@@ -1,6 +1,5 @@
 """Article body cleaner for Fifty Two."""
-from __future__ import annotations
-
+import json
 import re
 from bs4 import BeautifulSoup
 
@@ -16,101 +15,71 @@ class FiftyTwoArticleCleaner:
         """
         soup = BeautifulSoup(html, "html.parser")
         
-        # 1. Extract Author
-        author = ""
-        author_tag = soup.select_one(".story-info__author")
-        if author_tag:
-            author = author_tag.get_text(separator=" ", strip=True)
-        else:
-            # Fallback to meta
-            meta_author = soup.find("meta", attrs={"name": "author"})
-            if meta_author:
-                author = meta_author.get("content", "")
-
-        # 2. Extract Publication Date
-        date = ""
-        date_tag = soup.select_one(".story-info__date")
-        if date_tag:
-            date = date_tag.get_text(strip=True)
-            
-        # 3. Extract High-Resolution Image
-        image_url = ""
-        image_caption = ""
-        banner_img = soup.select_one(".story-banner__image img")
-        if banner_img:
-            # Try to get high-res from srcset if available
-            picture = banner_img.find_parent("picture")
-            if picture:
-                sources = picture.find_all("source")
-                max_width = 0
-                for source in sources:
-                    srcset = source.get("srcset", "")
-                    # Prismic URLs often have &w=... parameter
-                    match = re.search(r"&w=(\d+)", srcset)
-                    if match:
-                        width = int(match.group(1))
-                        if width > max_width:
-                            max_width = width
-                            image_url = srcset.split(" ")[0]
-            
-            # Fallback to src if image_url not set or if src is larger
-            src = banner_img.get("src", "")
-            match_src = re.search(r"&w=(\d+)", src)
-            if match_src:
-                src_width = int(match_src.group(1))
-                if src_width > max_width:
-                    image_url = src
-            elif not image_url:
-                image_url = src
-                
-            image_caption = banner_img.get("alt", "")
-
-        # 4. Identify noise selectors and remove them
-        noise_selectors = [
-            ".site-header",
-            ".site-footer",
-            ".story-sidebar",
-            ".story-next",
-            ".story-footer",
-            ".subscribe-bar",
-            ".svg-separator",
-            ".reading-progress-bar",
-            ".inline-svg-wrapper",
-            "#sidebar-right",
-            ".b-sidebar-outer",
-            "script",
-            "style",
-            ".story-info", # Removed as we already extracted it
-        ]
+        # 1. Try to extract from JSON-LD first (most complete for 52)
+        title = None
+        author = None
+        date = None
+        content_text = ""
+        content_html = ""
+        image_url = None
         
-        # We'll work on a copy for the body
-        body_soup = BeautifulSoup(html, "html.parser")
-        # Find the main article container
-        article = body_soup.select_one("article.story")
-        if not article:
-            article = body_soup.find("body")
+        json_ld = soup.find("script", type="application/ld+json")
+        if json_ld:
+            try:
+                data = json.loads(json_ld.string)
+                if isinstance(data, list):
+                    data = data[0]
+                
+                title = data.get("headline") or data.get("name")
+                body = data.get("articleBody", "")
+                if body:
+                    content_text = body
+                    # Convert plain text body to basic HTML paragraphs
+                    paragraphs = content_text.split("\n")
+                    content_html = "".join(f"<p>{p.strip()}</p>" for p in paragraphs if p.strip())
+                
+                author_data = data.get("author")
+                if isinstance(author_data, dict):
+                    author = author_data.get("name")
+                elif isinstance(author_data, list):
+                    author = author_data[0].get("name")
+                
+                date = data.get("datePublished")
+                image_data = data.get("image")
+                if isinstance(image_data, list) and image_data:
+                    image_url = image_data[0]
+                elif isinstance(image_data, str):
+                    image_url = image_data
+            except Exception:
+                pass
 
-        if article:
-            for selector in noise_selectors:
-                for noise in article.select(selector):
-                    noise.decompose()
+        # 2. Fallback or complement with DOM parsing
+        if not author:
+            author_tag = soup.select_one(".story-info__author")
+            author = author_tag.get_text(separator=" ", strip=True) if author_tag else ""
+
+        if not date:
+            date_tag = soup.select_one(".story-info__date")
+            date = date_tag.get_text(strip=True) if date_tag else ""
             
-            # Additional clean up: remove empty divs/sections that might be left
-            for div in article.find_all("div", recursive=False):
-                if not div.get_text(strip=True) and not div.find("img"):
-                    div.decompose()
-
-            content_html = str(article)
-            content_text = article.get_text(separator="\n", strip=True)
-        else:
-            content_html = ""
-            content_text = ""
+        if not image_url:
+            banner_img = soup.select_one(".story-banner__image img, .story-header__image img")
+            if banner_img:
+                image_url = banner_img.get("src", "")
+                
+        if not content_html:
+            # Fallback to selector-based body extraction
+            body_parts = soup.select(".story-intro__text, .paragraph__text, .drop-cap__other-text")
+            if body_parts:
+                content_html = "".join(str(p) for p in body_parts)
+                content_text = "\n".join(p.get_text(strip=True) for p in body_parts)
 
         return {
+            "title": title,
             "content_html": content_html,
             "content_text": content_text,
             "author": author,
             "date": date,
             "image_url": image_url,
-            "image_caption": image_caption,
+            "image_caption": None,
         }

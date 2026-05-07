@@ -66,7 +66,9 @@ class TheHinduArticleCleaner:
                 "script", "style", "aside", "nav", "iframe", ".premium-banner",
                 ".article-exclusive", ".social-share-container", ".comments-container",
                 ".author-box", ".tags-container", ".related-articles-container",
-                ".article-footer", ".share-icons", ".trending-container"
+                ".article-footer", ".share-icons", ".trending-container",
+                ".related-topics-list", ".read-comment-btn", ".print-btn",
+                "#read-comments", ".print-article", ".comment-btn"
             ]
             for selector in noise_selectors:
                 for tag in container.select(selector):
