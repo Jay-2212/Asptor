@@ -34,9 +34,14 @@ def fetch_with_retries(
         raise ValueError("max_attempts must be >= 1")
 
     last_error: Exception | None = None
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
     for attempt in range(1, max_attempts + 1):
         try:
-            with urlopen(url, timeout=timeout_seconds) as response:
+            from urllib.request import Request
+            req = Request(url, headers=headers)
+            with urlopen(req, timeout=timeout_seconds) as response:
                 return response.read().decode("utf-8", errors="replace")
         except Exception as exc:  # noqa: BLE001
             last_error = exc

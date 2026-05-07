@@ -1,0 +1,61 @@
+name: Asptor Pipeline
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours
+  workflow_dispatch:      # Manual trigger
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run Tests
+        run: python3 -m unittest discover tests -v
+
+      - name: Run Fetch
+        run: python3 -m scripts.fetch.run_fetch --raw-root data/raw
+
+      - name: Run Clean
+        run: python3 -m scripts.clean.run_clean --raw-root data/raw --processed-root data/processed
+
+      - name: Run Diff
+        run: python3 -m scripts.diff.run_diff --processed-root data/processed --state-root data/state --diff-root data/diff
+
+      - name: Run Publish
+        run: python3 -m scripts.publish.run_publish --processed-root data/processed --site-root site
+
+      - name: Commit data and site changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ site/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated pipeline update [skip ci]" && git push)
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'site/'
+
+  deploy:
+    needs: run-pipeline
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -224,13 +224,13 @@ _FIFTY_TWO_HTML = """
 <html><body>
   <article>
     <img src="https://fiftytwo.in/images/story1.jpg" />
-    <a href="https://fiftytwo.in/the-last-wilderness/">
+    <a href="https://fiftytwo.in/story/the-last-wilderness/">
       The Last Wilderness: Saving India's Forgotten Forests
     </a>
     <time datetime="2026-03-15">March 15, 2026</time>
   </article>
   <article>
-    <a href="https://fiftytwo.in/a-river-runs-through-it/">
+    <a href="https://fiftytwo.in/story/a-river-runs-through-it/">
       A River Runs Through It: Life Along the Ganga
     </a>
   </article>

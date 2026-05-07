@@ -37,7 +37,7 @@ _SKIP_SEGMENTS = frozenset(
 )
 
 _ARTICLE_PATH_RE = re.compile(
-    r"^https://fiftytwo\.in/([a-z0-9][a-z0-9-]{3,})/?$",
+    r"^https://fiftytwo\.in/story/([a-z0-9][a-z0-9-]{3,})/?$",
     re.IGNORECASE,
 )
 

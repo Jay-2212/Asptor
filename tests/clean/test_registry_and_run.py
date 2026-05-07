@@ -16,7 +16,14 @@ from scripts.clean.run_clean import process_snapshot, run_clean
 
 class RegistryTests(unittest.TestCase):
     def test_all_expected_sources_registered(self) -> None:
-        expected = {"the_hindu_opinion", "the_caravan", "fifty_two"}
+        expected = {
+            "the_hindu_opinion",
+            "the_hindu_national",
+            "indian_express_explained",
+            "scroll_magazine",
+            "the_caravan",
+            "fifty_two",
+        }
         self.assertEqual(set(CLEANERS.keys()), expected)
 
     def test_get_cleaner_returns_correct_instance(self) -> None:

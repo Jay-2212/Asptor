@@ -25,18 +25,23 @@ _SKIP_PATH_RE = re.compile(
 _MIN_TITLE_LEN = 12
 
 
-def _is_article_url(url: str) -> bool:
-    if not url.startswith(_BASE) and not url.startswith("/"):
-        return False
-    if _SKIP_PATH_RE.search(url):
-        return False
-    return bool(_ARTICLE_PATH_RE.search(url))
-
-
 class TheHinduCleaner(BaseCleaner):
-    """Parses The Hindu Opinion listing page into Article stubs."""
+    """Parses The Hindu listing pages into Article stubs."""
 
-    source_name = "the_hindu_opinion"
+    def __init__(
+        self,
+        source_name: str = "the_hindu_opinion",
+        article_path_pattern: str = "/opinion/",
+    ) -> None:
+        self.source_name = source_name
+        self._article_path_re = re.compile(article_path_pattern, re.IGNORECASE)
+
+    def _is_article_url(self, url: str) -> bool:
+        if not url.startswith(_BASE) and not url.startswith("/"):
+            return False
+        if _SKIP_PATH_RE.search(url):
+            return False
+        return bool(self._article_path_re.search(url))
 
     def parse(
         self,
@@ -47,7 +52,7 @@ class TheHinduCleaner(BaseCleaner):
         cards = extract_cards(
             content_html,
             base_url=_BASE,
-            url_filter=_is_article_url,
+            url_filter=self._is_article_url,
         )
 
         # Deduplicate by URL; preserve first-seen order.
@@ -97,7 +102,7 @@ class TheHinduCleaner(BaseCleaner):
         seen: set[str] = set()
         articles: list[Article] = []
         for link in links:
-            if not _is_article_url(link.href):
+            if not self._is_article_url(link.href):
                 continue
             title = re.sub(r"\s+", " ", link.text).strip()
             if len(title) < _MIN_TITLE_LEN:
