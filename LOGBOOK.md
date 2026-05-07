@@ -49,16 +49,16 @@ Use this file as the single source of truth for task handoffs.
 - Expected output: reusable fetcher utilities under `scripts/fetch/`, plus tests under `tests/fetch/`.
 
 ### Work Completed
-- Added `/home/runner/work/Asptor/Asptor/scripts/fetch/sources.py` with initial default source definitions for The Hindu Opinion, The Caravan, and Fifty Two.
-- Added `/home/runner/work/Asptor/Asptor/scripts/fetch/fetcher.py` with:
+- Added `scripts/fetch/sources.py` with initial default source definitions for The Hindu Opinion, The Caravan, and Fifty Two.
+- Added `scripts/fetch/fetcher.py` with:
   - retrying network fetch utility (`fetch_with_retries`)
   - structured fetch error type (`FetchError`)
   - raw snapshot persistence into `data/raw/<source>/<timestamp>.json`
   - orchestrators for single-source and all-source runs.
-- Added `/home/runner/work/Asptor/Asptor/scripts/fetch/run_fetch.py` CLI for running fetches with configurable retry/backoff/timeout and fail-fast behavior.
-- Added unit tests in `/home/runner/work/Asptor/Asptor/tests/fetch/test_fetcher.py`.
+- Added `scripts/fetch/run_fetch.py` CLI for running fetches with configurable retry/backoff/timeout and fail-fast behavior.
+- Added unit tests in `tests/fetch/test_fetcher.py`.
 - Added package markers (`scripts/__init__.py`, `scripts/fetch/__init__.py`, `tests/__init__.py`, `tests/fetch/__init__.py`) to ensure clean module/test discovery.
-- Updated `/home/runner/work/Asptor/Asptor/README.md` with Phase 1 fetcher usage docs.
+- Updated `README.md` with Phase 1 fetcher usage docs.
 
 ### Tests/Validation
 - Baseline before changes: `python -m unittest discover -v` (0 tests, exit code 5).

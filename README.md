@@ -60,13 +60,12 @@ If you are an implementation agent, start with **`INSTRUCTIONS.md`**, then follo
 
 The repository now includes a first-pass fetch layer implementation in:
 
-- `/home/runner/work/Asptor/Asptor/scripts/fetch/sources.py` (default source configuration)
-- `/home/runner/work/Asptor/Asptor/scripts/fetch/fetcher.py` (retrying fetch + raw snapshot persistence)
-- `/home/runner/work/Asptor/Asptor/scripts/fetch/run_fetch.py` (CLI entrypoint)
+- `scripts/fetch/sources.py` (default source configuration)
+- `scripts/fetch/fetcher.py` (retrying fetch + raw snapshot persistence)
+- `scripts/fetch/run_fetch.py` (CLI entrypoint)
 
 Run fetchers:
 
 ```bash
-cd /home/runner/work/Asptor/Asptor
 python -m scripts.fetch.run_fetch --raw-root data/raw --max-attempts 3
 ```

@@ -44,7 +44,11 @@ def fetch_with_retries(
                 break
             sleeper(backoff_seconds * (2 ** (attempt - 1)))
 
-    raise FetchError(url=url, attempts=max_attempts, last_error=last_error or Exception())
+    raise FetchError(
+        url=url,
+        attempts=max_attempts,
+        last_error=last_error or Exception("No error captured during retries"),
+    )
 
 
 def _normalize_source_name(source_name: str) -> str:
