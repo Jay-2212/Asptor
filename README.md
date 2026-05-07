@@ -56,16 +56,59 @@ Asptor/
 
 If you are an implementation agent, start with **`INSTRUCTIONS.md`**, then follow **`AGENTS.md`** and update **`LOGBOOK.md`** before and after your work.
 
-## Phase 1 Fetcher Foundation
+## Phase 1 — Fetcher Foundation
 
-The repository now includes a first-pass fetch layer implementation in:
+The fetch layer persists raw listing-page HTML as timestamped JSON snapshots.
 
-- `scripts/fetch/sources.py` (default source configuration)
-- `scripts/fetch/fetcher.py` (retrying fetch + raw snapshot persistence)
-- `scripts/fetch/run_fetch.py` (CLI entrypoint)
-
-Run fetchers:
+Key modules:
+- `scripts/fetch/sources.py` — default source configuration
+- `scripts/fetch/fetcher.py` — retrying fetch + raw snapshot persistence
+- `scripts/fetch/run_fetch.py` — CLI entrypoint
 
 ```bash
 python -m scripts.fetch.run_fetch --raw-root data/raw --max-attempts 3
 ```
+
+Snapshots are saved to `data/raw/<source_name>/<YYYYMMDDTHHMMSSZ>.json`.
+
+---
+
+## Phase 2 — Cleaning + Normalization
+
+The clean layer reads raw snapshots, parses the listing-page HTML, and writes
+normalised Article records to `data/processed/`.
+
+Key modules:
+- `scripts/clean/schema.py` — `Article` dataclass (common data contract)
+- `scripts/clean/html_utils.py` — stdlib-only HTML parsing utilities
+- `scripts/clean/base_cleaner.py` — abstract `BaseCleaner` interface
+- `scripts/clean/the_hindu_cleaner.py` — The Hindu Opinion listing-page parser
+- `scripts/clean/the_caravan_cleaner.py` — The Caravan listing-page parser
+- `scripts/clean/fifty_two_cleaner.py` — Fifty Two listing-page parser
+- `scripts/clean/registry.py` — source-name → cleaner dispatch
+- `scripts/clean/run_clean.py` — CLI entrypoint
+
+```bash
+python -m scripts.clean.run_clean --raw-root data/raw --processed-root data/processed
+```
+
+Each processed file is written to
+`data/processed/<source_name>/<YYYYMMDDTHHMMSSZ>.json` and contains a JSON
+array of Article records conforming to the schema in `ARCHITECTURE.md`.
+
+### Article schema
+
+| Field | Type | Notes |
+|---|---|---|
+| `source` | string | Source name key |
+| `source_id` | string | 16-hex SHA-256 of url+title |
+| `url` | string | Article URL |
+| `title` | string | Article title |
+| `subtitle` | string \| null | Optional deck text |
+| `author` | string \| null | Optional byline |
+| `published_at` | string \| null | ISO 8601 date when available |
+| `image_url` | string \| null | Lead image URL |
+| `content_html` | string | Full article HTML (empty at listing stage) |
+| `content_text` | string | Plain text body (empty at listing stage) |
+| `fetched_at` | string | ISO 8601 UTC fetch timestamp |
+| `hash` | string | 16-hex SHA-256 of url+title (for diffing) |
