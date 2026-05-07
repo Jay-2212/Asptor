@@ -23,6 +23,7 @@ class Article:
     author: str | None
     published_at: str | None
     image_url: str | None
+    image_caption: str | None
     content_html: str
     content_text: str
     fetched_at: str
@@ -50,7 +51,23 @@ class Article:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Article":
-        return cls(**data)
+        """Load from dict, providing defaults for missing fields to handle schema updates."""
+        # Ensure all fields exist, providing None for new optional ones if they are missing from JSON
+        return cls(
+            source=data["source"],
+            source_id=data["source_id"],
+            url=data["url"],
+            title=data["title"],
+            subtitle=data.get("subtitle"),
+            author=data.get("author"),
+            published_at=data.get("published_at"),
+            image_url=data.get("image_url"),
+            image_caption=data.get("image_caption"),
+            content_html=data.get("content_html", ""),
+            content_text=data.get("content_text", ""),
+            fetched_at=data["fetched_at"],
+            hash=data["hash"],
+        )
 
     @classmethod
     def from_json(cls, text: str) -> "Article":

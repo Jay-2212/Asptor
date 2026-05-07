@@ -17,6 +17,7 @@ def _make_article(**overrides) -> Article:
         author=None,
         published_at=None,
         image_url=None,
+        image_caption=None,
         content_html="",
         content_text="",
         fetched_at="2026-01-02T03:04:05Z",

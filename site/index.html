@@ -2,1395 +2,1937 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asptor - Clean Reading</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-            background-color: #f9f9f9;
-        }
-        header {
-            margin-bottom: 3rem;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 1rem;
-        }
-        h1 { margin: 0; color: #1a1a1a; }
-        .subtitle { color: #666; font-style: italic; }
-        .article-list { list-style: none; padding: 0; }
-        .article-item {
-            background: white;
-            margin-bottom: 1.5rem;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-        .article-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .article-link { text-decoration: none; color: inherit; display: block; }
-        .article-title { margin: 0 0 0.5rem 0; color: #0066cc; font-size: 1.4rem; }
-        .article-meta { font-size: 0.9rem; color: #888; margin-bottom: 0.5rem; }
-        .article-excerpt { font-size: 1rem; color: #555; }
-        footer { margin-top: 4rem; text-align: center; color: #999; font-size: 0.8rem; }
-    </style>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        width: 100%;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Asptor | Premium Reading Experience</title>
 </head>
 <body>
-    <header>
-        <h1>Asptor</h1>
-        <p class="subtitle">Clean, ad-free reading from quality sources.</p>
-    </header>
-    <main>
-        <ul class="article-list">
-            
-            <li class="article-item">
-                <a href="content/8b7fc22f0aed6e72.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Romila Thapar on life, teaching and what led her to history</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/9ed5a51f12c97990.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Exposing the largest far-right network in history</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f6bade896a2ef55b.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">A soldier of the Border Security Force dies in NCB custody</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/34496ccbbdeb45ab.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Confrontations over the reading of history</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/e904f9cc3ec12936.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The story of an incomplete cricketer in Kashmir</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d793b707b7bd8248.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Noida workers battle corporate exploitation and police repression</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/97776c0c63dd7940.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">How three recent books redefine cookbooks in India</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0289dacf5531b3c0.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The 2026 West Bengal assembly election explained</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0c27d3b27765aa82.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The women’s reservation bill was an all-too-transparent ploy</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/54266b8585a0d925.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Sayantan Ghosh: “The election is not against or for Mamata Banerjee but the Election Commission.”</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/915efd27d6c6f82f.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The 2026 Tamil Nadu assembly election explained</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5553ead0cdd3ee14.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">On chess and the notion of luck In The Price of Genius, published by Juggarnaut, Binit Priyaranjan looks at Indian chessplayers at the forefront of the chess boom today,</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b3d7f382a1335e9e.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Periyar, Ambedkar and the Poona Pact</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/65153c3bed819119.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">“Punitive actions against prisoners are seen as a demonstration of administrative control”</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d07df333f5b122e4.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">A film institute in an era of censorship</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/230c11b09810a5e5.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">A project that explores the lives of survivors of trafficking</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/2b964ccdaf0543d1.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The civic struggle against uranium mining in the West Khasi Hills</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/994af407e3a6b5ee.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The enduring language of Indian streets</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a09ffc9aba53d37f.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Women in fishing communities author vital stories of labour, crisis, and resilience</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/8ec20177fb850f48.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">How an amoral technocracy powers Modi’s India</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/466c9ec418d06f48.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">How upper castes invented a Hindu majority</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/2ea72a800dc1378b.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Adityanath’s reign of terror</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/54323cfacc87f224.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Manmohan Singh at the centre of the storm</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/4f2732cb17f85be1.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">How nine official inquiries obscured the truth of the 1984 anti-Sikh violence</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/7294e5c80e496b48.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Eligibility For A Personal Loan Explained With Income, Age And Credit Factors</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/e171c1eb45350dcb.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">IILM University Pioneering Educational Excellence: Celebrating 5 years of NEP 2020</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/54e19bf1e2219226.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Karnataka’s Model of Development: Inclusive Growth, Social Justice, and a Vision for the Future</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/fdc9a20134ed6d48.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">DY Patil Deemed to be University, Navi Mumbai: A Legacy of Excellence in Education, Healthcare, Technology and Sports</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/8779d5df99eef0e0.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Food in Dalit and Adivasi Writing</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5e4f018e38e5b09e.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Writing in the aftermath of the Police Action in Hyderabad</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5e0a06cfed4f3644.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Scenes from the modern literature of Brahminism</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/eda6202a6a3f0e0e.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Interfaith romance fiction in the era of love jihad</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5e7d7a63ecffb1c8.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Masculinity and the family in contemporary Indian fiction</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/432799aaef94c3ed.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">The changing contours of India’s relationship with Israel</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b74bd7ee2941f632.html" class="article-link">
-                    <div class="article-meta">The Caravan • 2026-05-07</div>
-                    <h2 class="article-title">Caste in the campus novel</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/025649bf1beefc3e.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Diversion</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d137b60190e27064.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Victory City</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f41614ff043e2842.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Elephants in the Room</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/4f3660a2b9629e12.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Our Struggle</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/c5a60c8d4a567a00.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Dear Neighbour</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f9cbd2107adef5bb.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Killey, Part Two</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/92e7bd8bbb9ed670.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Killey, Part One</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/9af16cdaf15b3254.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Advocate</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f9831d97bf55ab63.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Identity Crisis</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6da93b2e6693f709.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Italian Job</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0692ab2fc3525145.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Clansman</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/00e02fd987a5a728.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Crossing Over</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a9d401369cbf043e.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Knife in the Back</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d73df99961070c04.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Traders by the Creek</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/112647c4fd241148.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Adversary</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/9a1b1ddf8e1f23e0.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Restricted Code</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/19bff25491c2233c.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Numbers Game</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/4d4067ed2c14fe00.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Man of Culture</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6875daf8b96f69ba.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Searching for Swadesh</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/be862ce507d0c14b.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Brown Hunters</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/2531ccecdaeedac4.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Footsoldiers</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/ec70b8c99ff73a8a.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Ire on the Mountain</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/fa988bd192e7435c.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Rice, Fat, Meat, Streets</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/de758e4306e4b603.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Namesakes</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/116b5153f286acad.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Reservoir Gods</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/be76f051c7769b80.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Majority Report</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/03c200ca97fe4032.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Foreigner</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/703d53360808230e.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">The Testimony</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/7b3b51fc734cce24.html" class="article-link">
-                    <div class="article-meta">Fifty Two • 2026-05-07</div>
-                    <h2 class="article-title">Madras Check</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/7d92ea11a7823ddd.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Operation Sindoor a defining testament to India’s unwavering resolve against terrorism: President</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/07f58143fa7b8acd.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">One year of Operation Sindoor | PM Modi says Indian forces gave fitting response to terrorism</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/bcea9d06db5d1908.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">According to the ACB, former Minister Mahesh Joshi is accused of misusing his position as the then PHED Minister and accepting bribes in exchange for tenders</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/07d7d4f4eaacc638.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Over 150 children fall ill after consuming 'mid-day meal' in Bihar’s Saharsa</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/8f70af9ea32d92f3.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">India calls for Dhaka’s cooperation over repatriation of illegal Bangladeshi immigrants</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/9e5bc7a3f2bc8e30.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">SC asks Centre to vest District Collectors with powers to enforce waste management rules</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/bd130aad976e027a.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Union Minister Mansukh Mandaviya rolls out nationwide free annual health check-up initiative for workers</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/cd2bf727d6b0228b.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Environment Ministry’s expert panel clears Varanasi to Kolkata expressway</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a07edaba181ea566.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Akhilesh meets Mamata after Trinamool Congress poll debacle</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/481ae475efefd6c2.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Operation Sindoor signalled no terror sanctuary is safe: Indian Army</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/86fe4007a63755ff.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Questioning religious practices will break religion and civilisation: Supreme Court in Dawoodi Bohras case</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/53d9ee0308f3c50d.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">ED raids in Punjab in land 'fraud' case</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a15285f4b12156d5.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">One-year of Operation Sindoor: IAF releases 88-second footage of attack terror infra in Pak</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a22b5e59ab7bbedd.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">What is Karnataka’s new gig worker grievance system? | Explained</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/1b75629abda924fd.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Rise in cybercrime but overall crime rate dropped in 2024, says latest NCRB report</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6673cbb170ab2e09.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Dutch frigate arrives in Kochi as part of efforts to strengthen maritime cooperation</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/2ff1a69938bd1933.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Andhra Pradesh</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/58a333f1279aa892.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">School fitness: district-level plans to be prepared in Kerala</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/3bc2a390456738be.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">NCRB report: Crime against elders spikes, Bengaluru has second highest crimes against women</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/adde423274a66d41.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">Tension in Diggi Tanda after student drowns in water pond</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/21dae3e46e0521ff.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">NCRB: Bengaluru has country’s highest suicide rate</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/8a58586376d02fa7.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">VIT Chennai, The Hindu Education Plus to organise webinar on visual media careers</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/3743ae426db37241.html" class="article-link">
-                    <div class="article-meta">The Hindu National • 2026-05-07</div>
-                    <h2 class="article-title">GEMS Hospital earns Royal College of Surgeons of England accreditation</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/113339f936aae2f2.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">How three Indian soldiers escaped from Singapore during WWII and made the 4,800-km trip home Gautam Hazarika</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5974f82a50d0961b.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">In half the seats BJP won in Bengal, total SIR deletions outnumber victory margin Anant Gupta</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b261325174e3b6db.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Fiction: When a family decides to relocate its ancestral gods, it signals the end of a way of life DB Mokashi & Shanta Gokhale</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/c2f302148ad8c209.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Anand Patwardhan: The taming of the Mumbai Press Club Anand Patwardhan</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/db239a88306a8bb0.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">‘Last Song Before Home’: A deeply intimate novel that opens onto a panoramic view of India’s history Dushyant</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/789fcb9669678043.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Tamil Nadu: After defeat in the Assembly polls, Dravidian parties face unprecedented crisis Sruthisagar Yamunan</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6caf73cba2522e19.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Incentives, penalties, pay loss keep delivery workers on the job through hot days Shivam Bhardwaj, IndiaSpend.com</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/508d3a5e05f4fc9c.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Cover Story In the spotlight Photos of a Hyderabad princess throw light on women’s friendships in colonial South Asia Pronita Tripathi · Apr 12, 2026 · 11:30 am</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b4458d3a05001318.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Food and the memories it evokes can help comfort dementia patients Mar 22, 2025 · 10:00 pm</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6ba40efe3f2d564d.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Foraging in the city: The little-known vegetable of the cotton silk tree Mar 10, 2025 · 09:00 am</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/78ec52279e2ef101.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Is your digestion fast or slow? Find out with the ‘sweetcorn test’ and what it means Feb 12, 2025 · 10:00 pm</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/91068ee76d8eaf86.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">The life of Puja: How a young woman from rural Bengal became an internet star Apr 24, 2026 · 06:30 am</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/342583ce92ab06a0.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Like listening at the entrance of a tunnel: Why you can’t trust online reviews Jun 30, 2025 · 07:30 pm</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a0c0e48f3cb3b65a.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">There is a reason your X feed has turned more toxic. Have you heard of ‘engagement farming’? Sep 15, 2024 · 06:30 am</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/6c2a93ff4ef92c6b.html" class="article-link">
-                    <div class="article-meta">Scroll Magazine • 2026-05-07</div>
-                    <h2 class="article-title">Ukraine’s official Twitter handle is processing the nation’s trauma in real time with memes Mar 12, 2022 · 01:30 pm</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5cd05bb2d25e1873.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">From Western Disturbance to El Niño: The climate terms you’re hearing this summer, explained</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b15a1525d7074fc9.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Why Bombay HC upheld acquittal of 22 in the landmark Sohrabuddin encounter case</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0fb99b0af39a6eb2.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">AI in top colleges: Is it helping students or adding to stress? A professor explains</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/c8f0cc9658e214a6.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">​Expert Explains | A key ocean current is collapsing. This could be devastating for the world and India</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/12dc21f4fe37925b.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Expert Explains | How Ambedkar laid the foundations of India’s modern labour legislation</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/33c34751ae44148d.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Expert Explains | ‘Impact of UAE’s OPEC exit on oil market will be felt only in longer run’</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/de410aae4d288442.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Expert Explains | What the UAE exit from OPEC means for Saudi Arabia's Gulf leadership</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f9696cca46bc90ae.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">12 semiconductor plants approved: Where India’s chip manufacturing mission stands, what’s next</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a3b8ffce5855dd7f.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Those forced to consume acid also entitled to state support: Why SC expanded definition of ‘acid attack victim’</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a52f0caec041ebe4.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Why Centre eased FDI approvals amid competition from China, which sectors benefit</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/c4444cc37e3315e1.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Anger against mandatory prepaid smart meters in UP: What made the govt roll back policy?</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/ea123ae8b79f13e3.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Why Rahul Gandhi has asked ‘some in the Congress’ to not ‘gloat about TMC’s loss’</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/057eac7698411966.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">PM Modi condemns Fujairah attack that injured 3 Indians: Why the UAE is a target again</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f681b787572f8917.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Mamata Banerjee says won’t resign: What happens if an outgoing CM refuses to step down</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/aee4306f2be97e75.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Vedanta vs Adani: How NCLAT ruled on Jaypee flagship company’s insolvency proceedings</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/e5d010e884b42709.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Peak summer yet to come, but power supply is already falling short at night. Here’s why</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/58aeff45fcc3c040.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Why LNG supply disruption due to West Asia war has pushed India to consider raising storage capacity</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/b035ca4a5b5df8d4.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Assam Assembly Election Results | Himanta factor to Gogoi’s loss: 5 key takeaways</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/be674fdbf3fc8e9b.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Tamil Nadu’s new leading man: When Vijay took his parents to court for pushing him into politics</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/946629ff6a65f39e.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Puducherry Assembly Elections 2026: Who is N Rangaswamy, set to return as CM for fifth time?</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f1d92d6ada270db7.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">What the Assembly election results say about state parties and the emerging political landscape</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/9cdeaa097d6bf65d.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Tamil Nadu 2026 Verdict: Lessons TVK can take from the other ‘Vijay’ who dazzled state politics 15 years ago</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0c8824d448e23afc.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">BJP’s big Bengal win: 5 reasons it beat Mamata Banerjee</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/419270452874e4e4.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">With Left losing Kerala, India has no communist government for the first time since 1977: trajectory of the decline</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d82fa65009cd6614.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">TN Election Results 2026 | Vijay disrupts Dravidian binary. Here’s what his party TVK stands for</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/fe4758518417b0ed.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">ChatGPT’s goblin problem: The unintended consequences of teaching AI to be nerdy</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/81a76f9485f7656b.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Met Gala: How a simple New York fundraiser became ‘fashion’s biggest night’</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/44bca9511db6d4c0.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Rs 50 crore and counting: How Jharkhand’s alleged ‘treasury scam’ exposes system’s vulnerabilities</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f604dbcd6d1baf4b.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">AC unit fire leads to 9 deaths in Delhi: Signs to watch out for, and the precautions you should take</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/f89644d1ccda75fa.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">India’s two youths: Why gap between unemployed graduates and credit score chasers matters</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/e1ad6dcc343d1d4f.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Recalling Operation Neptune Spear, in which the US killed Osama bin Laden, 15 years on</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/feabbf3574405efd.html" class="article-link">
-                    <div class="article-meta">Indian Express Explained • 2026-05-07</div>
-                    <h2 class="article-title">Trump reduces US troops in Germany: Why were they there and what can Europe do?</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/11bf1342b27e4b2c.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Readers' Editor</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d7c145b331e52acb.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Corrections & Clarifications</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/cfdf7124c7c232f7.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">The BJP’s path to victory in Assam undermined the health of India’s polity</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/a5da0513fb0c101d.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Congress leaders in Kerala should rise above personal ambitions</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/da6abb5b27f177aa.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">A new roadmap for independent cinema</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/5af253f4e8be1916.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">TVK’s victory in Tamil Nadu polls: The rise of an apolitical polity</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/0c808706749f1a82.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Fixing structural deficits in India’s health system</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/c58b3c61e6fd065a.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">How ‘bulldozer justice’ undermines the law</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/687172675ba7c11a.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Letters to The Editor — May 7, 2026</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d69b6982e27978d1.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Understanding inequality in India’s growth story</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/439de445a31fa9e9.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">A shifting political arithmetic in Punjab</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/1d6eebda869603d9.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Letters to The Editor — May 6, 2026</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/1452a7d0420c007d.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">​Building bridges: On India’s solar generation, battery storage</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/d1e7b0271ea36901.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">Silencing academia, weakening democratic space</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-
-            <li class="article-item">
-                <a href="content/115a530acd693134.html" class="article-link">
-                    <div class="article-meta">The Hindu Opinion • 2026-05-07</div>
-                    <h2 class="article-title">​At sea: On the Indian Navy’s Project 17A</h2>
-                    <p class="article-excerpt">Click to read more.</p>
-                </a>
-            </li>
-
-        </ul>
-    </main>
-    <footer>
-        <p>Generated on 2026-05-07 15:44 UTC • <a href="https://github.com/jaybharti/asptor">GitHub</a></p>
-    </footer>
+    <div class="container">
+        <header class="site-header">
+            <h1 class="logo">Asptor</h1>
+            <p class="tagline">Curated, ad-free journalism for the thoughtful reader.</p>
+        </header>
+        <main>
+            <div class="article-list">
+                
+    <a href="content/d137b60190e27064.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Victory City</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f41614ff043e2842.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Elephants in the Room</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/4f3660a2b9629e12.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Our Struggle</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c5a60c8d4a567a00.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Dear Neighbour</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f9cbd2107adef5bb.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Killey, Part Two</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/92e7bd8bbb9ed670.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Killey, Part One</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9af16cdaf15b3254.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Advocate</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f9831d97bf55ab63.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Identity Crisis</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6da93b2e6693f709.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Italian Job</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0692ab2fc3525145.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Clansman</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/00e02fd987a5a728.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Crossing Over</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a9d401369cbf043e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Knife in the Back</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d73df99961070c04.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Traders by the Creek</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/112647c4fd241148.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Adversary</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9a1b1ddf8e1f23e0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Restricted Code</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/19bff25491c2233c.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Numbers Game</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/4d4067ed2c14fe00.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Man of Culture</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6875daf8b96f69ba.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Searching for Swadesh</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/be862ce507d0c14b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Brown Hunters</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/2531ccecdaeedac4.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Footsoldiers</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/ec70b8c99ff73a8a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Ire on the Mountain</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/fa988bd192e7435c.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Rice, Fat, Meat, Streets</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/de758e4306e4b603.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Namesakes</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/116b5153f286acad.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Reservoir Gods</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/be76f051c7769b80.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Majority Report</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/03c200ca97fe4032.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Foreigner</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/703d53360808230e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Testimony</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/7b3b51fc734cce24.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">Madras Check</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5974f82a50d0961b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">In half the seats BJP won in Bengal, total SIR deletions outnumber victory margin Anant Gupta</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b261325174e3b6db.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Fiction: When a family decides to relocate its ancestral gods, it signals the end of a way of life DB Mokashi & Shanta Gokhale</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c2f302148ad8c209.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Anand Patwardhan: The taming of the Mumbai Press Club Anand Patwardhan</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6caf73cba2522e19.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Incentives, penalties, pay loss keep delivery workers on the job through hot days Shivam Bhardwaj, IndiaSpend.com</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/db239a88306a8bb0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">‘Last Song Before Home’: A deeply intimate novel that opens onto a panoramic view of India’s history Dushyant</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/508d3a5e05f4fc9c.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Cover Story In the spotlight Photos of a Hyderabad princess throw light on women’s friendships in colonial South Asia Pronita Tripathi · Apr 12, 2026 · 11:30 am</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b4458d3a05001318.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Food and the memories it evokes can help comfort dementia patients Mar 22, 2025 · 10:00 pm</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6ba40efe3f2d564d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Foraging in the city: The little-known vegetable of the cotton silk tree Mar 10, 2025 · 09:00 am</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/78ec52279e2ef101.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Is your digestion fast or slow? Find out with the ‘sweetcorn test’ and what it means Feb 12, 2025 · 10:00 pm</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/91068ee76d8eaf86.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">The life of Puja: How a young woman from rural Bengal became an internet star Apr 24, 2026 · 06:30 am</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/342583ce92ab06a0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Like listening at the entrance of a tunnel: Why you can’t trust online reviews Jun 30, 2025 · 07:30 pm</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a0c0e48f3cb3b65a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">There is a reason your X feed has turned more toxic. Have you heard of ‘engagement farming’? Sep 15, 2024 · 06:30 am</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6c2a93ff4ef92c6b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Ukraine’s official Twitter handle is processing the nation’s trauma in real time with memes Mar 12, 2022 · 01:30 pm</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b15a1525d7074fc9.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Why Bombay HC upheld acquittal of 22 in the landmark Sohrabuddin encounter case</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0fb99b0af39a6eb2.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">AI in top colleges: Is it helping students or adding to stress? A professor explains</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c8f0cc9658e214a6.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">​Expert Explains | A key ocean current is collapsing. This could be devastating for the world and India</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/12dc21f4fe37925b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Expert Explains | How Ambedkar laid the foundations of India’s modern labour legislation</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/33c34751ae44148d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Expert Explains | ‘Impact of UAE’s OPEC exit on oil market will be felt only in longer run’</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/de410aae4d288442.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Expert Explains | What the UAE exit from OPEC means for Saudi Arabia's Gulf leadership</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f9696cca46bc90ae.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">12 semiconductor plants approved: Where India’s chip manufacturing mission stands, what’s next</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a3b8ffce5855dd7f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Those forced to consume acid also entitled to state support: Why SC expanded definition of ‘acid attack victim’</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a52f0caec041ebe4.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Why Centre eased FDI approvals amid competition from China, which sectors benefit</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c4444cc37e3315e1.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Anger against mandatory prepaid smart meters in UP: What made the govt roll back policy?</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/ea123ae8b79f13e3.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Why Rahul Gandhi has asked ‘some in the Congress’ to not ‘gloat about TMC’s loss’</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/057eac7698411966.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">PM Modi condemns Fujairah attack that injured 3 Indians: Why the UAE is a target again</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f681b787572f8917.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Mamata Banerjee says won’t resign: What happens if an outgoing CM refuses to step down</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/aee4306f2be97e75.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Vedanta vs Adani: How NCLAT ruled on Jaypee flagship company’s insolvency proceedings</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/e5d010e884b42709.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Peak summer yet to come, but power supply is already falling short at night. Here’s why</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/58aeff45fcc3c040.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Why LNG supply disruption due to West Asia war has pushed India to consider raising storage capacity</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b035ca4a5b5df8d4.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Assam Assembly Election Results | Himanta factor to Gogoi’s loss: 5 key takeaways</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/be674fdbf3fc8e9b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Tamil Nadu’s new leading man: When Vijay took his parents to court for pushing him into politics</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/946629ff6a65f39e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Puducherry Assembly Elections 2026: Who is N Rangaswamy, set to return as CM for fifth time?</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f1d92d6ada270db7.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">What the Assembly election results say about state parties and the emerging political landscape</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9cdeaa097d6bf65d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Tamil Nadu 2026 Verdict: Lessons TVK can take from the other ‘Vijay’ who dazzled state politics 15 years ago</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0c8824d448e23afc.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">BJP’s big Bengal win: 5 reasons it beat Mamata Banerjee</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/419270452874e4e4.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">With Left losing Kerala, India has no communist government for the first time since 1977: trajectory of the decline</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d82fa65009cd6614.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">TN Election Results 2026 | Vijay disrupts Dravidian binary. Here’s what his party TVK stands for</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/fe4758518417b0ed.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">ChatGPT’s goblin problem: The unintended consequences of teaching AI to be nerdy</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/81a76f9485f7656b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Met Gala: How a simple New York fundraiser became ‘fashion’s biggest night’</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/44bca9511db6d4c0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Rs 50 crore and counting: How Jharkhand’s alleged ‘treasury scam’ exposes system’s vulnerabilities</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f604dbcd6d1baf4b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">AC unit fire leads to 9 deaths in Delhi: Signs to watch out for, and the precautions you should take</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f89644d1ccda75fa.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">India’s two youths: Why gap between unemployed graduates and credit score chasers matters</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/e1ad6dcc343d1d4f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Recalling Operation Neptune Spear, in which the US killed Osama bin Laden, 15 years on</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/feabbf3574405efd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">Trump reduces US troops in Germany: Why were they there and what can Europe do?</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9ed5a51f12c97990.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Exposing the largest far-right network in history</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f6bade896a2ef55b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">A soldier of the Border Security Force dies in NCB custody</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/34496ccbbdeb45ab.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Confrontations over the reading of history</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/e904f9cc3ec12936.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The story of an incomplete cricketer in Kashmir</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d793b707b7bd8248.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Noida workers battle corporate exploitation and police repression</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/97776c0c63dd7940.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">How three recent books redefine cookbooks in India</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0289dacf5531b3c0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The 2026 West Bengal assembly election explained</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0c27d3b27765aa82.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The women’s reservation bill was an all-too-transparent ploy</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/54266b8585a0d925.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Sayantan Ghosh: “The election is not against or for Mamata Banerjee but the Election Commission.”</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/915efd27d6c6f82f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The 2026 Tamil Nadu assembly election explained</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5553ead0cdd3ee14.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">On chess and the notion of luck In The Price of Genius, published by Juggarnaut, Binit Priyaranjan looks at Indian chessplayers at the forefront of the chess boom today,</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b3d7f382a1335e9e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Periyar, Ambedkar and the Poona Pact</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/65153c3bed819119.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">“Punitive actions against prisoners are seen as a demonstration of administrative control”</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d07df333f5b122e4.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">A film institute in an era of censorship</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/230c11b09810a5e5.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">A project that explores the lives of survivors of trafficking</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/2b964ccdaf0543d1.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The civic struggle against uranium mining in the West Khasi Hills</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/994af407e3a6b5ee.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The enduring language of Indian streets</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a09ffc9aba53d37f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Women in fishing communities author vital stories of labour, crisis, and resilience</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/8ec20177fb850f48.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">How an amoral technocracy powers Modi’s India</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/466c9ec418d06f48.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">How upper castes invented a Hindu majority</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/2ea72a800dc1378b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Adityanath’s reign of terror</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/54323cfacc87f224.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Manmohan Singh at the centre of the storm</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/4f2732cb17f85be1.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">How nine official inquiries obscured the truth of the 1984 anti-Sikh violence</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/7294e5c80e496b48.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Eligibility For A Personal Loan Explained With Income, Age And Credit Factors</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/e171c1eb45350dcb.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">IILM University Pioneering Educational Excellence: Celebrating 5 years of NEP 2020</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/54e19bf1e2219226.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Karnataka’s Model of Development: Inclusive Growth, Social Justice, and a Vision for the Future</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/fdc9a20134ed6d48.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">DY Patil Deemed to be University, Navi Mumbai: A Legacy of Excellence in Education, Healthcare, Technology and Sports</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/8779d5df99eef0e0.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Food in Dalit and Adivasi Writing</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5e4f018e38e5b09e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Writing in the aftermath of the Police Action in Hyderabad</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5e0a06cfed4f3644.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Scenes from the modern literature of Brahminism</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/eda6202a6a3f0e0e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Interfaith romance fiction in the era of love jihad</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5e7d7a63ecffb1c8.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Masculinity and the family in contemporary Indian fiction</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/432799aaef94c3ed.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">The changing contours of India’s relationship with Israel</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/b74bd7ee2941f632.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Caste in the campus novel</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/dabfc8c8817a83a2.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Governor’s remit is to invite TVK chief Vijay and ask for a floor test: former Law Minister Ashwani Kumar</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/07d7d4f4eaacc638.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Over 150 children fall ill after consuming 'mid-day meal' in Bihar’s Saharsa</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/82fc76b9e3c63d11.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">On the contrary, Pakistan Army Chief Asim Munir has been embraced with extraordinary warmth by U.S. President Donald Trump from June 2025 onwards, says Congress leader Jairam Ramesh</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/afc6abcae6e46581.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Repatriation of illegal Bangladeshis is a ‘core issue’: MEA response to Dhaka’s remarks on ‘push-in’ from India</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/ee4f2f978693845f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Gurugram gated societies not letting in enumerators; FIRs recommended against enumerators obstructing Census work</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9e5bc7a3f2bc8e30.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">SC asks Centre to vest District Collectors with powers to enforce waste management rules</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/705cdd74a340c899.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Centre launches scheme for free health check-ups for workers</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/cd2bf727d6b0228b.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Environment Ministry’s expert panel clears Varanasi to Kolkata expressway</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0a939a0091a1c50f.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">India will shape the battlefield if challenged again: armed forces on Operation Sindoor</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/69ca94ade7e778cc.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Court’s interference in religious matters may break religions: SC</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/53d9ee0308f3c50d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">ED raids in Punjab in land 'fraud' case</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a15285f4b12156d5.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">One-year of Operation Sindoor: IAF releases 88-second footage of attack terror infra in Pak</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/2ff1a69938bd1933.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Andhra Pradesh</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/f95037621c060f5a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Residents apprehend vehicle dumping of sludge in open plots in Ranipet</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d7c145b331e52acb.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Corrections & Clarifications</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/da6abb5b27f177aa.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">A new roadmap for independent cinema</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5af253f4e8be1916.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">TVK’s victory in Tamil Nadu polls: The rise of an apolitical polity</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0c808706749f1a82.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Fixing structural deficits in India’s health system</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/687172675ba7c11a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Letters to The Editor — May 7, 2026</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d69b6982e27978d1.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Understanding inequality in India’s growth story</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/079db36ef59bc693.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Letters to the Editor — May 8, 2026</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/ce3acb8a48fcda16.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">The U.S. should pursue a deal with Iran, and not take a maximalist stand</h2>
+            <p class="card-excerpt">W
+hen Donald Trump announced ‘Operation Project Freedom’, aimed at “guiding” stranded merchant vessels out of the Strait of Hormuz, he warned that any interference from Iran would be dealt with “force...</p>
+        </div>
+    </a>
+
+
+    <a href="content/0a78245023113428.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">India needs to do more to both prevent and fight fiAres</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/2cc5edcb7055ea36.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Should the abortion law be amended for minor rape victims?</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/03155c66e8899e86.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">​Cost of success: On the BJP’s victory in Assam</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/7a4d4e53365af8c6.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">​Back in the saddle: On the Congress-led UDF’s win in the Kerala Assembly polls</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/cfdf7124c7c232f7.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">The BJP’s path to victory in Assam undermined the health of India’s polity</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a5da0513fb0c101d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Congress leaders in Kerala should rise above personal ambitions</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c58b3c61e6fd065a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">How ‘bulldozer justice’ undermines the law</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/439de445a31fa9e9.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">A shifting political arithmetic in Punjab</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/1d6eebda869603d9.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Letters to The Editor — May 6, 2026</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/c3c2d685446afcd3.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Off the script on Bengal elections</h2>
+            <p class="card-excerpt">Standing inside the oldest coal mine of India in Raniganj, West Bengal, amid black dust, I could feel a song reach my ears. The women singing in a synchronised voice as they continued to dig for coal....</p>
+        </div>
+    </a>
+
+
+    <a href="content/1cab39f45c487dc6.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Success of swamp deer translocation in Madhya Pradesh could help restore population Sneha Mahale</h2>
+            <p class="card-excerpt">WILDLIFE CONSERVATION
+Success of swamp deer translocation in Madhya Pradesh could help restore population
+Researchers recorded second- and third-generation fawns born in Satpura after the deer were tr...</p>
+        </div>
+    </a>
+
+
+    <a href="content/3adbbe9a3d82d1b3.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Canada urged to act against ‘anti-India extremist elements’: MEA</h2>
+            <p class="card-excerpt">India on Thursday (May 7, 2026) called upon Canada to act against "anti-India extremist elements" operating from Canadian soil against the backdrop of a Canadian intelligence report highlighting the n...</p>
+        </div>
+    </a>
+
+
+    <a href="content/fe96342f02a095e6.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Two persons killed in road accidents in Vellore</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/09e8d285ac7a3b7a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Two persons arrested for stealing at temple in Tirupattur</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5ec00e5c0092e46e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">GCC carries out cattle raid in Arumbakkam</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/653545e277a44ec1.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Stage erected for polls removed after days in M.G.R Nagar</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/1452a7d0420c007d.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">​Building bridges: On India’s solar generation, battery storage</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/58ebf7aab254e6fd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Operation Sindoor reflects India’s uncompromising stand against terrorism: PM Modi</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/73a5b9a786023ea3.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Tamil Nadu seeks postponement of DGP empanelment committee meeting</h2>
+            <p class="card-excerpt">The appointment of a regular Director General of Police and Head of the Police Force in the Tamil Nadu police is set to be delayed further.
+The State government has written to the Union Public Service...</p>
+        </div>
+    </a>
+
+
+    <a href="content/c3dfaeffcf58c96e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Yogi Adityanath launches first phase of Census 2027 in Uttar Pradesh</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/699a2cae3e4fbc13.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Centre calls for steps to safeguard shelter residents from heat</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/bb9469020260c2d2.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">State-run Trauma and Emergency Care Centre on Victoria Hospital campus records second organ donation in last three months</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/5b6c1ef91da79e05.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Ballots outside, bargains inside</h2>
+            <p class="card-excerpt">The 2026 Tamil Nadu Assembly election has sent shockwaves not only across Tamil Nadu but throughout India. The defeat of well-known electoral heavyweights in their own constituencies — despite holding...</p>
+        </div>
+    </a>
+
+
+    <a href="content/edf5979695791277.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Over 42,000 registrations received so far for TNEA 2026</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9429818bb4709971.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Demand to streamline traffic, ensure commuter safety on Ernakulam Junction, Town station premises</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/62ecc2c4c11bb088.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Women’s organisations seek immediate implementation of reservations</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9e7131e9e2e4df87.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">APPSC releases ranking lists on its website</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/4db9df810d7d5cd8.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Student stabbed to death in Chilkalguda</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/0cbf0d82c31cd174.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Nida Khan, key accused in Nashik TCS case, arrested in Maharashtra</h2>
+            <p class="card-excerpt">Over 40 days after a First Information Report (FIR) was registered against her in a rape and sexual exploitation case, suspended TCS employee Nida Khan was taken into police custody in Chhatrapati Sam...</p>
+        </div>
+    </a>
+
+
+    <a href="content/9fd738aa6c47fc98.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Gadkari praises Telangana for transport reforms and road safety</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/9aaf6230001b4e3e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Travelogue: An Indian woman writes about travelling solo in Uzbekistan’s Tashkent (and elsewhere) Shivya Nath</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/d1e7b0271ea36901.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Silencing academia, weakening democratic space</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/115a530acd693134.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">​At sea: On the Indian Navy’s Project 17A</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/85b3a21866e451b6.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">How delimitation gave a boost to BJP and allies in Assam Rokibuz Zaman</h2>
+            <p class="card-excerpt">Not a normal election
+How delimitation gave a boost to BJP and allies in Assam
+Scroll’s analysis reveals that the BJP-led alliance benefited from the exercise in 19 seats.
+Rokibuz Zaman
+19 hours ago
+S...</p>
+        </div>
+    </a>
+
+
+    <a href="content/d2e7692ec18e2fe8.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">SC asks if there was a 'proper debate' in Parliament before enacting CEC/EC appointments law</h2>
+            <p class="card-excerpt">The Supreme Court on Thursday (May 7, 2026) asked if there had been a “proper debate” in the Parliament about the "ethos” of its
+2023 judgment that took the appointment
+of members of the Election Comm...</p>
+        </div>
+    </a>
+
+
+    <a href="content/d75d4ec68c18e146.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">City police hold awareness session to tackle mobile addiction among personnel</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/07f58143fa7b8acd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">One year of Operation Sindoor | PM Modi says Indian forces gave fitting response to terrorism</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/bcea9d06db5d1908.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">According to the ACB, former Minister Mahesh Joshi is accused of misusing his position as the then PHED Minister and accepting bribes in exchange for tenders</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/8f70af9ea32d92f3.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">India calls for Dhaka’s cooperation over repatriation of illegal Bangladeshi immigrants</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/bd130aad976e027a.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Union Minister Mansukh Mandaviya rolls out nationwide free annual health check-up initiative for workers</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a07edaba181ea566.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Akhilesh meets Mamata after Trinamool Congress poll debacle</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/481ae475efefd6c2.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Operation Sindoor signalled no terror sanctuary is safe: Indian Army</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/86fe4007a63755ff.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Questioning religious practices will break religion and civilisation: Supreme Court in Dawoodi Bohras case</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/a22b5e59ab7bbedd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">What is Karnataka’s new gig worker grievance system? | Explained</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/1b75629abda924fd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Rise in cybercrime but overall crime rate dropped in 2024, says latest NCRB report</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/6673cbb170ab2e09.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Dutch frigate arrives in Kochi as part of efforts to strengthen maritime cooperation</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/58a333f1279aa892.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">School fitness: district-level plans to be prepared in Kerala</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/3bc2a390456738be.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">NCRB report: Crime against elders spikes, Bengaluru has second highest crimes against women</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/adde423274a66d41.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Tension in Diggi Tanda after student drowns in water pond</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/21dae3e46e0521ff.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">NCRB: Bengaluru has country’s highest suicide rate</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/8a58586376d02fa7.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">VIT Chennai, The Hindu Education Plus to organise webinar on visual media careers</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/3743ae426db37241.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">GEMS Hospital earns Royal College of Surgeons of England accreditation</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/789fcb9669678043.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">Tamil Nadu: After defeat in the Assembly polls, Dravidian parties face unprecedented crisis Sruthisagar Yamunan</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/113339f936aae2f2.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">SCROLL MAGAZINE</div>
+            <h2 class="card-title">How three Indian soldiers escaped from Singapore during WWII and made the 4,800-km trip home Gautam Hazarika</h2>
+            <p class="card-excerpt">History revisited
+How three Indian soldiers escaped from Singapore during WWII and made the 4,800-km trip home
+The incredible journey of Captains Balbir Singh, Pritam Singh and Gangaram Parab started ...</p>
+        </div>
+    </a>
+
+
+    <a href="content/7d92ea11a7823ddd.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU NATIONAL</div>
+            <h2 class="card-title">Operation Sindoor a defining testament to India’s unwavering resolve against terrorism: President</h2>
+            <p class="card-excerpt">President Droupadi Murmu on Thursday (May 7, 2026) said that
+Operation Sindoor
+is a defining testament to India’s unwavering resolve against terrorism and that the country stands vigilant, united and ...</p>
+        </div>
+    </a>
+
+
+    <a href="content/5cd05bb2d25e1873.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">INDIAN EXPRESS EXPLAINED</div>
+            <h2 class="card-title">From Western Disturbance to El Niño: The climate terms you’re hearing this summer, explained</h2>
+            <p class="card-excerpt">Written by:
+Anagha Jayakumar
+8 min read
+New Delhi
+Updated: May 7, 2026 09:07 PM IST
+Sprinklers at the Kartavya Path in New Delhi on April 27. (Express photo by Haobijam Chinglemba Meitei)
+Make us pref...</p>
+        </div>
+    </a>
+
+
+    <a href="content/8b7fc22f0aed6e72.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE CARAVAN</div>
+            <h2 class="card-title">Romila Thapar on life, teaching and what led her to history</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/11bf1342b27e4b2c.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">THE HINDU OPINION</div>
+            <h2 class="card-title">Readers' Editor</h2>
+            <p class="card-excerpt">Click to read more.</p>
+        </div>
+    </a>
+
+
+    <a href="content/025649bf1beefc3e.html" style="text-decoration: none; color: inherit;">
+        <div class="article-card">
+            <div class="card-source">FIFTY TWO</div>
+            <h2 class="card-title">The Diversion</h2>
+            <p class="card-excerpt">The Diversion
+Taking from the Ken, giving to the Betwa—that’s the plan for a river-linking project straight out of a technocratic dream. But for the humans and animals of Bundelkhand, the equation is ...</p>
+        </div>
+    </a>
+
+            </div>
+        </main>
+        <footer class="site-footer">
+            <p>Generated by Asptor Pipeline • 2026-05-07 20:27 UTC</p>
+            <p><a href="https://github.com/Jay-2212/Asptor">Source Code</a></p>
+        </footer>
+    </div>
 </body>
 </html>
