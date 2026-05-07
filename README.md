@@ -55,3 +55,17 @@ Asptor/
 ## Next Step
 
 If you are an implementation agent, start with **`INSTRUCTIONS.md`**, then follow **`AGENTS.md`** and update **`LOGBOOK.md`** before and after your work.
+
+## Phase 1 Fetcher Foundation
+
+The repository now includes a first-pass fetch layer implementation in:
+
+- `scripts/fetch/sources.py` (default source configuration)
+- `scripts/fetch/fetcher.py` (retrying fetch + raw snapshot persistence)
+- `scripts/fetch/run_fetch.py` (CLI entrypoint)
+
+Run fetchers:
+
+```bash
+python -m scripts.fetch.run_fetch --raw-root data/raw --max-attempts 3
+```
