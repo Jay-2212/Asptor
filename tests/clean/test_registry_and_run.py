@@ -20,7 +20,6 @@ class RegistryTests(unittest.TestCase):
             "the_hindu_opinion",
             "the_hindu_national",
             "indian_express_explained",
-            "scroll_magazine",
             "the_caravan",
             "fifty_two",
         }

@@ -93,6 +93,7 @@ class FiftyTwoCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="Reading Material"
                 )
             )
 
@@ -133,6 +134,7 @@ class FiftyTwoCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="Reading Material"
                 )
             )
         return articles

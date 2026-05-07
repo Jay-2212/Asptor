@@ -7,7 +7,7 @@ from string import Template
 from typing import Dict, List, Optional
 
 from scripts.clean.schema import Article
-from .templates import INDEX_TEMPLATE, ARTICLE_ITEM_TEMPLATE, ARTICLE_PAGE_TEMPLATE, BASE_HEAD
+from .templates import INDEX_TEMPLATE, ARTICLE_ITEM_TEMPLATE, ARTICLE_PAGE_TEMPLATE, BASE_HEAD, SECTION_TEMPLATE
 
 # ------------------------------------------------------------------
 # Publisher
@@ -69,8 +69,12 @@ class Publisher:
         import datetime as dt
         generated_at = datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
         
-        # 1. Generate individual article pages
-        article_items_html = []
+        # 1. Generate individual article pages and group for index
+        # We'll use a specific order for categories: Reading Material first, then National News
+        categories = ["Reading Material", "National News"]
+        grouped_articles: Dict[str, List[str]] = {cat: [] for cat in categories}
+        grouped_articles["Other"] = []
+
         for article in articles:
             self.publish_article_page(article, generated_at)
             
@@ -85,12 +89,27 @@ class Publisher:
                 title=article.title,
                 excerpt=excerpt
             )
-            article_items_html.append(item_html)
+            
+            cat = article.category if article.category in categories else ("Reading Material" if not article.category else "Other")
+            if cat not in grouped_articles:
+                grouped_articles[cat] = []
+            grouped_articles[cat].append(item_html)
 
-        # 2. Generate index page
+        # 2. Generate sections HTML
+        sections_html = []
+        # Display Reading Material first, then National News
+        for cat in ["Reading Material", "National News", "Other"]:
+            if grouped_articles.get(cat):
+                section_html = SECTION_TEMPLATE.substitute(
+                    title=cat,
+                    article_items="\n".join(grouped_articles[cat])
+                )
+                sections_html.append(section_html)
+
+        # 3. Generate index page
         index_html = INDEX_TEMPLATE.substitute(
             base_head=BASE_HEAD,
-            article_items="\n".join(article_items_html),
+            sections_html="\n".join(sections_html),
             generated_at=generated_at
         )
         with open(self.site_root / "index.html", "w") as f:

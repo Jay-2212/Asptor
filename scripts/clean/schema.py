@@ -28,6 +28,7 @@ class Article:
     content_text: str
     fetched_at: str
     hash: str
+    category: str | None = None
 
     # ------------------------------------------------------------------
     # Hashing
@@ -67,6 +68,7 @@ class Article:
             content_text=data.get("content_text", ""),
             fetched_at=data["fetched_at"],
             hash=data["hash"],
+            category=data.get("category"),
         )
 
     @classmethod

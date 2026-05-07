@@ -37,8 +37,8 @@ class IndianExpressArticleCleaner:
                 image_caption = caption_tag.get_text(strip=True)
 
         # 4. Clean Article Body
-        # Indian Express uses .article-body, #article-body, or .full-details
-        container = soup.select_one(".article-body, #article-body, .full-details, .content-article")
+        # Indian Express uses .article-body, #article-body, .full-details, or #pcl-full-content
+        container = soup.select_one("#pcl-full-content, .article-body, #article-body, .full-details, .content-article, .story_details")
         if not container:
             container = soup.find("article")
             

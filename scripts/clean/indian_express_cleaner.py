@@ -77,6 +77,7 @@ class IndianExpressCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="National News"
                 )
             )
 
@@ -119,6 +120,7 @@ class IndianExpressCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="National News"
                 )
             )
         return articles

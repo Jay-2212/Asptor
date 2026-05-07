@@ -80,6 +80,7 @@ class TheHinduCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="National News" if self.source_name == "the_hindu_national" else "Reading Material"
                 )
             )
 
@@ -125,6 +126,7 @@ class TheHinduCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="National News" if self.source_name == "the_hindu_national" else "Reading Material"
                 )
             )
         return articles

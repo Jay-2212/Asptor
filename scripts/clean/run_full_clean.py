@@ -11,7 +11,6 @@ from scripts.fetch.fetcher import fetch_with_retries
 from scripts.clean.schema import Article
 from scripts.clean.article_cleaners.the_hindu import TheHinduArticleCleaner
 from scripts.clean.article_cleaners.indian_express import IndianExpressArticleCleaner
-from scripts.clean.article_cleaners.scroll import ScrollArticleCleaner
 from scripts.clean.article_cleaners.the_caravan import TheCaravanArticleCleaner
 from scripts.clean.article_cleaners.fifty_two import FiftyTwoArticleCleaner
 from scripts.clean.article_cleaners.generic import clean_article as generic_clean
@@ -27,7 +26,6 @@ class FullArticleProcessor:
             "the_hindu_opinion": TheHinduArticleCleaner(),
             "the_hindu_national": TheHinduArticleCleaner(source_name="the_hindu_national", article_path_pattern="/news/national/"),
             "indian_express_explained": IndianExpressArticleCleaner(),
-            "scroll_magazine": ScrollArticleCleaner(),
             "the_caravan": TheCaravanArticleCleaner(),
             "fifty_two": FiftyTwoArticleCleaner(),
         }

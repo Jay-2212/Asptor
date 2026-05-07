@@ -67,6 +67,7 @@ class TheCaravanCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="Reading Material"
                 )
             )
 
@@ -107,6 +108,7 @@ class TheCaravanCleaner(BaseCleaner):
                     content_text="",
                     fetched_at=fetched_at,
                     hash=h,
+                    category="Reading Material"
                 )
             )
         return articles

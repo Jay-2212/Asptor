@@ -12,7 +12,6 @@ from __future__ import annotations
 from .base_cleaner import BaseCleaner
 from .fifty_two_cleaner import FiftyTwoCleaner
 from .indian_express_cleaner import IndianExpressCleaner
-from .scroll_cleaner import ScrollCleaner
 from .the_caravan_cleaner import TheCaravanCleaner
 from .the_hindu_cleaner import TheHinduCleaner
 
@@ -23,7 +22,6 @@ CLEANERS: dict[str, BaseCleaner] = {
         TheHinduCleaner(source_name="the_hindu_opinion", article_path_pattern="/opinion/"),
         TheHinduCleaner(source_name="the_hindu_national", article_path_pattern="/news/national/"),
         IndianExpressCleaner(),
-        ScrollCleaner(),
         TheCaravanCleaner(),
         FiftyTwoCleaner(),
     )

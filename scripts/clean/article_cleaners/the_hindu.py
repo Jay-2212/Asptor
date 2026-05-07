@@ -52,8 +52,8 @@ class TheHinduArticleCleaner:
                 image_caption = caption_tag.get_text(strip=True)
 
         # 4. Clean Article Body
-        # The Hindu uses div.article-body or content-body ID
-        container = soup.select_one("div.article-body, div.article-content, [id^='content-body-']")
+        # The Hindu uses div.article-body, div.article-content, or .articlebodycontent
+        container = soup.select_one("div.article-body, div.article-content, .articlebodycontent, [id^='content-body-']")
         if not container:
             container = soup.find("article")
             
