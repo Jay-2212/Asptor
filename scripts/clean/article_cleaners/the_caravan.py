@@ -47,7 +47,8 @@ class TheCaravanArticleCleaner:
             noise_selectors = [
                 ".ad-container", ".related-stories", ".social-sharing", 
                 ".newsletter-signup", ".tags-list", ".paywall-overlay",
-                "script", "style", "aside", "nav", "iframe", ".subscriber-only"
+                "script", "style", "aside", "nav", "iframe", ".subscriber-only",
+                ".article-footer", ".share-buttons", ".more-from-caravan"
             ]
             for selector in noise_selectors:
                 for tag in container.select(selector):

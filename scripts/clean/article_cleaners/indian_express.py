@@ -47,7 +47,9 @@ class IndianExpressArticleCleaner:
             noise_selectors = [
                 ".ad-container", ".related-articles", ".also-read", 
                 ".social-sharing", ".newsletter-box", ".tags",
-                "script", "style", "aside", "nav", "iframe", ".ie-exclusive"
+                "script", "style", "aside", "nav", "iframe", ".ie-exclusive",
+                ".ie-ie-share", ".google-preferred", ".share-box-n", ".share-options",
+                ".article-button-wrap", ".post-info", ".article-publish-date"
             ]
             for selector in noise_selectors:
                 for tag in container.select(selector):

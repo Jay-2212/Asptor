@@ -45,7 +45,8 @@ class ScrollArticleCleaner:
             noise_selectors = [
                 ".mail-us-section", ".article-tags-list", ".below-article-share-block", 
                 ".share-bar-mobile", ".ad-container", ".newsletter-signup",
-                "script", "style", "aside", "nav", "iframe"
+                "script", "style", "aside", "nav", "iframe",
+                ".article-author-bio", ".article-recommended", ".comments-section"
             ]
             for selector in noise_selectors:
                 for tag in container.select(selector):

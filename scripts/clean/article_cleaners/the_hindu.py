@@ -63,7 +63,10 @@ class TheHinduArticleCleaner:
             noise_selectors = [
                 ".ad-container", ".related-topics-container", ".also-read", 
                 ".social-share", ".subscription-container", ".banner-container",
-                "script", "style", "aside", "nav", "iframe", ".premium-banner"
+                "script", "style", "aside", "nav", "iframe", ".premium-banner",
+                ".article-exclusive", ".social-share-container", ".comments-container",
+                ".author-box", ".tags-container", ".related-articles-container",
+                ".article-footer", ".share-icons", ".trending-container"
             ]
             for selector in noise_selectors:
                 for tag in container.select(selector):
