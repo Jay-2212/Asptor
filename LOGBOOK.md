@@ -33,6 +33,59 @@ Use this file as the single source of truth for task handoffs.
 
 ---
 
+## [2026-05-07 14:30 UTC] Agent: copilot-task-agent (Phase 2)
+### Scope Claimed
+- Implement Phase 2: Cleaning + Normalization Layer under `scripts/clean/` with tests in `tests/clean/`.
+
+### Context Read
+- [x] README.md
+- [x] INSTRUCTIONS.md
+- [x] ARCHITECTURE.md
+- [x] LOGBOOK.md (latest entries)
+
+### Assumptions & Expected Outputs
+- Assumption: Phase 1 raw snapshots are listing-page HTML (not individual article HTML). The clean layer extracts article stubs from these listing pages.
+- Assumption: `content_html` / `content_text` fields are intentionally empty at this stage — individual-article content fetching is deferred to a later phase.
+- Assumption: Stick to Python stdlib only (no BeautifulSoup), consistent with Phase 1 decisions.
+- Expected output: `scripts/clean/` containing schema, HTML utilities, per-source cleaners, registry, and CLI; `tests/clean/` containing comprehensive unit tests.
+
+### Work Completed
+- Added `scripts/clean/schema.py` — `Article` dataclass with `compute_hash`, `to_dict/from_dict`, `to_json/from_json` serialisation.
+- Added `scripts/clean/html_utils.py` — stdlib `HTMLParser`-based utilities: `extract_text`, `extract_links` (with root-relative resolution), `extract_meta` (Open Graph + `<title>`), and `extract_cards` (card-context-aware extractor that groups `<img>`, `<a>` title, and `<time>` into article-card bundles).
+- Added `scripts/clean/base_cleaner.py` — abstract `BaseCleaner` with `parse()` and `clean_snapshot()` entry-point.
+- Added `scripts/clean/the_hindu_cleaner.py` — The Hindu Opinion parser (filters `/opinion/` paths, deduplicates, falls back to plain link scan).
+- Added `scripts/clean/the_caravan_cleaner.py` — The Caravan parser (filters `/<section>/<slug>` patterns, excludes utility paths).
+- Added `scripts/clean/fifty_two_cleaner.py` — Fifty Two parser (filters top-level slug paths, excludes known utility segments).
+- Added `scripts/clean/registry.py` — `CLEANERS` dict + `get_cleaner()` factory.
+- Added `scripts/clean/run_clean.py` — CLI (`python -m scripts.clean.run_clean`) with `--raw-root`, `--processed-root`, `--fail-fast` flags; writes `data/processed/<source>/<timestamp>.json`.
+- Added `scripts/clean/__init__.py` and `tests/clean/__init__.py` package markers.
+- Added comprehensive test suite in `tests/clean/`: `test_schema.py`, `test_html_utils.py`, `test_cleaners.py`, `test_registry_and_run.py`.
+- Updated `README.md` with Phase 2 usage docs and Article schema table.
+
+### Tests/Validation
+- Full test suite after implementation:
+  - `python -m unittest discover -v` ✅ (82 tests passed, 0 failures, 0 errors)
+  - Phase 1 fetch tests remain green (5/5).
+  - Phase 2 clean tests: 77 new tests added and all pass.
+
+### Decisions
+- Listing-page approach: raw snapshots hold listing-page HTML; the clean layer extracts article stubs with url+title only. `content_html`/`content_text` are intentionally empty — full article body fetching is a future concern.
+- `hash` = `source_id` = `sha256(url::title)[:16]` provides a stable dedup key for Phase 3's diff layer.
+- `extract_cards` uses a stack-based state machine to group `<img>`, `<a>`, and `<time>` within structural block tags (`<article>`, `<li>`, `<div>`, `<section>`). This is more robust than pure link scanning for modern listing pages.
+- Cleaners include a link-scan fallback in case the card extractor yields nothing (e.g., unusual HTML structure).
+
+### Risks/Blockers
+- Source-specific URL filters are based on known patterns and may need refinement if site structure changes.
+- `content_html` / `content_text` are empty at this stage; a future individual-article fetch step is needed to populate them.
+- Per-source parsers are tested against representative HTML fixtures; real-world pages may expose edge cases.
+
+### Next Step for Next Agent
+- Implement Phase 3: Diff / dedup layer under `scripts/diff/` with tests in `tests/diff/`.
+- The diff layer should compare the latest `data/processed/<source>/` files against a stored state (e.g., `data/state/<source>/seen_hashes.json`) and emit only newly discovered articles.
+- Key inputs: Article `hash` field (16-hex SHA-256 of url+title); key output: `data/diff/<source>/<timestamp>.json` containing only new/updated records.
+
+---
+
 ## [2026-05-07 13:55 UTC] Agent: copilot-task-agent
 ### Scope Claimed
 - Implement Phase 1 source fetcher foundation with retries, raw snapshot persistence, and focused unit tests.
