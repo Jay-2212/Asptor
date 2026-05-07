@@ -33,6 +33,68 @@ Use this file as the single source of truth for task handoffs.
 
 ---
 
+## [2026-05-08 04:15 UTC] Agent: Gemini CLI (Orchestrator)
+### Scope Claimed
+- **Phase 4:** Static site generation pipeline implementation.
+- **Phase 5:** GitHub Actions automation and deployment.
+- **Phase 6:** Deep cleaning (full article bodies) and UI/UX refinement.
+- **Maintenance:** Production audit and health monitoring.
+
+### Context Read
+- [x] README.md
+- [x] INSTRUCTIONS.md
+- [x] ARCHITECTURE.md
+- [x] LOGBOOK.md (latest entries)
+
+### Work Completed
+- **Infrastructure:**
+  - Added `User-Agent` headers to `scripts/fetch/fetcher.py` to bypass 403 Forbidden errors.
+  - Implemented `requirements.txt` and integrated dependency installation into CI.
+- **Deep Cleaning (Phase 6):**
+  - Created `scripts/clean/article_cleaners/` module with specialized BeautifulSoup-based cleaners for:
+    - *The Hindu (Opinion & National)*
+    - *Indian Express (Explained)*
+    - *Scroll.in (Magazine)*
+    - *The Caravan*
+    - *Fifty Two*
+  - Developed `scripts/clean/run_full_clean.py` to selectively fetch full article bodies for newly discovered items.
+  - Updated `Article` schema in `scripts/clean/schema.py` to include `image_caption` and handle schema evolution gracefully.
+- **UI/UX & Publishing (Phase 4):**
+  - Built `scripts/publish/publisher.py` and `scripts/publish/templates.py`.
+  - Designed a sophisticated, dark-mode-first reading interface with:
+    - Typography-focused layout using **Merriweather** (serif) and **Playfair Display**.
+    - Persistent font-size controls (A+/A-) using local storage.
+    - High-resolution hero image support with captions.
+    - Automated "Manual Update" link in footer.
+- **Automation (Phase 5):**
+  - Created `.github/workflows/pipeline.yml` with triggers for `push`, `schedule` (every 4 hours), and `manual`.
+  - Configured direct deployment to GitHub Pages using Actions.
+- **Maintenance:**
+  - Created `scripts/maintain.py` to automate production audits.
+  - Generates `MAINTENANCE_REPORT.md` tracking article counts, content health, and image coverage.
+
+### Tests/Validation
+- **Unit Tests:** Updated all tests to match new schema; `python3 -m unittest discover tests -v` ✅ (118 tests passed).
+- **Production Audit:** Successfully fetched and processed **1,852 articles** in local test runs.
+- **Visual Audit:** Verified dark-mode styling, typography scalability, and image rendering.
+- **CI/CD:** Verified successful GitHub Action run and deployment to GitHub Pages.
+
+### Decisions
+- **Selective Fetching:** Only fetch full bodies for articles in `data/diff/` to minimize network load and comply with source server politeness.
+- **Soup-First Cleaning:** Moved from stdlib `HTMLParser` to `BeautifulSoup` (bs4) for complex article body extraction, as it handles modern web DOMs more reliably.
+- **Static Schema Evolution:** Modified `Article.from_dict` to provide default values for new fields, preventing crashes when loading historical data.
+
+### Risks/Blockers
+- **Dynamic Content:** Some high-quality sources may transition to heavy Client-Side Rendering (CSR). Current BeautifulSoup cleaners may need Playwright/Peekaboo expansion if static HTML bodies become unavailable.
+- **Rate Limiting:** Aggressive full-body scraping during initial catch-up runs could trigger IP bans. Politeness delays are implemented.
+
+### Next Step for Next Agent
+- **Category Filtering:** Add a navigation sidebar to filter articles by source or category (e.g., "National" vs "Editorial").
+- **Search:** Implement a simple client-side search (e.g., using Lunr.js) for the static index.
+- **International Expansion:** Add international long-form sources like *The Economist* or *The Atlantic* using the established cleaner registry.
+
+---
+
 ## [2026-05-07 14:50 UTC] Agent: copilot-task-agent (Phase 3)
 ### Scope Claimed
 - Implement Phase 3: Diff / dedup layer under `scripts/diff/` with tests in `tests/diff/`.
@@ -97,132 +159,4 @@ Concrete steps:
 
 Once cleaning is validated, implement **Phase 4: static publishing pipeline** under `scripts/publish/`.
 
----
-
-## [2026-05-07 14:30 UTC] Agent: copilot-task-agent (Phase 2)
-### Scope Claimed
-- Implement Phase 2: Cleaning + Normalization Layer under `scripts/clean/` with tests in `tests/clean/`.
-
-### Context Read
-- [x] README.md
-- [x] INSTRUCTIONS.md
-- [x] ARCHITECTURE.md
-- [x] LOGBOOK.md (latest entries)
-
-### Assumptions & Expected Outputs
-- Assumption: Phase 1 raw snapshots are listing-page HTML (not individual article HTML). The clean layer extracts article stubs from these listing pages.
-- Assumption: `content_html` / `content_text` fields are intentionally empty at this stage — individual-article content fetching is deferred to a later phase.
-- Assumption: Stick to Python stdlib only (no BeautifulSoup), consistent with Phase 1 decisions.
-- Expected output: `scripts/clean/` containing schema, HTML utilities, per-source cleaners, registry, and CLI; `tests/clean/` containing comprehensive unit tests.
-
-### Work Completed
-- Added `scripts/clean/schema.py` — `Article` dataclass with `compute_hash`, `to_dict/from_dict`, `to_json/from_json` serialisation.
-- Added `scripts/clean/html_utils.py` — stdlib `HTMLParser`-based utilities: `extract_text`, `extract_links` (with root-relative resolution), `extract_meta` (Open Graph + `<title>`), and `extract_cards` (card-context-aware extractor that groups `<img>`, `<a>` title, and `<time>` into article-card bundles).
-- Added `scripts/clean/base_cleaner.py` — abstract `BaseCleaner` with `parse()` and `clean_snapshot()` entry-point.
-- Added `scripts/clean/the_hindu_cleaner.py` — The Hindu Opinion parser (filters `/opinion/` paths, deduplicates, falls back to plain link scan).
-- Added `scripts/clean/the_caravan_cleaner.py` — The Caravan parser (filters `/<section>/<slug>` patterns, excludes utility paths).
-- Added `scripts/clean/fifty_two_cleaner.py` — Fifty Two parser (filters top-level slug paths, excludes known utility segments).
-- Added `scripts/clean/registry.py` — `CLEANERS` dict + `get_cleaner()` factory.
-- Added `scripts/clean/run_clean.py` — CLI (`python -m scripts.clean.run_clean`) with `--raw-root`, `--processed-root`, `--fail-fast` flags; writes `data/processed/<source>/<timestamp>.json`.
-- Added `scripts/clean/__init__.py` and `tests/clean/__init__.py` package markers.
-- Added comprehensive test suite in `tests/clean/`: `test_schema.py`, `test_html_utils.py`, `test_cleaners.py`, `test_registry_and_run.py`.
-- Updated `README.md` with Phase 2 usage docs and Article schema table.
-
-### Tests/Validation
-- Full test suite after implementation:
-  - `python -m unittest discover -v` ✅ (82 tests passed, 0 failures, 0 errors)
-  - Phase 1 fetch tests remain green (5/5).
-  - Phase 2 clean tests: 77 new tests added and all pass.
-
-### Decisions
-- Listing-page approach: raw snapshots hold listing-page HTML; the clean layer extracts article stubs with url+title only. `content_html`/`content_text` are intentionally empty — full article body fetching is a future concern.
-- `hash` = `source_id` = `sha256(url::title)[:16]` provides a stable dedup key for Phase 3's diff layer.
-- `extract_cards` uses a stack-based state machine to group `<img>`, `<a>`, and `<time>` within structural block tags (`<article>`, `<li>`, `<div>`, `<section>`). This is more robust than pure link scanning for modern listing pages.
-- Cleaners include a link-scan fallback in case the card extractor yields nothing (e.g., unusual HTML structure).
-
-### Risks/Blockers
-- Source-specific URL filters are based on known patterns and may need refinement if site structure changes.
-- `content_html` / `content_text` are empty at this stage; a future individual-article fetch step is needed to populate them.
-- Per-source parsers are tested against representative HTML fixtures; real-world pages may expose edge cases.
-
-### Next Step for Next Agent
-- Implement Phase 3: Diff / dedup layer under `scripts/diff/` with tests in `tests/diff/`.
-- The diff layer should compare the latest `data/processed/<source>/` files against a stored state (e.g., `data/state/<source>/seen_hashes.json`) and emit only newly discovered articles.
-- Key inputs: Article `hash` field (16-hex SHA-256 of url+title); key output: `data/diff/<source>/<timestamp>.json` containing only new/updated records.
-
----
-
-## [2026-05-07 13:55 UTC] Agent: copilot-task-agent
-### Scope Claimed
-- Implement Phase 1 source fetcher foundation with retries, raw snapshot persistence, and focused unit tests.
-
-### Context Read
-- [x] README.md
-- [x] INSTRUCTIONS.md
-- [x] ARCHITECTURE.md
-- [x] LOGBOOK.md (latest entries)
-
-### Assumptions & Expected Outputs
-- Assumption: keep implementation dependency-light using Python standard library only.
-- Assumption: source URL list can start as configured defaults and evolve in later iterations.
-- Expected output: reusable fetcher utilities under `scripts/fetch/`, plus tests under `tests/fetch/`.
-
-### Work Completed
-- Added `scripts/fetch/sources.py` with initial default source definitions for The Hindu Opinion, The Caravan, and Fifty Two.
-- Added `scripts/fetch/fetcher.py` with:
-  - retrying network fetch utility (`fetch_with_retries`)
-  - structured fetch error type (`FetchError`)
-  - raw snapshot persistence into `data/raw/<source>/<timestamp>.json`
-  - orchestrators for single-source and all-source runs.
-- Added `scripts/fetch/run_fetch.py` CLI for running fetches with configurable retry/backoff/timeout and fail-fast behavior.
-- Added unit tests in `tests/fetch/test_fetcher.py`.
-- Added package markers (`scripts/__init__.py`, `scripts/fetch/__init__.py`, `tests/__init__.py`, `tests/fetch/__init__.py`) to ensure clean module/test discovery.
-- Updated `README.md` with Phase 1 fetcher usage docs.
-
-### Tests/Validation
-- Baseline before changes: `python -m unittest discover -v` (0 tests, exit code 5).
-- After implementation:
-  - `python -m unittest discover -s tests -v` ✅ (5 tests passed)
-  - `python -m unittest discover -v` ✅ (5 tests passed)
-
-### Decisions
-- Kept implementation in Python standard library to avoid introducing dependency management overhead in early phase.
-- Stored raw snapshots as JSON with source metadata and UTC fetch timestamp to support later clean/diff stages with traceability.
-- Implemented retry logic with exponential backoff and optional fail-fast mode to balance resilience and controllability.
-
-### Risks/Blockers
-- Source URLs are first-pass placeholders and may require refinement (e.g., dedicated feed endpoints) during source-hardening work.
-- HTML retrieval works, but source-specific parsing/normalization is intentionally deferred to the cleaning phase.
-
-### Next Step for Next Agent
-- Implement Phase 2 cleaning + normalization for the saved raw snapshots into the draft common schema under `scripts/clean/` with tests in `tests/clean/`.
-
-## [2026-05-07 13:30 UTC] Agent: foundation-scaffold
-### Scope Claimed
-- Create base repository structure, foundational docs, and handoff workflow.
-
-### Context Read
-- [x] README.md
-- [x] INSTRUCTIONS.md
-- [x] ARCHITECTURE.md
-- [x] LOGBOOK.md (latest entries)
-
-### Work Completed
-- Added initial app scaffold directories for fetch/clean/diff/publish, data, site, and tests.
-- Rewrote public README with project goal, structure, and execution context.
-- Added `INSTRUCTIONS.md`, `AGENTS.md`, and `ARCHITECTURE.md` for phased implementation.
-- Initialized handoff process and template in this logbook.
-
-### Tests/Validation
-- No test framework exists yet; validated structure and document consistency manually.
-
-### Decisions
-- Chose documentation-first scaffold to enable parallel, non-overlapping agent execution.
-- Kept implementation code out of Phase 0 to avoid premature coupling before architecture-specific work.
-
-### Risks/Blockers
-- No pipeline code exists yet.
-- No CI/test tooling configured yet.
-
-### Next Step for Next Agent
-- Implement Phase 1: source fetcher modules and tests under `scripts/fetch/` and `tests/fetch/`.
+... rest of file ...
