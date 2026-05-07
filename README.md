@@ -112,3 +112,34 @@ array of Article records conforming to the schema in `ARCHITECTURE.md`.
 | `content_text` | string | Plain text body (empty at listing stage) |
 | `fetched_at` | string | ISO 8601 UTC fetch timestamp |
 | `hash` | string | 16-hex SHA-256 of url+title (for diffing) |
+
+---
+
+## Phase 3 — Diff / Dedup Layer
+
+The diff layer compares the latest processed Article records against a
+persistent store of previously-seen hashes, emitting only newly discovered
+articles.  This prevents re-publishing the same content on every pipeline run.
+
+Key modules:
+- `scripts/diff/state_store.py` — load/save `data/state/<source>/seen_hashes.json`
+- `scripts/diff/differ.py` — core diff logic (per-source and all-sources entry-points)
+- `scripts/diff/run_diff.py` — CLI entrypoint
+
+```bash
+python -m scripts.diff.run_diff \
+    --processed-root data/processed \
+    --state-root     data/state \
+    --diff-root      data/diff
+```
+
+For each source the diff layer:
+
+1. Loads all Article records from `data/processed/<source>/`.
+2. Loads previously-seen hashes from `data/state/<source>/seen_hashes.json`.
+3. Filters to articles whose `hash` has **not** been seen before.
+4. Writes those new articles to `data/diff/<source>/<YYYYMMDDTHHMMSSZ>.json`.
+5. Updates the state file so the same articles are skipped on the next run.
+
+State files grow monotonically (hashes are only added, never removed).  If no
+state file exists yet, all current articles are treated as new.
