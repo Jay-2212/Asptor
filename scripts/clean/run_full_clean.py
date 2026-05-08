@@ -33,67 +33,84 @@ class FullArticleProcessor:
     def get_cleaner(self, source_name: str):
         return self.cleaners.get(source_name)
 
-    def process_all(self, limit: int = 5):
-        """Fetch and clean full bodies for articles found in diff_root."""
-        if not self.diff_root.exists():
-            logger.info("No diff files found. Skipping full content fetch.")
-            return
+    def process_all(self, limit: int = 5, repair_empty: bool = False):
+        """Fetch and clean full bodies. 
+        If repair_empty is True, scan processed root for empty content.
+        Otherwise, scan diff_root for new articles.
+        """
+        if repair_empty:
+            logger.info("Repairing empty articles in processed root...")
+            for source_dir in self.processed_root.iterdir():
+                if not source_dir.is_dir():
+                    continue
+                source_name = source_dir.name
+                for proc_file in source_dir.glob("*.json"):
+                    self.process_file(proc_file, source_name, limit, force_refetch=True)
+        else:
+            if not self.diff_root.exists():
+                logger.info("No diff files found. Skipping full content fetch.")
+                return
 
-        for source_dir in self.diff_root.iterdir():
-            if not source_dir.is_dir():
-                continue
-            
-            source_name = source_dir.name
-            logger.info(f"Processing new articles for: {source_name}")
-            
-            for diff_file in source_dir.glob("*.json"):
-                self.process_diff_file(diff_file, source_name, limit)
+            for source_dir in self.diff_root.iterdir():
+                if not source_dir.is_dir():
+                    continue
+                
+                source_name = source_dir.name
+                logger.info(f"Processing new articles for: {source_name}")
+                
+                for diff_file in source_dir.glob("*.json"):
+                    self.process_file(diff_file, source_name, limit)
 
-    def process_diff_file(self, diff_file: Path, source_name: str, limit: int):
+    def process_file(self, json_file: Path, source_name: str, limit: int, force_refetch: bool = False):
         try:
-            with open(diff_file, "r") as f:
+            with open(json_file, "r") as f:
                 articles_data = json.load(f)
             
             if not isinstance(articles_data, list) or not articles_data:
                 return
 
-            logger.info(f"  Enriching {len(articles_data)} articles in {diff_file.name}")
-            
-            count = 0
+            updated_count = 0
             for i, data in enumerate(articles_data):
-                if count >= limit:
+                if updated_count >= limit:
                     break
                 
                 article = Article.from_dict(data)
                 
-                logger.info(f"    Fetching: {article.title}")
-                try:
-                    raw_html = fetch_with_retries(url=article.url, max_attempts=2)
-                    cleaner = self.get_cleaner(source_name)
-                    result = cleaner.clean(raw_html) if cleaner else generic_clean(raw_html)
-                    
-                    # Update fields
-                    article.content_html = result.get("content_html", "")
-                    article.content_text = result.get("content_text", "")
-                    article.author = result.get("author") or article.author
-                    article.image_url = result.get("image_url") or article.image_url
-                    article.image_caption = result.get("image_caption", "")
-                    
-                    articles_data[i] = article.to_dict()
-                    
-                    # Also update the corresponding article in data/processed/
-                    self.update_processed_record(article, source_name)
-                    
-                    count += 1
-                    time.sleep(1)
-                except Exception as e:
-                    logger.error(f"      Error: {e}")
+                # Only fetch if content is empty (or forced)
+                if not article.content_html or force_refetch:
+                    logger.info(f"    Fetching: {article.title} ({article.url})")
+                    try:
+                        raw_html = fetch_with_retries(url=article.url, max_attempts=2)
+                        cleaner = self.get_cleaner(source_name)
+                        result = cleaner.clean(raw_html) if cleaner else generic_clean(raw_html)
+                        
+                        if result.get("content_html"):
+                            # Update fields
+                            article.content_html = result.get("content_html", "")
+                            article.content_text = result.get("content_text", "")
+                            article.author = result.get("author") or article.author
+                            article.image_url = result.get("image_url") or article.image_url
+                            article.image_caption = result.get("image_caption", "")
+                            
+                            articles_data[i] = article.to_dict()
+                            
+                            # If we are in diff mode, also update the processed record
+                            if not force_refetch:
+                                self.update_processed_record(article, source_name)
+                            
+                            updated_count += 1
+                            time.sleep(1.5)
+                        else:
+                            logger.warning(f"      No content extracted for: {article.title}")
+                    except Exception as e:
+                        logger.error(f"      Error: {e}")
 
-            with open(diff_file, "w") as f:
-                json.dump(articles_data, f, ensure_ascii=False, indent=2)
+            if updated_count > 0:
+                with open(json_file, "w") as f:
+                    json.dump(articles_data, f, ensure_ascii=False, indent=2)
 
         except Exception as e:
-            logger.error(f"Error processing {diff_file}: {e}")
+            logger.error(f"Error processing {json_file}: {e}")
 
     def update_processed_record(self, enriched_article: Article, source_name: str):
         """Update the article in processed_root so history is also enriched."""
@@ -124,7 +141,8 @@ if __name__ == "__main__":
     parser.add_argument("--processed-root", type=Path, default=Path("data/processed"))
     parser.add_argument("--diff-root", type=Path, default=Path("data/diff"))
     parser.add_argument("--limit", type=int, default=10, help="Limit articles per source per run")
+    parser.add_argument("--repair", action="store_true", help="Scan processed data for empty content and re-fetch")
     args = parser.parse_args()
     
     processor = FullArticleProcessor(args.processed_root, args.diff_root)
-    processor.process_all(limit=args.limit)
+    processor.process_all(limit=args.limit, repair_empty=args.repair)
