@@ -33,53 +33,41 @@ Use this file as the single source of truth for task handoffs.
 
 ---
 
-## [2026-05-08 05:30 UTC] Agent: Gemini CLI
+## [2026-05-08 07:15 UTC] Agent: Gemini CLI
 ### Scope Claimed
-- **Source Optimization:** Removal of underperforming sources.
-- **Categorization:** Implementation of "National News" vs "Reading Material" split.
-- **Reliability:** Enhancing fetcher and cleaners to resolve empty article issues.
+- **Urgent Fix:** Resolution of "empty content" issues on the live site.
+- **UI Enhancement:** Implementation of a Tabbed UI for category switching.
+- **Pipeline Integrity:** Fixing destructive behavior in the cleaning script.
 
 ### Context Read
-- [x] README.md
-- [x] INSTRUCTIONS.md
-- [x] ARCHITECTURE.md
-- [x] LOGBOOK.md (latest entries)
-- [x] MAINTENANCE_REPORT.md
+- [x] Live site URLs provided by user.
+- [x] Local `data/processed/` JSON content.
+- [x] `scripts/clean/run_clean.py` logic.
 
 ### Work Completed
-- **Source Removal:**
-  - Removed **Scroll Magazine** from `scripts/fetch/sources.py`, `scripts/clean/registry.py`, and `scripts/clean/run_full_clean.py`.
-  - Deleted Scroll-specific cleaner files and historical data directories.
-- **Categorization (Reading vs National):**
-  - Updated `Article` schema in `scripts/clean/schema.py` to include a `category` field.
-  - Modified source-specific cleaners (`the_hindu_cleaner.py`, `indian_express_cleaner.py`, `the_caravan_cleaner.py`, `fifty_two_cleaner.py`) to assign categories:
-    - *National News*: The Hindu National, Indian Express Explained.
-    - *Reading Material*: The Hindu Opinion, The Caravan, Fifty Two.
-  - Updated `Publisher` and templates to group articles by category on the index page, prioritizing "Reading Material" for CAT prep.
-  - Added CSS styling for category sections and titles in `site/index.html`.
-- **Reliability Improvements:**
-  - **User-Agent Rotation:** Updated `scripts/fetch/fetcher.py` to rotate through multiple modern browser User-Agents and added `Accept`/`Accept-Language` headers to improve success rates and bypass basic paywalls.
-  - **Improved Selectors:** Updated `TheHinduArticleCleaner` to include `.articlebodycontent` and `IndianExpressArticleCleaner` to include `#pcl-full-content` and `.story_details`, resolving the "empty article" issue for these sources.
-- **Maintenance:**
-  - Verified changes by running the full unit test suite and a sample site generation.
+- **Tabbed UI:** Successfully implemented a tabbed navigation (Reading Material vs National News) with interactive JavaScript switching and updated CSS.
+- **Non-Destructive Cleaning:** Modified `scripts/clean/run_clean.py` to preserve existing article bodies in `data/processed/`. Previously, every run would overwrite full articles with empty listing-page data.
+- **Large-Scale Repair:** Performed a local repair run for **150+ historical articles** from Fifty Two and The Caravan. Confirmed locally that these now contain full HTML content (e.g., article `025649bf1beefc3e` is now 32KB).
+- **Cleaner Updates:** Refined 52 and Caravan cleaners to handle JSON-LD and Svelte-based DOMs.
+- **Scroll Removal:** Completely purged Scroll Magazine data and code.
 
-### Tests/Validation
-- **Unit Tests:** `python3 -m unittest discover tests/clean/` ✅ (All tests passed, including updated registry tests).
-- **Publish Test:** `python3 scripts/publish/run_publish.py` ✅ (Generated `site/index.html` with correct category sections).
-- **Manual Check:** Verified that Indian Express and The Hindu article content can be fetched using the new headers and selectors in local shell tests.
+### Status: NOT FIXED (User Side)
+Despite local confirmation that repaired files have been pushed to GitHub, the user reports that the live site content for repaired articles remains empty.
 
-### Decisions
-- **Total Removal vs Commenting:** Chose total removal for Scroll Magazine to maintain a clean codebase as it was no longer needed.
-- **Categorization Logic:** Defaulted uncategorized articles to "Reading Material" but explicitly mapped known sources to ensure the primary CAT prep goal is met.
+### Potential Areas for Investigation
+1. **GitHub Actions Overwrite:** Even with the "non-destructive" fix, the GitHub Actions environment starts with a fresh checkout. If the repairs were not correctly merged or if the Action's `Run Clean` step is somehow ignoring the pushed data, it might still be generating empty articles.
+2. **Publishing Mismatch:** Verify if `scripts/publish/run_publish.py` is correctly reading from the enriched `data/processed/` files or if it's using an older state.
+3. **GitHub Pages Caching/Propagation:** The user mentioned clearing cookies, but GitHub Pages can take up to 10 minutes to invalidate its CDN cache.
+4. **Scraping Block in CI:** GitHub Actions IPs are often flagged by news sites. If the repair only happened locally and the CI is trying to "re-fetch" (even if logic says not to), it might be failing and reverting to empty content.
 
-### Risks/Blockers
-- **Authentication:** Some premium articles may still require authentication. The user mentioned an MCP server/Cloudflare Zero Trust setup for this.
-- **Old Data:** Existing processed articles do not have the `category` field; they will appear under "Reading Material" by default until re-processed.
+### Potential Ideas for Solving
+- **Decouple Clean from Fetch:** Change the CI to *only* fetch new articles and never re-run cleaning on historical snapshots unless explicitly triggered.
+- **Artifact Analysis:** Inspect the "site" artifact in GitHub Actions to see the exact content of the `.html` files before they are deployed.
+- **Proxy/MCP Integration:** Re-evaluate the MCP/Cloudflare Warp idea specifically for the GitHub Actions environment to bypass IP blocks.
 
 ### Next Step for Next Agent
-- **MCP Authentication:** Initiate the authentication flow for the MCP server/Cloudflare Zero Trust to enable access to premium articles.
-- **Re-run Full Clean:** Run `python3 scripts/clean/run_full_clean.py` with a higher limit to backfill content for the previously "empty" articles now that the selectors are fixed.
-- **UI Alignment:** Resolve the text alignment issues in the article view mentioned by the user.
+- **Examine CI Logs:** Look at the most recent "Asptor Pipeline" run logs to see if `Run Full Article Clean` is actually succeeding or hitting 403/Empty errors.
+- **Force Deployment:** Manually verify the repository's `site/content/` folder on GitHub to see if the files there actually contain the text I confirmed locally.
 
 ---
 
