@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Medical negligence claims don’t die with the doctor: What SC’s latest ruling means for patients, families | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Medical negligence claims don’t die with the doctor: What SC’s latest ruling means for patients, families</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-09</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Supreme-Court-explained-1.jpg?w=1600" alt="Medical negligence claims don’t die with the doctor: What SC’s latest ruling means for patients, families">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="medical negligence" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Supreme-Court-explained-1.jpg?w=1600" width="650"/><span class="ie-custom-caption">
+A bench of Justices JK Maheshwari and Atul S Chandurkar on May 4 clarified that personal claims such as pain, suffering or loss of reputation would abate upon death, while claims involving pecuniary loss could survive. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p class="p1"><span class="s1">The Supreme Court has ruled that a medical negligence case does not automatically come to an end with the death of the accused doctor. Legal heirs can be brought on record, and proceedings may continue against them, but only for claims linked to financial loss against the deceased doctor’s estate.</span></p>
+<p class="p1"><span class="s1">A bench of Justices JK Maheshwari and Atul S Chandurkar on May 4 clarified that personal claims such as pain, suffering or loss of reputation would abate upon death, while claims involving pecuniary loss could survive. “Upon the death of the alleged medically negligent doctor, his/her legal heirs can be impleaded and brought on record,” the bench said, adding that “the extent of liability will be determined based on the pleadings and evidence presented.”</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p class="p1"><span class="s1"><b>Facts of the case</b><b></b></span></p>
+<p class="p1"><span class="s1">The case pertained to an eye surgery that was performed in Bihar in 1990. Suresh Chandra Roy had approached Dr PB Lall at his clinic in Munger, Bihar, after Roy’s wife complained of severe pain in her right eye. A surgery was performed in February 1990, but the pain later recurred. The family subsequently consulted various doctors, after which they were informed that the vision in the right eye was compromised and that the left eye was at risk too. The left eye was eventually operated on in 1994.</span></p>
+<p class="p1"><span class="s1">A complaint under the Consumer Protection Act, 1986, sought a total of Rs 4.5 lakh in compensation for the treatment expenses, loss of vision, travel and mental agony. In 2003, the district consumer forum held Dr Lall liable for negligence and awarded the complainants Rs 2.6 lakh in compensation. The Bihar State Consumer Disputes Redressal Commission later reversed the order, holding that the loss of vision was attributable to glaucoma and that negligence had not been established through expert evidence.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p class="p1"><span class="s1">This decision was appealed in the NCDRC. During the pendency of proceedings, Dr Lall died in 2009. His wife and son were brought on record as legal heirs. They argued that medical negligence claims, being a “personal cause of action do not survive and end with the death of the person” and that the proceedings could not continue against them. The NCDRC rejected their plea, after which the matter reached the Supreme Court.</span></p>
+<p class="p1"><span class="s1"><b>The law</b><b></b></span></p>
+<p class="p1"><span class="s1">The Supreme Court examined the issue through the common law maxim <i>actio personalis moritur cum persona</i> – a personal right of action dies with the person. Traditionally, this meant that claims relating to personal injury abated upon death.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/supreme-court-acid-attack-definition-rpwd-act-expansion-10675177/">Those forced to consume acid also entitled to state support: Why SC expanded definition of ‘acid attack victim’</a></span></div>
+<p class="p1"><span class="s1">The Supreme Court traced how Indian law modified and circumscribed this principle through statutes. The Legal Representatives Suits Act 1855 permitted suits to be brought by or against the legal representatives of a deceased person, but confined them to pecuniary losses to the estate, particularly when the act was committed within one year before death.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p class="p1"><span class="s1">The Fatal Accidents Act 1855 created a right to sue for death caused by tortious acts. These, however, were eventually consolidated into Section 306 of the Indian Succession Act 1925, which is the operative provision in this case.</span></p>
+<p class="p1"><span class="s1">Section 306 states that “rights to prosecute or defend any action or special proceeding existing in favour of or against a person at the time of his decease, survive to and against his executors or administrators” except in cases involving defamation, assault, or “other personal injuries not causing death.”</span></p>
+<p class="p1"><span class="s1">The bench also examined Order XXII of the CPC, which governs the substitution of parties after death during the pendency of a proceeding. Rule 4 addresses the situation where a sole defendant dies, and the right to sue survives. In that case, the legal representatives must be brought on record through an application within the prescribed limitation period, failing which the suit abates against the deceased defendant.</span></p>
+<p class="p1"><span class="s1">Section 13(7) of the Consumer Protection Act, which makes those provisions applicable to consumer disputes, states that “in the event of death of a complainant who is a consumer or of the opposite party against whom the complaint has been filed, the provisions of Order XXII of the First Scheduled…shall apply.” The court read these provisions together and held that the continuation of proceedings after death depends on whether the right to sue survives in substantive law. Purely personal claims abate upon death, but claims relating to pecuniary loss can continue against legal representatives to the extent of the estate inherited by them.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p class="p1"><span class="s1">Procedural provisions under Order XXII tell us what to do when a party dies; substantive law under Section 306 of the Succession Act tells us whether there is anything left to do at all.</span></p>
+<p class="p1"><span class="s1"><b>The 2001 NCDRC ruling</b><b></b></span></p>
+<p class="p1"><span class="s1">Before the Supreme Court judgment, a five-judge bench ruling in <i>Balbir Singh Makol v Chairman, Sir Ganga Ram Hospital</i> was the leading precedent. It was held that in medical negligence matters, the cause of action was personal to the allegedly negligent doctor and did not survive against legal representatives after death.</span></p>
+<p class="p1"><span class="s1">The NCDRC said that death extinguished the right of action unless a decree had already been passed against the deceased doctor before death. It did so by relying on a Supreme Court case which concerned a defamation claim.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/nclat-jaypee-insolvency-adani-vedanta-ruling-10673808/">Vedanta vs Adani: How NCLAT ruled on Jaypee flagship company’s insolvency proceedings</a></span></div>
+<p class="p1"><span class="s1">The Supreme Court bench overruled that view, saying that the common law maxim had been applied by the NCDRC without considering the statutory modifications made under Indian law, that the reliance on a Supreme Court ruling on defamation “was solely arising from personal injury claim,” and that the NCDRC had wrongly treated the exception under Section 306 as absolute by barring even claims relating to pecuniary loss against the estate.</span></p>
+<p class="p1"><span class="s1"><b>What the Supreme Court held</b><b></b></span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p class="p1"><span class="s1">The Supreme Court held that while purely personal claims abate upon death, claims involving pecuniary loss to or against the estate can survive against legal representatives.</span></p>
+<p class="p1"><span class="s1">Interpreting Section 306 of the Indian Succession Act, the bench said the exception relating to “other personal injuries not causing the death of the party” could not be read so broadly as to extinguish all claims arising from personal injury. “Exceptions have to be strictly interpreted,” the court said, adding that the “scope of exception cannot be allowed to chew the enabling provision.”</span></p>
+<p class="p1"><span class="s1">To explain the distinction, the court referred to the difference between personal rights and proprietary rights. Claims such as pain, suffering or loss of reputation, it held, are personal in nature and abate upon death. These are non-transferable, “residual” in character and are merely “elements of well-being”. However, claims relating to pecuniary loss to the estate, including treatment expenses or financial losses, survive and may continue against the estate inherited by legal representatives. These are transferable, possess economic value and are “elements of wealth.” The court said that “distinction to an individual’s personal right which is attached to his status, the proprietary right relates to his estate. On the other hand, personal right or claim usually includes damages for loss of reputation, pain, and suffering.”</span></p>
+<p class="p1"><span class="s1">The bench rejected the argument that the Consumer Protection Act, being beneficial legislation, permits all claims to continue after death. It held that Section 13(7) of the Act applies Order XXII of the CPC, but the question of whether proceedings survive ultimately depends on substantive law under Section 306 of the Succession Act. “When we speak of ‘right to sue/cause of action’ we speak of substantive law, as opposed to procedural aspects,” the court observed.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p class="p1"><span class="s1">The court further clarified that where a decree already exists against a deceased person, the decretal amount can be recovered from the estate because the cause of action merges into the decree itself. In Dr Lall’s case, however, no decree existed at the time of his death because the State Commission had already set aside the District Forum’s order.</span></p>
+<p class="p1"><span class="s1">The matter will now return to the NCDRC, which must first determine whether Dr Lall was negligent and, if so, which parts of the claim are recoverable against the estate left behind.</span></p>
+<p class="p1"><span class="s1"><b>Reactions</b><b></b></span></p>
+<p class="p1"><span class="s1">Prof. (Dr.) SV Joga Rao, Founder of Legalexcel Attorneys, told <i>The Indian Express</i> that the judgment attempts to draw a line between holding a doctor personally responsible and allowing compensation claims to continue against the estate left behind. “The son or daughter cannot themselves be treated as medically negligent. But the court has said pecuniary claims can continue against the inherited estate of the deceased doctor,” he said.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p class="p1"><span class="s1">At the same time, Prof. Rao said the ruling could raise practical difficulties in enforcement. “If the legal heirs have not inherited any estate, then what happens? And where there is more than one legal heir, how will liability be worked out?” he said. “From a consumer perspective, the judgment appears justified, but making legal heirs face pecuniary liability may also seem unfair.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p class="p1"><span class="s1">Former Registrar of <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> Medical Council, Dr Girish Tyagi, also speaking to <i>The Indian Express</i>, said that many doctors would see the ruling as adding to the pressures already surrounding medical practice and litigation. “First, there is abuse or assault from patient relatives, then litigation, and now even after the doctor’s death, the family may have to continue facing compensation proceedings,” he said.</span></p>
+<p class="p1"><span class="s1">Tyagi said the fear of prolonged legal liability could also affect how doctors handle critical patients. “Doctors may prefer referring serious cases to bigger hospitals where legal teams are available to handle such litigation,” he said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10677067"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May seventh, twenty twenty-six, at fifty-two minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/supreme-court-medical-negligence-doctor-death-ruling-10677067/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-09 02:30 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
