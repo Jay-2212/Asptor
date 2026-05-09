@@ -33,6 +33,46 @@ Use this file as the single source of truth for task handoffs.
 
 ---
 
+## [2026-05-09 06:12 UTC] Agent: Codex
+### Scope Claimed
+- Improve article reading quality by preserving paragraph formatting for fetched bodies and making index ordering feel less source-clumped.
+
+### Context Read
+- [x] README.md
+- [x] INSTRUCTIONS.md
+- [x] ARCHITECTURE.md
+- [x] AGENTS.md
+- [x] LOGBOOK.md (latest entries)
+
+### Assumptions Before Implementation
+- Fifty Two formatting is primarily lost because JSON-LD `articleBody` is preferred over DOM paragraph nodes.
+- Index monotony is primarily caused by many articles sharing identical fetch timestamps, so source/file order dominates within a category.
+- The fix should preserve category tabs while interleaving sources inside each category.
+
+### Work Completed
+- Updated `scripts/clean/article_cleaners/fifty_two.py` so Fifty Two body extraction prefers DOM paragraph blocks over flat JSON-LD `articleBody`, preserving paragraph structure and stripping inline source-site styles that conflict with Asptor's dark reader.
+- Repaired the latest Fifty Two processed snapshot (`data/processed/fifty_two/20260509T051648Z.json`) with the improved cleaner.
+- Updated `scripts/publish/publisher.py` to interleave sources within each category tab while preserving recency inside each source, avoiding long same-publication blocks when articles share a fetch timestamp.
+- Strengthened duplicate article merging so the publisher keeps newer metadata while preferring the richest paragraph-preserving body when a newer duplicate has flattened content.
+- Regenerated `site/` from the updated processed data.
+
+### Tests/Validation
+- `python3 -m unittest tests.clean.test_cleaners.FiftyTwoArticleCleanerTests tests.publish.test_publisher.TestPublisher.test_mix_sources_for_feed_interleaves_same_timestamp_articles -v` passed.
+- `python3 -m unittest discover -v` passed: 123 tests.
+- `python3 -m scripts.publish.run_publish --processed-root data/processed --site-root site` published 283 articles after rebasing onto newer automated pipeline data.
+- Verified The Diversion now resolves to a paragraph-rich body with 69 paragraph tags in generated HTML, no inline `style=` attributes, and preserved paragraph breaks.
+- Verified index ordering now rotates Reading Material sources (`the_caravan`, `fifty_two`, `the_hindu_opinion`) and National News sources (`indian_express_explained`, `the_hindu_national`) instead of source-clumping.
+
+### Decisions
+- Kept category tabs intact and made ordering deterministic source interleaving rather than randomization.
+- Preferred source DOM paragraphs for Fifty Two because the JSON-LD body can flatten the whole article into one large paragraph.
+
+### Risks/Blockers
+- Older Fifty Two snapshots may still contain flattened content, but the latest repaired snapshot is what the publisher selects for current pages. Future fetches will use the improved cleaner.
+
+### Next Step for Next Agent
+- If further typography issues appear, audit the other article cleaners for source-specific inline styles and non-paragraph containers.
+
 ## [2026-05-08 05:37 UTC] Agent: Codex
 ### Scope Claimed
 - Diagnose and fix the GitHub Pages article body fallback where published articles show "Content is currently not available" despite fetchable source HTML.

@@ -69,6 +69,51 @@ class Publisher:
         return sorted_articles
 
     @staticmethod
+    def article_sort_key(article: Article) -> str:
+        """Return the timestamp used for feed ordering."""
+        return article.published_at or article.fetched_at
+
+    @staticmethod
+    def content_quality_score(article: Article) -> tuple[int, int]:
+        """Rank article body quality by preserved paragraph structure."""
+        html = article.content_html or ""
+        text = article.content_text or ""
+        paragraph_count = html.count("<p") + text.count("\n\n")
+        return paragraph_count, len(html) + len(text)
+
+    def mix_sources_for_feed(self, articles: List[Article]) -> List[Article]:
+        """Interleave sources while keeping each source internally recent-first.
+
+        Many articles discovered in one scheduled run share the same timestamp.
+        A plain timestamp sort then falls back to source/file order and creates
+        long blocks from one publication. This keeps the feed deterministic but
+        rotates across available sources for a livelier reading mix.
+        """
+        by_source: Dict[str, List[Article]] = {}
+        for article in articles:
+            by_source.setdefault(article.source, []).append(article)
+
+        for source_articles in by_source.values():
+            source_articles.sort(key=self.article_sort_key, reverse=True)
+
+        mixed: List[Article] = []
+        while by_source:
+            source_names = sorted(
+                by_source,
+                key=lambda source: (
+                    self.article_sort_key(by_source[source][0]),
+                    source,
+                ),
+                reverse=True,
+            )
+            for source in source_names:
+                mixed.append(by_source[source].pop(0))
+                if not by_source[source]:
+                    del by_source[source]
+
+        return mixed
+
+    @staticmethod
     def merge_duplicate_article(existing: Article, candidate: Article) -> Article:
         """Merge duplicate snapshots while preferring the newest metadata.
 
@@ -83,9 +128,11 @@ class Publisher:
             base = existing
             fallback = candidate
 
+        if Publisher.content_quality_score(fallback) > Publisher.content_quality_score(base):
+            base.content_html = fallback.content_html
+            base.content_text = fallback.content_text
+
         for field in (
-            "content_html",
-            "content_text",
             "author",
             "published_at",
             "image_url",
@@ -110,37 +157,38 @@ class Publisher:
         # 1. Generate individual article pages and group for index
         # We'll use a specific order for categories: Reading Material first, then National News
         categories = ["Reading Material", "National News"]
-        grouped_articles: Dict[str, List[str]] = {cat: [] for cat in categories}
+        grouped_articles: Dict[str, List[Article]] = {cat: [] for cat in categories}
         grouped_articles["Other"] = []
 
         for article in articles:
             self.publish_article_page(article, generated_at)
-            
-            # Prepare data for index item
-            date_str = article.published_at[:10] if article.published_at else article.fetched_at[:10]
-            excerpt = article.subtitle or (article.content_text[:200] + "..." if article.content_text else "Click to read more.")
-            
-            item_html = ARTICLE_ITEM_TEMPLATE.substitute(
-                hash=article.hash,
-                source=article.source.replace("_", " ").upper(),
-                date=date_str,
-                title=article.title,
-                excerpt=excerpt
-            )
-            
+
             cat = article.category if article.category in categories else ("Reading Material" if not article.category else "Other")
             if cat not in grouped_articles:
                 grouped_articles[cat] = []
-            grouped_articles[cat].append(item_html)
+            grouped_articles[cat].append(article)
 
         # 2. Generate sections HTML
         sections_html = []
         # Display Reading Material first, then National News
         for cat in ["Reading Material", "National News", "Other"]:
             if grouped_articles.get(cat):
+                article_items = []
+                for article in self.mix_sources_for_feed(grouped_articles[cat]):
+                    date_str = article.published_at[:10] if article.published_at else article.fetched_at[:10]
+                    excerpt = article.subtitle or (article.content_text[:200] + "..." if article.content_text else "Click to read more.")
+                    article_items.append(
+                        ARTICLE_ITEM_TEMPLATE.substitute(
+                            hash=article.hash,
+                            source=article.source.replace("_", " ").upper(),
+                            date=date_str,
+                            title=article.title,
+                            excerpt=excerpt
+                        )
+                    )
                 section_html = SECTION_TEMPLATE.substitute(
                     title=cat,
-                    article_items="\n".join(grouped_articles[cat])
+                    article_items="\n".join(article_items)
                 )
                 sections_html.append(section_html)
 

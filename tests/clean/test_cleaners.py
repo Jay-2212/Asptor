@@ -4,6 +4,7 @@ from __future__ import annotations
 import unittest
 
 from scripts.clean.fifty_two_cleaner import FiftyTwoCleaner
+from scripts.clean.article_cleaners.fifty_two import FiftyTwoArticleCleaner
 from scripts.clean.the_caravan_cleaner import TheCaravanCleaner
 from scripts.clean.the_hindu_cleaner import TheHinduCleaner
 
@@ -287,6 +288,36 @@ class FiftyTwoCleanerTests(unittest.TestCase):
     def test_empty_html_returns_empty_list(self) -> None:
         snapshot = _make_snapshot("fifty_two", "https://fiftytwo.in/", "")
         self.assertEqual(self.cleaner.clean_snapshot(snapshot), [])
+
+
+class FiftyTwoArticleCleanerTests(unittest.TestCase):
+    def test_dom_paragraphs_override_flat_json_ld_body(self) -> None:
+        html = """
+        <html><head>
+          <script type="application/ld+json">
+            {
+              "headline": "A River Story",
+              "articleBody": "First paragraph flattened into one block. Second paragraph flattened too.",
+              "author": {"name": "Reporter"},
+              "datePublished": "2026-05-09"
+            }
+          </script>
+        </head><body>
+          <main>
+            <p class="story-intro__text">First paragraph with its own rhythm.</p>
+            <p class="paragraph__text">Second paragraph stays separate.</p>
+          </main>
+        </body></html>
+        """
+
+        result = FiftyTwoArticleCleaner().clean(html)
+
+        self.assertIn("story-intro__text", result["content_html"])
+        self.assertIn("paragraph__text", result["content_html"])
+        self.assertEqual(
+            result["content_text"],
+            "First paragraph with its own rhythm.\n\nSecond paragraph stays separate.",
+        )
 
 
 if __name__ == "__main__":

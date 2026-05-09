@@ -1,5 +1,6 @@
 """Tests for the publishing pipeline."""
 import json
+import itertools
 import shutil
 import unittest
 from pathlib import Path
@@ -115,6 +116,48 @@ class TestPublisher(unittest.TestCase):
         self.assertEqual(articles[0].content_html, "<p>Body 1</p>")
         self.assertEqual(articles[0].content_text, "Body 1")
 
+    def test_load_all_articles_prefers_richer_body_when_newer_duplicate_is_flat(self):
+        article1_rich = Article(
+            source="the_hindu",
+            source_id="id1",
+            url="http://example.com/1",
+            title="Title 1",
+            subtitle="Subtitle 1",
+            author="Author 1",
+            published_at="2026-05-07T12:00:00Z",
+            image_url=None,
+            image_caption=None,
+            content_html="<p>Paragraph 1</p><p>Paragraph 2</p><p>Paragraph 3</p>",
+            content_text="Paragraph 1\n\nParagraph 2\n\nParagraph 3",
+            fetched_at="2026-05-07T13:00:00Z",
+            hash="hash1",
+        )
+        article1_newer_flat = Article(
+            source="the_hindu",
+            source_id="id1",
+            url="http://example.com/1",
+            title="Title 1",
+            subtitle="Subtitle 1 Updated",
+            author="Author 1",
+            published_at="2026-05-07T12:00:00Z",
+            image_url=None,
+            image_caption=None,
+            content_html="<p>Paragraph 1 Paragraph 2 Paragraph 3</p>",
+            content_text="Paragraph 1 Paragraph 2 Paragraph 3",
+            fetched_at="2026-05-07T14:00:00Z",
+            hash="hash1",
+        )
+        self._write_articles("the_hindu", "file1.json", [article1_rich])
+        self._write_articles("the_hindu", "file2.json", [article1_newer_flat])
+
+        publisher = Publisher(self.processed_root, self.site_root)
+        articles = publisher.load_all_articles()
+
+        self.assertEqual(articles[0].fetched_at, "2026-05-07T14:00:00Z")
+        self.assertEqual(articles[0].subtitle, "Subtitle 1 Updated")
+        self.assertEqual(articles[0].content_html, article1_rich.content_html)
+        self.assertEqual(articles[0].content_text, article1_rich.content_text)
+
     def test_load_all_articles_sorting(self):
         self._write_articles("the_hindu", "file1.json", [self.article1])
         self._write_articles("the_caravan", "file1.json", [self.article2])
@@ -125,6 +168,53 @@ class TestPublisher(unittest.TestCase):
         # article1: 12:00, article2: 11:00 -> article1 should be first (descending)
         self.assertEqual(articles[0].hash, "hash1")
         self.assertEqual(articles[1].hash, "hash2")
+
+    def test_mix_sources_for_feed_interleaves_same_timestamp_articles(self):
+        articles = [
+            Article(
+                source="source_a",
+                source_id=f"a{i}",
+                url=f"http://example.com/a{i}",
+                title=f"Source A Title {i}",
+                subtitle=None,
+                author=None,
+                published_at=None,
+                image_url=None,
+                image_caption=None,
+                content_html="<p>Body</p>",
+                content_text="Body",
+                fetched_at="2026-05-07T13:00:00Z",
+                hash=f"a{i}",
+            )
+            for i in range(3)
+        ] + [
+            Article(
+                source="source_b",
+                source_id=f"b{i}",
+                url=f"http://example.com/b{i}",
+                title=f"Source B Title {i}",
+                subtitle=None,
+                author=None,
+                published_at=None,
+                image_url=None,
+                image_caption=None,
+                content_html="<p>Body</p>",
+                content_text="Body",
+                fetched_at="2026-05-07T13:00:00Z",
+                hash=f"b{i}",
+            )
+            for i in range(2)
+        ]
+
+        publisher = Publisher(self.processed_root, self.site_root)
+        mixed_sources = [article.source for article in publisher.mix_sources_for_feed(articles)]
+
+        self.assertLessEqual(max(
+            len(list(group))
+            for _, group in itertools.groupby(mixed_sources)
+        ), 2)
+        self.assertEqual(mixed_sources.count("source_a"), 3)
+        self.assertEqual(mixed_sources.count("source_b"), 2)
 
     def test_publish_site_generates_files(self):
         self._write_articles("the_hindu", "file1.json", [self.article1])

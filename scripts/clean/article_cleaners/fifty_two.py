@@ -7,6 +7,32 @@ from bs4 import BeautifulSoup
 class FiftyTwoArticleCleaner:
     """Cleaner for Fifty Two articles."""
 
+    @staticmethod
+    def _extract_dom_body(soup: BeautifulSoup) -> tuple[str, str]:
+        """Extract paragraph-level body content from the rendered article DOM."""
+        body_parts = soup.select(".story-intro__text, .paragraph__text, .drop-cap__other-text")
+        if not body_parts:
+            body_parts = soup.select("article p, main p")
+
+        paragraphs = []
+        seen = set()
+
+        for part in body_parts:
+            text = part.get_text(" ", strip=True)
+            if not text or text in seen:
+                continue
+            seen.add(text)
+            for tag in [part, *part.find_all(True)]:
+                tag.attrs.pop("style", None)
+            paragraphs.append(part)
+
+        if not paragraphs:
+            return "", ""
+
+        content_html = "".join(str(p) for p in paragraphs)
+        content_text = "\n\n".join(p.get_text(" ", strip=True) for p in paragraphs)
+        return content_html, content_text
+
     def clean(self, html: str) -> dict:
         """Extract content and metadata from Fifty Two article HTML.
         
@@ -35,7 +61,7 @@ class FiftyTwoArticleCleaner:
                 if body:
                     content_text = body
                     # Convert plain text body to basic HTML paragraphs
-                    paragraphs = content_text.split("\n")
+                    paragraphs = re.split(r"\n{2,}", content_text)
                     content_html = "".join(f"<p>{p.strip()}</p>" for p in paragraphs if p.strip())
                 
                 author_data = data.get("author")
@@ -67,12 +93,10 @@ class FiftyTwoArticleCleaner:
             if banner_img:
                 image_url = banner_img.get("src", "")
                 
-        if not content_html:
-            # Fallback to selector-based body extraction
-            body_parts = soup.select(".story-intro__text, .paragraph__text, .drop-cap__other-text")
-            if body_parts:
-                content_html = "".join(str(p) for p in body_parts)
-                content_text = "\n".join(p.get_text(strip=True) for p in body_parts)
+        dom_html, dom_text = self._extract_dom_body(soup)
+        if dom_html:
+            content_html = dom_html
+            content_text = dom_text
 
         return {
             "title": title,
