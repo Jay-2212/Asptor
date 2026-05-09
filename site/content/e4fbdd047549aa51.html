@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>A political scientist explains why anti-incumbency alone is a 'lazy' way to understand elections | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>A political scientist explains why anti-incumbency alone is a 'lazy' way to understand elections</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-09</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-himanta-5col.jpg?w=1600" alt="A political scientist explains why anti-incumbency alone is a 'lazy' way to understand elections">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="anti-incumbency, Assembly Election Results 2026, Assembly election results, Assam Assembly Election Result 2026, West Bengal Assembly Election Result 2026, Tamil Nadu Assembly Election Result 2026, Kerala Assembly Election Result 2026, Indian express explained, explained news, current affairs" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-himanta-5col.jpg?w=1600" width="650"/><span class="ie-custom-caption">Assam CM Himanta Biswa Sarma celebrates NDA’s third straight poll victory in Assam. (PTI)
+</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>State and national elections in India are followed by frenetic political analyses aimed at making sense of the verdicts. An oft-cited reason for electoral loss is a feeling of “anti-incumbency”, or the tendency among the people to vote out the ruling party.</p>
+<p>What exactly do analysts mean when they attribute a loss to anti-incumbency, and is holding power always a reliable indicator of losing it? If so, why? Rahul Verma, a political scientist and Fellow at New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>-based think tank Centre for Policy Research, speaks to <em>The Indian Express</em> about the concept.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><strong>Why is anti-incumbency often suggested as a reason for an electoral loss? Is there a counterargument?</strong></h2>
+<p>The term gets thrown around without a proper explanation of why there was a sense of anti-incumbency among voters. In some ways, this has been a lazy explanation for when governments are removed from power. Unless the reasons for anti-incumbency are provided, as well as the scale of the phenomenon, we can’t clearly know its role.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>For example, <a href="https://indianexpress.com/article/opinion/columns/bengal-fall-anti-incumbency-bjp-tmc-congress-mamata-banerjee-10679578/"><strong>anti-incumbency could be</strong></a> due to the leadership being unavailable to the people or party workers, or the leadership being uncharismatic. Anti-incumbency may also arise because of policy failures. Sometimes, anti-incumbency sentiments could be about what a party and its MLAs were doing on the ground. In that case, it would mean that the anti-incumbency wasn’t against the leadership or policy, but against local leaders or cadres being more extractive and not helping the people.</p><div id="taboola-mid-article-personalisation"></div>
+<p>So, citing “anti-incumbency” without analysing its drivers is not the best way to understand why a ruling party lost power.</p>
+<h2><strong>Does incumbency always imply a potentially poor poll performance?</strong></h2>
+<p>In some countries, incumbency is actually considered advantageous. Scholars have shown that acquiring power results in high chances of getting re-elected. Many Western European democracies and Congress members in the US see high rates of re-election, perhaps thanks to name recognition, access to resources and other factors.</p>
+<p>In the Indian case, incumbency has been understood as disadvantageous, according to the data. It means that once a politician gets elected, the chances of re-election are almost a coin toss — there is only a 50/50 probability of getting re-elected. The reason, perhaps, is that a large number of Indians depend on the state or government for their well-being, which is not the case in Western countries, where markets have a greater say in people’s lives.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/west-bengal-political-violence-roots-history-expert-explains-10679776/">What makes West Bengal’s brand of political violence unique?</a></span></div>
+<p>One argument is that every additional day in power increases the chances of more people becoming dissatisfied with the ruling party’s performance. This is known as the idea of “cost of ruling”. So voters will turn away if they find that the party in power does not further their interests.</p>
+<p>India also has a much more diverse and heterogeneous society. Any party that forms a social coalition to come to power likely faces the difficult task of retaining its support. Many groups may make several demands of the state, and it becomes difficult for the party in power to fulfil them, presenting a disadvantage going into elections.</p>
+<p><strong>Why do some states see the same parties govern for successive terms, while others witness the opposite?</strong></p>
+<p>The tendency to re-elect varies state by state, and I think it depends on a large set of factors — demography (meaning the social coalitions), political history (whether it’s a two- or multi-party system) and how each of these interacts to produce an outcome.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>However, there is no one framework or explanation for why voters in a state behave the way they do. An election is a macro event, and there are too many factors that might be shaping it. In the case of Gujarat, the BJP has been in power for 25 years, but in neighbouring Rajasthan, every election in the same period saw power change hands.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/communist-kerala-west-bengal-tripura-decline-history-10671962/">With Left losing Kerala, India has no communist government for the first time since 1977: trajectory of the decline</a></span></div>
+<p>Sometimes, election results may reflect accumulated anti-incumbency sentiment, which can be peculiar to a state. In the TMC’s case, it was in <a href="https://indianexpress.com/article/explained/mamata-banerjee-wont-resign-what-happens-constitution-10674255/"><strong>power for 15 years</strong></a> and before that, West Bengal saw 34 years of Left rule before it was electorally diminished.</p>
+<p>When it comes to the recent election results, I believe they show anti-incumbency is not just against the government but also against parties. In both the TMC and DMK’s cases, we see a common thread of dynastic politics in terms of their young leaders. Similarly, the NDA’s third straight win in Assam is not only about governance, but also a function of the Congress weakening, as well as the recent delimitation of constituencies.</p>
+<h2><strong>How has anti-incumbency played out in India? With BJP’s national rise since 2014, is anti-incumbency declining?</strong></h2>
+<p>Between the first general elections of 1952 and 1967, the Congress was in power in most states. This was a period of incumbency advantage, where the party kept getting re-elected, but between 1967 and 1989, regional challengers arrived. The post-1989 period saw a high level of anti-incumbency.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Some parties then began adopting a strategy, like the BJP in Gujarat, where they replaced a large number of sitting MLAs to inject some freshness into the political space. Parties began realising that a lot of the voter unhappiness was with the local party organisation. Replacements allowed them to contest based on leadership popularity and organisational muscle, rather than relying on certain local candidates.</p>
+<p>In the current period, I think there is again close to a 50/50 probability of re-election. Recently, incumbents lost power in West Bengal, Kerala and <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a>, but returned in Assam and Puducherry.</p>
+<p>Taken together, this history shows that anti-incumbency sentiments are not only dependent on whether people are happy with their governments. It could be a function of which party was in power at the national level and what kind of influence it exerted on state politics.</p>
+<p>In the early years, Congress governments kept returning not because they were very popular or doing everything right, but because the Congress, as a party, was organisationally strong. It had resources at its disposal and the Opposition was quite weak then.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The reason that Congress governments lost power over time is that many more parties began competing for elections, more groups began making demands from the state, and more parties now represented some of those groups.</p>
+<p>Over the last 10 years, BJP governments have become much more likely to be re-elected, with some regional parties losing out. This time, three of the regional players — the Left in Kerala, DMK and TMC — lost power. Going back, the YSRCP lost power in Andhra, the BJD in Odisha, and BRS in Telangana.</p>
+<p>Today, the BJP possibly has a nationwide advantage. It exists alongside other factors, including greater organisational and financial resources, and underscores the limits of anti-incumbency as a theory in itself.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10680181"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May ninth, twenty twenty-six, at zero minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/assembly-election-results-2026/" href="https://indianexpress.com/about/assembly-election-results-2026/">Assembly Election Results 2026</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/expert-explains-why-anti-incumbency-alone-is-a-lazy-way-to-understand-election-results-10680181/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-09 05:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

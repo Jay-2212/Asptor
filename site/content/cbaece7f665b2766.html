@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>After Bengal win, PM Modi invokes Syama Prasad Mookerjee: The life and politics of the Jana Sangh founder | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>After Bengal win, PM Modi invokes Syama Prasad Mookerjee: The life and politics of the Jana Sangh founder</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-09</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Syama-Prasad-Mookerjee.jpg?w=1600" alt="After Bengal win, PM Modi invokes Syama Prasad Mookerjee: The life and politics of the Jana Sangh founder">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Syama Prasad Mookerjee" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Syama-Prasad-Mookerjee.jpg?w=1600" width="650"/><span class="ie-custom-caption">From 1943 to 1946, Mookerjee was the Hindu Mahasabha president. (Wikimedia Commons, enhanced using AI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In his <a href="https://indianexpress.com/article/india/new-dawn-pm-modi-calls-for-badlav-not-badla-10673009/"><strong>victory speech</strong></a> at the BJP headquarters on Monday evening (May 4), Prime Minister Narendra Modi said that “the soul of Syama Prasad Mookerjee must be at peace today”. As the party won West Bengal for the first time ever, the PM recalled Mookerjee, the Bengali leader who founded the BJP’s predecessor, the Bharatiya Jana Sangh, in 1951.</p>
+<p>A year after its formation, the Jana Sangh made a modest electoral debut, winning just three Lok Sabha seats — two of them from Bengal. The party merged with the Janata Party in the 1977 election to defeat Indira Gandhi, but the Janata experiment soon collapsed. It was in 1980 that the Jana Sangh’s successor, the BJP, was founded, with Atal Bihari Vajpayee, who had once been associated with Mookerjee, as its first president.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>Who was Syama Prasad Mookerjee?</h2>
+<p>Born on July 6, 1901, Mookerjee — son of Ashutosh Mookerjee, Calcutta High Court judge and vice-chancellor of Calcutta University — studied at Presidency College, Calcutta, and Lincoln’s Inn. He became the youngest vice-chancellor of Calcutta University at just 33.</p>
+<p>He was elected to the Bengal Legislative Council in 1929 and 1930, first as a Congressman and then as an independent. From 1941 to 1942, he joined the Progressive Coalition government of Fazlul Haque as Finance Minister. The government was formed in opposition to the Muslim League. Mookerjee justified his decision by saying that the need of the hour was to organise Hindus and cooperate with Muslims who believed in working together.</p><div id="taboola-mid-article-personalisation"></div>
+<p>A controversial letter decrying the Quit India Movement, purportedly written by Mookerjee to the British, has often been a topic of discussion.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Express Opinion</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/poll-verdicts-frame-peoples-push-for-change-bjp-seized-that-impulse-rivals-paid-for-their-standstill-10672794/">Poll verdicts frame people’s push for change – BJP seized that impulse, rivals paid for their standstill</a></span></div>
+<p>From 1943 to 1946, Mookerjee was the Hindu Mahasabha president. He took up the cause of Bengal’s Hindus in the run-up to Partition, opposing Muslim League leader and Bengal Prime Minister H S Suhrawardy’s “United Bengal” plan — which called for an independent state separate from India and Pakistan. Mookerjee saw this as an attempt to ensure domination of Hindus by a Muslim majority. He called for the partition of Bengal, with Hindu-majority West Bengal staying with India.</p>
+<p><strong>Moderate Hindutva</strong></p>
+<p>After the assassination of Mahatma Gandhi, Mookerjee made the Hindu Mahasabha’s Working Committee adopt resolutions that “expressed shame that Gandhi’s assassin had been connected with the organisation, and declared support for the government in its efforts to suppress terrorism or subversive activities in any shape or form”, writes BD Graham in Hindu Nationalism and Indian Politics (2007).<br/>
+In November 1948, Mookerjee resigned from the Hindu Mahasabha after it rejected his suggestion to broaden its membership if it wanted to be a modern political party.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>Bengal Hindus</strong></h2>
+<p>When riots broke out in East Pakistan, now Bangladesh, in 1949-50, large numbers of Hindu refugees came to India. Mookerjee, the minister of industry and supply in the Jawaharlal Nehru government at this time, spoke out for them.</p>
+<p>In April 1950, Nehru and Pakistan Prime Minister Liaqat Ali Khan signed a pact calling upon both countries to provide equality, freedom and justice to their minorities.</p>
+<p>Mookerjee resigned from the cabinet as the pact did not include a clause sought by him — sanctions against any side that failed to honour the agreement. It was after this that Mookerjee formed the Bharatiya Jana Sangh with the help of RSS volunteers.</p>
+<p><strong>The Kashmir issue</strong></p>
+<p>Pakistan, which laid claim to the princely state of Kashmir ruled by the Hindu Dogra king Raja Hari Singh on account of its Muslim majority, sent irregular troops, or <em>Kabailis</em>, to capture Kashmir in October 1947. A worried Hari Singh signed the Instrument of Accession on October 26, 1947, and Indian soldiers began pushing back the invaders. India took the case to the United Nations Security Council in January 1948, and the newly-established UN Commission for India and Pakistan (UNCIP) mediated a ceasefire.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/5-reasons-bjp-seats-west-bengal-elections-10672055/">BJP’s big Bengal win: 5 reasons it beat Mamata Banerjee</a></span></div>
+<p>The ceasefire brought the Line of Control into existence. UN Security Council Resolution 47 asked both sides to demilitarise so that a plebiscite could be held to determine the wishes of the people of <a class="" href="https://indianexpress.com/section/cities/jammu/" rel="noamphtml">Jammu</a> and Kashmir. Since demilitarisation never happened on either side, the resolution remained a dead letter.</p>
+<p>Article 370 of the Constitution was enacted, giving Parliament powers only in the fields of defence, foreign affairs and communication in the case of Kashmir. Indian laws didn’t apply to Kashmir beyond these three heads. People from outside also required a permit to visit the state, and were barred from buying land there.</p>
+<p>The state’s Prime Minister, Sheikh Abdullah, abolished big land holdings in Jammu and Kashmir in 1951 under the Big Landed Estates Abolition Act, without compensation, hitting Hindu landlords hard. He also adopted Urdu as the official language. The Dogra Hindu landlords resented these steps.</p>
+<p>Prem Nath Dogra, a former Swayamsevak and civil servant from Jammu, launched an agitation against the Sheikh Abdullah government through his Praja Parishad, seeking the complete integration of Jammu and Kashmir with India. Mookerjee joined the movement in 1952.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><strong>Mookerjee and the Kashmir issue</strong></h2>
+<p>The Jana Sangh took up in Parliament the arrest of Dogra and his followers after a clash with the police in the state. Later, the party also opposed the adoption of a flag by the state by the Constituent Assembly of Jammu and Kashmir.</p>
+<p>On June 26, 1952, Mookerjee pressed the Centre to convince Jammu and Kashmir to accept full integration with India. The Jana Sangh and Praja Parishad widely adopted a slogan – “<em>ek desh mein do vidhan, do pradhan aur do nishan nahin ho sakte</em> (in one nation, there cannot be two constitutions, two Prime Ministers and two flags).”</p>
+<span class="custom-caption"><img alt="Nehru with Mookerjee" class="lazyloading size-medium wp-image-10673343" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg?resize=600,354" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg 938w, https://indianexpress.com/wp-content/uploads/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg?resize=450,265 450w, https://indianexpress.com/wp-content/uploads/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg?resize=600,354 600w, https://indianexpress.com/wp-content/uploads/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg?resize=768,453 768w, https://indianexpress.com/wp-content/uploads/2026/05/Jawaharlal_Nehru_with_Syama_Prasad_Mookerjee_and_Jairamdas_Doulatram_in_the_rear_are_Govind_Ballabh_Pant_and_Jagjivan_Ram.jpg?resize=687,405 687w" height="553" sizes="(max-width: 938px) 100vw, 938px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="938"> Jawaharlal Nehru with Syama Prasad Mookerjee and Jairamdas Doulatram in the rear are Govind Ballabh Pant and Jagjivan Ram (Wikimedia Commons)</img></span>
+<p>Amid controversy, the Nehru government and the Jammu and Kashmir government signed the <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> Agreement in July 1952, under which the state accepted the jurisdiction of the Supreme Court. It also accepted the supremacy of the Indian flag, though the state’s flag would also remain in use. It further accepted the President of India’s power to declare a state of Emergency in the state under Article 352, subject to the concurrence of the state in the event of internal disturbances.</p>
+<p>The Praja Parishad, however, rejected the Delhi Agreement and, by October 1952, was planning an agitation if the Constituent Assembly of Jammu and Kashmir decided to elect a head of the state. They launched one when the assembly, by now the state’s legislative assembly, elected Karan Singh as head of the state (Sadr-e-riyasat). In November 1952, Dogra and other leaders of the Praja Parishad were again arrested.</p>
+<p><strong>Mookerjee calls for agitation</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>At its first annual session at Kanpur in December 1952, Mookerjee’s Jana Sangh passed a formal resolution supporting the Praja Parishad’s Jammu Satyagraha for the complete integration of the state with India. It demanded a round-table conference of representatives of the Praja Parishad, the government of Jammu and Kashmir and the leaders of India, failing which it would launch an all-India agitation for full integration of the state with India.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/bengal-win-shows-demographic-anxieties-cannot-be-ignored-10672832/">Bengal win shows demographic anxieties cannot be ignored</a></span></div>
+<p>Nehru saw the Jana Sangh’s orientation as ‘communal’ on this question. BD Graham quotes Nehru’s letter to Mookerjee, “I have no doubt that you wish well for India, but the fact remains that our conceptions of what is well for India appear to differ… I consider the communal approach to India’s problems, or to any other problems, as inherently bad, narrow and injurious to the individual, the group and the nation…” Nehru’s condition for any talks was that the Praja Parishad should stop its agitation.</p>
+<p>Mookerjee’s Jana Sangh now decided to go into agitation mode. Atal Bihari Vajpayee, who became private secretary to Mookerjee in early 1953, was sent across the Hindi-speaking states to popularise the agitation. “He patted your back once with love, and you would be ready to die for him,” Abhishek Choudhary’s biography of Vajpayee quotes the young PS referring to Mookerjee, his boss. Vajpayee travelled across Uttar Pradesh, urging people to go to Delhi for an agitation on Kashmir. Of the 1200-odd agitators who thronged the capital, 500 were from UP. Mookerjee then travelled to Madhya Bharat — the Gwalior-Indore region of erstwhile princely states — and also to Rajasthan, Vajpayee accompanying him in these trips.</p>
+<p>In Delhi, protestors of the Jana Sangh would suddenly emerge in parks, unanticipated by the police, and shout slogans for the full integration of Kashmir.</p>
+<p><strong>Mookerjee’s Jammu visit</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>In May 1953, Mookerjee decided to go to Jammu without a permit — a symbolic rejection of the special status of Kashmir — with Vajpayee. They went by train to Pathankot in Punjab, and then addressed multiple public meetings across the state for three days. Mookerjee was informed at Pathankot that he would be allowed to enter Jammu and Kashmir without a permit. This made Jana Sangh workers jubilant, and a slogan was coined, as per Choudhary’s book: “Permit system <em>toot gayi, Nehru sarkar jhuk gayi</em> (The permit system has been shattered; the Nehru government has been made to bend)”. (<em>“Vajpayee: The Ascent of the Hindu Right, 1924–1977”, Abhishek Choudhary, 2023</em>)</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>On May 11, 1953, Mookerjee crossed into Jammu and Kashmir over the Ravi. However, the state police had put up barricades for his arrest. Mentally prepared for this, Mookerjee did not turn back and was arrested. He told Vajpayee to return to Delhi and tell everyone that he had entered Jammu and Kashmir without a permit, if only as a prisoner, writes Choudhary. Mookerjee was kept in a cottage about eight miles from Srinagar. However, the heart patient who had a blood pressure problem could not cope well in the conditions of his detention. On June 23, he fell ill suddenly, having suffered a massive heart attack, and died.</p>
+<p>What he left behind was a sense of ‘martyrdom’ for Kashmir among his party workers. LK Advani would recall in his public speeches that a journalist in Rajasthan had informed him that Mookerjee was no more, plunging the Jana Sangh into deep mourning. “What happened? How did he die in confinement?” Advani would ask the crowd in rallies.</p>
+<p>In allied organisations of the RSS, there is a popular slogan: “<em>Jahaan hue balidaan Mookerjee, wo Kashmir hamara hai; jo Kashmir hamara hai, wo saare ka saara hai</em> (where Mookerjee was martyred, that Kashmir is ours; the Kashmir that is ours is the full Kashmir).”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10673327"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vikas-pathak/">
+<figure>
+<img alt="Vikas Pathak" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/09/Vikas-Pathak-1.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vikas-pathak/"><span></span>Vikas Pathak</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8958164"></div><div class="follow_author_title" data-id="Vikas Pathak"></div><div class="follow_author_slug" data-id="vikas-pathak"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/vikas.pathak.520562">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://twitter.com/vikaspathak76/">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vikas Pathak is deputy associate editor with The Indian Express and writes on national politics. He has over 17 years of experience, and has worked earlier with The Hindustan Times and The Hindu, among other publications. He has covered the national BJP, some key central ministries and Parliament for years, and has covered the 2009 and 2019 Lok Sabha polls and many state assembly polls. He has interviewed many Union ministers and Chief Ministers.
+
+Vikas has taught as a full-time faculty member at Asian College of Journalism, Chennai; Symbiosis International University, Pune; Jio Institute, Navi Mumbai; and as a guest professor at Indian Institute of Mass Communication, New Delhi.
+
+Vikas has authored a book, Contesting Nationalisms: Hinduism, Secularism and Untouchability in Colonial Punjab (Primus, 2018), which has been widely reviewed by top academic journals and leading newspapers.
+
+He did his PhD, M Phil and MA from JNU, New Delhi, was Student of the Year (2005-06) at ACJ and gold medalist from University Rajasthan College in Jaipur in graduation. He has been invited to top academic institutions like JNU, St Stephen’s College, Delhi, and IIT Delhi as a guest speaker/panellist.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vikas-pathak/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fifth, twenty twenty-six, at sixteen minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/syama-prasad-mookerjee-bengali-founder-bjp-jana-sangh-10673327/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-09 05:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
