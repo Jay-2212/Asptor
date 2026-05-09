@@ -87,6 +87,34 @@ class TestPublisher(unittest.TestCase):
         self.assertEqual(hashes["hash1"].title, "Title 1 Updated")
         self.assertEqual(hashes["hash2"].title, "Title 2")
 
+    def test_load_all_articles_preserves_body_when_newer_duplicate_is_empty(self):
+        article1_newer_empty = Article(
+            source="the_hindu",
+            source_id="id1",
+            url="http://example.com/1",
+            title="Title 1",
+            subtitle="Subtitle 1 Updated",
+            author=None,
+            published_at="2026-05-07T12:00:00Z",
+            image_url=None,
+            image_caption=None,
+            content_html="",
+            content_text="",
+            fetched_at="2026-05-07T14:00:00Z",
+            hash="hash1"
+        )
+        self._write_articles("the_hindu", "file1.json", [self.article1])
+        self._write_articles("the_hindu", "file2.json", [article1_newer_empty])
+
+        publisher = Publisher(self.processed_root, self.site_root)
+        articles = publisher.load_all_articles()
+
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0].fetched_at, "2026-05-07T14:00:00Z")
+        self.assertEqual(articles[0].subtitle, "Subtitle 1 Updated")
+        self.assertEqual(articles[0].content_html, "<p>Body 1</p>")
+        self.assertEqual(articles[0].content_text, "Body 1")
+
     def test_load_all_articles_sorting(self):
         self._write_articles("the_hindu", "file1.json", [self.article1])
         self._write_articles("the_caravan", "file1.json", [self.article2])

@@ -33,6 +33,48 @@ Use this file as the single source of truth for task handoffs.
 
 ---
 
+## [2026-05-08 05:37 UTC] Agent: Codex
+### Scope Claimed
+- Diagnose and fix the GitHub Pages article body fallback where published articles show "Content is currently not available" despite fetchable source HTML.
+
+### Context Read
+- [x] README.md
+- [x] INSTRUCTIONS.md
+- [x] ARCHITECTURE.md
+- [x] AGENTS.md
+- [x] LOGBOOK.md (latest entries)
+
+### Assumptions Before Implementation
+- Local raw and processed data may include repaired content, but GitHub Actions can still overwrite generated site output if the pipeline republishes from empty or stale records.
+- The fix should stay scoped to article content availability in the fetch/clean/diff/publish/Actions path, avoiding unrelated UI changes.
+- Tests should lock the specific failure mode once identified.
+
+### Work Completed
+- Diagnosed the live blank-article issue as a duplicate-selection bug in the publish path: `Publisher.load_all_articles()` kept the newest processed record for a hash even when that newer listing snapshot had empty `content_html`/`content_text`, discarding older enriched bodies.
+- Confirmed repository data had 107 hashes where an older processed snapshot contained body content but the latest duplicate was empty; before the fix, those would publish fallback pages.
+- Updated `scripts/publish/publisher.py` so duplicate article records keep newest metadata while preserving body/content fields from any older enriched record.
+- Updated `scripts/clean/run_clean.py` so newly cleaned listing snapshots preserve existing full body content from any prior processed snapshot for the same source/hash, not only from the same timestamped output file.
+- Regenerated `site/` with the fixed publisher. A known affected article (`dabfc8c8817a83a2`) changed from the fallback page on GitHub Pages/raw GitHub to a local generated page containing the full article body.
+- Documented the cross-snapshot body-preservation behavior in `README.md`.
+
+### Tests/Validation
+- `python3 -m unittest tests.publish.test_publisher tests.clean.test_registry_and_run -v` passed.
+- `python3 -m unittest discover -v` passed: 120 tests.
+- `python3 -m scripts.publish.run_publish --processed-root data/processed --site-root site` published 191 articles.
+- Local publish candidate audit now shows 8 truly bodyless records, down from 115 latest-empty records before merge preservation.
+- Public check before push: `https://jay-2212.github.io/Asptor/content/dabfc8c8817a83a2.html` and the matching raw GitHub file still contained the fallback, while the regenerated local file does not.
+
+### Decisions
+- Fixed the root cause in both publish and clean layers rather than relying on GitHub Actions successfully refetching every body on every run.
+- Kept article ordering based on the newest `fetched_at`, but made content fields monotonic so already-fetched bodies are not lost to later listing snapshots.
+
+### Risks/Blockers
+- Eight records still have no body in any processed snapshot. Some appear to be section/index pages incorrectly admitted by The Hindu URL matching; others are real article URLs that need a targeted body-fetch repair or the next successful full-clean run.
+- GitHub Pages will continue showing the old fallback until these changes and regenerated `site/` output are pushed and the Pages deployment completes.
+
+### Next Step for Next Agent
+- Tighten The Hindu listing URL filters to exclude section/index pages like `/news/national/andhra-pradesh/` and `/opinion/Readers-Editor/`, then target-repair the remaining real bodyless article records.
+
 ## [2026-05-08 07:15 UTC] Agent: Gemini CLI
 ### Scope Claimed
 - **Urgent Fix:** Resolution of "empty content" issues on the live site.

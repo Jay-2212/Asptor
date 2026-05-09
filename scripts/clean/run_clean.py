@@ -32,6 +32,44 @@ from .schema import Article
 # ---------------------------------------------------------------------------
 
 
+def _existing_content_score(article: dict) -> tuple[int, str]:
+    """Rank processed records by body richness, then recency."""
+    content_size = len(article.get("content_html") or "") + len(
+        article.get("content_text") or ""
+    )
+    return content_size, article.get("fetched_at") or ""
+
+
+def load_existing_articles_by_hash(source_dir: Path) -> dict[str, dict]:
+    """Load the richest known processed record for each article hash."""
+    existing_articles_by_hash: dict[str, dict] = {}
+
+    if not source_dir.exists():
+        return existing_articles_by_hash
+
+    for json_file in source_dir.glob("*.json"):
+        try:
+            existing_data = json.loads(json_file.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+
+        if not isinstance(existing_data, list):
+            continue
+
+        for item in existing_data:
+            article_hash = item.get("hash")
+            if not article_hash:
+                continue
+
+            current = existing_articles_by_hash.get(article_hash)
+            if current is None or _existing_content_score(item) > _existing_content_score(
+                current
+            ):
+                existing_articles_by_hash[article_hash] = item
+
+    return existing_articles_by_hash
+
+
 def process_snapshot(snapshot_path: Path, processed_root: Path) -> list[Article]:
     """Read *snapshot_path*, clean it, and write output.  Return Articles."""
     raw = json.loads(snapshot_path.read_text(encoding="utf-8"))
@@ -52,16 +90,8 @@ def process_snapshot(snapshot_path: Path, processed_root: Path) -> list[Article]
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / snapshot_path.name
 
-    # Preserve existing content if the file already exists
-    existing_articles_by_hash = {}
-    if out_path.exists():
-        try:
-            with open(out_path, "r") as f:
-                existing_data = json.load(f)
-                for item in existing_data:
-                    existing_articles_by_hash[item.get("hash")] = item
-        except:
-            pass
+    # Preserve existing content from any processed snapshot for this source.
+    existing_articles_by_hash = load_existing_articles_by_hash(out_dir)
 
     final_payload = []
     for article in new_articles:
@@ -78,6 +108,8 @@ def process_snapshot(snapshot_path: Path, processed_root: Path) -> list[Article]
             # Preserve image if missing
             if existing.get("image_url") and not article.image_url:
                 article.image_url = existing["image_url"]
+            if existing.get("image_caption") and not article.image_caption:
+                article.image_caption = existing["image_caption"]
         
         final_payload.append(article.to_dict())
 

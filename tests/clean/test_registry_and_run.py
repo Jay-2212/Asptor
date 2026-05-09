@@ -58,13 +58,21 @@ _HINDU_LISTING_HTML = """
 """
 
 
-def _write_snapshot(directory: Path, source_name: str, source_url: str, html: str) -> Path:
+def _write_snapshot(
+    directory: Path,
+    source_name: str,
+    source_url: str,
+    html: str,
+    *,
+    timestamp: str = "20260501T100000Z",
+    fetched_at: str = "2026-05-01T10:00:00Z",
+) -> Path:
     snapshot = {
         "source": {"name": source_name, "url": source_url},
-        "fetched_at": "2026-05-01T10:00:00Z",
+        "fetched_at": fetched_at,
         "content_html": html,
     }
-    out_file = directory / source_name / "20260501T100000Z.json"
+    out_file = directory / source_name / f"{timestamp}.json"
     out_file.parent.mkdir(parents=True, exist_ok=True)
     out_file.write_text(json.dumps(snapshot), encoding="utf-8")
     return out_file
@@ -107,6 +115,40 @@ class ProcessSnapshotTests(unittest.TestCase):
             data = json.loads(out_file.read_text(encoding="utf-8"))
             self.assertIsInstance(data, list)
             self.assertGreater(len(data), 0)
+
+    def test_preserves_existing_body_from_prior_processed_snapshot(self) -> None:
+        with tempfile.TemporaryDirectory() as raw_dir, tempfile.TemporaryDirectory() as proc_dir:
+            first_snap = _write_snapshot(
+                Path(raw_dir),
+                "the_hindu_opinion",
+                "https://www.thehindu.com/opinion/",
+                _HINDU_LISTING_HTML,
+                timestamp="20260501T100000Z",
+                fetched_at="2026-05-01T10:00:00Z",
+            )
+            first_articles = process_snapshot(first_snap, Path(proc_dir))
+            self.assertGreater(len(first_articles), 0)
+
+            old_out_file = Path(proc_dir) / "the_hindu_opinion" / "20260501T100000Z.json"
+            old_data = json.loads(old_out_file.read_text(encoding="utf-8"))
+            old_data[0]["content_html"] = "<p>Already fetched body</p>"
+            old_data[0]["content_text"] = "Already fetched body"
+            old_out_file.write_text(json.dumps(old_data), encoding="utf-8")
+
+            second_snap = _write_snapshot(
+                Path(raw_dir),
+                "the_hindu_opinion",
+                "https://www.thehindu.com/opinion/",
+                _HINDU_LISTING_HTML,
+                timestamp="20260502T100000Z",
+                fetched_at="2026-05-02T10:00:00Z",
+            )
+            process_snapshot(second_snap, Path(proc_dir))
+
+            new_out_file = Path(proc_dir) / "the_hindu_opinion" / "20260502T100000Z.json"
+            new_data = json.loads(new_out_file.read_text(encoding="utf-8"))
+            self.assertEqual(new_data[0]["content_html"], "<p>Already fetched body</p>")
+            self.assertEqual(new_data[0]["content_text"], "Already fetched body")
 
     def test_skips_unknown_source(self) -> None:
         with tempfile.TemporaryDirectory() as raw_dir, tempfile.TemporaryDirectory() as proc_dir:

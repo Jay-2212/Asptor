@@ -96,6 +96,12 @@ Each processed file is written to
 `data/processed/<source_name>/<YYYYMMDDTHHMMSSZ>.json` and contains a JSON
 array of Article records conforming to the schema in `ARCHITECTURE.md`.
 
+When a listing-page snapshot rediscovers an article whose full body was already
+fetched in an older processed snapshot, `run_clean` carries the existing
+`content_html` and `content_text` forward into the new processed file. This
+prevents scheduled runs from reintroducing empty article bodies for articles
+that have already been enriched.
+
 ### Article schema
 
 | Field | Type | Notes |
@@ -143,3 +149,24 @@ For each source the diff layer:
 
 State files grow monotonically (hashes are only added, never removed).  If no
 state file exists yet, all current articles are treated as new.
+
+---
+
+## Phase 4 — Static Publishing
+
+The publish layer reads all processed source files and generates:
+
+- `site/index.html`
+- one article page per unique article hash under `site/content/`
+
+```bash
+python -m scripts.publish.run_publish \
+    --processed-root data/processed \
+    --site-root      site
+```
+
+If the same article hash appears in multiple processed snapshots, the publisher
+uses the newest metadata for ordering and display, while preserving body content
+from any older enriched record. This is important because scheduled listing
+fetches can produce newer empty records for articles whose full bodies were
+already fetched earlier.

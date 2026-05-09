@@ -45,9 +45,17 @@ class Publisher:
                             for item in data:
                                 # Safe loading to handle schema updates
                                 article = Article.from_dict(item)
-                                # Keep the latest one based on fetched_at if hash is same
-                                if article.hash not in articles_by_hash or \
-                                   article.fetched_at > articles_by_hash[article.hash].fetched_at:
+                                if article.hash in articles_by_hash:
+                                    article = self.merge_duplicate_article(
+                                        articles_by_hash[article.hash], article
+                                    )
+                                
+                                # Keep the latest record, but never lose body content
+                                # that was already fetched in an older snapshot.
+                                if (
+                                    article.hash not in articles_by_hash
+                                    or article.fetched_at > articles_by_hash[article.hash].fetched_at
+                                ):
                                     articles_by_hash[article.hash] = article
                 except Exception as e:
                     print(f"Error loading {json_file}: {e}")
@@ -59,6 +67,36 @@ class Publisher:
             reverse=True
         )
         return sorted_articles
+
+    @staticmethod
+    def merge_duplicate_article(existing: Article, candidate: Article) -> Article:
+        """Merge duplicate snapshots while preferring the newest metadata.
+
+        Listing-page snapshots often rediscover an already-seen article with an
+        empty body. The full body may exist only on an older enriched record, so
+        deduplication must carry that content forward.
+        """
+        if candidate.fetched_at >= existing.fetched_at:
+            base = candidate
+            fallback = existing
+        else:
+            base = existing
+            fallback = candidate
+
+        for field in (
+            "content_html",
+            "content_text",
+            "author",
+            "published_at",
+            "image_url",
+            "image_caption",
+            "subtitle",
+            "category",
+        ):
+            if not getattr(base, field) and getattr(fallback, field):
+                setattr(base, field, getattr(fallback, field))
+
+        return base
 
     def publish_site(self):
         """Build the entire static site."""
