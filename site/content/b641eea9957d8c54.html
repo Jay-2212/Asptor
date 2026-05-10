@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>China This Week | China reveals Op Sindoor help to Pakistan, Trump-Xi meeting, and death to ‘corruption’ | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>China This Week | China reveals Op Sindoor help to Pakistan, Trump-Xi meeting, and death to ‘corruption’</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/china-pak.jpeg?w=1600" alt="China This Week | China reveals Op Sindoor help to Pakistan, Trump-Xi meeting, and death to ‘corruption’">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Pakistani Prime Minister Shehbaz Sharif and Chinese President Xi Jinping in Beijing in 2024." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/china-pak.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Pakistani Prime Minister Shehbaz Sharif and Chinese President Xi Jinping in Beijing in 2024.</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The past week saw developments in three notable areas that this tracker has covered for over a year — the China-Pakistan relationship, the China-US relationship and China’s sudden removals of senior military figures under what it terms an anti-corruption campaign.</p>
+<p>First, the<em> South China Morning Post</em> reported comments from an engineer working for a developer of China’s advanced fighter aircraft. Zhang Heng said in an interview about the India-Pakistan conflict last year that “At the support base, we frequently heard the roar of fighter jets taking off and the constant wail of air-raid sirens… It was a real ordeal for us, both mentally and physically.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>This is the <a href="https://indianexpress.com/article/india/china-confirms-on-site-support-to-pakistan-during-operation-sindoor-reports-10680334/"><strong>first admission from China</strong></a> of providing direct military support to Pakistan last May. Until now, officials had rejected the suggestion of collaboration and only spoken of Pakistan using previously purchased Chinese military hardware.</p>
+<p>We then turn to US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>’s official visit to Beijing, which will be his first in this term. The two-day trip, beginning Thursday (May 14), is a curtailed and delayed version of what was initially meant to be a three-day visit in late March, later affected by the US attacks on Iran and the outbreak of war.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Finally, we look at the extraordinary case of two former Chinese defence ministers, Wei Fenghe and Li Shangfu, who saw their death sentences commuted to life imprisonment over graft charges on Thursday.</p>
+<p><em>Here is a closer look at these developments:</em></p>
+<h2><span style="color: #800000">1. China’s role in helping Pakistan during Op Sindoor</span></h2>
+<p>Zhang spoke of their expectations from the J-10CE fighter jets, which Pakistan acquired in 2021 as a response to India’s acquisition of the Rafale fighter jets from France.</p>
+<p>“That wasn’t just a recognition of the J‑10CE; it was also a testament to the deep bond we formed through working side by side, day in and day out,” Zhang said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><strong><span style="color: #008000">UPSHOT:</span></strong> During the conflict last year, official statements from China underlined the need for “stability” and “peace” in the region, apart from condemning both the Pahalgam terror attack and India’s targeting of terrorist camps in Pakistan under Operation Sindoor.</p>
+<p>An editorial in the Communist Party mouthpiece <em>Global Times</em> on May 20, 2025, said, “Indian media have continued to hype up claims of so-called Chinese involvement – an act that is not only ridiculous but also highly dangerous.” While calling for dialogue and the countries to solve their disagreements, it added, “If China had really been militarily involved in the India-Pakistan conflict, the situation on the India-Pakistan battlefield would likely not be what it is today.”</p>
+<p>China <a href="https://indianexpress.com/article/explained/explained-global/china-operation-sindoor-tariff-us-russia-9993583/"><strong>continued describing Pakistan</strong></a> as an “ironclad friend and all-weather strategic cooperative partner”, and several top Pakistani leaders, including Field Marshal Asim Munir and Prime Minister <a class="" href="https://indianexpress.com/about/shehbaz-sharif/" rel="noamphtml">Shehbaz Sharif</a>, made visits to Beijing over the next few months. In fact, Sharif is again expected to visit China later this month.</p>
+<p>Therefore, before Zhang’s comments, too, China’s support for Pakistan was clear as part of a larger strategic relationship with India as a key component. But the comments nonetheless point to the closeness of the defence relationship, including military interoperability, that is, conducting joint operations.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/expert-explains-china-pakistan-peace-plan-iran-stakes-shipping-significance-10620102/">What the China-Pakistan peace plan for West Asia says about China’s stakes and global trade</a></span></div>
+<h2><span style="color: #800000">2. No grand bargain, no great expectations from Trump-Xi meet</span></h2>
+<p>Both Trump and Xi Jinping will have several items at the top of their agenda — the recent West Asia war, tariffs and trade tensions that dominated much of 2025, the Taiwan question, and more.</p>
+<p>Then there are other concerns, like China recently revoking a $2 billion deal between Meta and the Chinese-origin company, Manus AI. The move stemmed from Beijing’s increasing focus on technology and AI as an area closely linked to its security interests, as <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-eswatini-taiwan-meta-manus-hangor-pakistan-10670890/"><strong>we detailed in last week’s tracker.</strong></a></p>
+<p><span style="color: #008000"><strong>UPSHOT:</strong></span> If one goes by the commentary and analysis published in US media in the lead-up to the meeting, the mood seems quite measured, even leaning towards downbeat.</p>
+<p>Consider the first paragraph of a recent <em>Time Magazine</em>’s report: “This is how things will go down. U.S. President Donald Trump will arrive in Beijing next Thursday to be serenaded with gushing pageantry. There’s the obligatory photo op at the Great Hall of the People before closed-door talks with his Chinese counterpart, Xi Jinping. Both leaders will emerge to a fanfare of superficial deals that each can claim as a win: the sale of American soybeans and perhaps jet engines that China desperately needs. They release statements pledging cooperation. Wheels up.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Many such reports have attributed this sentiment to a US government that is unpredictable in its foreign policy, and a Chinese government unwilling to vacate its dominant position. Arguably, China won the tariff war by leveraging Rare Earths and turning to other markets to export its manufacturing goods. In such a situation, it would have little incentive to make concessions to the US.</p>
+<p><em>Semafor</em> also reported that little is known of the programme details, but that the Trump administration plans to invite CEOs from Nvidia, Apple, Exxon, Boeing, Qualcomm, Citigroup, Visa and other big companies “to accompany the president on his trip to China next week,” citing a source. Another important event could concern the proposed “Board of Trade” and “Board of Investment” to set some baseline rules on these subjects, as <em>Reuters</em> reported in March.</p>
+<h2><span style="color: #800000">3. Li Shangfu, Wei Feinghe sentenced to life</span></h2>
+<p>State media <em>Xinhua</em> reported that China’s military court handed out the sentences. After two years, the men will face life imprisonment. “According to the court rulings, Wei was convicted of the crime of accepting bribes, and Li was convicted of crimes of both accepting and offering bribes,” the report said.</p>
+<p><span style="color: #008000"><strong>UPSHOT:</strong></span> Wei, 72, was the defence minister from 2018 to 2023 and was replaced by Li, 68, who held the post for less than a year. Both leaders also served in the all-important military decision-making body, the Central Military Commission.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The sentencing is part of the wider removals of officials, with high-level officials from the military increasingly at its centre. In January, top military general Zhang Youxia was removed as part of the anti-corruption purge. <a href="https://indianexpress.com/article/explained/explained-global/china-purges-military-general-zhang-youxia-motive-theory-xi-10494480/"><strong>Reasons ranging from</strong></a> disagreements with Xi on Taiwan war plans to corruption (which has long been cited as a problem for the Chinese military) were cited.</p>
+<p>Given China’s opaque “black box” politics, it is difficult to give a definite reason for the wider purge, coming as Xi nears the end of an unprecedented third term in power. But what is clear is that it marks a break from the past, and the quick removals of veteran leaders could, somewhere down the line, affect the military at a time of turmoil in world affairs. As a neighbour with a history of military conflict with China, it also matters for India.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10682606"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May tenth, twenty twenty-six, at thirty-one minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-sindoor-pakistan-trump-visit-purge-10682606/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 13:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

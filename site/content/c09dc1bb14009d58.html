@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>On Rabindranath Tagore’s birth anniversary, recalling his clash with Mahatma Gandhi over the ‘cult’ of the charkha | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>On Rabindranath Tagore’s birth anniversary, recalling his clash with Mahatma Gandhi over the ‘cult’ of the charkha</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/gandhi-tagoremainpic.jpg?w=1600" alt="On Rabindranath Tagore’s birth anniversary, recalling his clash with Mahatma Gandhi over the ‘cult’ of the charkha">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Tagore and Gandhi" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/gandhi-tagoremainpic.jpg?w=1600" width="650"/><span class="ie-custom-caption">Jawaharlal Nehru once observed: 'No two persons could probably differ so much as Gandhi and Tagore'</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr"> In September 1921, during Mahatma Gandhi’s visit to Calcutta, Rabindranath Tagore told him: “Poems I can spin, Gandhiji, songs and plays I can spin, but of your precious cotton what a mess I would make!”</p>
+<p dir="ltr">Gandhi and Tagore shared an enduring friendship that lasted from 1914-15 till the latter’s death in 1941. But they also shared profound disagreements about political, social and economic matters.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">And perhaps no object symbolised their deepest philosophical differences more than the charkha. Tagore recoiled from Gandhi’s insistence that every true Indian must spin, while Gandhi remained unwavering in his belief that spinning carried deep moral and symbolic significance.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">On Tagore’s 165th birth anniversary, we revisit the Gandhi-Tagore debates on the spinning wheel.</p>
+<p dir="ltr"><strong>An inevitable conflict</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">Jawaharlal Nehru once observed: “No two persons could probably differ so much as Gandhi and Tagore!”</p>
+<p dir="ltr">The conflict between them, despite a deep friendship rooted in respect, was probably inevitable.</p>
+<p dir="ltr">The first signs appeared in 1915, when Gandhi visited Shantiniketan after returning from South Africa. They disagreed on a range of topics — from nationalism to education and politics.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">The gap grew after the Amritsar Massacre, when Gandhi initiated movements such as Non-Cooperation. Tagore worried these movements would lead to blind nationalism. Instead, he renounced his knighthood in protest.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">When Gandhi first met Tagore</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/mahatma-gandhi-rabindranath-tagore-friendship-santiniketan-9206038/">The story of their friendship, despite disagreements</a></span></div></p>
+<p dir="ltr">As Gangeya Mukherji notes in <em>Gandhi and Tagore: Politics, Truth and Conscience</em> (2016), many biographers see Tagore as more outspoken and willing to take risks than Gandhi, since he issued public statements even when he risked punishment under the Defence of India Act during a period of strong state repression. By mid-1921, their disagreements were being openly expressed through speeches, essays and letters.</p>
+<p dir="ltr">In the aftermath of a devastating earthquake in Bihar in 1934, Gandhi called the calamity a “divine chastisement for the great sin we [upper castes] have committed against… Harijans”. Tagore did not agree.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">“If we associate ethical principles with cosmic phenomena, we shall have to admit that human nature is morally superior to Providence…,” he wrote to Gandhi (and later published) in protest.</p>
+<p dir="ltr">“They had differences on fundamental philosophical questions, which led to disputation about many political, social, and economic matters,” wrote historian Sabyasachi Bhattacharya in his 1997 book <em>The Mahatma and The Poet: Letters and Debates between Gandhi and Tagore 1915-1941</em>.</p>
+<span class="custom-caption"><img alt="Tagore and Gandhi" class="lazyloading wp-image-10679454 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Tagore_Gandhi.jpg?resize=600,534" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Tagore_Gandhi.jpg 1024w, https://indianexpress.com/wp-content/uploads/2026/05/Tagore_Gandhi.jpg?resize=450,401 450w, https://indianexpress.com/wp-content/uploads/2026/05/Tagore_Gandhi.jpg?resize=600,534 600w, https://indianexpress.com/wp-content/uploads/2026/05/Tagore_Gandhi.jpg?resize=768,684 768w, https://indianexpress.com/wp-content/uploads/2026/05/Tagore_Gandhi.jpg?resize=455,405 455w" height="912" sizes="(max-width: 1024px) 100vw, 1024px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1024"> Rabindranath Tagore and Mahatma Gandhi in 1940. Wikimedia Commons</img></span>
+<p dir="ltr">“Both were unsparing in their debate and, indeed, it cannot be said that either of them was very successful in persuading the other towards a path of convergence of views.”</p>
+<p dir="ltr">In <em>Rabindranath Tagore: The Myriad-Minded Man</em> (1996), Krishna Dutta and Andrew Robinson described Tagore and Gandhi as “the cherisher of beauty versus the ascetic; the artist versus the utilitarian; the thinker versus the man of action; the individualist versus the politician; the elitist versus the populist; the internationalist versus the nationalist… and, most prominently of all, the fine flowing robes and beard versus the coarse loincloth and bald pate.”</p>
+<p dir="ltr"><strong>The cult of the charkha </strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Tagore was deeply unsettled by what he saw as the moral tyranny embedded in the spinning movement — the cult of the charkha and the Congress directive mandating khadi, or hand-spun cloth.</p>
+<p dir="ltr">In November 1924, Gandhi and other Congress leaders resolved that all Congress members must wear khadi while attending political or Congress functions, and contribute 2,000 yards of evenly spun yarn every month. Gandhi believed this would not only make India self-reliant in clothing, but also morally transform Congress workers themselves.</p>
+<p dir="ltr">Tagore disagreed sharply. He dismissed the directive as “censure in printer’s ink” and responded with the essay <em>The Cult of the Charkha</em> in <em>The Modern Review</em>.</p>
+<p dir="ltr">What troubled him most was the unquestioning obedience the movement seemed to demand. The enthusiasm surrounding the charkha, he argued, reflected Indians’ tendency to submit to the dictates of morally revered figures, especially when those dictates appeared to offer shortcuts to difficult national goals. As Gangeya Mukherji notes in <em>Gandhi and Tagore</em>, Tagore feared that the natural diversity of human temperament and choice was being “kneaded… into a lump of uniformity”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">He also believed the original purpose of the charkha — enabling the poor to meet a basic need for clothing, was being undermined as spinning turned into ritual. The repetitive labour it demanded, he argued, engaged “the muscles and not the mind”.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/express-sunday-eye/the-great-debate-6334226/">When Tagore accused Gandhi of superstition</a></span></div></p>
+<p dir="ltr">“That is why in every country,” Tagore wrote, “man has looked down on work which involves this kind of mechanical repetition.”</p>
+<p dir="ltr">Tagore also rejected the idea that India could isolate itself from the modern world. Withdrawal from science and technology, he believed, would impoverish rather than strengthen the country. In several essays, Tagore contrasted Sparta and Athens to illustrate his point. Sparta, he wrote, narrowed itself to a single purpose and ultimately failed; Athens flourished because it “sought to attain perfection by opening herself out in all her fullness”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<span class="custom-caption"><img alt="Tagore and Gandhi" class="lazyloading wp-image-10679456 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Gandhi-Tagore-cropped.jpg?resize=600,343" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Gandhi-Tagore-cropped.jpg 795w, https://indianexpress.com/wp-content/uploads/2026/05/Gandhi-Tagore-cropped.jpg?resize=450,258 450w, https://indianexpress.com/wp-content/uploads/2026/05/Gandhi-Tagore-cropped.jpg?resize=600,343 600w, https://indianexpress.com/wp-content/uploads/2026/05/Gandhi-Tagore-cropped.jpg?resize=768,440 768w, https://indianexpress.com/wp-content/uploads/2026/05/Gandhi-Tagore-cropped.jpg?resize=708,405 708w" height="455" sizes="(max-width: 795px) 100vw, 795px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="795"> Rabindranath Tagore with Mohandas Gandhi and Kasturba Gandhi at Shantiniketan in 1940. Wikimedia Commons</img></span>
+<p dir="ltr">Gandhi answered these criticisms in <em>The Poet and the Charkha</em> in November 1925. Acknowledging the unease generated by Tagore’s essay, he defended the spinning wheel: “The fact is that the Poet’s criticism is a poetic licence and he who takes it literally is in danger of finding himself in an awkward corner.”</p>
+<p dir="ltr"><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div></p>
+<p dir="ltr">He also accused Tagore of inhabiting an ivory tower, remarking: “If the Poet span half an hour daily, his poetry would gain in richness. For it would then represent the poor man’s wants and woes in a more forcible manner than now.”</p>
+<p dir="ltr">For Gandhi, machinery had its place, but “it must not be allowed to displace the necessary human labour”. The charkha, in his view, cultivated dignity in physical work, encouraged cooperation, and carried both economic and ethical significance.</p>
+<p dir="ltr"><strong>Uneasy dissent</strong></p>
+<p dir="ltr">Tagore was not opposed to the charkha as a means of meeting a basic human need. What troubled him was the excessive importance it had acquired in Gandhi’s political and moral programme.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">Yet Tagore approached this disagreement with visible reluctance. He openly acknowledged, “It is extremely distasteful to me to have to differ from Mahatma Gandhi in regard to any principle or method. Not that, from a higher standpoint, there is anything wrong in doing so: but my heart shrinks from it.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10679419"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between colonial history and contemporary issues, especially in gender, culture, and sport.
+
+For suggestions, feedback, or an insider’s guide to exploring Calcutta, feel free to reach out to her at nikita.mohta@indianexpress.com.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May eighth, twenty twenty-six, at forty-one minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/gandhi-tagore-charkha-debate-explained-10679419/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 13:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
