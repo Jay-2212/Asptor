@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Dravidian parties got trapped in vicious cycle of cash-for-votes and corruption, says T.N. Minister Arunraj | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Dravidian parties got trapped in vicious cycle of cash-for-votes and corruption, says T.N. Minister Arunraj</h1>
+                <div class="article-meta">
+                    <span>By N.  Sai Charan</span> • <span>THE HINDU NATIONAL</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-70963286"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>K.G. Arunraj, a former IRS officer who took charge as a Minister in Chief Minister <a href="https://www.thehindu.com/news/national/tamil-nadu/from-vadapalani-to-vikravandi-vijays-transformation-from-celluloid-hero-to-party-chief/article68567603.ece" target="_self">C. Joseph Vijay</a>’s Cabinet on Sunday (May 10, 2026), said the <a href="https://www.thehindu.com/topic/dravida-munnetra-kazhagam/" target="_blank">DMK</a> and the <a href="https://www.thehindu.com/topic/all-india-anna-dravida-munnetra-kazhagam/" target="_blank">AIADMK</a> had lost their initial idealism. In an interview to <i>The Hindu</i>, the <a href="https://www.thehindu.com/elections/tamil-nadu-assembly/tamilaga-vettri-kazhagam-vijay-the-star-who-stormed-into-politics/article70960039.ece" target="_self">Tamilaga Vettri Kazhagam</a> general secretary (policy and propaganda) said that even if the Dravidian parties wanted to do good, they were not in a position to do so because they got themselves trapped in a vicious cycle of cash-for-votes and corruption.</p><p><b><i>Edited excerpts</i></b>:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									A doctor-turned-IRS officer, you left behind a secure career to join the TVK last year. Did you anticipate that you would become a Minister so soon?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									From medical service to civil service, and then to politics – for all these, the common thread is social service. I see these three as tools for social service. If one has a conviction, the results don’t matter. I had a strong sense of passion towards politics and it was my long-term decision since college days. I am the first-generation politician in my family. 
+				</img></p><p>
+										While in college, I got the idea of preparing for the civil services. As a civil servant, our mandate is to implement government policies. So, if we actually want to make the government’s policies, we have to get a mandate from the people.
+				</p><p>
+										 There was a huge vacuum when it came to clean politics in the State. The two parties [the DMK and the AIADMK] ruled the State alternatively for more than 50 years.
+				</p><p>
+										The people were desperate for a change. Our leader correctly sensed it. There was a leadership and governance vacuum. We planned everything strategically. We spoke of the ideology of the soil — secular social justice. With our leader’s charisma, we were confident. We are thankful that the people have reposed faith in us.
+				</p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									A bureaucrat is bound by rules, procedures, and financial constraints while implementing schemes. Whereas politicians are often expected to balance governance with the aspirations of their constituents. How do you propose to handle that shift?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									If one understands the people, the transition is easy. Politicians must empathise with the people. Only with empathy can we frame policies for them. TVK is a new party. Many of us are also new to politics.
+				</img></p><p>
+										According to me, politics is the most noble profession. If politics is good, everything in society will be good. So, if politics has to be good, empathy is needed for politicians. They should understand people’s problems.
+				</p><p>
+										My five years as a doctor at a primary health centre at Kakkadasam in Krishnagiri district played a crucial role in my understanding of the people’s problems. Being an IRS officer gave me a wider perspective of governance. Everything will help me as a Minister.
+				</p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									You are in a Cabinet where eight of the members are first-time legislators. Is this a challenge in addressing larger issues of governance or would it bring a fresh perspective to administration?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									For us, it is a fresh way of thinking. We don’t have any baggage. We did not spend money to win. There are challenges ahead. We are ready to face them.
+				</img></p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									What aspects of Tamil Nadu’s governance model, shaped over the last six decades, need to change?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									We are not saying that the Dravidian parties did nothing. They played a role in making Tamil Nadu a social justice State. But their initial idealism slowly got diluted. They got trapped in a narrow path of corruption-ridden governance and family politics to such an extent that they couldn’t come out of it. The two parties [the DMK and the AIADMK] are caught in a vicious cycle. The worst part of it is that even if they want to do good, they are not in a position to do so because they have a lot of baggage and they are caught in cash for votes, then corruption, and again cash for votes. We have our ideological continuum. The two strong pillars of our party are our leader’s charisma and the ideology on which the entire edifice of our party stands. Secular social justice will be our constant theme on which all policies and programmes will rest. Basically, Tamil Nadu is a welfare State. Welfare measures will continue. Growth, pro-business, and other development-orientated approaches will also be there.
+				</img></p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									For the first time, Tamil Nadu is witnessing a coalition government, with the Congress likely to join the Cabinet. Would coalition dynamics place constraints on governance and decision-making?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									Our leader announced a share in power at the first party conference. Having another party in the government means it will bring in its own perspectives. So we will work collectively for the people’s good. We will learn from each other. The Dravidian parties were against power-sharing because they didn’t want to share their loot.
+				</img></p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									The recently concluded Assembly election is being described as India’s first ‘Gen Z election’. What can young people expect from you?</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									Our priority is to provide quality education. The predominant section of students study at government schools in villages. Creating employment opportunities and tackling the drug menace will be our focus.
+				</img></p></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg">
+									The Chief Minister has criticised the outstanding debt of over ₹10 lakh crore. But you have also promised several welfare measures that would eventually increase revenue expenditure...</img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									Definitely, there is a challenge. But, as our leader has said, we are going to cut down on corruption. Earlier, 30%-40% of the government spending drained away through corruption. We will reduce that spending and be more efficient. At the same time, we have ideas to boost the revenue. We are confident of achieving this and keeping our promises.
+				</img></p></div></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- May 11, 2026 01:45 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="70963286" data-title="Dravidian parties got trapped in vicious cycle of cash-for-votes and corruption, says T.N. Minister Arunraj" data-url="https://www.thehindu.com/news/national/tamil-nadu/dravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj/article70963286.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; copytext('https://www.thehindu.com/news/national/tamil-nadu/dravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj/article70963286.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece&amp;t=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj')">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece&amp;text=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj')">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece&amp;text=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj')">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece&amp;title=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://api.whatsapp.com//send?text=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj%20-%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-0bab6708cbc7eb680433bd34-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Ftamil-nadu%2Fdravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj%2Farticle70963286.ece&amp;title=Dravidian%20parties%20got%20trapped%20in%20vicious%20cycle%20of%20cash-for-votes%20and%20corruption%2C%20says%20T.N.%20Minister%20Arunraj')">
+                Reddit      
+                        
+            </li></ul></div></div><div class="right"><div class="read-later"><button class="btn read-later-btn" data-articleid="70963286" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/tamil-nadu/dravidian-parties-got-trapped-in-vicious-cycle-of-cash-for-votes-and-corruptiontamil-nadu-minister-arunraj/article70963286.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 20:43 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
