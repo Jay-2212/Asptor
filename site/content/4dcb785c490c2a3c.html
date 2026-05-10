@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India is rapidly scaling up renewable energy. Now it needs to store it | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India is rapidly scaling up renewable energy. Now it needs to store it</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Solar_panels_in_India.jpg?w=1600" alt="India is rapidly scaling up renewable energy. Now it needs to store it">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="solar energy, storage" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Solar_panels_in_India.jpg?w=1600" width="650"/><span class="ie-custom-caption">In India, renewable sources account for 53% of the total installed power generation capacity of 532 GW. Solar power alone contributes over 150 GW. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">As India rapidly scales up its renewable energy capacity to meet its climate goals, a key challenge is emerging for its power system — electricity supply that is abundant in some hours <a href="https://indianexpress.com/article/explained/explained-economics/india-grid-night-time-power-shortage-solar-demand-gap-10673205/" rel="noopener" target="_blank"><strong>but insufficient in others</strong></a>.</span></p>
+<p><span style="font-weight: 400">This is because renewable power generation sources come with a fundamental limitation: They are intermittent. Solar power generation drops to zero after sunset and wind output fluctuates with changing weather.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">But electricity demand does not always align with these patterns. This creates a growing mismatch between when electricity is generated and when it is needed. This mismatch can stretch the grid and even threaten its stability if not managed properly.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">This challenge is particularly relevant for India, where renewable sources account for 53% (283 gigawatts) of the total installed power generation capacity of 532 GW. Solar power alone contributes over 150 GW, making it the largest source in the renewable energy mix.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">This is where deploying systems that “store” energy becomes critical — and where India has fallen short so far.</span></p>
+<p><span style="font-weight: 400">So how does such energy get stored? Here’s a look at the different types of systems in use around the world and what India is doing to build up its storage capacity.</span></p>
+<h2><strong>What is energy storage?</strong></h2>
+<p><span style="font-weight: 400">Energy storage refers to systems that can store excess renewable electricity during periods of high generation and discharge it when demand rises but power generation remains low.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">At its core, energy storage systems convert electricity from renewable sources such as solar and wind, when it is available, into forms that can be stored. Later, it converts these back into electricity when need arises.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-power-grid-demand-night-shortage-heatwave-10659385/">Temperature drops at night. So why is India’s power grid facing the most strain in those hours?</a></span></div>
+<h2><strong>Types of energy storage</strong></h2>
+<p><span style="font-weight: 400">A range of energy storage technologies are being deployed globally. Among them, pumped hydro storage (PHS) and battery energy storage systems (BESS) are currently the most widely used. A look at these two systems:</span></p>
+<ul>
+<li><span style="font-weight: 400"><strong><span style="color: #800000">PHS</span></strong> uses surplus electricity to pump water from a lower reservoir to a higher one. When electricity demand peaks, it releases the stored water downhill through turbines to generate power.</span></li>
+<li><span style="font-weight: 400"> <span style="color: #800000"><strong>BESS</strong> </span>technology stores electricity chemically and discharges it when needed. Lithium-ion batteries, particularly lithium iron phosphate (LFP) batteries, are currently the dominant technology for grid-scale storage because of their falling costs, high efficiency and long operational life. Lithium-ion batteries, especially LFP batteries, account for the overwhelming majority of global battery storage deployment. In 2025, LFP batteries made up more than 90% of annual storage additions, according to data from <em>BloombergNEF</em>.</span></li>
+</ul>
+<p><span style="font-weight: 400">Beyond these technologies, several other storage solutions are also being deployed globally, though at a smaller scale.</span></p>
+<ul>
+<li><span style="font-weight: 400"><span style="color: #800000"><strong>Concentrating solar-thermal </strong><span style="color: #000000">storage systems</span>:</span> This technology uses mirrors that capture and focus sunlight onto a receiver. As the receiver gets heated, materials such as molten salt are circulated inside the receiver to store the heat. The stored heat can later be used to produce steam. This steam is converted into mechanical energy in a turbine, which powers a generator to produce electricity.</span></li>
+<li><span style="font-weight: 400"><span style="color: #800000"><strong>Compressed-air energy </strong><span style="color: #000000">storage systems</span></span> use excess electricity to compress air and store it in underground caverns or tanks. When power demand rises, the compressed air is released to drive turbines and generate electricity.</span></li>
+<li><span style="font-weight: 400"><span style="color: #800000"><strong>Flywheel energy</strong></span> storage systems store electricity as rotational energy by spinning a rotor at extremely high speeds. Because they can inject power into the grid almost instantly, they are particularly useful for maintaining grid stability and managing short-term fluctuations.</span></li>
+<li><span style="font-weight: 400"><span style="color: #800000"><strong>Gravity energy</strong></span> storage systems use electricity to lift heavy weights to higher elevations. When electricity is needed, the weights are lowered, converting gravitational energy back into electricity through generators.</span></li>
+</ul>
+<h2><strong>India’s energy storage capacity</strong></h2>
+<p><span style="font-weight: 400">The deployment of energy storage systems in India has not kept pace with the rapid addition of renewable energy capacity. This widening gap is raising concerns over whether the grid will be able to efficiently absorb and manage the rising share of renewable power in the years ahead.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The government is primarily focusing on the two major systems mentioned above: PHS and BESS.</span></p>
+<p><span style="font-weight: 400">At present, India has an installed BESS capacity of around 0.27 GW. PHS capacity stands at about 7.2 GW. There are plans, however, for a massive scale-up over the next decade.</span></p>
+<p><span style="font-weight: 400">A Central Electricity Authority (CEA) plan projects the country’s total energy storage capacity to reach 174 GW/888 gigawatt hours by 2035-36. This includes 80 GW/321 GWh of BESS and 94 GW/567 GWh of PHS.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-heatwave-power-demand-10655708/">How heatwave has driven an early surge in India’s power demand</a></span></div>
+<p><span style="font-weight: 400">The top power planning agency noted that storage systems with durations of around four to six hours would become increasingly critical for integrating larger volumes of renewable energy into the grid beyond 2030. This requirement is expected to grow alongside India’s non-fossil fuel installed capacity, which is projected to rise from the current 283 GW to 786 GW by 2035-36.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">“The storage requirement can be met either through Hydro Pumped Storage Projects (PSP) or BESS or a combination of both. BESS is suitable for short-duration storage, and PSPs are suitable for long-duration storage. Long-duration energy storage will also be crucial for the supply of round-the-clock renewable energy power to Commercial &amp; Industrial (C&amp;I) consumers,” the CEA plan said.</span></p>
+<h2><strong>India’s plans to expand energy storage, and the hurdle</strong></h2>
+<p><span style="font-weight: 400">The project pipeline for both technologies is already expanding rapidly.</span></p>
+<p><span style="font-weight: 400"> Currently, 13,120 MW/78,720 MWh of PHS capacity is under construction. Another 9,580 MW/57,480 MWh has received concurrence and is awaiting construction. In addition, pumped storage projects totalling nearly 75,000 MW are under survey and investigation.</span></p>
+<p><span style="font-weight: 400">On the battery storage side, 10,658.94 MW/28,739.32 MWh of BESS capacity is currently under construction. Projects totalling 22,347.15 MW/69,836.70 MWh are at the tendering stage.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">However, the CEA’s long-term resource adequacy plan also flagged a major concern: India’s heavy dependence on imports for battery storage systems. India currently imports nearly 75-80% of its lithium-ion cells, which account for roughly 80% of the total cost of a battery storage system.</span></p>
+<p><span style="font-weight: 400">“One of the Asian countries dominates over 75-80% of global battery manufacturing, exposing India to geopolitical risks, trade frictions and price volatility,” it noted.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<h2><strong>Global energy storage</strong></h2>
+<p><span style="font-weight: 400"> Globally, PHS and BESS are the two most widely deployed electricity storage technologies. According to the International Renewable Energy Agency, global installed PHS capacity currently stands at around 160 GW.</span></p>
+<p><span style="font-weight: 400"> China leads with nearly 66 GW of installed capacity, followed by Japan at 21.8 GW and the US at 18.9 GW. Europe collectively accounts for around 28 GW of pumped hydro capacity.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Battery energy storage deployment is accelerating rapidly. Some estimates place the total installed global battery storage capacity at around 270 GW. According to the International Energy Agency, 108 GW of new battery storage capacity was added globally in 2025 alone – a 40% increase over 2024.</span></p>
+<p><span style="font-weight: 400">China continued to dominate battery storage deployment in 2025, accounting for nearly 60% of global additions, followed by the US and Europe. The technology, however, is also expanding quickly beyond the largest markets.</span></p>
+<p><span style="font-weight: 400">“Deployment is widening beyond the largest markets, with strong momentum in Australia and parts of the Middle East, where storage is increasingly seen as a key building block for electricity security and renewables integration,” the IEA noted in its Global Energy Review 2026.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10681344"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May tenth, twenty twenty-six, at two minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/india-energy-storage-renewable-power-grid-explained-10681344/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 02:34 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
