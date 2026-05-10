@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Revolt of 1857: An Expert Explains how Mangal Pandey inspired a rebellion that rattled the British | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Revolt of 1857: An Expert Explains how Mangal Pandey inspired a rebellion that rattled the British</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-SepoyRevoltMeerut_expl-hist.jpg?w=1600" alt="Revolt of 1857: An Expert Explains how Mangal Pandey inspired a rebellion that rattled the British">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Revolt of 1857" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-SepoyRevoltMeerut_expl-hist.jpg?w=1600" width="650"/><span class="ie-custom-caption">'The Sepoy revolt at Meerut,' from the Illustrated Times, 1857. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">On this day 169 years ago, </span><a href="https://indianexpress.com/article/research/how-the-1857-revolt-lit-the-spark-for-setting-up-aligarh-muslim-university-9143288/"><b>the Revolt of 1857</b></a><span style="font-weight: 400"> — also known as the Sepoy Mutiny or the First War of Indian Independence — broke out when a band of Indian soldiers (sepoys) in the British army ransacked an army base and murdered their European officers. But the fire was lit when Sepoy Mangal Pandey had fired a shot at the Sergeant Major of his regiment at Barrackpore near Kolkata weeks before, triggering a significant event in the history of Modern India.</span></p>
+<p><span style="font-weight: 400">With the Revolt ended the rule of the East India Company over India, which would now be governed by and in the name of the British Monarch through a Secretary of State. The British were forced to announce the aim of their rule, and what would be their future policy with regard to India.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>Mangal Pandey and the discontent of Awadh</b></p>
+<p><span style="font-weight: 400">Mangal Pandey, who was hanged to death by the Company on April 8, 1857, belonged to the kingdom of Awadh, which had been treacherously annexed by the British in 1856. The Begums of Awadh had an understanding with the British, and had been abiding by the terms of the agreement. In spite of this, Awadh was annexed, which was greatly resented by the people.</span></p>
+<p><span style="font-weight: 400">Awadh was a region that supplied large numbers of soldiers of war to the Company’s army. There were 75,000 soldiers from Awadh, and almost every agricultural family in the kingdom had a representative in the army. Whatever happened in Awadh was of immediate concern to the Sepoy.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/1857-revolt-british-narrative-media-erasure-indian-agency-10679558/">During 1857 revolt, British power wrote its own innocence. The script isn’t unfamiliar for our times</a></span></div>
+<p><span style="font-weight: 400">The deposition of the Nawab and the confiscation of the villages of taluqdars during the land revenue settlement of 1856 caused outrage. Some 14,000 petitions were received from the Sepoys about the hardships they faced on account of the revenue system. Mangal Pandey represented the discontent that the misery of British rule had brought upon peasant families.</span></p>
+<p><b>The mutiny and hanging of Mangal Pandey</b></p>
+<p><span style="font-weight: 400">Mangal Pandey was born on July 19, 1827 in Nagwa village in Ballia district in a Bhumihar Brahmin family. He joined the East India Company’s army at the age of 22 as a soldier in the 6th company of the 34th Bengal Native Infantry. He refused to use the newly introduced Enfield rifle, the cartridges of which had a covering that was believed to be made of animal fat (beef and pork), and which had to be bit open before the cartridges could be used.</span></p>
+<p><span style="font-weight: 400">This was viewed by the soldiers as a direct assault on their religious beliefs by the British who intended to bring an end to their religion and propagate Christianity.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="Mangal Pandey" class="lazyloading size-medium wp-image-10682242" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ex-Mangalpandey-barrackpore.jpg?resize=395,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ex-Mangalpandey-barrackpore.jpg 711w, https://indianexpress.com/wp-content/uploads/2026/05/ex-Mangalpandey-barrackpore.jpg?resize=296,450 296w, https://indianexpress.com/wp-content/uploads/2026/05/ex-Mangalpandey-barrackpore.jpg?resize=395,600 395w, https://indianexpress.com/wp-content/uploads/2026/05/ex-Mangalpandey-barrackpore.jpg?resize=267,405 267w" height="1080" sizes="(max-width: 711px) 100vw, 711px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="711"> A bust of Sepoy Mangal Pandey at Barrackpore in West Bengal. Photo: Wikimedia Commons</img></span>
+<p><span style="font-weight: 400">On March 29, 1857, Pandey mutinied and fired at his Senior Sergeant Major. He was overpowered and hanged on April 8, 1857, by the order of a Court Martial at Lal Bagan in Barrackpore. His regiment was disbanded, like the 19th infantry at Behrampore, for showing resentment.</span></p>
+<p><b>The spread of the 1857 revolt and march to <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a></b></p>
+<p><span style="font-weight: 400">Pandey’s action was followed by defiance by the soldiers of the 7th Awadh Regiment, and it too met with the same fate.</span></p>
+<p><span style="font-weight: 400">By the beginning of May, news of the Sepoys’ mutiny had reached Meerut, and in the morning of May 11, 1857, a band of Sepoys from Meerut who had refused to use the new cartridges and killed their European officers the previous day, crossed the Jamuna, set the tool house on fire, and marched to the Red fort.</span></p>
+<p><span style="font-weight: 400">They appealed to Bahadur Shah II, the elderly Mughal emperor who was a pensioner of the East India Company, to become their leader to provide legitimacy to their cause. After much persuasion, he yielded and was proclaimed </span><i><span style="font-weight: 400">Shah-en-shah-i-Hindustan</span></i><span style="font-weight: 400"> (Emperor of India).</span></p>
+<p><b>Fighting heroically against all odds</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The interchange of identities between the soldier and the peasant, and the groundswell of collective discontent against British rule allowed the revolt to assume the proportions it did. It spread to a greater part of India, and the population felt free for some time from the fear of the state and the control of the administration.</span></p>
+<p><span style="font-weight: 400">Their accumulated grievances found immediate expression, and they rose en masse in opposition to British rule. Buildings were destroyed, the treasury was plundered, barracks and courthouses were burnt, and prison gates were flung open.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/savarkar-1857-history-national-character-book-9857835/">How Savarkar’s ‘The Indian War of Independence 1857’ gave a national character to the revolt</a></span></div>
+<p><span style="font-weight: 400">In Awadh, the revolt took the form of a popular movement with the participation of not only taluqdars who had been dispossessed but also peasants who had got titles to lands in 1856. These people fought in the name of their dispossessed Nawab.</span></p>
+<p><span style="font-weight: 400">For more than a year, the rebels carried on their struggle against difficult odds. They had no source of arms and ammunition. What they had captured from British arsenals could not carry them far. They were often forced to fight with swords and pikes against an enemy equipped with the most modern weapons. They had no quick system of communication at their command, and hence no coordination.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Beyond a shared hatred of alien rule, the rebels had no political perspective or a definite vision of the future. They showed exemplary courage, dedication, and commitment. Thousands of men courted death, fighting for a cause they held dear.</span></p>
+<p><b>But heroism alone has its limits</b></p>
+<p><span style="font-weight: 400">But heroism alone could not stem the onslaught of the superior British forces. Delhi fell after a prolonged battle on September 20, 1857. Bahadur Shah, who had taken refuge at Humayun’s Tomb, was captured, tried, and deported to Burma. The British dealt with the rebels in other places as well.</span></p>
+<p><span style="font-weight: 400">The Rani of Jhansi died fighting on June 17, 1858. Nana Saheb refused to give in, and finally escaped to Nepal in the beginning of 1859, hoping to renew the struggle. Tantiya Tope, who successfully carried out guerrilla warfare until April 1859, was betrayed by a zamindar, captured, and put to death by the British.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Thus came to an end the most formidable challenge the British had to face in India. Despite the limitations of the rebels, their effort to emancipate the country from foreign rule was a patriotic and progressive step.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">To commemorate Mangal Pandey’s heroic action, a park has been named after him in Barrackpore on the banks of the Hooghly. It has a small bust of Pandey and a brief history of his sacrifice. Perhaps more should be done to pay homage to a man who selflessly and without any hope of support rose up in revolt against the British. Pandey was hanged from a tree in the police lines, but people cannot visit the place without permission.</span></p>
+<h2><b>Legacy of the revolt of 1857</b></h2>
+<p><span style="font-weight: 400">Pandey’s action had far-reaching consequences, including a change in the nature of British rule in India. The mutiny shocked the British; they had never imagined that Indians, whom they believed to be inferior, were capable of rising against their rule. After the revolt, they realised the need for the adoption of a strategy to hold India for the long term.</span></p>
+<p><span style="font-weight: 400">The British parliament passed an Act on August 2, 1858, transferring all powers of the Company to the Crown. Queen Victoria was declared the Sovereign of British India. The Queen’s Proclamation made by Lord Canning on November 1, 1858, to the Princes, Chiefs and people of India, unveiled a new policy of perpetual support for the native Princes, and non-intervention in matters of religious beliefs in India.</span></p>
+<p><span style="font-weight: 400">The governance of India by and in the name of the Monarch through a Secretary of State was aimed at improving the administrative machinery of supervision and control over the Indian government. It was decided to grant the same status to the “Natives of India” as other subjects of the British Empire. It was assured that the Crown would create equality for all people in the eyes of the law.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">The Queen’s Proclamation was reinforced in 1877 in a big event held at Delhi’s Coronation Park, which was attended by a large number of people. The event came to be known as the Delhi Durbar. Queen Victoria assumed the title of </span><i><span style="font-weight: 400">Qaiser-e-Hind</span></i><span style="font-weight: 400">.</span></p>
+<p><b><i>Indu Tewari retired as a Professor of Modern Indian History at Panjab University. The piece was <a class="" href="https://indianexpress.com/article/explained/explained-history/mangal-pandey-legacy-revolt-1857-9256891/">first published</a> in 2024.</i></b></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10682228"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May tenth, twenty twenty-six, at twenty-nine minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/revolt-of-1857-mangal-pandey-british-rule-india-expert-explains-10682228/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 09:26 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
