@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How can India meet its long-term energy needs? An Expert Explains why thorium as nuclear fuel can help | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How can India meet its long-term energy needs? An Expert Explains why thorium as nuclear fuel can help</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-KudankulamNPP_expl-scitech.jpg?w=1600" alt="How can India meet its long-term energy needs? An Expert Explains why thorium as nuclear fuel can help">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="nuclear plant" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-KudankulamNPP_expl-scitech.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Kudankulam Nuclear Power Plant in Tirunelveli district of Tamil Nadu. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">It is heartening to see indigenously developed pressurised heavy water reactors (PHWR) finally getting into the mainstream of India’s energy push towards a net-zero compliant </span><i><span style="font-weight: 400">Viksit Bharat</span></i><span style="font-weight: 400">. The <strong><a class="" href="https://indianexpress.com/article/explained/thorium-based-n-power-key-to-securing-energy-independence-10502354/">100 GWe (gigawatt electric) nuclear energy mission</a></strong> launched by the Government is to be realised by 2047.</span></p>
+<p><span style="font-weight: 400">The high rate of capacity addition necessary for such a deployment would need a credible implementation framework as well as standardised technologies that are mature and commercially competitive. PHWRs are a fit case for the purpose.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The attendant steep increase in uranium imports is, however, a matter of concern. Given the current uranium demand-supply mismatch, expected rise in uranium demand consequent to global nuclear generation growing three to four times as is being projected, and complexities of nuclear-related geopolitics, nuclear fuel supply security could be at risk in about 10-15 years.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>A much-needed shift</b></p>
+<p><span style="font-weight: 400">So, a quicker shift to thorium — that India has in abundance — remains critical to <strong><a class="" href="https://indianexpress.com/article/explained/explained-sci-tech/expert-thorium-based-nuclear-power-energy-independence-10502336/">India’s energy security</a></strong> or, in fact, energy independence. Large reactor capacity that can produce uranium-233 (U-233) from thorium at scale while also producing electricity is a prerequisite for this purpose. Thus, the first criticality of the 500 MWe (megawatt electric) prototype fast breeder reactor (PFBR) that would open the path to growing such a capacity through fuel breeding marks a key milestone for India. Thorium can also enable India’s transition to a significant energy exporter from being a major energy importer.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">A number of new developments beyond PFBR would also be necessary for the growth of such thorium irradiation platforms. These include a set of reactor and nuclear fuel cycle technologies based on mixed oxide, metallic, and thorium fuels.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/expert-explains-thorium-india-100-gwe-2047-10564911/">Expert Explains | How thorium can power India’s 100 GWe by 2047 mission</a></span></div>
+<p><span style="font-weight: 400">The start of thorium utilisation at scale is thus three to four decades away. Pursuing this development is nevertheless critical to our long term energy future. Fast reactors breed new fuel. They are necessary to expand energy generating systems that would run as long as thorium is available.</span></p>
+<p><span style="font-weight: 400">Nuclear generation capacity through uranium-fuelled reactors is soon expected to cross 10 GWe, the target set for the first stage of the three-stage nuclear power programme. The spent fuel from these plants already constitutes the required inventory waiting to feed the second stage as planned. The experience with PFBR so far suggests that in addition to moving closer to large-scale thorium utilisation, fast reactors can provide economically competitive electricity without dependence on fuel imports. Nuclear generation capacity of a few hundred GWe can be established in this mode. Moving fast on leveraging these possibilities should thus continue to be a matter of high priority.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><b>Timeline for transition</b></h2>
+<p><span style="font-weight: 400">But what about the timeline for transition from uranium to thorium? The intention behind opening international civil-nuclear cooperation was to remove the hurdles in accessing uranium — priority for thorium was never to be compromised but rather speeded up. Access to imported uranium is now expected to make the first stage 10 times bigger, that is 100 GWe. PHWRs could constitute around 60 GWe.</span></p>
+<p><span style="font-weight: 400">Apart from electricity supply, such a substantive PHWR capacity coming into existence between now and 2047 (approximately 20 years) would also enable a sizeable capacity for production of U-233 at scale through thorium irradiation in PHWRs. This would happen much earlier than build-up of similar capacity with fast reactors. One can see at least a three-decade time difference between the two.</span></p>
+<p><span style="font-weight: 400">Use of thorium-HALEU (high-assay low-enriched uranium) fuel in place of natural uranium in PHWRs would enable thorium irradiation at scale while leading to several advantages in terms of safety, economy, waste minimisation, proliferation resistance, and some saving in the mined uranium. One can thus start building inventory of spent fuel that can produce fuel material directly for the third-stage thorium reactors.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">In my view, the thorium molten salt reactor (TMSR) operating in the near thermal neutron spectrum offers an ideal choice for the third stage. This would enable significant electricity generation capacity sustainably fuelled by thorium. Rough estimates suggest that PHWRs running on thorium-HALEU fuel could support new TMSR capacity comparable with the mother PHWR annually.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The availability of thorium-HALEU fuel recycle technology for feeding TMSRs and development of TMSRs would need to be ensured in about 10-15 years from now to start producing electricity from thorium. These technologies are anyway a part of the technology development agenda for the three-stage nuclear power programme. Advancing their deployment will enable us to get on with thorium utilisation at scale without having to wait for completion of second-stage development and large-scale thorium irradiation therein. With fast reactor capacity scaling up to the required level, one can assure U-233 supply and required energy availability at least till fusion energy arrives on the scene.</span></p>
+<p><span style="font-weight: 400">The world has largely restricted the use of uranium only in once-through mode. This is due to the fear of potential for malevolent diversion. Utilisable energy potential in uranium thus remains two orders of magnitude lower for such countries. On the other hand, proliferation resistance of the thorium-U-233 fuel cycle should enable realisation of fuller energy potential of thorium. Thorium systems, once available, are thus destined to play a greater role in coping up with base load energy demand of the world.</span></p>
+<p><span style="font-weight: 400">This is a unique opportunity for India. Developing requisite technologies and policies related to use of thorium is the need of the hour. It is time India transitions its nuclear energy programme from uranium to thorium.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10682686"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May tenth, twenty twenty-six, at forty-four minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/india-thorium-nuclear-programme-energy-security-expert-explains-10682686/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-10 16:50 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
