@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Before Vijay, there was Rajaji: Recalling independent India’s first hung Assembly in Madras state | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Before Vijay, there was Rajaji: Recalling independent India’s first hung Assembly in Madras state</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-11</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Nehru-Rajai-Patel.jpg.jpeg?w=1600" alt="Before Vijay, there was Rajaji: Recalling independent India’s first hung Assembly in Madras state">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Vijay Rajaji" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Nehru-Rajai-Patel.jpg.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Jawaharlal Nehru with Rajaji and Sardar Patel. X/@ShashiTharoor</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">Tamil Nadu has witnessed <a href="https://indianexpress.com/article/political-pulse/tamil-nadu-vijays-tvk-tamilaga-vettri-kazhagam-10680847/" rel="noopener" target="_blank"><strong>high political drama</strong></a> over the last few days.</p>
+<p dir="ltr">First, Governor Rajendra Arlekar asked Vijay to prove his majority despite the Tamilaga Vettri Kazhagam emerging as the single largest party. Then, just as the party appeared to have secured enough support, the arithmetic became wobbly again, prompting the Governor to defer Vijay’s Saturday morning swearing-in. On Saturday night, <a href="https://indianexpress.com/article/india/tamil-nadu-government-formation-live-updates-tvk-vijay-party-alliance-stalin-dmk-aiadmk-10678643/" rel="noopener" target="_blank"><strong>TVK finally cobbled up the required numbers</strong></a>.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>A similar crisis was playing out around the same time nearly 75 years ago in the same region. The 1952 Assembly election in the erstwhile Madras State — made up of the present-day <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a>, Kerala, Karnataka and Andhra Pradesh — threw up independent India’s very first fractured verdict.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">The deadlock set in motion a series of events involving Prime Minister Jawaharlal Nehru that would eventually lead to statesman C Rajagopalachari (Rajaji) stepping in as the state’s Chief Minister between April 1952 and April 1954.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">This is the story of what happened in those tumultuous days between February and early April that saw a fledgling republic managing to overcome, albeit imperfectly, its first serious Constitutional test.</p>
+<h2 dir="ltr">What happened in the 1951 Assembly election in Madras State?</h2>
+<p dir="ltr">The election to the 375-seat Madras State Assembly was held over the course of nine days between January 2 and January 25. They were the first elections held in the state following independence.</p>
+<p dir="ltr">As the results trickled in, it became clear that no party had secured an outright majority.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">The Congress won 152 seats. The Communist Party of India (CPI) came in second with 62 seats, followed by the J B Kripalani-founded Kisan Mazdoor Praja Party (KMPP) with 35 seats. There were also 63 independent members.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Vijay swearing-in delay</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/tamil-nadu-governor-vijay-swearing-in-delay-explained-10678294/">Why Governor’s role has raised questions</a></span></div></p>
+<p dir="ltr">Even though the Congress was the single largest party, its election performance was seen as a debacle. Then Congress chief minister P S Kumaraswami Raja and five of his cabinet members lost their seats.</p>
+<p dir="ltr">Historian and biographer Rajmohan Gandhi, in his book Rajaji: A Life, puts the Congress’s poor performance down to a series of factors — a foodgrain crisis, loss of touch with the masses, the appeal of the Communists, and, importantly, the strong support in the Telugu-speaking Andhra region for a former Congress leader.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">This leader was T Prakasam, who was premier (equivalent to chief minister) of the Madras Presidency from 1946 to 1947 as a Congress member. Prakasam joined Kripalani’s KMPP in 1951 over differences with the Congress leadership.</p>
+<p dir="ltr">Gandhi writes: “Though he had lost his own seat, Prakasam claimed the support, not proved, of a front of 166 MLAs, including the Communists and independents.”</p>
+<p dir="ltr">This left the Madras State Governor, Maharaja Krishnakumarsinhji of Bhavnagar, in a quandary.</p>
+<p dir="ltr">On one side was Prakasam’s claim. On the other side was the single largest party, the Congress, and its leader K Kamaraj’s assertion that “only the Congress is going to rule”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Krishnakumarsinhji, who was due to retire, referred the question to the President.</p>
+<p dir="ltr">Rajmohan Gandhi notes that the Congress leadership went into a huddle over the issue. But it “did not know what advice to give Nehru, who did not know what to advise the President, who was thus unable to send any word to the Governor”.</p>
+<h2 dir="ltr"><strong>What was Nehru’s stance on the hung Assembly?</strong></h2>
+<p dir="ltr">Nehru was clear in his preference for an elected government over President’s Rule.</p>
+<p dir="ltr">He wrote to President Rajendra Prasad on February 3, 1952, saying President’s Rule should be considered only if it became clear that “there is no possibility of any party or coalition succeeding in forming a stable Government”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">But he added: “President’s rule cannot be normal or prolonged in the circumstances. It must yield place either to a Government envisaged in the Constitution or to a fresh election.”</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">The story of C. Rajagopalachari</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/rajagopalachari-statue-politics-anti-hindi-temples-bjp-10549267/">Proponent of temple entry, critic of Hindi policy</a></span></div></p>
+<p dir="ltr">He acknowledged that the Congress did not possess an outright majority, and was keen that the party “avoid any appearance of hankering after office”.</p>
+<p dir="ltr">At the same time, he underlined the importance of the state’s administration being carried on.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<span class="custom-caption"><img alt="Rajaji" class="lazyloading wp-image-10680954 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/rajaji.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/rajaji.jpg 546w, https://indianexpress.com/wp-content/uploads/2026/05/rajaji.jpg?resize=450,341 450w, https://indianexpress.com/wp-content/uploads/2026/05/rajaji.jpg?resize=534,405 534w" height="414" sizes="(max-width: 546px) 100vw, 546px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="546"> Rajaji with B R Ambedkar. (Wikimedia Commons)</img></span>
+<p dir="ltr"><strong>Consensus builds around Rajaji</strong></p>
+<p dir="ltr">Rajaji, or CR, was one of the most important figures of the Indian freedom movement. In 1948, he became Governor-General and, thus, independent India’s first Indian head of state.</p>
+<p dir="ltr">As the situation in Madras continued to fester, Rajmohan Gandhi notes that the Congress was internally forming a consensus around nudging the 73-year-old leader. The thinking was that the prestige he commanded would ensure support for his government.</p>
+<p dir="ltr">“If he was drafted, their link with power could continue. If not, there would be President’s rule, if not Red rule…,” the author wrote.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">Rajaji’s elevation was also backed by the new Governor of Madras State, Sri Prakasa.</p>
+<p dir="ltr">According to Rajmohan Gandhi, Sri Prakasa wrote to President Prasad: “After endless parleys, everybody came to one and only one solution — that the only person who could save the situation was Rajaji.”</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Vijay swearing-in delay</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/tamil-nadu-vijay-swearing-in-delayed-governor-role-hung-assembly-10676396/">What is the Governor’s role in a hung Assembly</a></span></div></p>
+<p dir="ltr">On March 4, 1952, Nehru wrote to Rajaji underlining the significance of steering clear of President’s Rule in Madras, doing which “hurriedly would, in my opinion, lead to unfortunate consequences later in Madras. Elsewhere too the consequences would be regrettable.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p dir="ltr">Nehru wrote: “If the old set of leaders have proved helpless and lacking in capacity, we shall have to search for new ones.”</p>
+<p dir="ltr">On the same day, in a letter to Kamaraj, Nehru stressed that he had been “repeatedly approached by people from Madras and asked to induce Shri Rajagopalachari to take up the leadership of the Congress Legislature Party in Madras” adding that he had, received a “telegram signed by 62 newly elected M.L.As” in this regard.</p>
+<p dir="ltr">And on March 29, Nehru stated that he received a letter from Madras Congress leader Kumaraswami Raja, conveying the state legislature party’s resolution backing Rajaji to take over its leadership.</p>
+<p dir="ltr">Nehru accepted that decision — but he still had one lingering doubt.</p>
+<p dir="ltr"><strong>An unelected chief minister</strong></p>
+<p dir="ltr">Nehru hesitated in effectively parachuting in a non-elected person to the chief minister’s post.</p>
+<p dir="ltr">He wanted Rajaji to be elected to the Assembly. This was the sticking point.</p>
+<p dir="ltr">While Rajaji said on March 31 that he was willing to take over as chief minister, he was also clear that he would not stand for election.</p>
+<p dir="ltr">Following discussions among Governor Sri Prakasa, Kumaraswami Raja and Rajaji, a solution was found. Rajaji would be nominated to the upper house of the state legislature. President Prasad was informed about this on April 1.</p>
+<p dir="ltr">Rajmohan Gandhi notes: “To install C.R. on his terms would amount to flouting Nehru’s wish, but the alternative was to lose C.R. and, with him, every chance of a Congress government.” So, Kumaraswami Raja, with the Governor’s cooperation, moved swiftly to swear Rajaji in as Chief Minister — “before Nehru could come to know of CR’s inflexible condition.”</p>
+<p dir="ltr">Nehru was clearly unhappy with being blindsided, and expressed this in a letter to the Governor on April 3. But he also acknowledged in the letter: “At the same time, I could suggest no other and better alternative to all this and so I left it to our friends in Madras… All we can do is to leave further developments now to Rajaji and his colleagues there.”</p>
+<p dir="ltr">And in an April 7 letter to Rajaji, he assured him of “all our help”.</p>
+<p dir="ltr"><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div></p>
+<p dir="ltr">Vijay’s current huddle with smaller parties, who may eventually be accommodated in ministerial berths in a coalition government led by him to keep the DMK-AIDMK combine from staking claim, bears striking similarity with Rajaji’s decision in 1952. To keep the Communist-led opposition from power, Rajaji’s ministry included Commonweal Party leader Manickavelu Naicker in his cabinet and members of the N G Ranga-led Krishak Lok along with over five dozen independents.</p>
+<p dir="ltr"><strong>So why was Nehru unhappy with the upper house route?</strong></p>
+<p dir="ltr">According to Nehru, President Prasad had termed the nomination of Rajaji to the Legislative Council as “a wrong step, wrong not only in the spirit of the Constitution but also the letter of it.”</p>
+<p dir="ltr">Nehru’s key concern, as expressed in a letter to Governor Sri Prakasam on April 7, was that it could set a bad precedent.</p>
+<p dir="ltr">“I do not entirely agree with what the President has written, but I must confess that I was taken aback by these nominations, which were clearly political and made with the object of strengthening a political party,” he stated.</p>
+<p dir="ltr">But he also accepted that “drastic situations” require “drastic remedies”.</p>
+<p dir="ltr">“Perhaps the situation in Madras was such a drastic one. Anyhow the thing is done now and we must accept the consequences that flow from it.”</p>
+<p dir="ltr">Interestingly, other prolific political figures from what is now Tamil Nadu took a similar route to the CM’s chair: its first CM C N Annadurai was first sworn-in an a Member of the Legislative Council and then as CM; five-time CM and DMK patriarch M Karunanidhi, for a short stint in the 1980s, had switched to the Council before returning to contest Assembly polls.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10680912"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/jatin-anand/">
+<figure>
+<img alt="Jatin Anand" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/01/image.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/jatin-anand/"><span></span>Jatin Anand</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8356988"></div><div class="follow_author_title" data-id="Jatin Anand"></div><div class="follow_author_slug" data-id="jatin-anand"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Jatin Anand is an Assistant Editor with the national political bureau of The Indian Express. With over 16 years of experience in mainstream journalism, he is a seasoned expert in national governance, electoral politics, and bureaucratic affairs. Having covered high-stakes beats including the Election Commission of India (ECI), intelligence, and urban development, Jatin provides authoritative analysis of the forces shaping Indian democracy. He is an alumnus of Zakir Husain Delhi College (DU) and the prestigious Asian College of Journalism (ACJ), Chennai, where he specialized in Print Journalism.
+Expertise
+
+High-Stakes Beat Coverage: Throughout his decade-and-a-half career, Jatin has covered some of the most sensitive and influential beats in the country, including:
+
+
+ 	
+The Election Commission of India (ECI): Monitoring electoral policy, reforms, and the conduct of national and state polls.
+
+ 	
+National Security &amp; Intelligence: Reporting on the internal mechanisms and developments within India's security apparatus.
+
+ 	
+Urban Development: Analyzing the policies and bureaucratic processes driving the transformation of India’s cities.
+
+
+
+ 	
+National Political Bureau: In his current role, he tracks the intersection of policy and politics, offering deep-dive reporting on the Union government and national political movements.
+
+ 	
+Academic Credentials:
+
+
+ 	
+Zakir Husain Delhi College (DU): Alumnus of one of Delhi's premier institutions.
+
+ 	
+Asian College of Journalism (ACJ), Chennai: Specialized in Print Journalism at India's most prestigious journalism school.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/jatin-anand/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May ninth, twenty twenty-six, at forty-four minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/before-vijay-there-was-rajaji-recalling-independent-indias-first-hung-assembly-in-madras-state-10680912/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-11 07:38 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
