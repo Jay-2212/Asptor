@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How India diversified its LNG import basket after crunch in supplies from Qatar, UAE | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How India diversified its LNG import basket after crunch in supplies from Qatar, UAE</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-11</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-StraitofHormuz_expl-econ.jpg?w=1600" alt="How India diversified its LNG import basket after crunch in supplies from Qatar, UAE">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="LNG" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-StraitofHormuz_expl-econ.jpg?w=1600" width="650"/><span class="ie-custom-caption">Bulk carriers, cargo ships, and service vessels line the horizon in the Strait of Hormuz off Bandar Abbas, Iran, on April 27, 2026. Photo: Razieh Poudat/ISNA via AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The war in West Asia and the consequent closure of the Strait of Hormuz has upended the regular flow of <strong><a class="" href="https://indianexpress.com/article/explained/explained-economics/india-lng-storage-hormuz-crisis-expansion-plans-10672673/">liquefied natural gas (LNG)</a></strong> to India from key suppliers like Qatar and the United Arab Emirates (UAE), leading to a scramble for LNG cargoes from alternate geographies and a recast of New Delhi’s natural gas import basket.</span></p>
+<p><span style="font-weight: 400">Notably, the supply disruption has not been as severe as initially anticipated. That is not just true for India but even at the global level, due to a combination of alternative suppliers raising exports and demand curtailment in various parts of the world.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">India’s LNG imports rebounded a bit after faltering in March, as importers turned to suppliers that don’t depend on the Strait of Hormuz to secure emergency spot cargoes. As a result, while not one LNG cargo reached Indian shores in March from the country’s largest supplier Qatar and another major supplier, the UAE, the likes of Oman, Nigeria, Angola, and the US stepped in to partially bridge the gap. </span></p>
+<p><span style="font-weight: 400">India depends on LNG imports to meet about half of its natural gas requirement, and about 60% of those imports came through the critical maritime chokepoint of the Strait of Hormuz, primarily from Qatar, and also the UAE. The two Gulf countries are major LNG exporters at the global level as well.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Vessel movements through the Strait of Hormuz — the narrow waterway between Iran and Oman that connects the Persian Gulf with the Gulf of Oman and the Arabian Sea — are all but halted owing to the West Asia conflict. The Strait is a major chokepoint for global energy flows, accounting for a fifth of international oil and LNG shipments.</span></p>
+<p><b>Recovery in India’s LNG imports in April</b></p>
+<p><span style="font-weight: 400">According to data from commodity market analytics firm Kpler, LNG imports in April recovered to 1.95 million tonnes, after falling to 1.67 million tonnes in March. The country’s 2025 average monthly LNG imports stood at 2.08 million tonnes, not significantly higher than the volumes imported in April.</span></p>
+<p><span style="font-weight: 400">On a year-on-year basis, April LNG imports were down 9.3% from 2.15 million tonnes in the year-ago period, which reflects that the supply shock was not fully offset and market conditions remained tight, according to Sonal Ranjan, LNG and natural gas analyst at Kpler. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The month-over-month growth in imports over March was likely due to higher gas use in a few sectors, particularly fertilisers.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-lpg-supply-crisis-hormuz-imports-impact-10674549/">How much did LPG imports fall due to Hormuz closure, and why demand may fall too</a></span></div>
+<p><span style="font-weight: 400">Following the disruption in LNG supplies due to the Strait of Hormuz’s closure, the government had initially reduced gas allocation to the fertiliser sector to 70% of average consumption over the previous six months. It was part of a larger effort to manage natural gas supplies in order to prioritise the most critical sectors. </span></p>
+<p><span style="font-weight: 400">But by early April, the allocation to the fertilisers sector was hiked to about 95%, and earlier in May, it was hiked further to about 98%. This has been done to ensure uninterrupted urea production ahead of the crucial </span><i><span style="font-weight: 400">kharif</span></i><span style="font-weight: 400"> season.</span></p>
+<h2><b>Reshuffle in India’s LNG import basket</b></h2>
+<p><span style="font-weight: 400">“After the Hormuz disruption, Oman, Nigeria and the US have emerged as the key LNG suppliers in both March and April. They accounted for almost 69% of the total LNG imports in India. Oman of course remained the largest supplier out of the three, contributing to 30-31% of the total imports, supported by its advantage of a shorter-delivery route to India’s west coast terminals,” Ranjan told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">In 2025, the average monthly LNG import volumes from Qatar stood at 0.95 million tonnes, followed by imports from the UAE at 0.27 million tonnes. In March-April, the Strait of Hormuz closure meant that just 0.06 million tonnes came from Qatar and 0.13 from the UAE during the two months. These would have been cargoes that had transited the Strait of Hormuz before the West Asia war started with the US and Israel attacking Iran on February 28.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/west-asia-conflict-strait-of-hormuz-lng-supply-essential-commodities-act-gas-cng-png-priority-list-10574761/">With LNG imports hit, Govt prioritises gas allocation; top priority to household piped gas, CNG, LPG production</a></span></div>
+<p><span style="font-weight: 400">Supplies from Oman, which was the fourth largest supplier of LNG to India in 2025 with an average monthly flow of 0.18 million tonnes, jumped to 1.2 million in March-April, or 0.6 million tonnes a month on average. While Oman is located in West Asia, it has a sizeable coastline facing the Arabian Sea and the Gulf of Oman, and doesn’t depend on the Strait of Hormuz for the transit of its cargoes.</span></p>
+<p><span style="font-weight: 400">Imports from the US, India’s third-largest LNG supplier in 2025, rose to 0.31 million tonnes a month on average in March-April. The average monthly LNG imports from the US in 2025 were at 0.24 million tonnes. Average monthly imports from Nigeria and Angola jumped to 0.41 million tonnes and 0.24 million tonnes in March-April, respectively; the monthly average of imports from the two suppliers in 2025 was 0.14 million tonnes apiece. </span></p>
+<p><b>Global supply hit not as severe yet as initially anticipated</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Beyond India’s LNG imports, the disruption in global supplies has also not been as acute as initially anticipated, although the system has been <strong><a class="" href="https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/indias-growing-focus-on-coal-gasification-amid-global-energy-disruptions-10672538/">under stress</a></strong>.</span></p>
+<p><span style="font-weight: 400">“Global LNG exports reached 32.4 Mt (million tonnes) in April 2026, down from 33.7 Mt a year earlier — a decline of just 3.8%, despite roughly 16% of global liquefaction capacity being effectively offline due to the Strait of Hormuz disruption,” said Geoffroy Hureau, secretary general of France-based natural gas and LNG data provider Cedigaz.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The loss of LNG exports from Qatar and the UAE — around 6 million tonnes combined — is “unprecedented” on a monthly basis, yet it was partially offset by the US, which supplied an additional 2 million tonnes, Canada (additional 1 million tonne), and some other producers like Malaysia, Nigeria, and Russia adding another 2.4 million tonnes in April, according to Hureau.</span></p>
+<p><span style="font-weight: 400">About a 4% year-on-year increase in global liquefaction capacity — capacity to turn natural gas from the gaseous state to the liquid state — and extremely high capacity utilisation across the rest of the international liquefaction capacity ensured that the large part of the deficit due to unavailability of LNG from Qatar and the UAE was offset in April.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">“Even without a reopening of the Strait of Hormuz, global supply could stabilise around 32–33 Mt/month — close to Spring 2025 levels. But there is very little buffer left,” Hureau said, adding that demand is also adjusting with large LNG importers like China, South Korea, and Western Europe reducing LNG intake. </span></p>
+<p><span style="font-weight: 400">“The LNG market is absorbing a major supply disruption with a remarkably mild price reaction so far — but only by running the system harder, relying on limited new capacity, and triggering demand destruction. If the Strait of Hormuz disruption extends into summer, the balance tightens further — and could turn critical by autumn,” Hureau said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10683846"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May eleventh, twenty twenty-six, at fifty-two minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/india-lng-imports-hormuz-closure-qatar-supply-disruption-10683846/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-11 10:58 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
