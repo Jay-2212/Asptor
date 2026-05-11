@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why India curtailed solar energy during peak summer power demand | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why India curtailed solar energy during peak summer power demand</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-11</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/solar-plant.jpg?w=1600" alt="Why India curtailed solar energy during peak summer power demand">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="solar curtailment" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/solar-plant.jpg?w=1600" width="650"/><span class="ie-custom-caption">While renewable energy sources, such as solar, enjoy “must-run” status in India, they can still be backed down on grounds of grid security and system safety. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Even as India’s electricity demand touched a record high in April amid an early summer heatwave, on average 23 gigawatt-hours (GWh) of solar power were curtailed every day — enough to serve one-fourth of Delhi for a day.</p>
+<p>Curtailment — when grid operators ask renewable energy plants to reduce generation to maintain system stability — translates into a substantial loss of clean electricity at a time when India is accelerating its clean energy transition.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>An analysis of data from the Grid Controller of India (Grid India) shows that solar curtailment in April was 74% higher than the combined curtailment recorded in January, February and March, signalling growing stress in the power system even as daytime demand surged.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>According to data from Grid India, at least 693.81 GWh of solar power was curtailed, compared to a total of 399.34 GWh curtailed between January and March. Earlier, a report by global energy think tank Ember also found that a total of 2,300 GWh of solar power was curtailed under a mechanism called Emergency Tertiary Reserves Ancillary Services (TRAS), between late May, when reporting started, and December 2025. Of this, 900 GWh was curtailed in October alone.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The curtailment came despite no reported shortages <a href="https://indianexpress.com/article/explained/explained-economics/india-power-grid-demand-night-shortage-heatwave-10659385/"><strong>during daytime peak hours</strong></a>, underlining both the crucial role solar played in meeting daytime demand and the scale of surplus generation that still went unused.</p>
+<p>The glut of daytime solar generation was also reflected in power markets. Spot prices on the Indian Energy Exchange in April repeatedly hit the regulatory ceiling of Rs 10 per unit during night-time hours, before crashing to around Rs 1.5 per unit during the day — highlighting the widening gap between abundant daytime solar supply and tighter evening demand conditions.</p>
+<h2><strong>Curtailment due to grid concerns</strong></h2>
+<p>While renewable energy sources, such as solar, enjoy “must-run” status in India, they can still be backed down on grounds of grid security and system safety.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>One such mechanism is Emergency TRAS, under which the National Load Dispatch Centre (NLDC) can direct inter-state transmission system (ISTS)-connected renewable energy projects to reduce generation during system-wide emergency conditions to maintain grid stability. It acts as the third layer of grid control after primary and secondary reserve responses, and is triggered when additional intervention is required to prevent instability.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-grid-night-time-power-shortage-solar-demand-gap-10673205/">Peak summer yet to come, but power supply is already falling short at night. Here’s why</a></span></div>
+<p>Because renewable energy plants can rapidly reduce output, they are frequently used for down-regulation under Emergency TRAS.</p>
+<p>Unlike many other forms of curtailment, generators backed down under this mechanism receive financial compensation for the loss of generation.</p>
+<p>Analysis of Grid India data shows that curtailment under Emergency TRAS averaged 15.76 GWh per day in April. On April 5 alone, solar curtailment under the mechanism touched 80.5 GWh — enough electricity to meet the daily needs of hilly states of Uttarakhand and Himachal Pradesh. Overall, curtailment in April was about 73.5% higher than the combined curtailment recorded during January to March, highlighting the growing stress on the grid amid rising renewable energy penetration.</p>
+<p></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2><strong>Curtailment due to technical constraint</strong></h2>
+<p>Apart from emergency TRAS-down events, data from the Grid Controller of India also shows significant renewable energy curtailment in solar-rich states such as Rajasthan and Gujarat due to technical and transmission constraints, including transmission overloading and heavy underdrawl by states.</p>
+<p>In April, an average of 7.36 GWh of solar power was curtailed daily due to such technical reasons, compared to a combined daily average of 1.4 GWh during January, February and March — an increase of nearly 75%.</p>
+<p></p>
+<p>A major share of this curtailment was linked to heavy under-drawl in Gujarat, according to Grid India data. In Rajasthan, the grid operator cited overloading of interconnecting transformers (ICTs) as a key factor behind the backing down of renewable energy generation.</p>
+<p>“The under-drawl problem can happen due to a sudden dip in demand, which is generally seen during unseasonal rainfall events or when manufacturing activity slows. However, this is usually a short-term phenomenon unless such conditions persist for a longer duration,” a senior official aware of the matter told <em>The Indian Express</em>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The official also underlined the need to accelerate transmission infrastructure to minimise renewable energy curtailment. “The Ministry of Power and the Central Transmission Utility (CTU) are working in this direction,” the official said.</p>
+<p>Queries sent to the Ministry of New and Renewable Energy (MNRE) remained unanswered till the time of filing this report.</p>
+<p><strong>Transmission lag impacting generators</strong></p>
+<p>Meanwhile, the sluggish pace of transmission infrastructure development has emerged as another major driver of renewable energy curtailment. Industry executives said the issue largely stems from a mismatch between the rapid pace of renewable energy deployment and the much longer timelines required for transmission planning, approvals, and construction.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Akshay Hiranandani, chief executive officer of Serentica Renewables, said the curtailment the company faced is primarily linked to the Temporary General Network Access (T-GNA) regime. According to him, some of the company’s projects are witnessing up to 70% curtailment, translating into a revenue hit of nearly 65-70%.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Under the current General Network Access (GNA) framework, inter-state transmission system (ISTS)-connected renewable energy projects with long-term GNA are granted firm transmission evacuation rights. However, projects awaiting commissioning of associated transmission infrastructure are provided only T-GNA, under which power scheduling is allowed only based on residual network capacity. During periods of transmission congestion, priority is assigned to long-term GNA holders, often leaving limited room for T-GNA projects and leading to curtailment.</p>
+<p>“We generators have completed our projects within the timelines given to us. But we are facing curtailment because the transmission infrastructure has not come up on time and has been delayed,” Hiranandani told <em>The Indian Express</em>. “Instead of putting us under T-GNA, treat us at par with other GNA holders,” he added.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10681080"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May ninth, twenty twenty-six, at nine minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/india-solar-power-curtailment-april-grid-stress-10681080/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-11 14:41 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

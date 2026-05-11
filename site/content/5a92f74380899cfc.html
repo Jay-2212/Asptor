@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>ExplainSpeaking: Why PM Modi’s call to save forex could slow down India’s growth | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>ExplainSpeaking: Why PM Modi’s call to save forex could slow down India’s growth</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-11</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-modi-forex_explspeaking.jpg?w=1600" alt="ExplainSpeaking: Why PM Modi’s call to save forex could slow down India’s growth">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Modi forex" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-modi-forex_explspeaking.jpg?w=1600" width="650"/><span class="ie-custom-caption">Prime Minister Narendra Modi in Jamnagar, Gujarat, on May 10, 2026. Photo: @NarendraModi/Yt via PTI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><b><i>Dear Readers,</i></b></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Prime Minister Narendra Modi has urged Indians to <strong><a class="" href="https://indianexpress.com/article/explained/explained-economics/india-forex-reserves-gold-oil-imports-10683535/">save foreign exchange (forex)</a></strong> by any means necessary. In a recent speech, he called on Indians to stop buying gold for a year. Imports of gold are a huge reason why Indians demand forex. In the same vein, he has also urged Indians to work from home in a bid to reduce the consumption of imported crude oil — another big drain on forex.</span></p>
+<p><span style="font-weight: 400">He also urged Indians to cut back the use of edible oil in their food by 10%; he said this will not only cut back on the import of edible oils and save forex but also improve the health of Indians.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">He also urged the farmers to cut back on the use of chemical fertilisers by half if possible; he said that too much use of chemical fertilisers was ruining soil health, and instead advocated the farmers should shift to natural farming.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">He also took this opportunity to underscore the need for buying “made in India” products and focusing on “swadeshi” products and being “vocal for local” instead of buying imported goods of everyday use. He asked Indians to make a list of things they buy and wean out the imported products (say, “scissors or toothbrush”) and substitute them with Indian ones.</span></p>
+<p><span style="font-weight: 400">He also called on other institutions and organisations — from the judicial courts to labour unions to media — to help work towards this goal.</span></p>
+<p><b>What is the link between forex and the PM’s demand?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">This call comes in the wake of the war in Iran and the associated supply and price shocks of goods like fuel and fertiliser.</span></p>
+<p><span style="font-weight: 400">Indians typically import large quantities of the commodities Modi mentioned in his speech.</span></p>
+<p><span style="font-weight: 400">When Indians buy goods from outside the country — be it gold or a toothbrush or fertiliser or edible oil — India ends up running down its pile of forex held with the RBI, India’s central bank. That’s because the transaction of importing goods from outside the country involves Indians using their rupees to buy dollars and then using those dollars to import (buy) goods from outside the country.</span></p>
+<p><span style="font-weight: 400">Under normal circumstances, foreigners across the world also buy Indian goods, and thus they use dollars to buy Indian rupees, and this leads to dollars adding to Indian forex reserves with the RBI.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">But the situation can go off-balance if Indians imports far outstrip Indian exports; in such a scenario India will keep spending dollars without getting as many in return.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/indian-economy-gdp-growth-slowdown-goldilocks-analysis-10654208/">The Indian economy’s goldilocks scenario that wasn’t</a></span></div>
+<p><span style="font-weight: 400">If such a situation sustains for long, it has two effects: one, India runs down its pile of forex, and two, while this is happening, Indian rupee’s exchange rate weakens against the dollar (or whatever other currency that India is using to trade).</span></p>
+<p><span style="font-weight: 400">There is another way in which forex come in and out of India: through foreign investments. Foreigners invest in India (either by creating new factories and offices — called foreign direct investment — or by buying shares in Indian companies listed in the <a class="" href="https://indianexpress.com/about/stock-market-today/" rel="noamphtml">stock market</a> — called foreign portfolio investment) while Indians invest in other countries, again via the same two routes. </span></p>
+<p><span style="font-weight: 400">For most part of India’s history since the economic reforms in 1991, there has been a broad trend: Indians import more goods and services than they export — this is called running a “current account deficit” — while foreigners invest in India more than Indians invest outside India — and this called a “capital account surplus”. Typically the capital account surplus is bigger than the current account deficit — implying more dollars are coming in than going out — and thus India adds to its forex reserves. This situation is technically called a “Balance of Payment (BoP) surplus”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><b>What is the link between BoP and rupee’s exchange rate?</b></p>
+<p><span style="font-weight: 400">As long as the BoP is in surplus — that means, more dollars are coming into the country than going out — the RBI can either let the rupee’s exchange rate strengthen or it can simply accumulate forex reserves.</span></p>
+<p><span style="font-weight: 400">Often the RBI accumulates forex reserves  for a variety of reasons, one of them being because letting the rupee strengthen may not help Indian exports. Moreover, having a healthy level of reserves helps in times of crisis.</span></p>
+<p><span style="font-weight: 400">When the BoP goes into a deficit, either the rupee weakens or, if the RBI defends rupee’s exchange rate by selling dollars in the market, the forex reserves fall.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><b>So, has the situation changed? And how bad is it?</b></p>
+<p><span style="font-weight: 400">For a while now — roughly since mid-2024 — India’s BoP surplus has taken a hit. While the current account deficit hasn’t worsened as much, the trouble has been the capital account surplus has shrunk — and in fact, often become a deficit itself.</span></p>
+<span class="custom-caption"><img alt="Chart 1" class="lazyloading size-medium wp-image-10684051" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ES-CHART-1.png?resize=600,273" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-1.png 1492w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-1.png?resize=450,204 450w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-1.png?resize=600,273 600w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-1.png?resize=768,349 768w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-1.png?resize=728,331 728w" height="678" sizes="(max-width: 1492px) 100vw, 1492px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1492"> Chart 1.</img></span>
+<p><b><i>Chart 1</i></b><span style="font-weight: 400"> shows that India’s current BoP situation appears as weak as it was in 2013, when India was designated as one of the “fragile five” economies by Morgan Stanley, a reputed international investment bank.</span></p>
+<p><span style="font-weight: 400">As a result, both the ill-effects that a BoP deficit brings are happening.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<span class="custom-caption"><img alt="Chart 2" class="lazyloading size-medium wp-image-10684053" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ES-CHART-2.png?resize=600,273" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-2.png 1492w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-2.png?resize=450,204 450w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-2.png?resize=600,273 600w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-2.png?resize=768,349 768w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-2.png?resize=728,331 728w" height="678" sizes="(max-width: 1492px) 100vw, 1492px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1492"> Chart 2.</img></span>
+<p><span style="font-weight: 400">One, the rupee is weakening against the dollar (</span><b><i>Chart 2</i></b><span style="font-weight: 400">) and second, the RBI has been drawing down its forex reserves to defend the rupee’s exchange rate (</span><b><i>Chart 3</i></b><span style="font-weight: 400">).</span></p>
+<span class="custom-caption"><img alt="Chart 3" class="lazyloading size-medium wp-image-10684055" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ES-CHART-3.png?resize=600,273" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-3.png 1492w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-3.png?resize=450,204 450w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-3.png?resize=600,273 600w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-3.png?resize=768,349 768w, https://indianexpress.com/wp-content/uploads/2026/05/ES-CHART-3.png?resize=728,331 728w" height="678" sizes="(max-width: 1492px) 100vw, 1492px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1492"> Chart 3.</img></span>
+<p><span style="font-weight: 400">The most troublesome bit is that the more the rupee weakens — thanks to India’s heavy dependence on import of crude oil (which itself has become very costly since the start of the war in Iran) — the more the imports become costlier and the vicious cycle strengthens.   </span></p>
+<h2><b>Will the PM’s mantra help?</b></h2>
+<p><span style="font-weight: 400">There are many ways to analyse Modi’s call.</span></p>
+<p><span style="font-weight: 400">There are two ways for India to deal with the forex situation: </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<ul>
+<li><span style="font-weight: 400">Either reduce the demand for dollars by cutting domestic consumption, or</span></li>
+<li><span style="font-weight: 400">Boosting India’s ability to earn more forex by improving domestic production.</span></li>
+</ul>
+<p><span style="font-weight: 400">All of Modi’s suggestions are focused on cutting consumption to spend less forex while none focus on boosting production to earn more forex. This choice has several implications.</span></p>
+<p><span style="font-weight: 400">On the face of it, if all Indians were to suddenly stop using gold in all ceremonies and substitute it with fresh flowers plucked from the nearby garden, and if all Indians stopped stepping out from home for any reason (or just cycled) then it is true that India’s imports will fall since imports of gold and crude oil are the big reasons for our imports being higher than our exports. This, in turn, will reduce our demand for dollars by reducing or even eliminating the current account deficit.</span></p>
+<p><span style="font-weight: 400">But such a move will likely come at the cost of overall economic growth because all businesses that use crude oil or gold or edible oil will likely suffer lower sales, not to mention the inefficiency due to cutbacks.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/rupee-record-low-vs-dollar-2026-fragile-five-comparison-10665381/">GDP: Is the Indian rupee back to the ‘fragile five’ days of 2013?</a></span></div>
+<p><span style="font-weight: 400">Weaker consumption, especially in a country that is already struggling with weak consumption, will drag down growth in the immediate time period of the current year.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">Further, weak consumption levels have been a key reason why businesses have not increased their investments into the Indian economy despite the government’s best efforts. As such, a strict adherence of the PM’s call could further disincentivise businesses.</span></p>
+<p><span style="font-weight: 400">Moreover, while the cut in consumption helps the current account, it may further worsen the capital account: After all, why would the foreign investors return to an economy that they are already shunning if that economy chooses to further roll back consumption.</span></p>
+<p><span style="font-weight: 400">Arguably, there can be another scenario in the medium term: That consumption doesn’t get reduced but gets diverted to Indian firms, and Indian businesses invest because Indians only prefer “swadeshi” goods. As such, this call turns around the Indian economy by redirecting all demand towards Indian businesses.</span></p>
+<p><span style="font-weight: 400">By itself, the idea of becoming self-reliant — or </span><i><span style="font-weight: 400">atmanirbhar</span></i><span style="font-weight: 400"> as the PM calls it — sounds intuitively appealing. To be sure, it goes back to the days of independent India’s start when PM Jawaharlal Nehru adopted a strategy of substituting imports and cutting imports to save forex exchange. But many economists (including former PM Manmohan Singh) thought that was a sub-optimal idea, and that India should have opened up its economy and traded more aggressively with the rest of the world.</span></p>
+<p><span style="font-weight: 400">Here’s why. While becoming self-reliant is an understandable goal, not every country can become self-reliant in everything. </span></p>
+<p><span style="font-weight: 400">For instance, while it is true that India is now self-reliant in terms of food production, food production, in turn, depends on imported fertilisers. Further, even if India intends to make all its fertilisers at home — and it does make many at home — there is still the reliance on imported feedstock (fuels such natural gas or naphtha, etc.) that actually account for more than 80% of the total domestic production cost of fertilisers. </span></p>
+<p><span style="font-weight: 400">So, arguably, if India cannot be self-reliant in fertilisers, it can’t really consider itself to be self-reliant in terms of food production.</span></p>
+<p><span style="font-weight: 400">Similarly, India cannot replace imported crude oil with any domestic alternatives in a hurry; moreover any shift will cause the economy to slow down. </span></p>
+<p><span style="font-weight: 400">In other words, crashing India’s overall imports doesn’t necessarily make the economy stronger; if anything, a forced reduction in imports will slow down the economy.</span></p>
+<p><span style="font-weight: 400">Further, it is also incorrect to say that too much use of chemical fertilisers is hurting India’s soil. What is hurting India’s soil is not too much use of chemical fertilisers but imbalanced use of chemical fertilisers. There is an excessive use of nitrogenous fertilisers (urea) and too little use of phosphorus and potassium, apart from other micro-nutrients. The sole reason for this imbalance is the domestic subsidy regime which over-subsidises urea and thus nudging farmers to overuse it. Reducing use of chemical fertilisers and shifting to natural farming can help to the extent that the use is so excessively imbalanced.</span></p>
+<p><b>What is required to deal with the forex issue?</b></p>
+<p><span style="font-weight: 400">Cutting consumption in such a stark manner — not buying gold or not going to office — cannot be a sustainable solution. The only way out of this situation is for India to boost both its domestic production and productivity. It is only when India becomes more efficient as a producer — regardless of what machines we import — that it will be able to grow its share in the global exports market.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Similarly, only when India reforms its ease of doing business will it attract fresh investments either from within the country or from outside. Higher levels of exports and/or improved attractiveness in terms of starting and running a business is the actual recipe for dealing with the forex issue in a sustainable manner.</span></p>
+<p><span style="font-weight: 400">Already, India’s growth has been modest relative to what it needs to become a developed country. Further, the growth model is such that it fails to create enough good quality jobs. Domestic consumption has been so weak that over the past 2-3 years, all governments — both Union and state-level — have been giving tax relief as well as direct cash transfers running into trillions of rupees in a bid to prevent consumption from cratering further.</span></p>
+<p><span style="font-weight: 400">Should India be focusing on cutting consumption or boosting production?</span></p>
+<p><b><i>Share your views and queries at </i></b><b><i>udit.misra@expressindia.com</i></b></p>
+<p><b><i>Take care,</i></b></p>
+<p><b><i>Udit</i></b></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10684047"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May eleventh, twenty twenty-six, at fifty-six minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explainspeaking/" href="https://indianexpress.com/about/explainspeaking/">EXPLAINSPEAKING</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-india-forex-crisis-pm-modi-import-cuts-10684047/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-11 14:41 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
