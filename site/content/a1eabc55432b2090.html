@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Madras HC barred TVK MLA Seenivasa Sethupathi from Tamil Nadu Assembly floor test | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Madras HC barred TVK MLA Seenivasa Sethupathi from Tamil Nadu Assembly floor test</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-tnfloortest_expl.jpg?w=1600" alt="Why Madras HC barred TVK MLA Seenivasa Sethupathi from Tamil Nadu Assembly floor test">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Seenivasa Sethupathi" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-tnfloortest_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">The newly elected Tamil Nadu Assembly in Chennai on May 12, 2026. Photo: @CMOTamilnadu/X via PTI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Tamilaga Vettri Kazhagam (TVK) MLA R Seenivasa Sethupathi, who won the No.185 Tiruppattur Assembly constituency by one vote, <strong><a class="" href="https://indianexpress.com/article/legal-news/tvk-mla-supreme-court-madras-high-court-floor-test-vijay-10685617/">moved the Supreme Court</a></strong> on Tuesday (May 12) after the Madras High Court barred him from participating in the Tamil Nadu Assembly floor test slated for Wednesday. Senior Advocate Abhishek Manu Singhvi mentioned the matter before Chief Justice of India Surya Kant, who agreed to list it urgently on Wednesday before the floor test is scheduled to begin.</span></p>
+<p><span style="font-weight: 400">The High Court bench comprising Justices L Victoria Gowri and N Senthilkumar had <strong><a class="" href="https://indianexpress.com/article/legal-news/madras-high-court-tvk-candidate-1-vote-floor-test-vijay-10685384/">restrained Sethupathi</a></strong> from “voting or otherwise taking part in any floor test, including confidence motion, no-confidence motion, trust vote or any voting proceeding in the <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a> Legislative Assembly where the numerical strength of the House is tested, until further orders”.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">It held: “The principle that ‘election disputes must await an election petition’ cannot be converted into a principle that, constitutional courts must remain silent, even when the issue is not merely the validity of an election, but the immediate use of a disputed electoral mandate, to decide the fate of a Government.”</span></p>
+<p><b>What triggered the dispute</b></p>
+<p><span style="font-weight: 400">Sethupathi, TVK’s MLA from No.185 Tiruppattur Assembly constituency in Sivagangai district, won the election by exactly one vote over DMK’s K R Periakaruppan.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Periakaruppan approached the Madras High Court alleging a discrepancy of 18 electronic voting machine (EVM) votes between two official records. According to the petition, a postal ballot belonging to No.185 Tiruppattur constituency in Sivagangai district was mistakenly sent to No.50 Tiruppattur constituency in Tiruppattur district. Because the two constituencies carried the same name, the ballot allegedly reached the wrong Returning Officer. Instead of forwarding it to the correct constituency, the Returning Officer rejected the ballot.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/rahul-gandhi-actor-vijay-tvk-congress-alliance-tamil-nadu-10681430/">How Vijay, Rahul Gandhi chemistry over 17 years proved glue for TVK, Congress alliance</a></span></div>
+<p><span style="font-weight: 400">The Election Commission, in its affidavit before the High Court, admitted there is no statutory mechanism under the Conduct of Election Rules, 1961, for transferring a wrongly transmitted postal ballot from one constituency to another. The Rules only deal with ballots received after the time under Rule 54A(2). There is no provision enabling the transfer of a postal ballot from one Returning Officer to another.</span></p>
+<h2><b>What the Madras High Court held</b></h2>
+<p><span style="font-weight: 400">The Madras High Court said that it was not setting aside Sethupathi’s election or directing a recount. Its interim order, it said, intended to preserve the integrity of the electoral process until the dispute could be properly examined.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The court found three factors significant: the one-vote margin, the alleged EVM discrepancy, and the disputed postal ballot.</span></p>
+<p><span style="font-weight: 400">“In an election decided by one vote, every vote is not merely relevant; it is potentially determinative,” the bench observed.</span></p>
+<p><span style="font-weight: 400">The court was particularly critical of the handling of the postal ballot. It held that the official respondents position “itself reveals the existence of a procedural vacuum in the electoral framework insofar as situations involving mistaken transmission of postal ballots from one constituency to another are concerned”.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/as-vijay-takes-charge-as-tamil-nadu-cm-93-tvk-mlas-are-first-timers-10681662/">As Vijay takes charge as Tamil Nadu CM, 93 TVK MLAs are first-timers</a></span></div>
+<p><span style="font-weight: 400">The court went further and criticised the Returning Officer directly. Once he noticed the ballot didn’t belong to No.50, “the least that was expected of the said authority, consistent with the doctrine of institutional fairness embedded in the electoral framework, was to immediately take prompt corrective steps to restore and transmit the ballot to the competent Returning Officer of No.185-Thiruppattur Assembly Constituency, instead of mechanically rejecting the same”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The bench said that “election officials are not mere passive custodians of forms and procedures; they are constitutional functionaries obligated to ensure that every valid vote cast by a citizen reaches its lawful destination”.</span></p>
+<p><b>How the court got around Article 329(b)</b></p>
+<p><span style="font-weight: 400">At the centre of the case lies Article 329(b) of the Constitution, which bars courts from entertaining election disputes except through an election petition under the Representation of the People Act, 1951.</span></p>
+<p><span style="font-weight: 400">Ordinarily, courts do not intervene in election disputes through writ proceedings under Article 226.</span></p>
+<p><span style="font-weight: 400">The Madras High Court acknowledged this limitation. Sethupathi argued that Periakaruppan’s remedy lay only through an election petition under Sections 80 and 100 of the Act.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">The High Court, however, relied on the Supreme Court’s ruling in </span><i><span style="font-weight: 400">Election Commission of India v. Ashok Kumar</span></i><span style="font-weight: 400"> (2000), which recognised a narrow exception permitting judicial intervention where it is necessary to preserve evidence or remove obstacles affecting the electoral process.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Using that reasoning, the High Court held that the petition before it was not a conventional challenge to the election result itself, but a plea arising from an “extraordinary factual situation” involving preservation of electoral material and a procedural vacuum concerning wrongly transmitted postal ballots.</span></p>
+<p><span style="font-weight: 400">The court said the remedy of the election petition itself would become “illusory” if foundational electoral material was lost before adjudication.</span></p>
+<p><span style="font-weight: 400">It said: “Democracy breathes through the ballot. The Court, while exercising jurisdiction under Article 226 of the Constitution of India in matters touching elections, is required to walk with constitutional caution. It cannot, under the guise of interim protection, trench upon the forbidden field reserved for an election petition. At the same time, where a narrow and exceptional plea is made for preservation of vital electoral material, so that the truth is not lost by efflux of time, constitutional courts are not rendered helpless spectators.”</span></p>
+<p><b>Why floor test changes the stakes</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">The proposed floor test altered what would otherwise have remained an ordinary election dispute. Election petitions typically take months or years to conclude. But the High Court reasoned that if Sethupathi’s vote proved decisive in the floor test and his election was later invalidated, the political consequences during that intervening period could not realistically be undone.</span></p>
+<p><span style="font-weight: 400">It said, “We are only considering whether, pending prima facie scrutiny of serious electoral anomalies in a one-vote result, the returned candidate should be permitted to participate in a proceeding where his vote may alter the balance of power in the House.” If Sethupathi is allowed to participate and his vote becomes decisive, “the injury caused to the petitioner and to the purity of the electoral process may be incapable of meaningful correction”.</span></p>
+<p><span style="font-weight: 400">The court, therefore, distinguished between a challenge to an election result and the immediate use of a disputed electoral mandate in proceedings affecting the stability of a government. It restrained him from participating in any proceedings testing the Assembly’s numerical strength until further orders.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10686007"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twelfth, twenty twenty-six, at five minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/tvk-mla-seenivasa-sethupathi-tamil-nadu-floor-test-madras-hc-order-10686007/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-12 14:12 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
