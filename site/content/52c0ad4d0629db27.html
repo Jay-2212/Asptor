@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Mother’s Day: All about the woman who created, and then hated, this day | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Mother’s Day: All about the woman who created, and then hated, this day</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/mothers-day-2.jpg?w=1600" alt="Mother’s Day: All about the woman who created, and then hated, this day">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="mother's day: A young Anna heard her mother say, &quot;I hope and pray that someone, sometime, will find a memorial mothers' day commemorating her for the matchless service she renders to humanity in every field of life. She is entitled to it.”" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/mothers-day-2.jpg?w=1600" width="650"/><span class="ie-custom-caption">Mothers Day 2026: By 1908, Jarvis's efforts began to bear fruit, and two Mother's Day events were held. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400"><strong>Mother’s Day 2026</strong>: By now, you have probably seen the Mother’s Day Google doodle, received and sent WhatsApp messages, read the “best gift ideas for your mom” listicles for inspiration, and may have even posted on Instagram or Facebook to mark the day. </span></p>
+<p><span style="font-weight: 400">C</span><span style="font-weight: 400">hances are, in all these interactions with Mother’s Day, you have not once come across the name “Anna Jarvis”.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>That is because Jarvis’s relationship with <a href="https://indianexpress.com/article/express-sunday-eye/mothers-day-funniest-motherhood-kids-humiliate-you-10680599/"><strong>the day she founded</strong></a> was complicated — while she had worked tirelessly to get “Mother’s Day” officially recognised, she eventually came to hate the commercialisation of it, and spent the last of her energy and money campaigning against it.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>Who created Mother’s Day?</h2>
+<p>Anna Jarvis (May 1, 1864 – November 24, 1948) was an American activist who founded Mother’s Day to honour her and “all mothers” in 1908.</p><div id="taboola-mid-article-personalisation"></div>
+<p>She grew up in West Virginia in turbulent years — the Civil War guns were booming when she was born, and she saw several siblings die of diseases like measles, typhoid, and diphtheria.</p>
+<p>Her mother, Ann Reeves Jarvis, driven by her own experiences, spent her life working for causes centred around motherhood, such as teaching mothers sanitation to prevent child mortality, and forming a community of mothers from both sides of the Civil War divide to bridge rankling differences.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>A young Anna heard her mother say, “I hope and pray that someone, sometime, will find a memorial mothers’ day commemorating her for the matchless service she renders to humanity in every field of life. She is entitled to it.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>When Mrs Jarvis died in 1905, Anna got to work fulfilling this wish of her mother’s. She wrote letter upon letter to politicians, businessmen, and church leaders to enlist their support for her cause, proposing the second Sunday of May as a day dedicated to celebrating mothers, with a white carnation – her mother’s favourite flower – as the day’s emblem.</p>
+<p>Sunday, being a holiday, was likely to make her job easier. She chose the second Sunday of May so that the date would be close to May 9, when her mother had died.</p>
+<span class="custom-caption"><img alt="Anna Jarvis." class="lazyloading size-full wp-image-10682190" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Anna_jarvis.jpg" height="318" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="250"> Anna Jarvis. (Wikimedia Commons)</img></span>
+<p>By 1908, Jarvis’s efforts began to bear fruit, and two Mother’s Day events were held, in the Andrews Methodist Episcopal Church in her hometown of Grafton (the church is now called International Mother’s Day Shrine), and a larger one in Philadelphia. The day grew in popularity, and in 1914, James Heflin of Alabama introduced a formal legislation to recognise Mother’s Day in the House of Representatives. The bill reached the desk of then US President Woodrow Wilson on May 8, 1914, and was signed into law the same day.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/everyday-explainers/fathers-day-third-sunday-june-history-9395894/">Why is Father’s Day celebrated on the third Sunday of June?</a></span></div>
+<p><strong>‘Domestication’, then commercialisation</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Before Jarvis’s successful campaign — she had managed to enlist the support of industrialists like John Wanamaker (who later became US Postmaster General) and HJ Heinz (whose ketchup you have probably eaten) — others had proposed days to celebrate mothers. Notable among these was Julia Ward Howe, author, abolitionist and suffragist, who had started a Mothers’ Day (apostrophe placement important) celebration in June 1873, which continued for some years.</p>
+<p>Historians and feminists have pointed out that Jarvis, through her energetic efforts to get the day recognised, narrowed the definition of ‘mother’ to a caregiver who puts her children’s needs first. Instead of Howe’s Mothers’ Day, Jarvis chose the singular, ‘Mother’s Day’, “For the Best Mother who Ever Lived—Your Mother.” Thus, Jarvis, the devoted daughter, wanted people to honour their individual mothers who cared for them at home.</p>
+<p>Howe, and even the elder Mrs Jarvis, had more political ideas. Mrs Jarvis had spoken of “civic leadership and service; mothers united in public works to empower themselves and help to empower others.” Howe, in her original Mothers’ Day Proclamation, wrote, “As men have often forsaken the plough and the anvil at the summons of war, Let women now leave all that may be left of home for a great and earnest day of counsel.”</p>
+<p>Anna Jarvis’ family version of the holiday was eagerly taken up by the greeting card industry, the flower industry, candy makers, etc., and Mother’s Day was soon heavily commercialised. A <em>New York Times </em>report of 1964, the 50th anniversary of Mother’s Day, says, “According to the National Committee on the Observance of Mother’s Day, Inc., the day has become a gift‐giving occasion second only to <a class="" href="https://indianexpress.com/about/merry-christmas/" rel="noamphtml">Christmas</a>.”</p>
+<p><strong>Jarvis’s reaction</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Jarvis hated what the day she strove to establish was fast mutating into. She now threw her energies into arresting this commercialisation, through written campaigns, litigations, and later, direct action. She had copyrighted the phrase “Second Sunday in May, Mother’s Day” early on and sued people for using it for marketing campaigns.</p>
+<p>The price of carnations would shoot up around Mother’s Day, even though modifications were made to Jarvis’ original idea, with the white flowers now used for deceased mothers and red or pink ones for those alive. A livid Jarvis brought out a press release, saying, according to the BBC, “WHAT WILL YOU DO to rout charlatans, bandits, pirates, racketeers, kidnappers and other termites that would undermine with their greed one of the finest, noblest and truest movements and celebrations?”</p>
+<p>She then started exhorting people to do away with flowers entirely.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/everyday-explainers/womens-day-march-8-significance-history-origin-9202335/">Why do we celebrate Women’s Day on March 8?</a></span></div>
+<p>About greeting cards and candies, she said, “A printed card means nothing except that you are too lazy to write to the woman who has done more for you than anyone in the world. And candy! You take a box to Mother—and then eat most of it yourself. A pretty sentiment.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Jarvis’ opposition to those using the day for anything other than what she had intended it to be – “a day of sentiment, not profit” — grew more strident over the years. According to the <em>National Geographic</em>, “She organized boycotts… and even attacked First Lady Eleanor Roosevelt for using Mother’s Day to raise funds for charities.” When a proposal was floated to rename Mother’s Day as ‘Parents’ Day’, she opposed it vociferously.</p>
+<p>In 1925, she was arrested for “disturbing peace” when she crashed a convention of American War Mothers, who sold carnations on Mother’s Day and used it for fundraising. Two years before this, she crashed a retail confectioner convention.</p>
+<p>When the flower industry offered to share profits with her, she promptly spurned them.</p>
+<p>Jarvis died, almost penniless and alone, in a sanatorium in 1948. According to the BBC, one of her final public activities before being admitted to the sanatorium was “to go door-to-door in Philadelphia asking for signatures to back an appeal for Mother’s Day to be rescinded.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Claims have been made that Jarvis’ sanatorium bills were secretly footed, at least in part, by the florist and greeting card industries. However, these reports have not been confirmed.</p>
+<p>Jarvis never had children of her own, but so vehement was her eventual opposition to Mother’s Day that, according to the BBC, even her extended family did not observe the day for a long time.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10682151"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/yashee/">
+<figure>
+<img alt="Yashee" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2019/08/yashee-resized.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/yashee/"><span></span>Yashee</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="5895939"></div><div class="follow_author_title" data-id="Yashee"></div><div class="follow_author_slug" data-id="yashee"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Yashee is a Senior Assistant Editor at The Indian Express, and she heads the Explained Desk. With over 12 years of experience in mainstream journalism, she specializes in translating intricate geopolitical shifts, legal frameworks, and historical narratives into accessible insight.
+
+Having started her career with Hindustan Times and later contributing to India Today (DailyO), Yashee brings a veteran’s perspective to contemporary analysis. She holds a Bachelor’s degree in English Literature from the historic Presidency College, Kolkata, and a postgraduate diploma from the Asian College of Journalism (ACJ), Chennai. Her work provides readers with the deep context needed to navigate a complex world.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/yashee/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May tenth, twenty twenty-six, at fifty-two minutes past twelve in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-culture/" href="https://indianexpress.com/about/explained-culture/">Explained Culture</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-culture/mothers-day-origin-creator-history-10682151/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-12 10:29 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
