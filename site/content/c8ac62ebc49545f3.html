@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>In Trump’s China visit, why breakthrough trade deals are unlikely | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>In Trump’s China visit, why breakthrough trade deals are unlikely</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/trump-xi-china-us-meeting.jpg?w=1600" alt="In Trump’s China visit, why breakthrough trade deals are unlikely">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="US President Donald Trump, left, and Chinese President Xi Jinping, shake hands after their U.S.-China summit talk at Gimhae International Airport Jinping in Busan, South Korea, Oct. 30, 2025." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/trump-xi-china-us-meeting.jpg?w=1600" width="650"/><span class="ie-custom-caption">US President Donald Trump, left, and Chinese President Xi Jinping, shake hands after their US-China summit talk in Busan, South Korea, Oct. 30, 2025. (AP Photo/Mark Schiefelbein)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>With a day left for US President Donald Trump’s arrival in Beijing, a Chinese foreign ministry spokesperson said Trump and Chinese President Xi Jinping will have an “in-depth exchange of views on major issues concerning China-U.S. relations and world peace and development.”</p>
+<p>The ministry also formally announced that Trump’s visit to China — the first by a US president in nine years — is scheduled from Wednesday (May 13) to Friday. Earlier planned for late March, the <a href="https://indianexpress.com/article/world/us-news/us-sanctions-iran-oil-china-irgc-shadow-fleet-trump-xi-summit-10684694/"><strong>US attacks on Iran</strong></a> led to its postponement.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The trip comes after months of tit-for-tat tariffs, the US Supreme Court subsequently ruling against their use as government policy, and a global energy crisis triggered by the West Asia war. China has also seen developments in its economic priorities and adopted a stronger tone for its claims on Taiwan.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>But apart from high-profile photo-ops and meetings, little is expected in terms of a breakthrough on trade or other concerns that have long plagued the ties. Here is why, and what happened the last time Trump visited China.</p>
+<p><strong>Issues at hand: Trade, global tensions, Taiwan</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>Beginning with Trump’s reciprocal “Liberation Day” tariffs on nearly all US trade partners in April 2025, average tariffs on China went from 34% to a high of 145% within a few days. China countered with 125% tariffs, and by May, both sides opened negotiations with top leaders meeting in Geneva.</p>
+<p>China heavily leveraged its dominant position in processing rare earths, which are essential for manufacturing technological goods, to demand concessions. In fact, US Treasury Secretary Scott Bessent and Chinese Vice Premier He Lifeng will meet in Seoul before Trump’s visit.</p>
+<p>The basis of Trump’s tariffs was the belief that countries imposed trade restrictions on US-made goods while the US did not, resulting in a rising trade imbalance. This was contested by both economists and US trade partners, who pointed out that the US also purchased goods for lower prices thanks to the manufacturing scale of countries like China and Vietnam, and that tariffs could hurt domestic consumers.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Still, tariffs affected the US-China trade deficit (the difference in imports and exports), which stood at $346 billion in 2016 and dropped significantly to $202 billion by 2025.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/explained-interview-china-record-1-trillion-trade-surplus-impact-trade-10414467/">China’s $1 trillion trade surplus as much ‘sign of imbalance as it is of strength’</a></span></div>
+<p>However, rather than slowing down China’s manufacturing juggernaut, it made the country turn to the rest of the world. In 2025, China hit a $1 trillion trade surplus — a figure no country has ever registered — on account of trade with the Global South and other markets.</p>
+<span class="custom-caption"><img alt="Trump in China in 2017." class="lazyloading size-medium wp-image-10686009" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Trump-in-China-in-2017.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Trump-in-China-in-2017.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/Trump-in-China-in-2017.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/05/Trump-in-China-in-2017.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/05/Trump-in-China-in-2017.jpg?resize=608,405 608w" height="480" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> Trump in China in 2017. (Wikimedia Commons)</img></span>
+<p>Trade imbalance was just one of the US’s long-held criticisms of China’s policies, apart from its trade subsidies for domestic firms, blue-collar job losses in the US due to Chinese manufacturing, and so on. The sheer range of complex issues makes the possibility of a grand deal remote.</p>
+<p>On the other hand, lower-level deals or commitments could transpire. Much has been said about China already committing to buying soybeans, used as livestock feed on a large scale, from the US. This also matters for Trump ahead of the mid-term election in November, with rural Americans being a key demographic. Boeing is also looking for a massive order of aircraft from China.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>But deeper concessions from China may not be easily won, because the tariffs episode showed its ability to weather unpredictable US policy. Despite a slightly downward GDP growth target this year, and a realisation that overcapacity in certain sectors may be even hurting its own producers, there is little to show that China is taking big steps towards fundamentally changing its trade policies.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Then there is the conflict in West Asia. China, like other countries, had obvious dependencies on the region for oil and the movement of goods, but this was another scenario where China emerged better-than-expected, thanks to years of investments in non-renewables and diversified crude supplies (like from Russia).</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/china-trade-surplus-worlds-headache-10473839/">Trump’s tariffs reduced China’s surplus with US — and made it the world’s headache</a></span></div>
+<p>Beyond energy needs, China has stakes in regional peace and stability, owing to its ties with Gulf nations. After weeks of mostly issuing condemnations, China unveiled a five-point peace plan along with Pakistan. While it did not ultimately take, China was also reportedly behind nudging Iran to accept the ceasefire eventually negotiated with the US. Whether it can negotiate with the US for a peace plan for the region is again up in the air, dependent on what Trump seeks from the conflict.</p>
+<p>The final concern is Taiwan. The United States has, for decades, maintained informal ties with Taiwan and sold military hardware to it. China has increasingly objected to such moves and asserted its territorial claims with flybys and sending ships to the Taiwan Strait.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Under Trump, however, the US has shifted from past precedents on many issues, seen as unrelated to immediate domestic concerns or of little value by Trump himself. China might want to use this period to have the US use more unequivocal language on accepting its Taiwan claims.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-china-diplomatic-ties-history-9091388/">How China and the US first established diplomatic ties 45 years ago, why Taiwan became a sticking point</a></span></div>
+<p>As the Communist Party mouthpiece <em>Global Times</em> said in an editorial, “The Taiwan question concerns China’s core interests and constitutes the first red line that must not be crossed in China-US relations… what the US especially needs to recognize is that maintaining peace and stability in the Taiwan Straits requires a clear and unequivocal opposition to ‘Taiwan independence’”.</p>
+<p><strong>Limited results from the 2017 visit</strong></p>
+<p>The <em><a class="" href="https://indianexpress.com/about/gujarat-titans/" rel="noamphtml">GT</a></em> editorial said that “Heads-of-state diplomacy plays an irreplaceable role in providing strategic guidance for China-US relations.” But too often, such summits have delivered more short-term relief.</p>
+<p>Take Trump’s last visit in 2017. He said at the time to Xi, “My feeling toward you is an incredibly warm one. As we said, there’s great chemistry. And I think we’re going to do tremendous things for both China and for the United States.” But the visits to the Forbidden City and a reception at the Great Hall of the People, or even deals worth $250 million, did not stop Trump from imposing tariffs on Chinese goods the next year.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>A 2020 “Phase One” deal saw China commit to increasing its purchases of certain US goods and services in 2020 and 2021 by at least $200 billion over 2017 levels. The US-based Pieterson Institute for International Economics found in 2022 that “China bought only 58 percent of the US exports it committed to purchase over 2020–21.” Last year, the US government initiated an investigation into the deal’s implementation at China’s end.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10685981"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twelfth, twenty twenty-six, at forty-four minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/donald-trump/" href="https://indianexpress.com/about/donald-trump/">donald trump</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/uschina-relations/" href="https://indianexpress.com/about/uschina-relations/">US-China relations</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/trump-us-china-visit-agenda-expectations-10685981/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-13 14:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
