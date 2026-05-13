@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains: Why Trump's China visit will be more about managing rivalry than restoring trust | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains: Why Trump's China visit will be more about managing rivalry than restoring trust</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/trump-xi-meeting.jpg?w=1600" alt="Expert Explains: Why Trump's China visit will be more about managing rivalry than restoring trust">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="China's President Xi Jinping, right, waves, with US President Donald Trump, in Busan, South Korea, Thursday, Oct. 30, 2025." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/trump-xi-meeting.jpg?w=1600" width="650"/><span class="ie-custom-caption">Chinese President Xi Jinping, right, waves, with US President Donald Trump, in Busan, South Korea, Thursday, Oct. 30, 2025. (AP Photo/Mark Schiefelbein, File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In what is set to be one of the most consequential encounters in years, US President Donald Trump arrives today in Beijing, where he will meet with his Chinese counterpart, Xi Jinping.</p>
+<p>The Trump-Xi summit is less about reconciliation than it is about managing an increasingly adversarial relationship in which economic interdependence survives despite collapsing strategic trust. Washington and Beijing are no longer negotiating the terms of partnership, but the boundaries of coexistence within an increasingly fragmented international order.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>The Iran factor and strategic distrust</strong></p>
+<p><a href="https://indianexpress.com/article/explained/explained-global/trump-us-china-visit-agenda-expectations-10685981/"><strong>The summit takes place</strong></a> amid a widening technological divide, continuing trade tensions, and the destabilising effects of the conflict in West Asia. The prolonged disruption around the Strait of Hormuz has intensified inflationary pressures globally while creating fresh political pressures for President Trump ahead of the November midterm elections.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>China has simultaneously used the crisis to position itself as a stabilising power with leverage over Tehran, particularly after hosting Iranian Foreign Minister Abbas Araghchi in Beijing shortly before Trump’s visit. For Washington, Chinese cooperation in restoring stability in the Gulf has become an important, if unstated, objective of the summit. Yet the challenges facing the summit extend far beyond immediate geopolitical bargaining.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Domestic political pressures in the US further complicate the summit. Rising inflation, declining approval ratings, and the approaching elections increase the pressure on Trump to project the image of a diplomatic victory. Yet any overt attempt by Washington to frame the summit in triumphalist terms is unlikely to sit well with the Chinese leadership, which remains acutely sensitive to perceptions of strategic concession or “loss of face.”</p>
+<p>The problem is compounded by the clash of negotiating cultures themselves: Trump’s transactional, headline-driven diplomacy sits uneasily alongside a Chinese negotiating culture rooted in strategic patience and incremental pressure.</p>
+<span class="custom-caption"><img alt="US President Donald Trump and Chinese President Xi Jinping participate in a welcome ceremony at the Great Hall of the People in Beijing, China, Nov. 9, 2017. " class="lazyloading size-medium wp-image-10686074" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/trump-china-2017.jpg?resize=600,434" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/trump-china-2017.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/trump-china-2017.jpg?resize=450,326 450w, https://indianexpress.com/wp-content/uploads/2026/05/trump-china-2017.jpg?resize=600,434 600w, https://indianexpress.com/wp-content/uploads/2026/05/trump-china-2017.jpg?resize=560,405 560w" height="521" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> US President Donald Trump and Chinese President Xi Jinping participate in a welcome ceremony at the Great Hall of the People in Beijing, China, Nov. 9, 2017. (AP Photo/Andrew Harnik, File)</img></span>
+<p>This is where Harvard scholar Daniel Shapiro’s idea of the “tribe effect” becomes relevant — an adversarial, self-righteous, and closed mindset that pushes rival powers to magnify differences, treat their own positions as morally superior, and increasingly view compromise as weakness rather than strategy. These tensions are likely to shape the contentious agenda before both sides.</p>
+<p><strong>The ‘5 Bs’ and the ‘3 Ts’</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The competing priorities of both sides are reflected in what officials and analysts have described as Washington’s “5 Bs” and Beijing’s “3 Ts.”</p>
+<p>Washington’s priorities revolve around Boeing aircraft, beef, beans (soyabeans), and the proposed Board of Trade and Board of Investment, a framework aimed at stabilising commerce in “non-sensitive” sectors while insulating strategic industries such as semiconductors and artificial intelligence from deeper confrontation. The approach reflects Washington’s growing preference for negotiated reciprocity over multilateral trade mechanisms that many within the Trump administration view as inadequate in dealing with China’s state-directed economic system.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/china-meta-manus-ai-deal-blocked-explained-10661976/">Why China blocked Meta’s $2-bn deal for Manus AI, and what this means for US-China tech race</a></span></div>
+<p>China’s priorities, meanwhile, revolve around Taiwan, tariffs, and technology. Beijing seeks a longer-term trade truce while pushing back against tightening US export controls, investment restrictions, and technology barriers.</p>
+<p>US restrictions on advanced semiconductors and AI ecosystems have accelerated Beijing’s push for technological self-reliance even as slowing growth increases pressure on the leadership to stabilise external economic conditions. At the same time, Beijing wants greater access for its electric vehicles and other clean-energy exports to global markets as it recalibrates its export strategy amid growing geopolitical fragmentation.</p>
+<p><strong>AI, semiconductors, and the new battleground</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>If trade and tariffs once defined the US–China rivalry, artificial intelligence and advanced semiconductors have now become the central battlegrounds of strategic competition. The summit may also see the first serious high-level discussions on the risks posed by increasingly powerful frontier AI systems — one of the few areas where Washington and Beijing still recognise the need for limited cooperation despite deepening mistrust.</p>
+<p>Artificial intelligence has emerged as another major fault line in the relationship. The release of Anthropic’s “Claude Mythos Preview” — an advanced AI system capable of autonomously identifying software vulnerabilities and executing complex cyber operations — has intensified global concerns over the risks posed by increasingly powerful AI agents.</p>
+<p>While both sides have shown limited willingness to open communication channels on AI safety and misuse, deep mistrust continues to overshadow cooperation. That mistrust was evident in China’s recent decision to block Meta’s $2 billion acquisition of Manus, an AI startup with Chinese roots, signalling Beijing’s determination to retain frontier AI talent and intellectual property within its strategic ecosystem.</p>
+<p>The episode underscored how technological competition is increasingly shifting from hardware access to the control of talent, data, and innovation ecosystems. These developments are likely to further harden adversarial perceptions on both sides, bringing the underlying “tribe effect” into even sharper relief.</p>
+<p><strong>India and the challenge of multi-alignment</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Whatever the immediate outcome of the Beijing summit, strategic and foreign policy circles in India will watch the developments closely. A prolonged phase of institutionalised rivalry between the US and China is likely to add new pressures to an already fragmenting global order.</p>
+<p>India’s strategy of multi-alignment will increasingly be tested as trade networks, technological ecosystems, and geopolitical partnerships become more polarised. The challenge for New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> will lie in preserving strategic flexibility while continuing to build issue-based coalitions without becoming overly dependent on any single power bloc.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>As Trump and Xi meet in the Great Hall of the People, the objective is no longer reconciliation, but stabilisation. The summit may produce temporary truces, symbolic gestures, and carefully negotiated bargains, but the larger reality is harder to obscure: The US and China are learning not how to restore strategic trust, but how to manage enduring rivalry without allowing it to spiral into systemic rupture. The summit’s significance may lie less in what it resolves than in the fact that both sides still recognise the necessity of engagement despite deepening hostility.</p>
+<p>The defining feature of the emerging order may not be a new Cold War, but a world in which rivalry itself becomes institutionalised.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><em><strong>G Venkat Raman, a professor at <a class="" href="https://education.indianexpress.com/university/indian-institute-of-management-iim-indore" rel="noamphtml">IIM Indore</a>, is a Fulbright and Institute of Chinese Studies fellow.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10686034"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May thirteenth, twenty twenty-six, at zero minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/donald-trump/" href="https://indianexpress.com/about/donald-trump/">donald trump</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/trump-beijing-visit-china-xi-managing-rivalry-10686034/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-13 06:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
