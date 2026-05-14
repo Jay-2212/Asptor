@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From DK to DMK to AIADMK: How the Dravidian movement has shaped TN’s politics for nearly a century | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From DK to DMK to AIADMK: How the Dravidian movement has shaped TN’s politics for nearly a century</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Anna-Periyar-DMK-history.jpg?w=1600" alt="From DK to DMK to AIADMK: How the Dravidian movement has shaped TN’s politics for nearly a century">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="DMK" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Anna-Periyar-DMK-history.jpg?w=1600" width="650"/><span class="ie-custom-caption">Soon after its formation, differences began to emerge between Periyar and Annadurai, who found the DK patriarch’s ways overbearing. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Tamil Nadu has just seen its latest political twist. More than half of the AIADMK’s 47 MLAs defied the party whip to help Chief Minister C Joseph Vijay’s Tamilaga Vettri Kazhagam (TVK)-led coalition <a href="https://indianexpress.com/article/political-pulse/tamil-nadu-cm-vijay-tvk-wins-trust-vote-aiadmk-split-dmk-walkout-10687851/" rel="noopener" target="_blank"><strong>sail through the Assembly floor test</strong></a> on Wednesday.</p>
+<p>The rebel faction has solidified a split in the AIADMK, which is now staring at an erosion of its relevance amid the rise of the TVK.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Splits, however, are nothing new for the Dravidian parties that have dominated <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a>’s politics for almost 60 years now.</p>
+<p>What’s crucial is that none of the splits appears to have diluted their “Dravidian ideology”. So ingrained is this ideology in the state’s psyche that it will endure even with the TVK in power, says veteran <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Chennai</a>-based journalist Kalyan Arun, who teaches at the Asian College of Journalism.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>Indeed, Vijay has invoked Periyar as his guiding light and spoken of inaugurating a “new era of real, secular social justice”, signalling continuity with the state’s long social justice tradition.</p>
+<p>Here’s a look at the journey of the Dravidian movement in the state, from its origins as a social force to a political identity carried and moulded by multiple parties.</p>
+<h2><strong>Dravidian movement</strong></h2>
+<p>The institutional basis of the Dravidian movement was laid in 1916 with the formation of the Justice Party. It comprised members of the non-Brahmin elite, merchants, landlords and professionals who were looking to politically counter Brahmin dominance in government jobs and the public sphere.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In 1925, E V Ramasamy Naicker — a former Congressman who would later come to be known as Periyar (the elder) — formed the Self-Respect Movement that stood for anti-caste politics, rationalism, social reforms and women’s rights. Periyar was also known for his uncompromising atheism.</p>
+<p>The Self-Respect Movement also increasingly emphasised Tamil identity, calling the language and culture distinct from Sanskritic North Indian traditions.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/congress-dmk-alliance-ends-history-tvk-tamil-nadu-10675837/">Congress leaves DMK for TVK: Why this post-poll break-up is a first in their decades-old alliance</a></span></div>
+<p>In 1944, the Justice Party and the Self-Respect Association merged to form the Dravidar Kazhagam (DK). The DK was anti-Brahmin, anti-Congress and anti-Aryan, espousing an independent Dravida Nadu.</p>
+<p>C N Annadurai, or Anna (elder brother), emerged as a key figure of the DK, which also attracted youngsters such as M Karunanidhi.</p>
+<p><strong>The DK splits</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>It would not take long for differences to emerge between Periyar and Annadurai, who found the DK patriarch’s ways overbearing.</p>
+<p>Periyar, an admirer of British rule, called independence a “day of mourning” as he felt power would pass into the hands of North Indian Aryans, says veteran journalist Vaasanthi in her book <em>Karunanidhi: The Definitive Biography</em>. Annadurai, however, felt that the day needed to be celebrated as it marked the end of foreign domination.</p>
+<p>Periyar also believed in keeping the DK away from direct politics and elections. Annadurai and others disagreed.</p>
+<p>Another point of friction was that 72-year-old Periyar, according to Vaasanthi’s book, married his 31-year-old assistant Maniyammai. Apart from the age difference, many younger DK members were unhappy that Periyar had named her his legal heir and placed the DK’s funds in her hands.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>So on September 17, 1949, five years after the DK’s formation, Annadurai broke away to form the Dravida Munnetra Kazhagam (DMK). Like the DK, it grounded its politics in language, social justice, and an anti-Brahmin and separatist pitch.</p>
+<p>But the DMK would also break with Periyar’s atheistic line, writes Vaasanthi, instead focusing on “one community, one god”. The mellowing would happen in other ways as well — with the Sino-India war of 1962, Annadurai gave up his secessionist demands, too.</p>
+<p><strong>A turning point for DMK: Opposition to Hindi</strong></p>
+<p>In March 1938, after he became Premier of Madras Presidency, C Rajagopalachari introduced a policy that effectively made Hindi compulsory in classes 6, 7 and 8. The British withdrew the policy a year later after a backlash by Periyar’s followers.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/before-vijay-there-was-rajaji-recalling-independent-indias-first-hung-assembly-in-madras-state-10680912/">Before Vijay, there was Rajaji: Recalling independent India’s first hung Assembly in Madras state</a></span></div>
+<p>In 1950, the state’s Congress government again introduced a Hindi policy, making the language compulsory from classes 1 to 6. After a massive DMK agitation, the government made Hindi optional.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The DMK did not contest the 1952 Madras State election. In 1957, however, it won 15 Assembly and two Lok Sabha seats. Annadurai became the Leader of the Opposition. In 1962, it won 50 seats in the Assembly and seven in the Lok Sabha.</p>
+<p>Then came the turning point — the massive anti-Hindi agitations in the state in 1965.</p>
+<p>The protests stemmed from a 1949 Constituent Assembly decision that chose Hindi as the official language of the Union, with English to continue alongside it for 15 years — until January 26, 1965. Prime Minister Lal Bahadur Shastri attempted to implement this policy.</p>
+<p>But amid fears that Hindi would dominate official communication, violent protests broke out in Madras State — marked by self-immolations, killings of policemen and multiple deaths in police firing.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>This forced  Shastri to assure the state that Hindi would not be imposed upon it.</p>
+<p>However, the anger sealed the Congress’s fate in the state. In the 1967 elections, buoyed by the anti-Hindi agitation and rise in the price of rice, the DMK won 138 Assembly seats, securing a majority. Annadurai became chief minister. A two-language formula — English and Tamil — replaced the Centre’s three-language formula. And Madras was renamed as Tamil Nadu, the land of the Tamils.</p>
+<p><strong>The DMK splits</strong></p>
+<p>After Annadurai’s death in 1969, Karunanidhi took over as Chief Minister, with the support of Tamil film superstar M G Ramachandran (MGR), an old friend and DMK leader.</p>
+<p>But the popularity of MGR, who would steal the show in public appearances, began to rankle Karunanidhi, says Vaasanthi in her book. After the DMK won the 1971 elections, Karunanidhi thwarted MGR’s aspirations to become a cabinet minister. The chief minister also unsuccessfully attempted to launch his eldest son, M K Muthu, into films to counter MGR.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>While all this soured their relations, it was the Union government that played a significant part in engineering the final split. The CBI and the ED initiated raids on MGR’s properties, rattling him. MGR met Prime Minister Indira Gandhi and returned a transformed man, openly accusing DMK leaders of corruption, Vaasanthi recalls in her book. The DMK expelled MGR on October 10, 1972. A week later, on October 18, MGR founded his own party — the Anna Dravida Munnetra Kazhagam, or ADMK, named after Annadurai. It would be known by this name until September 1976, when the words ‘All India’ were prefixed to it.</p>
+<h2><strong>DMK vs ADMK</strong></h2>
+<p>Karunanidhi tried to undermine MGR as a Malayali, but his popularity remained undented. MSS Pandian argued in his book, <em>The Image Trap</em>, that MGR’s screen image — the underdog who rises to power and delivers justice — became a propeller for his politics, despite the fact that he pursued no radical economic measures for the poor.</p>
+<p>MGR, however, took care to indulge in visible philanthropy. His fan clubs also engaged in civic activities — thus marrying the reel image to the real image.</p>
+<p><strong><span style="color: #800000">ALSO READ</span> | <a class="" href="https://indianexpress.com/article/research/mgr-aiadmk-birth-centenary-of-mgr-100-years-tamil-nadu/">MGR: The man who made cult worship the theme of Tamil Nadu politics</a></strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>In November 1972, MGR went to New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> and presented a memorandum to the President, seeking an inquiry into the entire Tamil Nadu Cabinet for corruption. The DMK government tried to contain the damage by passing a Bill to punish the corrupt, covering even the chief minister.</p>
+<p>What made things worse for the DMK was its opposition to the Emergency and Karunanidhi’s good terms with Indira’s arch-rival Jayaprakash Narayan.</p>
+<p>The Centre asked Tamil Nadu Governor KK Shah to examine MGR’s charges against the DMK. His report accused the DMK government of corruption, and flagged its autonomy demands and aggressive speeches. The DMK government was dismissed in January 1976. Karunanidhi’s son MK Stalin and nephew Murasoli Maran were jailed under the Maintenance of Internal Security Act, or MISA.</p>
+<p>A commission led by Justice Ranjit Singh Sarkaria also published a damning report on corruption allegations against the DMK government ahead of the 1977 Assembly elections.</p>
+<p>Sure enough, MGR swept to power. However, Indira Gandhi dismissed the AIADMK government in 1980 after he backed Chaudhary Charan Singh’s bid for prime ministership. And the Congress, in an unlikely reversal, aligned with the DMK. But when elections were held later that year, the AIADMK again swept to power. MGR remained chief minister until his death in 1987.</p>
+<p><strong>The AIADMK splits</strong></p>
+<p>After MGR’s death, the AIADMK first split into factions led by his wife, Janaki, and his favourite lieutenant, film star J Jayalalithaa, a Brahmin. The Governor invited Janaki to the floor test, but the violence that erupted between the two factions in the House forced its sine die adjournment and the imposition of President’s Rule. The DMK won the 1989 elections, but the Jayalalithaa faction, which came in second with 27 seats, became the real AIADMK.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>From here began the epic rivalry between Karunanidhi and Jayalalithaa. The two parties infamously clashed in the Assembly when Karunanidhi was to present the <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> of 1989, with DMK members allegedly assaulting Jayalalithaa.</p>
+<p>With Sri Lankan militant Tamil factions becoming active in the state in the late 1980s because of the alleged tacit backing of the Dravidian parties, the DMK government was dismissed early in 1991. Months later, Rajiv Gandhi was assassinated in Sriperumbudur amid the 1991 polls. The assassination swung the elections, with the state handing a victory to the Congress in Lok Sabha and Jayalalithaa in the state Assembly.</p>
+<p>After this, the two rival Dravidian parties would take turns to rule the state for more than two decades.</p>
+<p>This changed when Chief Minister Jayalalithaa died in December 2016. The AIADMK first split between factions led by O Panneerselvam (OPS) and Edappadi K Palaniswami (EPS). They merged again in 2017 with both taking turns to serve as chief ministers till 2021. EPS, however, would oust OPS in 2022 after a power struggle. In 2018, TTV Dhinakaran formed a breakaway faction, the AMMK.</p>
+<p>The DMK, too, saw another split in 1994, after an Intelligence Bureau report said the LTTE was planning to assassinate Karunanidhi to ensure Vaiko’s elevation. Expelled from the party, Vaiko founded the Marumalarchi Dravida Munnetra Kazhagam.</p>
+<p>In 2018, Karunanidhi died and, in 2021, the DMK came to power with Stalin as chief minister.</p>
+<p>Now, the TVK’s rise has pushed both Dravidian giants into the same Opposition corner. Stalin’s son, Udhayanidhi, is the Leader of Opposition. And a post-Jayalalithaa AIADMK, under the shadow of the BJP, faces questions over its future. But Vijay’s signal of continuity with the state’s long social justice tradition means that its Dravidian politics may not be over yet.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10689043"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vikas-pathak/">
+<figure>
+<img alt="Vikas Pathak" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/09/Vikas-Pathak-1.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vikas-pathak/"><span></span>Vikas Pathak</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8958164"></div><div class="follow_author_title" data-id="Vikas Pathak"></div><div class="follow_author_slug" data-id="vikas-pathak"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/vikas.pathak.520562">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://twitter.com/vikaspathak76/">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vikas Pathak is deputy associate editor with The Indian Express and writes on national politics. He has over 17 years of experience, and has worked earlier with The Hindustan Times and The Hindu, among other publications. He has covered the national BJP, some key central ministries and Parliament for years, and has covered the 2009 and 2019 Lok Sabha polls and many state assembly polls. He has interviewed many Union ministers and Chief Ministers.
+
+Vikas has taught as a full-time faculty member at Asian College of Journalism, Chennai; Symbiosis International University, Pune; Jio Institute, Navi Mumbai; and as a guest professor at Indian Institute of Mass Communication, New Delhi.
+
+Vikas has authored a book, Contesting Nationalisms: Hinduism, Secularism and Untouchability in Colonial Punjab (Primus, 2018), which has been widely reviewed by top academic journals and leading newspapers.
+
+He did his PhD, M Phil and MA from JNU, New Delhi, was Student of the Year (2005-06) at ACJ and gold medalist from University Rajasthan College in Jaipur in graduation. He has been invited to top academic institutions like JNU, St Stephen’s College, Delhi, and IIT Delhi as a guest speaker/panellist.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vikas-pathak/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fourteenth, twenty twenty-six, at fifty-nine minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/dravidian-movement-tamil-nadu-dmk-aiadmk-tvk-history-10689043/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-14 14:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
