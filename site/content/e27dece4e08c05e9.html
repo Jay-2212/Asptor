@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Graphs, Data and Perspectives: Why the latest crude oil price spike will test the Indian economy | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Graphs, Data and Perspectives: Why the latest crude oil price spike will test the Indian economy</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/indian_economy.jpg?w=1600" alt="Graphs, Data and Perspectives: Why the latest crude oil price spike will test the Indian economy">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="An employee operates a fuel dispensing unit at a petrol pump, in Amritsar, Friday, May 15, 2026. (PTI Photo/Shiva Sharma)" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/indian_economy.jpg?w=1600" width="650"/><span class="ie-custom-caption">An employee operates a fuel dispensing unit at a petrol pump, in Amritsar, Friday, May 15, 2026. (PTI Photo/Shiva Sharma)
+</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">The government has increased fuel prices across the country, relaying some of the effect of the higher crude oil prices in the wake of the US war in Iran.</p>
+<p dir="ltr">The question is: How will this affect India’s economy?</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">As of now, there are <a href="https://indianexpress.com/article/explained/explained-economics/petrol-diesel-price-hike-india-omc-west-asia-crisis-10690586/"><strong>too many variables</strong></a> to accurately predict the impact — such as how long the West Asia tensions will continue, how high crude prices will go and how much of the increase the government will pass on to the average Indian consumer.</p>
+<p dir="ltr">However, it would help to look back at India’s recent history as a way to understand how higher crude oil prices affect different aspects of the Indian economy.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr"><strong>12 years of luck coming to an end</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">When Prime Minister Narendra Modi first came to power in 2014, the Indian economy — especially its consumers — had been suffering from the effects of high crude oil prices for three preceding years (2011-12, 2012-13 and 2013-14). In all those years, the crude oil price of the Indian basket — basically the price at which India procured oil — ranged from $114 a barrel to $106 a barrel; one barrel is roughly 160 litres (see chart 1).</p>
+<span class="custom-caption"><img alt="Chart 1" class="lazyloading wp-image-10691593 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP-CHART-1_jpeg.jpg?resize=600,401" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP-CHART-1_jpeg.jpg 800w, https://indianexpress.com/wp-content/uploads/2026/05/GDP-CHART-1_jpeg.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/05/GDP-CHART-1_jpeg.jpg?resize=600,401 600w, https://indianexpress.com/wp-content/uploads/2026/05/GDP-CHART-1_jpeg.jpg?resize=768,513 768w, https://indianexpress.com/wp-content/uploads/2026/05/GDP-CHART-1_jpeg.jpg?resize=607,405 607w" height="534" sizes="(max-width: 800px) 100vw, 800px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="800"> <em>Chart 1</em></img></span>
+<p dir="ltr">Soon after Modi took charge, however, the international situation changed and global crude oil prices fell sharply. Within a couple of years, they were at one-third of the price that the previous government paid. What’s more, since 2014, the Union government never saw crude touching $100 again.</p>
+<p dir="ltr">That has changed now with the first two months of the current financial year — April and May — recording the Indian basket of crude oil at $115 and $106 a barrel, respectively.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">If prices remain anywhere close to the $100-per-barrel level for the full year, that would imply an increase of around 40% over the previous year’s cost.</p>
+<p dir="ltr">Such a sharp increase would either upend household budgets (if the government entirely relays the price increase) or the government’s <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> (in the form of higher borrowings if it decides to bear the brunt itself).</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">ExplainSpeaking</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-india-forex-crisis-pm-modi-import-cuts-10684047/">Why PM Modi’s call to save forex could slow down India’s growth</a></span></div></p>
+<p dir="ltr">When governments borrow more to pay for the fuel bill instead of passing on the costs to consumers, they are only deferring the inevitable. Consumers, eventually, will have to pay for higher prices either today (in the form of higher prices at the petrol pump) or tomorrow (in the form of higher taxes to repay the government’s increased debt).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">Here’s a look at how crude oil prices were relayed and how they different macroeconomic variables over the past 15 years.</p>
+<p dir="ltr"><strong>Retail prices</strong></p>
+<p dir="ltr">Table 1 shows the impact on retail prices across various types of crude oil products in each year.</p>
+<span class="custom-caption"><img alt="Table 1" class="lazyloading wp-image-10691585 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP_TABLE_1.jpg?resize=600,518" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_1.jpg 920w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_1.jpg?resize=450,388 450w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_1.jpg?resize=600,518 600w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_1.jpg?resize=768,663 768w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_1.jpg?resize=469,405 469w" height="794" sizes="(max-width: 920px) 100vw, 920px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="920"> <em>Table 1</em></img></span>
+<p dir="ltr">As the data shows, while crude oil prices crashed all the way up to and including the Covid year (2020-21), for most commodities barring Aviation Turbine Fuel (ATF), retail prices actually went up. This is true even for the Covid year when crude oil prices fell by as much as 30%, and yet pump prices of petrol and diesel actually went up.</p>
+<p dir="ltr">Since then, however, the trend changed in the wake of the increased demand owing to the global economic recovery and the supply constraints caused by the Russia-Ukraine war.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2 dir="ltr"><strong>Inflation</strong></h2>
+<p dir="ltr">Inflation rate is the rate at which prices increase over one year to another. Typically it is a positive number — suggesting the general price level went up from one year to another — but sometimes it can be negative too — suggesting prices actually fell from one year to another.</p>
+<p dir="ltr">Table 2 shows the impact of higher crude oil prices on the main types of inflation— wholesale and retail. The wholesale inflation is more affected by fuel prices than retail inflation because fuel prices have a bigger weight in the way wholesale inflation is calculated.</p>
+<span class="custom-caption"><img alt="Table 2" class="lazyloading wp-image-10691595 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP_TABLE_2.jpg?resize=318,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg 880w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg?resize=239,450 239w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg?resize=318,600 318w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg?resize=768,1449 768w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg?resize=215,405 215w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_2.jpg?resize=814,1536 814w" height="1660" sizes="(max-width: 880px) 100vw, 880px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="880"> <em>Table 2</em></img></span>
+<p dir="ltr">Unsurprisingly then, wholesale inflation has stayed very modest in most years — in some years even being in the negative zone implying that wholesale prices fell.</p>
+<p dir="ltr">Retail inflation — which is what an average consumer might be facing — has been much higher, not just in comparison to wholesale inflation but also from the RBI’s target rate of 4%. In particular, this is true of the four-year period starting the Covid year of 2020.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h3 dir="ltr"><strong>Economic growth rates</strong></h3>
+<p dir="ltr">Table 3 brings out why higher crude oil prices tend to alarm Indian policymakers. It shows both the nominal and the real GDP growth rates; the nominal growth rates are inclusive of the effect of inflation and the real is without them.</p>
+<span class="custom-caption"><img alt="Table 3" class="lazyloading wp-image-10691599 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP_TABLE_3.jpg?resize=357,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_3.jpg 892w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_3.jpg?resize=268,450 268w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_3.jpg?resize=357,600 357w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_3.jpg?resize=768,1290 768w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_3.jpg?resize=241,405 241w" height="1498" sizes="(max-width: 892px) 100vw, 892px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="892"> <em>Table 3</em></img></span>
+<p dir="ltr">Broadly speaking higher crude oil prices are detrimental to India’s real GDP growth while lower prices help India’s economy zoom. In 2015-16 and 2016-17, for instance, when crude oil was in mid-$40s a barrel, India grew at 8% and above. In the last years of UPA-2, oil prices were well above $100 and the growth rate struggled between 5% and 6%.</p>
+<p dir="ltr">To be sure, the data in this table is based on the old GDP series since the new one still doesn’t provide historical data. A crucial aspect of the old GDP series is that it was found to be overstating India’s GDP — both nominal and real. As such the growth rates are likely to lower when the back series is released.</p>
+<h2 dir="ltr"><strong>Trade balance, forex and exchange rate</strong></h2>
+<p dir="ltr">The trade balance refers to the net effect of the export and import of goods between India and the rest of the world. Since India has a high dependence on crude oil imports — a dependence that has only increased over the past 12 years — higher crude oil prices tend to worsen India’s trade balance. In the data, a negative sign is referred to as a trade deficit.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">A higher trade deficit has to either be plugged by surpluses on other aspects of India’s Balance of Payment (trade in services, foreign investments into India etc.) or by depreciation in the rupee or else by drawing down forex reserves (read dollars).</p>
+<p dir="ltr">As can be seen from table 4, India’s trade deficit starts going up every time crude oil prices rise. This also correlates with sharp depreciation in the rupee’s exchange rate. In fact there were only two years out of the past 15 when rupee appreciated against the dollar — 2016-17 and 2020-21 — and in both years, crude oil prices were below $50, less than half of where they are at present.</p>
+<span class="custom-caption"><img alt="Table 4" class="lazyloading wp-image-10691601 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP_TABLE_4.jpg?resize=531,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_4.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_4.jpg?resize=399,450 399w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_4.jpg?resize=531,600 531w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_4.jpg?resize=359,405 359w" height="813" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> <em>Table 4</em></img></span>
+<p dir="ltr">The sharp depreciation of rupee in the past year, is a result of the fact that India’s weakness in the trade balance has not been offset by surpluses on other accounts and this has put pressure on India’s exchange rate.</p>
+<p dir="ltr"><strong>Health of government finances</strong></p>
+<p dir="ltr">Typically, higher crude oil prices tend to worsen the government’s fiscal deficit — which essentially refers to the amount of money the government was forced to borrow in a bid to bridge the gap between its expenses and its earnings.</p>
+<p dir="ltr">Table 5 squares up these two variables.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<span class="custom-caption"><img alt="Table 5" class="lazyloading wp-image-10691602 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/GDP_TABLE_5.jpg?resize=365,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_5.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_5.jpg?resize=274,450 274w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_5.jpg?resize=365,600 365w, https://indianexpress.com/wp-content/uploads/2026/05/GDP_TABLE_5.jpg?resize=246,405 246w" height="1183" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> <em>Table 5</em></img></span>
+<p dir="ltr">What is concerning about this table is that the government seems to have registered higher fiscal deficits despite having much lower oil prices. While it is true that part of the problem has to do with the Covid-era expenses, it is also true that in all those years oil prices were half or even one-third of where they were before the Modi government took charge. It is also important to note that even in the years before Covid and when  oil prices were acutely low, the NDA government never once achieved its FRBM (Fiscal responsibility and Budget Management) Act targets of a fiscal deficit of 3% (of GDP).</p>
+<p dir="ltr">The important thing is this: Given the past record, fiscal management will likely take a hit if oil prices stay elevated at $100.</p>
+<p dir="ltr">In conclusion, higher crude oil prices worsen India’s trade deficit, stoke inflation, depress growth, hit exchange rate and increase government debt.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10691553"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fifteenth, twenty twenty-six, at three minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/crude-oil-spike-affects-economy-10691553/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-15 17:26 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
