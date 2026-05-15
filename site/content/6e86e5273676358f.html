@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Who owns a person’s digital data after their death? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Who owns a person’s digital data after their death?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/digital-legacy-law.jpg?w=1600" alt="Who owns a person’s digital data after their death?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="digital data legacy law: There is another side to digital inheritance — online accounts often contain parts of a person’s life they may never have intended to share, even with family." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/digital-legacy-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">There is another side to digital inheritance — online accounts often contain parts of a person’s life they may never have intended to share, even with family. (Pixabay)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Earlier this month, a civil court in Gandhinagar recognised stored digital data in an iCloud account as “property” and part of a deceased person’s estate.</p>
+<p>The case arose after the deceased man’s family was unable to access his locked iPhone and the linked iCloud account. They said it contained “valuable personal data of emotional, sentimental and practical significance” to them, including photographs, videos, documents, voice notes and contact lists.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><a href="https://indianexpress.com/article/technology/tech-news-technology/google-account-data-after-death-passing-away-how-to-keep-safe-8274194/"><strong>Increasingly, such cases</strong></a> are part of a larger shift in which courts are using succession laws to govern the new frontier of digital estates, while dealing with privacy concerns.</p>
+<p><strong>The case</strong></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>To access the man’s phone, his family contacted Apple. The company informed them that under its terms of service, which contain a Digital Legacy clause, it could assist in recovering the cloud-stored data.</p><div id="taboola-mid-article-personalisation"></div>
+<p>But, this could happen only if “a court order containing specific declarations” formally appointed a legal representative who was authorised to act on behalf of the deceased.</p>
+<p>The deceased’s wife and daughter approached the court under the Indian Succession Act, 1925, seeking letters of administration, which the court provides when a person dies without a will. Judge Himanshu Choudhary allowed the petition, appointed the daughter as administrator of his estate and directed Apple to assist in recovering the data “to the extent technically feasible.”</p>
+<h2>Digital information as property</h2>
+<p>The heirs argued that the law sufficiently contains broad definitions to recognise digital data as property, even without a dedicated statute governing digital inheritance. The court found merit in the argument, saying that “the digital data stored in the Apple iCloud account of the deceased constitutes a valuable digital asset forming part of the estate of the deceased.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/what-happens-when-the-dead-dont-log-off-10541949/">What happens when the dead don’t log off?</a></span></div>
+<p>To get there, the family relied on how existing laws define “movable property” and found that the language allowed for their inclusion.</p>
+<p>The General Clauses Act says movable property is “property of every description, except immovable property.” The BNS of 2023 similarly exempts everything except land and things fixed to it. The Prevention of Money Laundering Act goes further, pulling in incorporeal and intangible assets within the meaning of property.</p>
+<p>None of these statutes was drafted with iCloud accounts in mind, but the court found their definitions broad enough to accommodate them. It also pointed to the Income Tax Act, which already taxes cryptocurrencies and NFTs as virtual digital assets under Section 2(47A). The court reasoned that the law had quietly begun recognising digital things as property worth protecting.</p>
+<p>The court noted that these provisions were “sufficiently expansive to accommodate digital data within the conceptual scope of property.”</p>
+<p><strong>The privacy angle</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>There is another side to digital inheritance — online accounts often contain private conversations, personal notes and parts of a person’s life they may never have intended to share, even with family. Treating such accounts as inheritable property can therefore clash with privacy and dignity after death.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/tamil-nadu-governor-vijay-swearing-in-delay-explained-10678294/">Vijay swearing-in delay: Why Governor’s role has raised questions, what top court has said in the past</a></span></div>
+<p>The issue, then, is not just who inherits digital assets, but how far access to a deceased person’s private digital life should extend. The court said that while the right to privacy is a fundamental right, “it is an inherently personal right which is born with and extinguishes with the individual.”</p>
+<p>Applying the maxim <em>actio personalis moritur cum persona</em>, which means a personal right of action dies with the person, the court held that “no claim in respect of the right to privacy of the deceased can be sustained” and that it cannot “obstruct the lawful heirs from administering his digital estate.”</p>
+<p>Section 14 of the Digital Personal Data Protection Act, 2023, allows a person to nominate someone to exercise their data rights after death, but the law says nothing about what happens if no nominee is appointed. In that gap, the court held, the rights devolve on the legal heirs. Apple was thus directed to assist in recovering the data “to the extent technically feasible, in recovery of any locally stored data on the physical device.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>Digital property jurisprudence</h2>
+<p>Last year, the Madras High Court in <em>Rhutikumari v. Zanmai Labs Pvt. Ltd.</em> held that cryptocurrency constituted property capable of possession and beneficial enjoyment.</p>
+<p>That case arose after crypto holdings on the WazirX platform were frozen following a cyberattack that resulted in losses of around $230 million. The court drew on Supreme Court rulings that define property in the widest possible terms, as SC observed in <em>Ahmed GH Ariff v CWT</em> (1969), “every possible interest which a person can clearly hold or enjoy” and an “aggregate of rights which are guaranteed and protected by law… everything that has an exchangeable value or which goes to make up wealth or estate or status,” as under <em>Jilubhai Nanbhai Khachar v State of Gujarat</em> (1995).</p>
+<p>Applying that reasoning, the Madras court observed that “investment made by the user is converted into crypto currency, which is capable of being stored, traded and sold. Crypto currency is termed as a virtual digital asset and is governed under Section 2(47A) of the Income Tax Act, 1961.”</p>
+<p>The <a class="" href="https://indianexpress.com/section/cities/gandhinagar/" rel="noamphtml">Gandhinagar</a> case is more ordinary, as it concerns photographs, videos, cloud backups and data generated every day and stored in devices. The shift from financial instruments to personal data under the umbrella of digital assets matters because India’s legislation has not kept pace with rising levels of digital dependence.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The IT Act, 2000, addresses cyber offences and unauthorised access but does not create inheritance rights over digital accounts. The Indian Succession Act predates the internet entirely. While the DPDP Act introduces the idea of nominating a person to exercise data rights after death, it does not comprehensively regulate digital inheritance.</p>
+<p><strong>The Germany case</strong></p>
+<p>The legal question before the Gandhinagar court was earlier confronted by the highest court in Germany.</p>
+<p>In 2012, a 15-year-old girl died after being struck by a train in Berlin. Her parents sought access to her Facebook account to understand the circumstances leading up to her death and to respond to legal claims arising from the incident. Facebook refused access, citing privacy.</p>
+<p>The dispute eventually reached the German Federal Court of Justice, which ruled in 2018 that the deceased user’s Facebook contract passed to the heirs under principles of universal succession, much like diaries or personal letters. The court held that the heirs had legally stepped into the deceased person’s position and were not “third parties” barred by confidentiality protections. It also found that EU data protection law did not prohibit such access because the General Data Protection Regulation (GDPR), one of the strictest digital privacy laws globally, does not apply to deceased persons.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Facebook was thus directed to provide the parents full access to the account. A later ruling specified that while heirs could access and read the account, they could not operate it as though they were the deceased user.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10690792"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fifteenth, twenty twenty-six, at twenty minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/digital-data-death-inheritance-phone-data-10690792/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-15 10:20 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
