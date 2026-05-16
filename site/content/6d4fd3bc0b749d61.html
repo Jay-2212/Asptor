@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Centre weighs new move to bring foreign capital to India: What is it and how much can it help? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Centre weighs new move to bring foreign capital to India: What is it and how much can it help?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-india-foreign-investors_expl-econ.jpg?w=1600" alt="Centre weighs new move to bring foreign capital to India: What is it and how much can it help?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Withholding tax" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-india-foreign-investors_expl-econ.jpg?w=1600" width="650"/><span class="ie-custom-caption">Most countries impose some form of withholding tax on foreign investors, especially on passive income such as dividends, interest and royalties. However, the rates, scope and exemptions vary widely depending on the country. Photo: Wikimedia Commons.</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">With capital outflows eroding India’s foreign exchange reserves by nearly $38 billion since March this year amid the West Asia conflict, the government is reportedly considering <a href="https://indianexpress.com/article/business/to-attract-foreign-investors-govt-considers-cut-in-withholding-tax-10690140/" rel="noopener" target="_blank"><strong>slashing the ‘withholding tax’ rate</strong></a> from 20% to the earlier 5% as it looks to revive overseas inflows.</span></p>
+<p><span style="font-weight: 400">Withholding tax, akin to a tax deducted at source, is paid by foreign investors on the interest they earn on their holding of Indian bonds.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">A high withholding tax is seen as a major deterrent for foreign capital inflows at a time when India is grappling with rising external pressures, including a sharp surge in crude oil prices.</span></p>
+<p><span style="font-weight: 400">The move assumes significance as the government has already proposed several measures to curb outflows and manage the external account, including cuts in expenditure and restrictions on foreign travel, gold imports and other non-essential spending.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Market participants believe that lowering the withholding tax could improve post-tax returns for foreign investors, make Indian debt and other financial assets more attractive, and help stabilise forex reserves amid heightened global uncertainty.</span></p>
+<h2><b>What is withholding tax? </b></h2>
+<p><span style="font-weight: 400">Withholding tax, or WHT, is a tax collected at the source of income. Instead of waiting for an investor or foreign company to pay taxes at the end of the financial year, the government requires the payer to deduct a portion of the income before it is remitted to the recipient. </span></p>
+<p><span style="font-weight: 400">The deducted amount is then directly deposited with the government. In simple terms, whenever income is earned — whether through employment, investments, royalties or other sources — the government ensures tax collection in advance through withholding tax.</span></p>
+<p><b>When was the withholding tax rate hiked?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">India had introduced a concessional 5% withholding tax rate on interest earned by foreign investors from investments in government securities and certain rupee-denominated bonds under Section 194LD of the Income Tax Act. </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/why-india-discontinued-sovereign-gold-bonds-10689470/">PM appeal, import duty hike: Could Sovereign Gold Bonds have eased strain on forex reserves?</a></span></div>
+<p><span style="font-weight: 400">However, the concessional regime expired in July 2023. Following its expiry, the withholding tax applicable to many foreign investors effectively reverted to around 20%, making India one of the relatively higher-tax jurisdictions for global bond investors. Analysts say the higher tax burden reduced the attractiveness of Indian debt instruments at a time when the country was also seeking greater foreign capital inflows and inclusion in global bond indices.</span></p>
+<p><span style="font-weight: 400">India’s withholding tax regime has also evolved significantly over the decades in other areas. In 1976, withholding tax on royalties paid to non-residents was fixed at 40%, while fees for technical services (FTS) attracted a 20% levy. Between 1986 and 2005, the government sharply reduced the withholding tax rate on both royalties and technical services to 10% in an effort to lower technology acquisition costs for Indian companies and encourage foreign collaboration.</span></p>
+<p><b>How will slashing withholding tax affect FPIs?</b></p>
+<p><span style="font-weight: 400">The withholding tax reduces foreign portfolio investors’ (FPIs) effective yields and overall investment returns because it is deducted at the source before interest, dividends or other investment income is remitted to them. This compresses investors’ post-tax returns, weakens the power of long-term compounding and limits the amount of capital available for immediate reinvestment. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">For large global investors operating across multiple jurisdictions, such deductions can also create short-term liquidity constraints by locking up funds until tax credits or refunds are processed.</span></p>
+<p><span style="font-weight: 400">In addition, FPIs often face significant administrative and compliance burdens in claiming relief under Double Taxation Avoidance Agreements (DTAAs). Higher withholding taxes may therefore reduce the attractiveness of a market by increasing transaction costs, lowering risk-adjusted returns and creating regulatory friction for overseas investors.</span></p>
+<p><b>Do other countries impose such a tax?</b></p>
+<p><span style="font-weight: 400">Most countries impose some form of withholding tax on foreign investors, especially on passive income such as dividends, interest and royalties. However, the rates, scope and exemptions vary widely depending on the country, the type of investor and whether a DTAA exists with the investor’s home country. The US imposes a 30% tax, Germany 26.4%, France 25% and China 10%. Hong Kong and Singapore don’t have a withholding tax.</span></p>
+<p><b>How much do FPIs invest in government debt?</b></p>
+<p><span style="font-weight: 400">FPIs hold a relatively small share of India’s government debt market, though their exposure has risen sharply after India’s inclusion in global bond indices such as the JPMorgan Government Bond Index-Emerging Market. The Reserve Bank of India has kept the FPI investment cap in government securities at 6% of outstanding stock.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-india-forex-crisis-pm-modi-import-cuts-10684047/">Why PM Modi’s call to save forex could slow down India’s growth</a></span></div>
+<p><span style="font-weight: 400">At the end of March 2025, FPI investment in dated securities jumped by 43.2% to 43.9 billion from its level of 30.6 billion at end-March 2024.</span></p>
+<p><b>Why are there demands for eliminating or cutting this tax?</b></p>
+<p><span style="font-weight: 400">Analysts say inclusion in global bond indices was delayed by taxation and procedural hurdles such as the high withholding tax. This suggests foreign inflows could rise significantly if the government reduces withholding tax on investments and simplifies related processes. Interest tax of 20%, higher than in most peer jurisdictions, also reduces the relative attractiveness of Indian debt.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">“Both Global Agg and FTSE WBGI seek clarity or exemption on taxes. The inclusion could imply $45-50 billion of inflows over two years, and greater allocation from pension funds/endowments not using these as benchmarks but taking comfort from inclusion and the clarity on taxation. Several major nations do not tax bond investments, and even those that do, like China, gave a special dispensation to investors that entered after index inclusion (tax exemption granted has so far been extended repeatedly),” said a report by Prateek Ancha, Senior Vice President, Axis Bank.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Besides capital gains tax (short and long-term), interest income typically attracts a 20% rate, after the concessional WHT facility was phased out in mid-2023. Debt category has witnessed FPI outflows worth $613 million in FY27 so far, after $2.8 billion inflows in FY26, under the general limit, VRR and FAR windows, said Radhika Rao, Senior Economist and Executive Director, DBS Bank.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10690880"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fifteenth, twenty twenty-six, at thirteen minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/india-withholding-tax-cut-fpi-foreign-investors-forex-inflows-10690880/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 13:15 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

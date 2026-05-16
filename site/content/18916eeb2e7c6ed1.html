@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>As Supreme Court cites ‘Hinduism as way of life’, recalling 30-year-old ruling that coined the phrase | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>As Supreme Court cites ‘Hinduism as way of life’, recalling 30-year-old ruling that coined the phrase</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Delete-again.jpg?w=1600" alt="As Supreme Court cites ‘Hinduism as way of life’, recalling 30-year-old ruling that coined the phrase">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Inside the Supreme Court of India, Building and premises, New Delhi (source: Wikimedia commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Delete-again.jpg?w=1600" width="650"/><span class="ie-custom-caption">Inside the Supreme Court of India, Building and premises, New Delhi (source: Wikimedia commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">Thirty years ago, a Supreme Court verdict described Hinduism as a “way of life” — a phrase that would acquire a life of its own over the coming years and decades.</p>
+<p dir="ltr">That phrase returned to the court this week during the hearings in the <a href="https://indianexpress.com/article/legal-news/sabarimala-reference-constitution-entrusts-religious-reform-to-legislature-not-courts-10688368/"><strong>Sabarimala</strong></a> case.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">Advocate G Mohan Gopal argued before a nine-judge Constitution bench, headed by Chief Justice of India Surya Kant, that many who identify as Hindus may not fit within a rigid definition.</p>
+<p dir="ltr">Justice B V Nagarathna responded: “That is why Hinduism is called a way of life. It is not necessary for a Hindu to mandatorily go to a temple or perform a ritual to remain a Hindu.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">This immediately raised memories of the 1995 Supreme Court ruling that coined the phrase — and inadvertently cemented it in political rhetoric.</p>
+<p dir="ltr">What is less remembered, however, is the full phrase: “Hinduism is a way of life, and nothing more”. And even less remembered is the context in which it was used — a ruling that underlined secularism and came down heavily on election speeches that sought votes in the name of religion.</p>
+<p dir="ltr">Here’s a look at the story of how these speeches landed in the Supreme Court, what the court said, and how its ruling became associated with this fragment of a phrase.</p>
+<p dir="ltr"><strong>The speeches</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">The origin of the case lay in the run-up to the December 1987 Vile Parle Assembly by-election in <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>, won by the Shiv Sena’s Ramesh Yeshwant Prabhoo.</p>
+<p dir="ltr">The period before the by-election, however, was marked by three contentious speeches delivered by Shiv Sena chief Bal Thackeray.</p>
+<p dir="ltr">In November, Thackeray told a gathering in Vile Parle that the election was being fought “for the protection of Hinduism”, that the Shiv Sena needed no Muslim vote, and that India “belongs to Hindus and will remain so”.</p>
+<p dir="ltr">In December, at the Khar Danda area, he said that if mosques were dug up, Hindu temples would be found underneath, that anyone who stood against Hindus should be “worshipped with shoes”, and that Prabhoo should be “led to victory in the name of the religion”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">And a day later, he warned another gathering that if Prabhoo was not elected, “Hindus would be finished”. Muslims were referred to in derogatory terms throughout the speech.</p>
+<p dir="ltr">Prabhoo was present at all three meetings and admitted in his own testimony that the speeches were consistent with his election campaign. The text of these speeches was never disputed.</p>
+<p dir="ltr">Prabhoo’s victory, however, was challenged by one Prabhakar Kunte before the Bombay High Court.</p>
+<p dir="ltr">Kunte told the court that Thackeray, who led Prabhoo’s campaign, delivered speeches appealing for votes in the name of Hindu identity and attacking Muslims.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/the-sabarimala-case-and-questions-of-religion-and-equality-10666379/">The Sabarimala case and questions of religion and equality</a></span></div></p>
+<p dir="ltr">To be clear, seeking votes in the name of religion is a “corrupt practice” under the Representation of the People Act, 1951.</p>
+<p dir="ltr">Section 123(3) of the Act bars candidates or their agents from seeking votes on the basis of religion, caste, race, community or language. Section 123(3A) prohibits the promotion of hatred between communities during campaigns.</p>
+<p dir="ltr">The High Court held that the speeches indeed amounted to “corrupt practices” under the two Sections mentioned above. It set aside Prabhoo’s election and held Thackeray guilty under Section 99 of the same Act. Both Thackeray and Prabhoo moved the Supreme Court against this decision.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Back then, the Ram Janmabhoomi movement and Hindu nationalist politics were shaping the electoral discourse across many parts of India. What began as an electoral dispute over one constituency would soon become a larger Constitutional argument about religion, secularism and political speech.</p>
+<h2 dir="ltr"><strong>The arguments in the Supreme Court</strong></h2>
+<p dir="ltr">Senior Advocate Ram Jethmalani, appearing for the appellants, argued before the Supreme Court that the speeches were really about “Hindutva” as an Indian culture — and not the Hindu religion.</p>
+<p dir="ltr">He argued that election law only prohibited direct religious appeals and that unless a candidate explicitly said “vote for ‘A’ because he is a Hindu”, the prohibition would just not apply.</p>
+<p dir="ltr">The court rejected that argument. Justice J S Verma, writing for the bench, held that election law cannot be defeated through indirect phrasing or coded language. What mattered was not merely the wording of a speech but how it would be understood by the audience listening to it.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">The court also upheld the constitutional validity of both provisions — Sections 123(3) and 123(3A) of the Representation of the People Act — stating that the restrictions on religious appeals during elections are compatible with secular democracy and permissible under Article 19(2) of the Constitution.</p>
+<p dir="ltr">“In a secular polity,” the court said, “an appeal for votes should not be made on the ground of the candidate’s religion.”</p>
+<h3 dir="ltr"><strong>What the top court ruling said</strong></h3>
+<p dir="ltr">The bench examined earlier Constitutional bench rulings and writings on Hinduism, including observations that Hindu traditions do not fit neatly within the framework of a single organised religion with one prophet, one text or one doctrine. It was in this context that the court observed that Hinduism “may broadly be described as a way of life and nothing more”.</p>
+<p dir="ltr">The judgment also said that “Hindutva is understood as a way of life or a state of mind” and should not automatically be equated with religious fundamentalism. Whether a speech violates Section 123, the court said, “is a question of fact in each case.” The word is not the test, the speech is.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">The court found that the first speech violated both Sections 123(3) and 3A — that is, the references to Muslims was not just political mobilisation but an attempt to promote enmity between communities.</p>
+<p dir="ltr">The remaining two speeches were held to only violate Section 123(3) (seeking votes on the basis of religion).</p>
+<p dir="ltr">The court said: “The lack of restraint in the language used and the derogatory terms used therein to refer to a group of people in an election speech is indeed to be condemned.”</p>
+<p dir="ltr">The speeches, the court said, “discarded the cherished values of our rich cultural heritage and tended to erode the secular polity”.</p>
+<p dir="ltr"><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p dir="ltr">The court’s ruling then went into discussing “Hindutva” — transforming this into a Constitutional flashpoint.</p>
+<p dir="ltr">It said: “Hinduism is an utterly diverse conglomerate of doctrines, cults, and way of life…[it] incorporates all forms of belief and worship without necessitating the election or elimination of any.”</p>
+<p dir="ltr">It also said that “‘Hindutva’ is related more to the way of life of the people in the sub-continent. It is difficult to appreciate how, in the face of these decisions, the term `Hindutva’ or `Hinduism’ per se, in the abstract, can be assumed to mean and be equated with narrow fundamentalist Hindu religious bigotry, or be construed to fall within the prohibition in sub-sections (3) and/or (3A) of Section 123 of the R.P. Act.”</p>
+<p dir="ltr">It then added that “fundamentalism of any colour or kind must be curbed with a heavy hand to preserve and promote the secular creed of the nation.”</p>
+<p dir="ltr"><strong>Why the ruling remains debated</strong></p>
+<p dir="ltr">The debate around the judgment lies less in the outcome and more in the language the court used to reach it. Critics have long argued that describing Hindutva as a “way of life” blurred the line between religion and culture in Constitutional law and allowed political rhetoric framed as “culture” or “civilisation” to evade scrutiny under election law.</p>
+<p dir="ltr">Supporters of the judgment argue that the court merely acknowledged the broad and plural character historically associated with Hindu traditions while still upholding restrictions on religious appeals for votes.</p>
+<p dir="ltr">Over time, one line of the judgment acquired a life independent of the case itself.</p>
+<p dir="ltr">In subsequent litigation, candidates accused of communal campaigning began citing the 1995 ruling in their defence. One of the clearest examples appeared in the Abhiram Singh v C.D Commachen case, where earlier Hindutva rulings were cited to argue that such references did not automatically constitute corrupt practices.</p>
+<p dir="ltr">Outside courtrooms, sections of the Sangh Parivar and the BJP publicly embraced the judgment through the late 1990s. The BJP’s manifesto described the ruling as recognition of Hindutva’s compatibility with secularism. It said that it “endorsed the true meaning and content of Hindutva as being consistent with the true meaning and definition of secularism”.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10692914"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May sixteenth, twenty twenty-six, at fourteen minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/supreme-court-ruling-hindutva-10692914/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 13:15 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
