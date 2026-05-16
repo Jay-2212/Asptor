@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why US is cracking down on a post-study work programme that Indians depend on for H-1B visas | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why US is cracking down on a post-study work programme that Indians depend on for H-1B visas</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/OPT-explainer.jpg?w=1600" alt="Why US is cracking down on a post-study work programme that Indians depend on for H-1B visas">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="OPT" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/OPT-explainer.jpg?w=1600" width="650"/><span class="ie-custom-caption">For Indian students, OPT is the bridge between American education and long-term employment in the US. (Magnific)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>For years, the American dream for Indian students came with a predictable pathway — first a US degree, a few years of work under Optional Practical Training (OPT), then an H-1B visa and, eventually, permanent residency.</p>
+<p>Now, that route is under its most serious threat in years.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>This week, acting Immigration and Customs Enforcement director Todd Lyons publicly described OPT as a “magnet for fraud”, alleging that the Department of Homeland Security had identified over 10,000 potential fraud cases involving international students and employers.</p>
+<p>Federal officials spoke of shell companies, fake jobs, “pay-to-stay” arrangements, and even international financial fraud networks operating through the student visa ecosystem.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>The developments come at a particularly vulnerable moment. The American tech job market has weakened, AI-driven layoffs have intensified competition, and uncertainty around immigration policy is already discouraging international enrolment at US universities.</p>
+<p>Here is why Indian students are worried, and what immigration lawyers are now advising.</p>
+<h2>What exactly is OPT, and why is it so important for Indian students?</h2>
+<p>OPT, or Optional Practical Training, allows international students on F-1 visas to work in the US after graduation in jobs related to their field of study. Students can generally work for 12 months under regular OPT, while STEM graduates receive an additional 24-month extension.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>For foreign students, particularly Indians, OPT is not merely a post-study work benefit. It is the bridge between American education and long-term employment in the US. Without OPT, many graduates would have to leave the country immediately after finishing their degrees unless they already had an H-1B visa sponsorship lined up.</p>
+<p>The programme expanded significantly under the Bush and Obama administrations as US universities increasingly relied on international students to sustain STEM programmes and feed the American tech workforce. Today, Indians make up nearly half of all OPT participants.</p>
+<p><strong>Why is the Trump administration suddenly targeting OPT?</strong></p>
+<p>The immediate trigger was a high-profile DHS and ICE press conference this week in which officials alleged widespread fraud within the OPT system. According to DHS, investigators found cases where students were allegedly maintaining their visa status through fake employment arrangements, shell companies, and third-party consultancies that existed only on paper.</p>
+<p>Asel Williams, an immigration attorney based in New York, told <em>The Indian Express</em> that the investigations appeared focused on “widespread, systemic abuses”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/neet-ug-computer-based-test-cbt-shift-10691143/">Why NEET-UG is finally shifting to computer-based testing, what can students expect</a></span></div>
+<p>“DHS targeted widespread, systemic abuses in which fraudulent employers ‘hired’ OPT students solely to maintain their legal status in the country without providing actual work,” Williams said.</p>
+<p>She said investigators visited worksites tied to employers who had hundreds of OPT students on record and often found “empty buildings or residential addresses” instead of functioning offices. “In some cases, multiple OPT employers shared the same registered address,” she said.</p>
+<p>Another attorney from Dallas, Texas on the condition of anonymity said the underlying concern being raised by DHS is real. “I totally agree with USCIS. I think there is fraud in OPT and STEM OPT,” he said. “Some students are claiming to work for companies that don’t really exist or are not actually training them. That itself is fraud.”</p>
+<p>He explained that OPT rules require students to work in their field of study and restrict the amount of unemployment they can accumulate. “In the initial OPT, they can only have 90 days of unemployment. In the entire OPT plus STEM OPT, they can only have a total of 150 days of unemployment,” he said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>According to him, some students unable to find jobs in a weak market may have resorted to fraudulent employment records to avoid losing status. “A lot of these guys probably are not having employment and to show they have employment, they have been trying to do some fraud,” he said.</p>
+<p><strong>Are legitimate Indian students now at risk?</strong></p>
+<p>Immigration attorneys say yes. Williams warned that even fully compliant students should now expect “heightened scrutiny”.</p>
+<p>“I anticipate a higher number of Requests for Evidence issued by USCIS in connection with OPT students’ change or extension of status applications, such as a change of status to H-1B, as well as green card applications,” she said.</p>
+<p>She said students may increasingly be asked to prove that their jobs were legitimate and genuinely connected to their academic training.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>“RFEs may request evidence of a bona fide employer-employee relationship and consistency between actual job duties and worksite with the information on record,” Williams explained.</p>
+<p>She advised students to preserve “job offer letters, employment agreements, training plans, wage documentation, pay stubs, proof of commute to the worksite, and proof of daily job responsibilities.”</p>
+<p>“Even a minor violation can lead to denial of employment-based temporary or permanent immigration benefits,” she added.</p>
+<p><strong>Which employers are likely to face the most scrutiny?</strong></p>
+<p>Both attorneys pointed to staffing consultancies, third-party placement companies, and firms employing unusually high numbers of OPT workers.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Williams said Indian IT firms and staffing consultancies may face particularly close examination because the government believes there are vulnerabilities in “the questionable bona fide nature of employer-employee relationships, the lack of direct student training, and the absence of fixed physical worksites.”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/why-neet-more-prone-to-paper-leaks-than-jee-10687737/">Why NEET is more prone to paper leaks than JEE</a></span></div>
+<p>She also noted that the DHS press conference “singled out Indian nationals” repeatedly. The Dallas-based attorney said “any company hiring a lot of students” would likely attract government attention.</p>
+<p>“They’re talking about hundreds of OPT employees in some companies,” he said. “Third-party placements have to be very, very particular that there is legitimate work.” Still, he stressed that students working in genuine jobs should not panic.</p>
+<p><strong>Can the Trump administration actually dismantle OPT?</strong></p>
+<p>Probably not entirely, but it can significantly weaken or narrow it.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Williams pointed to a proposed DHS rule submitted in May 2026 that could fundamentally reshape student visa policies.</p>
+<p>According to her, the proposed changes include eliminating “duration of status,” reducing student grace periods to 30 days, and requiring formal extension applications through USCIS.</p>
+<p>“The proposed rule would cause unlawful presence to begin accruing immediately after the grace period ends,” she said.</p>
+<p>That could dramatically increase the pressure on students to either secure employment quickly or leave the country.</p>
+<p><strong>Why are laid-off H-1B workers also suddenly worried?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Another immigration rule is making it much harder for them to leave the US and return. According to Rajiv Khanna, the safest option for a laid-off H-1B worker still remains finding a new employer within the 60-day grace period.</p>
+<p>“As soon as the new petition is properly filed with USCIS, the worker can begin employment immediately without waiting for approval,” Khanna explained. But for workers who cannot secure a job quickly, the alternatives are becoming increasingly risky.</p>
+<p>“The traditional fallback has been to file for a change of status to B-1/B-2 visitor status within the grace period,” Khanna said. “USCIS used to process these applications with relatively little friction. That is no longer the case.”</p>
+<p>According to him, USCIS is now issuing extensive RFEs questioning whether job-searching itself qualifies as a permissible activity under visitor status.</p>
+<p>“Workers who have followed this strategy in recent months have found themselves stranded, watching job offers expire while USCIS sits on their B application,” he said.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Khanna said the situation became even more serious after the September 2025 presidential proclamation imposing a $100,000 fee on certain new H-1B petitions filed for workers outside the US who do not already hold a valid H-1B visa.</p>
+<p>“Leaving the US right now is, for many workers, effectively a one-way door,” he warned.</p>
+<p><strong>What alternatives are immigration lawyers now advising students to consider?</strong></p>
+<p>Williams said Indian students should first “carefully re-evaluate the ROI” of an American degree in the current climate. “For those already in the US, enrolling in another academic program is not something I would advise; it is largely a waste of money,” she said.</p>
+<p>Instead, she urged students to begin planning immigration strategies much earlier. “OPT alternatives include O-1 visas, cap-exempt H-1Bs, EB-1A green cards, and EB-2 National Interest Waivers,” she said.</p>
+<p>She particularly recommended the O-1 route for highly skilled individuals. “The O-1 does not require a lottery, can be filed year-round, and had a past approval rating of over 90%,” she said.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10692141"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/">
+<figure>
+<img alt="Vidheesha Kuntamalla" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/01/vidheesha.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/"><span></span>Vidheesha Kuntamalla</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8400215"></div><div class="follow_author_title" data-id="Vidheesha Kuntamalla"></div><div class="follow_author_slug" data-id="vidheesha-kuntamalla"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vidheesha Kuntamalla is a Senior Correspondent at The Indian Express, based in New Delhi. She is known for her investigative reporting on higher education policy, international student immigration, and academic freedom on university campuses. Her work consistently connects policy decisions with lived realities, foregrounding how administrative actions, political pressure, and global shifts affect students, faculty, and institutions.
+
+Professional Profile
+
+Core Beat: Vidheesha covers education in Delhi and nationally, reporting on major public institutions including the University of Delhi (DU), Jawaharlal Nehru University (JNU), Jamia Millia Islamia, the IITs, and the IIMs. She also reports extensively on private and government schools in the National Capital Region.
+
+Prior to joining The Indian Express, she worked as a freelance journalist in Telangana and Andhra Pradesh for over a year, covering politics, rural issues, women-centric issues, and social justice.
+
+Specialisation: She has developed a strong niche in reporting on the Indian student diaspora, particularly the challenges faced by Indian students and H-1B holders in the United States. Her work examines how geopolitical shifts, immigration policy changes, and campus politics impact global education mobility.
+
+She has also reported widely on:
+* Mental health crises and student suicides at IITs
+* Policy responses to campus mental health
+* Academic freedom and institutional clampdowns at JNU, South Asian University (SAU), and Delhi University
+* Curriculum and syllabus changes under the National Education Policy
+
+Her recent reporting has included deeply reported human stories on policy changes during the Trump administration and their consequences for Indian students and researchers in the US.
+
+Reporting Style
+Vidheesha is recognised for a human-centric approach to policy reporting, combining investigative depth with intimate storytelling. Her work often highlights the anxieties of students and faculty navigating bureaucratic uncertainty, legal precarity, and institutional pressure. She regularly works with court records, internal documents, official data, and disciplinary frameworks to expose structural challenges to academic freedom.
+
+Recent Notable Articles (Late 2024 &amp; 2025)
+
+1. Express Investigation Series
+JNU’s fault lines move from campus to court: University fights students and faculty (November 2025)
+An Indian Express investigation found that since 2011, JNU has appeared in over 600 cases before the Delhi High Court, filed by the administration, faculty, staff, students, and contractual workers across the tenures of three Vice-Chancellors.
+
+JNU’s legal wars with students and faculty pile up under 3 V-Cs | Rs 30-lakh fines chill campus dissent (November 2025)
+The report traced how steep monetary penalties — now codified in the Chief Proctor’s Office Manual — are reshaping dissent and disciplinary action on campus.
+
+2. International Education &amp; Immigration
+‘Free for a day. Then came ICE’: Acquitted after 43 years, Indian-origin man faces deportation — to a country he has never known (October 2025)
+
+H-1B $100,000 entry fee explained: Who pays, who’s exempt, and what’s still unclear? (September 2025)
+
+Khammam to Dallas, Jhansi to Seattle — audacious journeys in pursuit of the American dream after H-1B visa fee hike (September 2025)
+
+What a proposed 15% cap on foreign admissions in the US could mean for Indian students (October 2025)
+
+Anxiety on campus after Trump says visas of pro-Palestinian protesters will be cancelled (January 2025)
+
+‘I couldn’t believe it’: F-1 status of some Indian students restored after US reverses abrupt visa terminations (April 2025)
+
+3. Academic Freedom &amp; Policy
+Exclusive: South Asian University fires professor for ‘inciting students’ during stipend protests (September 2025)
+
+Exclusive: Ministry seeks explanation from JNU V-C for skipping Centre’s meet, views absence ‘seriously’ (July 2025)
+
+SAU rows after Noam Chomsky mentions PM Modi, Lankan scholar resigns, PhD student exits SAU
+A series of five stories examining shrinking academic freedom at South Asian University after global scholar Noam Chomsky referenced Prime Minister Narendra Modi during an academic interaction, triggering administrative unease and renewed debate over political speech, surveillance, and institutional autonomy on Indian campuses.
+
+4. Mental Health on Campuses
+In post-pandemic years, counselling rooms at IITs are busier than ever; IIT-wise data shows why (August 2025)
+
+Campus suicides: IIT-Delhi panel flags toxic competition, caste bias, burnout (April 2025)
+
+5. Delhi Schools
+These Delhi government school grads are now success stories. Here’s what worked — and what didn’t (February 2025)
+
+‘Ma’am… may I share something?’ Growing up online and alone, why Delhi’s teens are reaching out (December 2025)                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May sixteenth, twenty twenty-six, at three minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/us-opt-crackdown-indian-students-h1b-concerns-10692141/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 06:20 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

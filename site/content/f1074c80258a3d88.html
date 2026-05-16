@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>PM Modi’s Europe trip begins today: What India hopes to gain from better ties with Nordic countries | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>PM Modi’s Europe trip begins today: What India hopes to gain from better ties with Nordic countries</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/modi-europe.jpg?w=1600" alt="PM Modi’s Europe trip begins today: What India hopes to gain from better ties with Nordic countries">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="European Council President António Costa, PM Narendra Modi, and European Commission President Ursula von der Leyen in New Delhi this year." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/modi-europe.jpg?w=1600" width="650"/><span class="ie-custom-caption">European Council President António Costa, PM Narendra Modi, and European Commission President Ursula von der Leyen in New Delhi this year. </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Prime Minister Narendra Modi is headed to Norway for the third India-Nordic summit. He will then visit three more countries — the Netherlands, Sweden and Italy. The visit and the summit were planned in mid-May last year but were postponed after Operation Sindoor.</p>
+<p>The Prime Minister’s trip is part of India’s push to deepen ties with Europe, a process that has been going on for a few years now. The engagement resulted in the <a href="https://indianexpress.com/article/explained/explained-economics/how-india-eu-clinched-trade-deal-10496781/"><strong>India-EU Free Trade Agreement (FTA) earlier this year</strong></a>, and is a larger attempt to broaden alliances at a time when the US is no longer the stable partner it was seen as.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>In contrast to US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>’s unprecedented unpredictability, Europe has positioned itself as a reliable partner, shedding its past positions and hesitations on engaging with India. New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> too has warmed up to Europe, as it looks for capital for investment, destinations for its people, and technology to power its growth.</p>
+<p>Next month, PM Modi will again head to France for the G7 leaders’ summit. With the Iran war adding to global uncertainties, this engagement assumes greater significance.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>India-Nordic Summit, Oslo (May 19)</h2>
+<p>The first India-Nordic summit was held in Stockholm (2018) and the second in Copenhagen (2022), bringing together leaders of India, Norway, Sweden, Denmark, Finland and Iceland. Only the US holds an equivalent summit-level engagement with the Nordics.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">C Raja Mohan writes</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/c-raja-mohan-writes-in-a-shifting-world-order-five-principles-should-guide-indias-diplomacy-10686420/">In a shifting world order, five principles should guide India’s diplomacy</a></span></div>
+<p>The trade and investment logic is very important, as the India-Nordic trade in goods and services reached $19 billion in 2024 (exports $9.4 billion, imports $9.6 billion). Over 700 Nordic companies operate in India, while 150 Indian companies are present in the Nordic region. The summit is expected to boost Make in India investment flows and attract Nordic pension fund capital, reinforced by the India-EU FTA, and the India-EFTA Trade and Economic Partnership Agreement (TEPA) between India and the European Free Trade Association (Iceland, Liechtenstein, Norway, and Switzerland), which entered into force on October 1, 2025.</p>
+<p>Each Nordic country brings distinct strengths — Sweden in industrial innovation and defence; Denmark in maritime and green technology; Norway in blue economy and Arctic; Finland in digital technologies; Iceland in geothermal energy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>With all five Nordic states as Arctic Council members, the Summit also aims to establish a dedicated India-Nordic Arctic cooperation mechanism.</p>
+<p>The Nordic countries have consistently supported India’s Permanent Membership in a reformed UN Security Council. Both sides also share a strong alignment on Indo-Pacific security, Arctic governance, climate action and the rules-based international order — all important elements of cooperation in the face of an unpredictable US and an assertive rising China.</p>
+<h2>The Hague, Netherlands (May 15-17)</h2>
+<p>This is PM’s second visit since 2017.</p>
+<p>The strategic and geopolitical context is that the Netherlands today engages India not as a market alone, but as a major power. The Dutch ecosystem of frontier technology paired with India’s scale of deployment defines a partnership of “innovation meets scale,” visible most strikingly in semiconductors, water, hydrogen and maritime technology. Philips, a household name in India, is a Dutch company.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The Netherlands is India’s 11th largest trading partner globally, 3rd largest export destination and the largest in Europe, with FY 2024-25 trade at USD 27.8 billion. It is India’s 4th largest investor with cumulative FDI of USD 55.6 billion, and Indian ODI to the Netherlands stands at USD 28 billion, with over 300 companies present in India and Netherlands. This partnership is expected to get a boost with the India-EU FTA.</p>
+<p>During the visit, TATA Electronics and ASML Netherlands are expected to sign an agreement to equip a semiconductor fabrication plant in Dholera, Gujarat.</p>
+<p>As India battles the crisis on energy supply, energy security and clean energy are expected to be part of the agenda, as PM Modi, along with the PM of Netherlands, will visit the Afsluitdijk Dam as part of India-Dutch collaboration in clean energy, water management and sustainable fisheries. This is an effort towards diversification from fossil fuel.</p>
+<h2>Gothenburg, Sweden (May 17-18)</h2>
+<p>PM Modi will visit Sweden after eight years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The strategic and geopolitical context is that Sweden invests over 3% of GDP in R&amp;D and ranks consistently among the top performers in the European Innovation Scoreboard. It has taken one of Europe’s firmest positions on strategic de-risking from China, having removed Chinese vendors from telecom networks and tightened research-security norms, making India among its most consequential strategic diversification partners in Asia.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/why-the-european_defence-is-splintered-10676066/">As the US signals troop reduction, why is the European Union’s defence so broken? The answer lies within</a></span></div>
+<p>It also positions itself as a partner in Make in India, Trade, Investment and EU FTA gateway: since bilateral trade in goods and services has reached USD 7.75 billion in 2025, with over 280 Swedish companies operating in India. The visit’s centrepiece business event includes engagement with the European Roundtable of Industries, opening up Europe’s broader industrial leadership in the post-India-EU FTA era.</p>
+<p>Defence and critical minerals is an important pillar of engagement, as Saab is building its first Carl-Gustaf manufacturing plant outside Sweden at Jhajjar —India’s first 100% FDI-driven defence manufacturing project.</p>
+<p>Sweden also hosts one of Europe’s largest critical mineral deposits, a natural opening for partnership in supply-chain sovereignty for electric vehicles, semiconductors and defence electronics.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>When it comes to technology, innovation and clean industry, Sweden has expressed a strong desire to collaborate with India in 6G, AI, quantum computing, life sciences, healthcare and Digital India priorities, reflected in the participation of over 80 Swedish companies at the AI Impact Summit 2026.</p>
+<h2>Oslo, Norway (May 18-19)</h2>
+<p>It is the first standalone bilateral visit by an Indian PM to Norway in 43 years.</p>
+<p>The strategic context is that defence and maritime cooperation are a key pillar of India-Norway ties. Indian shipyards now hold 11% of the Norwegian Shipowners’ Association order book. Norwegian tunnelling technology has powered the Char Dham railway project.</p>
+<p>Norway’s GPFG, the world’s largest sovereign wealth fund with a corpus touching USD 2 trillion, has invested close to USD 30 billion in Indian capital markets, while Norfund remains active in Indian renewables. Bilateral merchandise trade approximately US$1 billion in 2024-25; India’s services exports to Norway US$876 million in 2024.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h2>Rome, Italy (May 19-20)</h2>
+<p>The visit reaffirms a strategic partnership in motion, as PM Modi will visit Italy at the invitation of PM Giorgia Meloni.</p>
+<p>PM Meloni’s first state visit after election was to India in March ߧ she was Chief Guest at the Raisina Dialogue and participated in the G20 Leaders’ Summit, New Delhi (September 2023), where Italy joined the India-Middle East-Europe Economic Corridor (IMEEC) and the Global Biofuels Alliance.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/israel-gaza-war-imec-10179793/">How Israel’s Gaza war has thrown future of IMEC up in the air</a></span></div>
+<p>Italy’s championing of IMEEC as a founding member makes it the western anchor of the corridor. IMEEC ensures not just stability of supply chains but also gives a boost to India’s energy security.</p>
+<p>The bilateral defence relationship has expanded significantly in recent years, after the difficult phase due to the Italian marines’ arrest in 2012 and the AgustaWestland allegations of corruption.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Italy is part of India-led initiatives — <a href="https://indianexpress.com/article/explained/explained-climate/us-leaves-india-headquartered-international-solar-alliance-trump-10461781/"><strong>the International Solar Alliance (ISA)</strong></a>, Indian Ocean Rim Association (IORA), Coalition for Disaster Resilient Infrastructure (CDRI) and Indo-Pacific Oceans Initiative (IPOI).</p>
+<p>Overall, the realism in India’s foreign and strategic outreach is on display, as Delhi is reaching out to countries with strengths that India lacks and needs.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10689780"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubhajit-roy/">
+<figure>
+<img alt="Shubhajit Roy" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/untitled-3.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubhajit-roy/"><span></span>Shubhajit Roy</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951102"></div><div class="follow_author_title" data-id="Shubhajit Roy"></div><div class="follow_author_slug" data-id="shubhajit-roy"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="http://ShubhajitRoy">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubhajit Roy, Diplomatic Editor at The Indian Express, has been a journalist for more than 25 years now. Roy joined The Indian Express in October 2003 and has been reporting on foreign affairs for more than 17 years now. Based in Delhi, he has also led the National government and political bureau at The Indian Express in Delhi — a team of reporters who cover the national government and politics for the newspaper. He has got the Ramnath Goenka Journalism award for Excellence in Journalism ‘2016. He got this award for his coverage of the Holey Bakery attack in Dhaka and its aftermath. He also got the IIMCAA Award for the Journalist of the Year, 2022, (Jury’s special mention) for his coverage of the fall of Kabul in August 2021 — he was one of the few Indian journalists in Kabul and the only mainstream newspaper to have covered the Taliban’s capture of power in mid-August, 2021.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubhajit-roy/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May fifteenth, twenty twenty-six, at zero minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/europe/" href="https://indianexpress.com/about/europe/">Europe</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/pm-modi-europe-trip-begins-geopolitics-importance-10689780/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 06:20 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

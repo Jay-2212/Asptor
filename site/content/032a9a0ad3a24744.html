@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Madhya Pradesh High Court ruled that Bhojshala was a temple | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Madhya Pradesh High Court ruled that Bhojshala was a temple</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/bhojshala.jpeg?w=1600" alt="Why Madhya Pradesh High Court ruled that Bhojshala was a temple">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Bhojshala" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/bhojshala.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Bhojshala temple-cum-Kamal Maula mosque complex in Dhar district. Deepika Singh</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Madhya Pradesh High Court said Friday (May 15) that the religious character of the disputed Bhojshala-Kamal Maula Mosque complex <a href="https://indianexpress.com/article/legal-news/bhojshala-is-a-temple-says-madhya-pradesh-high-court-10690857/" rel="noopener" target="_blank"><strong>was that of Bhojshala, or a temple of goddess Vagdevi (Saraswati)</strong></a>.</span></p>
+<p><span style="font-weight: 400">The medieval structure in Madhya Pradesh’s Dhar has long been the subject of competing claims. While Hindus consider the ASI-protected complex a temple dedicated to the goddess, Muslims regard it as the Kamal Maula mosque. </span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Under a 2003 arrangement, Hindus have performed puja at the complex on Tuesdays while Muslims offered namaz on Fridays — until now.</span></p>
+<p><span style="font-weight: 400">In 2024, the Madhya Pradesh High Court ordered an ASI survey of the complex, observing that its nature and character need to be “demystified and freed from the shackles of confusion”. The ASI report stated that the “existing structure was <a href="https://indianexpress.com/article/india/bhojshala-complex-asi-ganesh-brahma-narasimha-images-9454964/" rel="noopener" target="_blank"><strong>made from the parts of earlier temples</strong></a>”.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">On Friday, the Bench of justices Vijay Kumar Shukla and Alok Awasthi, in its 242-page judgment, concluded that the “historical literature placed (before the court) established that the character of the disputed area was Bhojshala as a Centre of Sanskrit learning associated with Raja Bhoj of Parmar dynasty”, which indicates the “existence of temple dedicated to the goddess Saraswati at Dhar.”</span></p>
+<p><span style="font-weight: 400">Here’s what to know about how the court arrived at its verdict.</span></p>
+<p><b>What the High Court ruled</b></p>
+<p><span style="font-weight: 400">On Friday, the court said that historical literature and architectural references established that the disputed complex was associated with Raja Bhoj of the Parmar dynasty and functioned as a centre of Sanskrit learning.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/basant-panchami-prayers-namaz-bhojshala-dispute-10490517/">The history of the Bhojshala dispute</a></span></div>
+<p><span style="font-weight: 400">Allowing petitions filed by the Hindu Front for Justice and others, the court on Friday set aside portions of the April 7, 2003, order passed by the ASI director that restricted the rights of Hindus to worship within the Bhojshala complex while permitting namaz by the Muslim community.</span></p>
+<p><span style="font-weight: 400">It also directed the Union government and the ASI to take decisions regarding the administration and management of Bhojshala and the Sanskrit learning centre situated on the disputed land in Dhar district, while clarifying that the ASI would continue to exercise overall control and management of the protected monument under the 1958 Act.</span></p>
+<ul>
+<li><b>Not a decision on the title of property</b></li>
+</ul>
+<p><span style="font-weight: 400">In the present case, the court said that it was not deciding the title of the property of the disputed area. Most of the “arguments of the other respondents and interveners were as if the petitioners are claiming title over the disputed area,” the court said.</span></p>
+<p><span style="font-weight: 400">In the Ayodhya Ramjanmabhoomi-Babri Masjid case (in which the Supreme Court ruled in 2019), the judgment had arisen out of a civil suit dealing with the claim of a title over the disputed area. In the present case, the court determined “the character of the disputed area on the basis of historical literature, architectural features, ASI survey reports, etc.” </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Bhojshala verdict:</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/bhojshala-case-hindu-muslim-arguments-mp-hc-10691153/">What the Hindu and Muslim sides argued in the High Court</a></span></div>
+<p><span style="font-weight: 400">The Muslim side had produced an </span><i><span style="font-weight: 400">ailan</span></i><span style="font-weight: 400"> (order) from August 24, 1935, which recognised the disputed property as a mosque. The court, however, held this was not a legal constitutional order.</span></p>
+<p><span style="font-weight: 400">The court held that the disputed area was already notified as an ancient monument under the Ancient Monuments Preservation Act, 1904, and since it was a protected monument since 1904, then the “Ruler of Dhar State could not have issued Ailan dated 24.8.1935”. </span></p>
+<ul>
+<li><b>Historical evidence submitted by Muslim side</b></li>
+</ul>
+<p><span style="font-weight: 400">The Muslim side had submitted various historical literature to state that the “Hazrat Maulana Kamaluddin Chishti had laid the foundation stone of the said Mosque in 1306-07 AD”.</span></p>
+<p><span style="font-weight: 400">The court, however, said “none of the material relied [on] by them shows that the disputed area which is claimed to be a mosque was constructed prior to 1034 AD”. More importantly, the court said the historical material, literature, and the notifications placed by the appellant “itself established that the said mosque was constructed after 1034 AD”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">The other reason why the court disowned the claim that the disputed area was a mosque right from its inception was because the court said there was no material that suggests the disputed land was Waqf (charitable endowment under Islamic law) property.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">State, ASI submission in court</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/bhojshala-site-in-dhar-was-never-a-mosque-muslims-have-no-right-to-offer-namaz-there-state-submission-in-court-10686458/">Bhojshala site in Dhar ‘was never a mosque’, ‘Muslims have no right to offer namaz’ there</a></span></div>
+<p><span style="font-weight: 400">This is because the historical records did not show the property belonged to a Waqif (donor) and the “owner must belong to the Waqf and dedicated the property to the almighty”. </span></p>
+<p><span style="font-weight: 400">“Historical material placed before us could not show that waqf has been created and therefore, there can be no presumption regarding existence of a mosque in the disputed area,” the court said.</span></p>
+<ul>
+<li><b>On allegations regarding fairness of ASI survey</b></li>
+</ul>
+<p><span style="font-weight: 400">A core technical team of archaeologists was formed for conducting the survey. As per the</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">court order, a team of seven senior archaeologists headed by an Additional Director General of the ASI was constituted. It also comprised ASI officers even belonging to the Muslim community, and two nominated representatives of each petitioner were also present at the time of photography and videography during the entire survey proceedings.</span></p>
+<p><span style="font-weight: 400">The Muslim side had raised questions about the process leading up to the ASI report. But the court said this argument could not be accepted.</span></p>
+<p><span style="font-weight: 400">“We find that the survey was conducted by adopting (a) scientific method in a fair and impartial manner…. The method which has been adopted by the experts was as per their expertise. The carbon dating method is used to determine the age of material itself and not for the age of construction period. The scope of (the) survey was to find out the period of architectural structure of the disputed area,” it said.</span></p>
+<p><span style="font-weight: 400">On the contention of the Muslim side that plastic bottles and modern waste was recovered — showing the site was compromised — the court said that “such material was found </span><span style="font-weight: 400">only in the uppermost heterogeneous debris layers, which already consisted of modern </span><span style="font-weight: 400">dumped material, conservation debris, ceramic pieces, wrappers and assorted waste”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<ul>
+<li><b>Buddhism and Jainism</b></li>
+</ul>
+<p><span style="font-weight: 400">On the allegation that the ASI did not take into account the recovery of a Gautam Buddha statue, the court relied on the ASI’s argument that “no such idol was recovered, and the concerned artefact referred to by the other side was not in fact a Jain statue, which was duly recorded and catalogued”.</span></p>
+<p><span style="font-weight: 400">Meanwhile, the court also did not agree with the Jain community’s contention that the Saraswati idol was, in fact, an idol of Ambika from the Jain religion. The court said that in India, “Jainism and Hinduism are not distinct entities”. </span></p>
+<p><span style="font-weight: 400">According to the court, both faiths have evolved alongside each other since ancient times and idols belonging to “both Jain and Hindu traditions are frequently found within each other’s temples”. It also sought to provide a legal basis to this by citing provisions of the Hindu Marriage Act, 1955, and the Hindu Succession Act, 1956, wherein “Jainism and Buddhism are considered to be part of Hinduism.”</span></p>
+<p><span style="font-weight: 400">“Therefore, the discovery of a statue of a Jain Tirthankara within the disputed premises during the excavation… comes as no surprise,” the court said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10692190"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/anand-mohan-j/">
+<figure>
+<img alt="Anand Mohan J" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2017/08/Anand-Mohan.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/anand-mohan-j/"><span></span>Anand Mohan J</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="4802422"></div><div class="follow_author_title" data-id="Anand Mohan J"></div><div class="follow_author_slug" data-id="anand-mohan-j"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Anand Mohan J is an award-winning Senior Correspondent for The Indian Express, currently leading the bureau’s coverage of Madhya Pradesh. With a career spanning over eight years, he has established himself as a trusted voice at the intersection of law, internal security, and public policy.
+
+Based in Bhopal, Anand is widely recognized for his authoritative reporting on Maoist insurgency in Central India. In late 2025, he provided exclusive, ground-level coverage of the historic surrender of the final Maoist cadres in Madhya Pradesh, detailing the backchannel negotiations and the "vacuum of command" that led to the state being declared Maoist-free.
+
+Expertise and Reporting Beats
+Anand’s investigative work is characterized by a "Journalism of Courage" approach, holding institutions accountable through deep-dive analysis of several key sectors:
+
+National Security &amp; Counter-Insurgency: He is a primary chronicler of the decline of Naxalism in the Central Indian corridor, documenting the tactical shifts of security forces and the rehabilitation of surrendered cadres.
+
+Judiciary &amp; Legal Accountability: Drawing on over four years of experience covering Delhi’s trial courts and the Madhya Pradesh High Court, Anand deconstructs complex legal rulings. He has exposed critical institutional lapses, including custodial safety violations and the misuse of the National Security Act (NSA).
+
+Wildlife Conservation (Project Cheetah): Anand is a leading reporter on Project Cheetah at Kuno National Park. He has provided extensive coverage of the biological and administrative hurdles of rewilding Namibian and South African cheetahs, as well as high-profile cases of wildlife trafficking.
+
+Public Health &amp; Social Safety: His recent investigative work has uncovered systemic negligence in public services, such as contaminated blood transfusions causing HIV infections in thalassemia patients and the human cost of the fertilizer crisis affecting rural farmers.
+
+Professional Background
+Tenure: Joined The Indian Express in 2017.
+
+Locations: Transitioned from the high-pressure Delhi City beat (covering courts, police, and labor issues) to his current role as a regional lead in Madhya Pradesh.
+
+Notable Investigations: * Exposed the "digital arrest" scams targeting entrepreneurs.
+
+Investigated the Bandhavgarh elephant deaths and the impact of kodo millet fungus on local wildlife.
+
+Documented the transition of power and welfare schemes (like Ladli Behna) in Madhya Pradesh governance.
+
+Digital &amp; Professional Presence
+Author Profile: Anand Mohan J at Indian Express
+
+Twitter handle: @mohanreports                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/anand-mohan-j/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May sixteenth, twenty twenty-six, at forty-nine minutes past nine in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/mp-high-court-bhojshala-temple-verdict-explained-10692190/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 06:20 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
