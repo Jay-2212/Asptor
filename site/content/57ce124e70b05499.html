@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How climate change and heat stress will impact the 2026 FIFA World Cup | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How climate change and heat stress will impact the 2026 FIFA World Cup</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/fifa-weather.jpg?w=1600" alt="How climate change and heat stress will impact the 2026 FIFA World Cup">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="fifa world cup" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/fifa-weather.jpg?w=1600" width="650"/><span class="ie-custom-caption">Passengers look at a giant model of the football called "Trionda" and a replica of the World Cup trophy, are displayed at Mexico City International Airport, ahead of the World Cup starting on June 11, in Mexico City, Mexico, May 15, 2026. (Reuters)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In a matter of weeks, the world is set to be gripped by <a href="https://indianexpress.com/article/sports/football/fifa-world-cup-record-prize-money-increase-10660795/"><strong>football World Cup fever</strong></a>, as an expanded, 48-team tournament will be played in the North American summer for the first time since 1994. Before the heat rises on the pitch, a new scientific analysis by the World Weather Attribution (WWA), a climate research group, has warned that human-induced climate change has made heat stress at the upcoming World Cup more likely than it was in 1994.</p>
+<p>The study found that more matches will be played under humid heat conditions, which pose health risks to not only athletes, but also fans, officials and staff inside and outside the venues. It also mapped city and venue-specific heat stress risks, and the matchdays that will see high humid heat.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>What did the study analyse and what did it find?</strong></p>
+<p>Researchers from Imperial College London analysed Wet Bulb Globe Temperature (WBGT) across 16 venues in the United States, Mexico and Canada during the tournament period of June 11 to July 19. WBGT is a composite index which factors in the combined effect of humidity, sunlight and winds to determine how the human body can regulate internal heat and cool itself.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The research involved comparing today’s climate and temperature with those of 1994, which was 0.7°C cooler. Using climate and weather model simulations, the researchers assessed how many cities or venues were likely to see WBGT exceed the threshold of 26°C. To be sure, a WBGT of 26°C translates to temperatures of roughly 30°C with mid to high humidity, or the equivalent of 38°C in dry heat, as per WWA.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/uttar-pradesh-storm-deaths-reasons-temprature-air-10691535/">What triggered the powerful thunderstorms in Uttar Pradesh that killed over 100?</a></span></div>
+<p>The study found that at least 25% of the 104 World Cup matches were likely to be played at 26°C and higher wet bulb globe temperature. “Our research shows that climate change is having a real and measurable impact on the viability of holding World Cups during the northern hemisphere summer. The 1994 World Cup may not feel particularly distant to many adults today, yet half of human-induced climate change has happened since then,” said Friederike Otto, one of the study’s authors and professor of climate science at Imperial College, London.</p>
+<h2><strong>How higher wet-bulb temperatures and related heat stress impact health</strong></h2>
+<p>Wet-bulb temperature, and WBGT specifically, is an indicator to determine how wind, humidity, and direct heat from sunlight affect the body’s ability to cool down through sweating. Typically, in humid heat, the body is unable to cool down quickly enough, making it harder to regulate body temperature. WBGT as an index has been used for decades to capture the heat-stress impact, rather than air temperature alone.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>When the body is unable to cool down quickly enough, it increases the risk of heat exhaustion, heat stroke and cardiovascular disease, making those engaged in outdoor occupations and exposed to long periods of uninterrupted, direct sun and humidity more vulnerable. A landmark 2010 study theorised that sustained six-hour exposure to a wet-bulb temperature of 35°C could prove fatal. A March 2026 study, published in Nature, said that risks are rising even at temperatures below this 35°C threshold.</p>
+<p>With footballers exerting themselves in direct sunlight through sprints and high-intensity movements, humid heat is expected to affect their performance and endurance. The FIFPRO, an organisation of professional players, has issued guidance recommending that when WBGT reaches 26°C or higher, heat strain becomes a real risk, which necessitates cooling and drink breaks. At 28°C and above, FIFPRO says it is unsafe for play and postponement is advised.</p>
+<p>“The calculations to estimate the likelihood of 2026 FIFA World Cup games being played in high WBGT conditions are in line with FIFPRO’s calculations published in 2023,” said FIFPRO’s medical director Dr Vincent Gouttebarge in a statement issued by World Weather Attribution.</p>
+<p>However, FIFA, the global football governing body, will consider postponement only if WBGT levels exceed 32°C. Precedent shows that cooling breaks were first introduced during the 2014 World Cup in Brazil. On June 22, 2014, the United States faced Portugal at Manaus in the heart of the Amazon rainforest. The conditions were stifling at 30°C and 66% humidity, prompting referee Nestor Pitana to pause the match for a hydration break in the 39th minute.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>While the upcoming tournament will be held in hot and humid conditions, concerns over desert heat prompted FIFA to move the 2022 Qatar World Cup to winter, for the first time. The 2025 Club World Cup, considered a dress rehearsal for World Cup venues, saw players getting a taste of playing in the North American summer. Eleven US cities hosted the matches, and players complained of heat stress, dizziness, and soreness, urging organisers to avoid afternoon kick-offs.</p>
+<p><strong>Which venues and matches will be worst affected?</strong></p>
+<p>Southern, mid-west, and humid coastal venues face the prospect of high heat stress during the World Cup. The study identified six stadiums – New York MetLife Stadium (which will host the final), Philadelphia Lincoln Financial Field, Kansas City Arrowhead Stadium, Miami Hard Rock Stadium, Boston Gillette Stadium and Estadio Monterrey in Mexico – as most likely to see high humid heat. None of these stadiums is air-conditioned.</p>
+<p>Miami faces a “near certainty” of high heat, with multiple games guaranteed to be played at temperatures above 26°C WBGT. Dallas and Houston, which have cooled stadiums, face a 30% chance of enduring wet-bulb temperatures above 26°C during the tournament period. Both have cooling systems in the stadium.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10692490"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikhil-ghanekar/">
+<figure>
+<img alt="Nikhil Ghanekar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikhil-ghanekar/"><span></span>Nikhil Ghanekar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9279959"></div><div class="follow_author_title" data-id="Nikhil Ghanekar"></div><div class="follow_author_slug" data-id="nikhil-ghanekar"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/NGhanekar">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> An award-winning journalist with 14 years of experience, Nikhil Ghanekar is an Assistant Editor with the National Bureau [Government] of The Indian Express in New Delhi. He primarily covers environmental policy matters which involve tracking key decisions and inner workings of the Ministry of Environment, Forest and Climate Change. He also covers the functioning of the National Green Tribunal and writes on the impact of environmental policies on wildlife conservation, forestry issues and climate change.
+
+Nikhil joined The Indian Express in 2024. Originally from Mumbai, he has worked in publications such as Tehelka, Hindustan Times, DNA Newspaper, News18 and Indiaspend. In the past 14 years, he has written on a range of subjects such as sports, current affairs, civic issues, city centric environment news, central government policies and politics.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikhil-ghanekar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May sixteenth, twenty twenty-six, at twenty-five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sports/" href="https://indianexpress.com/about/explained-sports/">Explained Sports</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/2026-fifa-world-cup-heat-risk-climate-change-10692490/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-16 16:57 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
