@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Punjab’s paddy dilemma: Save groundwater or preserve soil health? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Punjab’s paddy dilemma: Save groundwater or preserve soil health?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-17</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-punjab-paddy_expl.jpg?w=1600" alt="Punjab’s paddy dilemma: Save groundwater or preserve soil health?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Punjab paddy" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-punjab-paddy_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">Punjab’s groundwater situation has become alarming after decades of intensive paddy cultivation. Photo: Harmeet Sodhi</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">As Punjab moves into another <strong><a class="" href="https://indianexpress.com/article/cities/chandigarh/budget-diversification-paddy-lions-share-10572292/">paddy sowing season</a></strong>, concerns over the state’s shrinking groundwater reserves are once again colliding with the economic realities of rice cultivation. Despite repeated warnings from agricultural experts, environmentalists, and policy planners, the area under paddy in Punjab has continued to expand over the years.</span></p>
+<p><span style="font-weight: 400">In 2025-26, it was a record-breaking 32.49 lakh hectares — up from 32.44 lakh hectares in 2024-25. This has deepened the state’s dependence on a crop that consumes enormous quantities of water.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">In response to the worsening groundwater crisis, the Punjab government has aggressively promoted direct-seeded rice (DSR) for the past decade or so as an alternative to the conventional puddled transplanted paddy system. This is being encouraged through financial incentives: Punjab’s 2026-27 <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> proposed a Rs 40-crore allocation, wherein incentives of Rs 1,500 per acre will be given to farmers to cover 2.77 lakh acres under DSR cultivation. </span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">Although DSR is being projected as a major water-saving and labour shortage solution, scientists are increasingly raising a difficult question: can Punjab save groundwater at the cost of increasing chemical dependence and potential deterioration of soil health?</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>Punjab’s push for direct-seeded rice</strong></h2>
+<p><span style="font-weight: 400">Punjab’s groundwater situation has become alarming after decades of intensive paddy cultivation. Traditional puddled transplanted rice requires continuous flooding of fields for 7-8 weeks after transplantation. This consumes massive quantities of groundwater, especially in central Punjab districts where paddy cultivation dominates.</span></p>
+<p><span style="font-weight: 400">DSR changes the method entirely. Instead of transplanting nursery-grown seedlings into flooded fields, seeds are directly sown into moist soil using seed drills. Since the field is not continuously flooded during the early growth period at least for three weeks, irrigation demand declines significantly.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/war-west-asia-basmati-rice-exports-punjab-haryana-10562540/">War in West Asia: Why basmati rice exporters from Punjab and Haryana are in crisis</a></span></div>
+<p><span style="font-weight: 400">According to scientists from Punjab Agricultural University (PAU), <a class="" href="https://indianexpress.com/section/cities/ludhiana/" rel="noamphtml">Ludhiana</a>, DSR can reduce water consumption by approximately 15-20% in Punjab’s conditions. It also reduces labour dependency, which has become another major challenge in Punjab agriculture due to rising labour costs and shortage of migrant workers during peak transplantation season.</span></p>
+<p><b>Weeds remain the biggest challenge</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Yet the very factor that helps DSR conserve water also creates its biggest agronomic problem.</span></p>
+<p><span style="font-weight: 400">Unlike conventional transplanted paddy fields, where standing water naturally suppresses weed growth, DSR fields remain relatively dry or moist during the first few weeks. This creates ideal conditions for weeds to germinate simultaneously with rice plants.</span></p>
+<p><span style="font-weight: 400">Agricultural experts say DSR fields witness the growth of multiple weed categories including grasses, sedges, broadleaf weeds, and even “weedy rice,” which resembles cultivated rice and is difficult to identify and control.</span></p>
+<p><span style="font-weight: 400">Some commonly reported weeds in Punjab include <em>swank</em>, <em>madhana</em>, <em>chini gha</em>, <em>takri gha</em>, <em>mothas</em> and paddy <em>motha</em>. In several districts, especially Pathankot, weedy rice has emerged as a serious concern because it directly competes with paddy plants and significantly reduces yield.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">According to the 2025 research paper “Weed Dynamics and Control Measures in Direct-Seeded Rice” published in the </span><i><span style="font-weight: 400">International Journal of Research in Agronomy</span></i><span style="font-weight: 400">, weeds in DSR can reduce crop yields anywhere between 15% and 100% depending upon infestation intensity and weed-management practices. The study described weed management as one of the “biggest challenges” in DSR cultivation systems.</span></p>
+<p><span style="font-weight: 400">Because weeds emerge aggressively during the initial crop stage, herbicides become central to DSR cultivation.</span></p>
+<span class="custom-caption"><img alt="Punjab paddy" class="lazyloading size-medium wp-image-10691881" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ex-paddy-cultivation_expl.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/05/ex-paddy-cultivation_expl.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"> The continued expansion of paddy cultivation has aggravated water scarcity issues in Punjab, which is already grappling with depleting groundwater. Photo: File</img></span>
+<p><span style="font-weight: 400">In their joint paper titled “Tar-Wattar DSR: a solution to Labour Problem”, Jasvir Singh Gill and Makhan Singh Bhullar of the Department of Agronomy, PAU Ludhiana, recommended the spraying of the herbicide Stomp/Bunker 30 EC (pendimethalin) “at 1.0 liter/acre in 200 liters of water, in a moist field, immediately after sowing”.</span> <span style="font-weight: 400">The paper explains that the herbicide effectively controls annual grass weeds and small-seeded broadleaf weeds during the early crop stage.</span></p>
+<p><span style="font-weight: 400">Apart from pendimethalin, several post-emergence herbicides are also recommended depending upon weed intensity and weed type. These include Nominee Gold, Ricestar, Almix, Vijaya, and Counsil Active formulations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Experts say that unlike conventional puddled paddy — where flooding itself acts as a weed suppressant for nearly a month — DSR requires repeated and highly precise weed-management interventions.</span></p>
+<p><b>Is Punjab saving water while increasing chemical load?</b></p>
+<p><span style="font-weight: 400">This is now emerging as one of the most debated questions surrounding DSR. While the technology undoubtedly helps conserve groundwater, scientists and researchers are increasingly examining whether excessive dependence on herbicides could create long-term ecological problems.</span></p>
+<p><span style="font-weight: 400">The concern becomes even more significant because pendimethalin — considered almost mandatory for successful DSR weed control — has been under regulatory scrutiny.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The Central government had included pendimethalin among a list of pesticides proposed for phase-out or ban due to toxicity-related concerns. Experts have pointed out that the herbicide can persist in soil for several weeks after application and is toxic to aquatic life.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Scientists from PAU have clarified that more studies are needed regarding its long-term impact on soil ecology and environmental systems.</span></p>
+<p><b>Soil health risks</b></p>
+<p><span style="font-weight: 400">The 2025 paper on weed dynamics examined that despite being promoted as a major water-saving technique, DSR is becoming increasingly dependent on herbicides because weeds germinate alongside rice plants in non-flooded fields. It </span><span style="font-weight: 400">warned that continuous reliance on herbicides could adversely affect soil biology over time.</span></p>
+<p><span style="font-weight: 400">According to the researchers, excessive herbicide residues may interfere with soil microbial activity and reduce the biodiversity of beneficial microorganisms that play a crucial role in nutrient cycling, decomposition of organic matter, and maintenance of soil fertility.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/punjab-wheat-stubble-burning-2026-highest-rabi-farm-fires-data-firozpur-10683583/">Punjab records 136% jump in wheat stubble burning and highest number of incidents in 3 years</a></span></div>
+<p><span style="font-weight: 400">The paper noted that repeated herbicide use may gradually weaken natural biological processes that sustain long-term soil productivity.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Researchers also warned about the emergence of herbicide-resistant weeds: a problem already reported in several agricultural regions globally. Continuous use of the same chemical formulations allows certain weed species to evolve resistance mechanisms, forcing farmers to apply stronger doses or multiple herbicide combinations over time. This creates a cycle of increasing dependence on chemicals.</span></p>
+<p><span style="font-weight: 400">The study further cautioned that sustainability cannot be judged solely on the basis of water savings.</span></p>
+<p><b>Overuse the bigger risk</b></p>
+<p><span style="font-weight: 400">Another serious concern in Punjab is not merely herbicide usage, but overuse. Agriculture department officials have repeatedly observed that many farmers apply pesticides and herbicides in quantities higher than officially recommended doses.</span></p>
+<p><span style="font-weight: 400">One senior agriculture officer pointed out that if Punjab witnesses 5 lakh acres under DSR, the recommended pendimethalin requirement would be 5 lakh litres. However, actual consumption could rise substantially higher because of excessive or repeated applications. Such trends raise concerns not only about soil contamination but also about groundwater quality and ecological balance.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">Interestingly, PAU scientists themselves have acknowledged that alternatives need to be developed. Bhullar has suggested that if pendimethalin is banned in future, farmers may adopt traditional stale seedbed practices involving double pre-sowing irrigation (</span><i><span style="font-weight: 400">rauni</span></i><span style="font-weight: 400">). Under this method, weeds are first allowed to germinate after irrigation. They are then uprooted through light cultivation before sowing.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/punjab-expands-maize-push-amid-its-heavy-dependence-on-paddy-10677529/">Punjab expands maize push amid its heavy dependence on paddy</a></span></div>
+<p><span style="font-weight: 400">The process may be repeated to reduce weed pressure further before final DSR sowing. Farmers can subsequently rely more on manual weeding if needed.</span></p>
+<p><span style="font-weight: 400">The 2025 paper also strongly advocated integrated weed management instead of excessive chemical dependence. Researchers recommended combining limited herbicide use, crop rotation, mechanical weeding, mulching, stale seedbed preparation, competitive rice cultivars (cultivated plant), and biological and eco-friendly weed suppression methods. </span></p>
+<p><span style="font-weight: 400">The study also highlighted emerging research on allelopathic plant residues and beneficial microbial strains that may naturally suppress weed germination.</span></p>
+<p><b>The larger agricultural contradiction</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">Punjab today finds itself trapped in a larger agricultural contradiction. On one hand, groundwater depletion has made traditional water-intensive paddy cultivation environmentally unsustainable. On the other hand, the most practical alternative currently available — DSR — depends heavily on herbicides for successful implementation.</span></p>
+<p><span style="font-weight: 400">Agricultural scientists broadly agree that DSR remains an important climate-adaptive technology for groundwater-stressed states like Punjab. </span></p>
+<p><span style="font-weight: 400">“Unless weed management becomes chemical-free, Punjab may end up replacing one environmental crisis with another — groundwater depletion with gradual soil degradation and rising chemical stress on ecosystems,” said Devinder Sharma, distinguished agriculture and food expert, adding that the bigger question now is whether Punjab can develop a model of DSR that saves both water and soil together. He said that the system of rice intensification (SRI) technique can be promoted with more research, as it saves water and provides more yield without using chemicals to manage weeds.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10691876"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May sixteenth, twenty twenty-six, at fifty-six minutes past eight in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/punjab-direct-seeded-rice-groundwater-herbicide-soil-health-10691876/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-17 16:56 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
