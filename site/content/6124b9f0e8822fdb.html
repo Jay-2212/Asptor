@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>China This Week | Not tariffs or West Asia war, why Taiwan is ‘most important issue’ for China in ties with US | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>China This Week | Not tariffs or West Asia war, why Taiwan is ‘most important issue’ for China in ties with US</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-17</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/white-house-xi-trump.jpg?w=1600" alt="China This Week | Not tariffs or West Asia war, why Taiwan is ‘most important issue’ for China in ties with US">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="US President Donald Trump and Chinese President Xi Jinping in Beijing earlier this week." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/white-house-xi-trump.jpg?w=1600" width="650"/><span class="ie-custom-caption">US President Donald Trump and Chinese President Xi Jinping in Beijing earlier this week. (White House photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In the lead-up to the meeting between US President Donald Trump and Chinese President Xi Jinping in Beijing this week, China watchers and analysts warned to <a href="https://indianexpress.com/article/explained/explained-global/trump-us-china-visit-agenda-expectations-10685981/"><strong>temper expectations</strong></a> for any breakthroughs. That nearly unanimous prediction turned out correct, and more than trade or the war in West Asia, China underlined the importance of the Taiwan issue.</p>
+<p>An official release from the Chinese Ministry of Foreign Affairs said, “President Xi stressed that the Taiwan question is the most important issue in China-U.S. relations. If it is handled properly, the bilateral relationship will enjoy overall stability. Otherwise, the two countries will have clashes and even conflicts…”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>It added, “‘Taiwan independence’ and cross-Strait peace are as irreconcilable as fire and water. Safeguarding peace and stability across the Taiwan Strait is the biggest common denominator between China and the U.S. The U.S. side must exercise extra caution in handling the Taiwan question.”</p>
+<p>What explains the importance China attaches to Taiwan, especially in its ties with the US? And what do such statements indicate about the possibility of military action — something China has not ruled out? We take a closer look.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>China’s claims on Taiwan</h2>
+<p>Taiwan is an island about 160 km off the coast of southeastern China, separated by the Taiwan Strait. In its recent history, it was administered by China’s last imperial dynasty, the Qing, but passed on to the Japanese in 1895. Japan’s defeat in World War II (1939-45) led to the Republic of China (ROC) taking control.</p>
+<p>The country was led by the Nationalist Party leader Chiang Kai-shek, but the Mao Zedong-led Communists challenged his rule. A long civil war that began before WWII, and paused to defeat the Japanese, saw the Communists emerging victorious and establishing the People’s Republic of China (PRC).</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">China This Week</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/china-this-week-sindoor-pakistan-trump-visit-purge-10682606/">China reveals Op Sindoor help to Pakistan, Trump-Xi meeting, and death to ‘corruption’</a></span></div>
+<p>Chiang and his supporters fled to Taiwan to set up the ROC government. Both the PRC and the ROC claimed to represent a singular, unified political entity called China, comprising the mainland and the island, but wished to assert their own control over it.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>What complicated matters was the Cold War. The USSR backed the PRC while the United States backed the ROC, with the US particularly concerned about the spread of Communism in Asia. Over time, this equation underwent a drastic shift. After a split between the allies USSR and China in the early 1960s, the US believed that China could be an ally against the USSR.</p>
+<p>“Chinese Communists… we do not want 800,000,000 living in angry isolation. We want contact… [want] China—cooperative member of international community and member of Pacific community,” US President Richard Nixon wrote in a note in his very first two days in office in 1969.</p>
+<p>After covert meetings involving former US Secretary of State Henry Kissinger and cooperation from the governments of Pakistan and Romania, the US and China established <a href="https://indianexpress.com/article/explained/explained-global/us-china-diplomatic-ties-history-9091388/"><strong>diplomatic relations in 1979.</strong></a> For China, another pull factor was its decision to modernise and liberalise the economy under the new leader, Deng Xiaoping, and cooperation with the US would be crucial for it.</p>
+<span class="custom-caption"><img alt="In the foreground, US Secretary of State Henry Kissinger and Chinese President Mao Zedong in the early '70s. " class="lazyloading size-medium wp-image-10694372" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Taiwan-Mao-China-US-Kissinger.jpg?resize=600,420" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Taiwan-Mao-China-US-Kissinger.jpg 620w, https://indianexpress.com/wp-content/uploads/2026/05/Taiwan-Mao-China-US-Kissinger.jpg?resize=450,315 450w, https://indianexpress.com/wp-content/uploads/2026/05/Taiwan-Mao-China-US-Kissinger.jpg?resize=600,420 600w, https://indianexpress.com/wp-content/uploads/2026/05/Taiwan-Mao-China-US-Kissinger.jpg?resize=579,405 579w" height="434" sizes="(max-width: 620px) 100vw, 620px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="620"> In the foreground, US Secretary of State Henry Kissinger and Chinese President Mao Zedong in the early ’70s. (Wikimedia Commons)</img></span>
+<p>But, Taiwan remained a sticking point from the beginning. US President Jimmy Carter, under whom ties were established, later recalled, “Taiwan definitely was the biggest challenge we faced throughout the negotiations. We recognized that for the People’s Republic of China, its relationship with Taiwan was considered a domestic issue. Nevertheless, the American people had had an extensive, close, and friendly association with the Taiwanese people. It was important that this be continued through nongovernmental means.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>In his memoir, <em>The White House Years</em> (1979), Kissinger wrote, “No government ever less deserved what was about to happen to it than Taiwan… But we were in a position where we had to decide which was more important: the 17 million people on Taiwan or the 800 million on the mainland.”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/cai-qi-role-xi-trump-visit-china-10689654/">‘Chief of Staff’ to Xi Jinping, who shook hands with Trump: How Cai Qi wields power in China</a></span></div>
+<p>The US has since maintained a ‘One China’ policy, under which it recognises Taiwan as a part of China, while having unofficial ties with Taiwan — known as strategic or deliberate ambiguity. These ties, particularly weapon sales from the US to Taiwan, have become a sore point for Beijing.</p>
+<p><strong>Increasing assertiveness</strong></p>
+<p>Beijing has never recognised Taiwan as an independent political entity. Taiwan, in turn, states that it was never part of the Communist state and challenges its historical claims. Despite these political tensions, China and Taiwan have historically had strong economic ties. Many migrants from Taiwan work in China, and China has investments in Taiwan.</p>
+<p>A major contributor to China’s growing assertiveness is the leadership on both sides. In power since 2012, Xi has framed the goal of controlling regions in and around China — including Taiwan, the South China Sea, Hong Kong, Xinjiang and Tibet — as part of a larger mission for “national rejuvenation”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Beijing has increasingly described China’s subjugation at the hands of colonial powers (Western and Japanese) in modern history as a teaching moment. It has invoked that period in calls to strengthen the military, even if it involves purging veteran leaders with little transparency, championing national unity, and demanding allegiance to the Communist Party.</p>
+<p>On the other hand, Taiwan has seen the electoral rise of the Democratic Progressive Party (DPP) since 2016. Its leaders, including current President Lai Ching-te, emphasise that Taiwan is already independent in its functioning and its people’s Taiwanese identity, rather than a Chinese one. Surveys have also shown little public support for unification with China, with most people identifying as Taiwanese but still preferring the status quo.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/kmt-china-visit-taiwan-politics-ccp-relations-10632733/">Explained: The tumultuous history behind China’s Xi Jinping meeting Taiwan’s top opposition leader</a></span></div>
+<p>More recently, Russia’s 2022 invasion of Ukraine has added to a perception that the US will not militarily intervene on the ground for battles being fought far away. Thus, many analysts believe that a Chinese invasion of Taiwan is more realistic than theoretical in the near future.</p>
+<p>The year 2027 has been proposed as a potential starting point in the US, since it will mark 100 years of the Chinese People’s Liberation Army (PLA). In 2021, the admiral leading US Indo-Pacific Command, Phil Davidson, said the invasion was likely by the end of the decade, given the Chinese military posturing around the region. However, there is no clarity yet.</p>
+<p><strong>The stakes, possibilities under Trump</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Analysts say that an attack on Taiwan could, in theory, be more devastating for the global economy than the ongoing West Asia conflict for several reasons. First is the Strait of Malacca in Southeast Asia, connecting key exporters such as China and Vietnam to the rest of the world. A widening of the conflict could affect the movement of ships through the region.</p>
+<p>Then there is Taiwan’s standing as the world’s foremost producer of semiconductors, which are crucial for manufacturing modern electronics. The “silicon shield” theory argues that this valuable resource could reduce the likelihood of an outright military conflict, and it provides the US with a clear reason to defend Taiwan.</p>
+<p>For the US, there have always been strategic reasons to support Taiwan. The 2025 National Security Strategy said, “There is, rightly, much focus on Taiwan, partly because of Taiwan’s dominance of semiconductor production, but mostly because Taiwan provides direct access to the Second Island Chain and splits Northeast and Southeast Asia into two distinct theaters.”</p>
+<p>The first island chain includes Japan, Taiwan, the Philippines, and Indonesia and is seen as a US allies’ line of defence to counter China. The second chain comprises islands such as those of Indonesia and Guam, while the third chain is a line imagined to stretch from Alaska to New Zealand.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Trump, however, has been less than willing to pledge direct support to Taiwan, unlike his predecessor, <a class="" href="https://indianexpress.com/about/joe-biden/" rel="noamphtml">Joe Biden</a>. Just a few months ago, Trump said of Xi and Taiwan: “He considers it to be a part of China, and that’s up to him what he’s going to be doing. But I’ve expressed to him that I would be very unhappy if he did that, and I don’t think he’ll do that. I hope he doesn’t do that.”</p>
+<p>After the summit, Trump said he was still considering approving a $14 billion arms package to Taiwan, calling the weapons sale a “very good negotiating chip.” But in making the sale conditional on US interests, Trump has, yet again, deviated from established policy, with consequences for the rest of the world.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10694365"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May seventeenth, twenty twenty-six, at thirty-one minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/taiwan/" href="https://indianexpress.com/about/taiwan/">Taiwan</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-taiwan-us-relevance-history-trump-xi-meet-10694365/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-17 13:12 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
