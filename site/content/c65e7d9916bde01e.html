@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Did the Maratha empire have control over Rajputana’s rulers? How a new petition highlights this contested history | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Did the Maratha empire have control over Rajputana’s rulers? How a new petition highlights this contested history</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-18</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-maratha-empire_expl-hist.jpg?w=1600" alt="Did the Maratha empire have control over Rajputana’s rulers? How a new petition highlights this contested history">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Maratha empire" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-maratha-empire_expl-hist.jpg?w=1600" width="650"/><span class="ie-custom-caption">Peshwa Madhavrao II in his court in 1790, concluding a treaty with the British. According to history researcher Indrajit Sawant, the Marathas effectively decided who would sit on the Mughal throne in Delhi during the 18th century. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Earlier this month, <strong><a class="" href="https://indianexpress.com/article/legal-news/ncert-maratha-empire-map-removal-pil-bombay-hc-10675490/">a PIL petition</a></strong> was filed in the Bombay High Court challenging the removal of the “Maratha Empire” map from the revised Class 8 NCERT Social Science textbook, </span><i><span style="font-weight: 400">Exploring Society: India and Beyond – Part 1</span></i><span style="font-weight: 400">. The petition alleges that the National Council of Educational Research and Training (NCERT) acted arbitrarily and under political pressure from groups in Rajasthan, without relying on historical evidence or expert consultation.</span></p>
+<p><span style="font-weight: 400">The group of petitioners, which includes descendants of prominent Maratha-era families, social workers, and others, have sought restoration of the map across all language editions, alleging violations of constitutional rights.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Here’s what to know about the controversy that erupted last year, the current case, and the contested history of the Maratha empire’s control over parts of Rajasthan in the 18th century.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>The controversy</b></p>
+<p><span style="font-weight: 400">In the revised Class 8 NCERT Social Science textbook released in July 2025, a map showing the extent of the Maratha empire in 1759 courted controversy, after a member of the royal family of the erstwhile princely state of Jaisalmer had called the map “historically misleading, factually baseless, and deeply objectionable”.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">The map showed Jaisalmer to be a part of the Maratha empire. It also showed parts of the western coast and a large part of the northern plains and present-day Gujarat, Rajasthan, Lahore, and Peshawar under the Marathas. The revised Class 8 textbook also included a separate chapter on the Marathas.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/jaisalmer-royal-slams-new-ncert-textbook-maratha-empire-10171658/">‘Baseless, deeply objectionable’: Jaisalmer royal slams new NCERT textbook depicting city as part of ‘Maratha Empire’</a></span></div>
+<p><span style="font-weight: 400">Under the old curriculum, the Class 7 History textbook had a section on the Marathas as part of a chapter on 18th-century political formations. That chapter had two maps indicating state formations during that period. While it did not mark specific boundaries, it placed the Marathas in the region of present-day Maharashtra, with arrows pointing outward to indicate their expansion, and the Rajputs around present-day Rajasthan.</span></p>
+<p><span style="font-weight: 400">NCERT later clarified that the map under scrutiny included areas under direct Maratha control, as well as tributary states and regions under temporary agreements or influence. The clarification stated that the disclaimer about approximate borders (present in the Class 7 textbook) should also have been included in Class 8.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">On August 11, 2025, NCERT formed a high-powered committee of experts in response to protests from Rajasthan’s royal families and politicians.</span></p>
+<p><b>The petition in Bombay HC</b></p>
+<p><span style="font-weight: 400">The PIL petition in the Bombay High Court states that although the committee had initially acknowledged the matter as “controversial and complex”, it subsequently decided to remove or withdraw the map from the Hindi edition “without examining a single historical record.”</span></p>
+<p><span style="font-weight: 400">It added that in September 2025, Gajanan Bhaskar Mehendale, a panel member, passed away, leaving the committee incomplete. Mehendale was a historian noted for his scholarship on Maratha history. The petitioners claimed the panel continued proceedings without filling Mehendale’s vacancy with a history specialist.</span></p>
+<p><span style="font-weight: 400">Between October last year and April 2026, the petition claimed, NCERT “quietly and without any public announcement” removed the map from all editions, and in March 2026, the Maharashtra Government wrote to the Centre seeking restoration of the map.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Mudhojiraje Bhonsle, one of the petitioners, alleged that NCERT removed the map solely following objections raised by royal families in Rajasthan. “The map should not have been removed as there is sufficient historical evidence supporting it,” he told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">. He further alleged that after Mehendale’s death, no historian from Maharashtra was appointed to NCERT, and the decision was taken without consulting any historian from the state.</span></p>
+<p><span style="font-weight: 400">Calling the “Attock to Cuttack” map — a historical phrase describing the vast extent of the Maratha Empire at its peak in the mid-18th century, stretching from Attock on the Indus River (now in Pakistan) to Cuttack in Odisha (eastern India) — a representation of “Hindavi Swarajya”, he said the petitioners had submitted documents including references from the “Rajputana Gazette”, Mughal-era agreements and British records from 1822, which they claim establish Maratha influence over Rajasthan.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/jaisalmer-maratha-empire-history-10178204/">Was Jaisalmer ever a part of the Maratha empire? Here’s what historians say</a></span></div>
+<p><span style="font-weight: 400">According to Bhonsle, a member of the erstwhile Nagpur royal family, NCERT had admitted through RTI responses that it had no evidence proving the map was incorrect. Calling the decision “one-sided”, he said “history should not be altered under pressure”.</span></p>
+<p><span style="font-weight: 400">Bhonsle also pointed to ample historical evidence of Maratha influence in Rajasthan, including the collection of “</span><i><span style="font-weight: 400">chauth</span></i><span style="font-weight: 400">” (which means accepting the overlordship). He argued that if objections reject Maratha influence in Rajasthan, then Mughal and British rule over the region would also have to be denied.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">The petitioners, however, have argued that historical records show Jaisalmer did not pay tribute to the Marathas not because it was independent, but simply because it was geographically far from the areas where the Marathas and the Pathans operated. They cited British-era documents stating that Jaisalmer’s remoteness was the reason no tribute was collected.</span></p>
+<p><span style="font-weight: 400">According to the petition, Jaisalmer was also politically and militarily weak at the time, facing territorial losses, internal instability, and very limited military strength. The petitioners further argued that when the British signed a treaty with Jaisalmer in 1818, they continued the same arrangement of not imposing tribute due to the region’s remoteness, which they claim shows continuity between the Maratha and later British administrative systems.</span></p>
+<h2><b>Contested histories</b></h2>
+<p><span style="font-weight: 400">History researcher Indrajit Sawant told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that following the death of Mughal emperor Aurangzeb in 1707, the Marathas launched campaigns across India to dismantle Mughal rule. For nearly a century, the Marathas effectively decided who would sit on the Mughal throne in <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</span></p>
+<p><span style="font-weight: 400">Sawant said that in the 18th century, the Marathas established unquestioned authority from Attock to Cuttack, from the Gulf of Khambhat to beyond the Kaveri river. This included the Rajputana region of present-day Rajasthan, which was then divided into Rajput states.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">According to him, Rajput rulers from Jodhpur, Jaipur and Udaipur accepted Maratha overlordship and maintained alliances with them. He said that authentic records also show that these rulers paid tribute or </span><i><span style="font-weight: 400">chauth</span></i><span style="font-weight: 400"> to the Marathas, what he termed “effectively protection money”.</span></p>
+<p><span style="font-weight: 400">Sawant said that renowned historians and researchers have produced maps documenting this period, and such maps have long appeared in history books worldwide. He cited the historian G S Sardesai, who documented the Maratha Empire in </span><i><span style="font-weight: 400">Marathi Riyasat Part IV: Balaji Bajirao Peshwa</span></i><span style="font-weight: 400">. Sardesai’s map includes not only Rajputana but also Attock and Peshawar in present-day Pakistan, and his research was recognised by the British government, giving his work historical reference value. Another example Sawant mentioned was </span><i><span style="font-weight: 400">Maps of India 1795–1935</span></i><span style="font-weight: 400">, published by the Maharashtra State Archives, wherein a detailed 1795 map depicts the spread of the Maratha Empire across India, including Rajputana.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Sawant pointed out that Rajputana has long been shown as part of the Mughal Empire in historical maps without any objections, and said: “Then why object to Maratha rule?” He added that historical evidence of Maratha influence should be acknowledged and taught just as other dynasties, and called for restoration of the map and a neutral NCERT panel to review the issue.</span></p>
+<p><span style="font-weight: 400">When the controversy over the map erupted last year, Rahul Magar, assistant professor of history at Savitribai Phule <a class="" href="https://indianexpress.com/section/cities/pune/" rel="noamphtml">Pune</a> University, had told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that “Marathas were collecting </span><i><span style="font-weight: 400">chauth</span></i><span style="font-weight: 400"> and </span><i><span style="font-weight: 400">sardeshmukhi</span></i><span style="font-weight: 400"> (a form of tax) from the Rajput territories, but does that mean that they had political intervention in those states? No, they did not, in many cases.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">He added that economic tribute and political authority should be treated as distinct: “These states, like Rajputana and even Orissa and Bengal, were paying financial tribute, but it is not necessary that they politically considered the Peshwa as their overlord.”</span></p>
+<p><span style="font-weight: 400">Dilbagh Singh, retired professor of history at Jawaharlal Nehru University, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> last year that the Marathas raided parts of Rajasthan a number of times to claim tribute, adding that while the Marathas did take control of some territory, no Rajput state was ever annexed to be “directly ruled by the Marathas”. According to him, the Marathas did not raid Jaisalmer and Bikaner and that most of their attacks were confined to Jaipur and Jodhpur.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10696306"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/ankita-deshkar/">
+<figure>
+<img alt="Ankita Deshkar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/03/ankita-deshkar.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/ankita-deshkar/"><span></span>Ankita Deshkar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8521311"></div><div class="follow_author_title" data-id="Ankita Deshkar"></div><div class="follow_author_slug" data-id="ankita-deshkar"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Ankita Deshkar is a Deputy Copy Editor and a dedicated fact-checker at The Indian Express. Based in Maharashtra, she specializes in bridging the gap between technical complexity and public understanding. With a deep focus on Cyber Law, Information Technology, and Public Safety, she leads "The Safe Side" series, where she deconstructs emerging digital threats and financial scams. Ankita is also a certified trainer for the Google News Initiative (GNI) India Training Network, specializing in online verification and the fight against misinformation. She is also an AI trainer with ADiRA (AI for Digital Readiness and Advancement)
+
+Professional Background &amp; Expertise
+
+Role: Fact-checker &amp; Deputy Copy Editor, The Indian Express
+
+Experience: Started working in 2016
+
+Ankita brings a unique multidisciplinary background to her journalism, combining engineering logic with mass communication expertise. Her work often intersects regional governance, wildlife conservation, and digital rights, making her a leading voice on issues affecting Central India, particularly the Vidarbha region.
+
+Key focus areas include:
+
+Fact-Checking &amp; Verification: As a GNI-certified trainer, she conducts workshops on debunking deepfakes, verifying viral claims, and using OSINT (Open Source Intelligence) tools.
+
+Cyber Law &amp; IT: With postgraduate specialization in Cyber Law, she decodes the legalities of data privacy, digital fraud, and the evolving landscape of intellectual property rights.
+
+Public Safety &amp; Health: Through her "The Safe Side" column, she provides actionable intelligence on avoiding "juice jacking," "e-SIM scams," and digital extortion.
+
+Regional Reporting: She provides on-ground coverage of high-stakes issues in Maharashtra, from Maoist surrenders in Gadchiroli to critical healthcare updates and wildlife-human conflict in Nagpur.
+
+Education &amp; Credentials
+Ankita is currently pursuing her PhD in Mass Communication and Journalism, focusing on the non-verbal communication through Indian classical dance forms. Her academic foundation includes:
+
+MA in Mass Communication (RTM Nagpur University)
+
+Bachelors in Electrical Engineering (RTM Nagpur University)
+
+Post Graduate Diploma (PGTD) in Cyber Law and Information Technology
+
+Specialization in Intellectual Property Rights
+
+Recent Notable Coverage
+Ankita’s reportage is recognized for its investigative depth and emphasis on accountability:
+
+Cyber Security: "Lost money to a scam? Act within the 'golden hour' or risk losing it all" — A deep dive into the critical window for freezing fraudulent transactions.
+
+Public Health: "From deep coma to recovery: First fully recovered Coldrif patient discharged" — Investigating the aftermath of pharmaceutical toxins and the healthcare response.
+
+Governance &amp; Conflict: "Gadchiroli now looks like any normal city: SP Neelotpal" — An analysis of the socio-political shift in Maoist-affected regions.
+
+Signature Beat
+Ankita is best known for her ability to translate "technical jargon into human stories." Whether she is explaining how AI tools like MahaCrimeOS assist the police or exposing the dire conditions of wildlife transit centres, her writing serves as a bridge between specialized knowledge and everyday safety.
+
+Contact &amp; Follow
+X (Twitter): @ankita_deshkar
+
+Email: ankita.deshkar@indianexpress.com
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/ankita-deshkar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May eighteenth, twenty twenty-six, at five minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/ncert-maratha-empire-map-controversy-bombay-hc-pil-10696306/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-18 18:05 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
