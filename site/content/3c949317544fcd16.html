@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Iran war, monsoon worries could make 2026 India’s Year of Millets | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Iran war, monsoon worries could make 2026 India’s Year of Millets</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-18</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Bajra-farmer-1600.jpg?w=1600" alt="Why Iran war, monsoon worries could make 2026 India’s Year of Millets">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Millets" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Bajra-farmer-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">Farmer Ramesh Chander sowing Proagro 9001 hybrid bajra with a tractor-powered seed drill machine on his field in Haryana's Kusambi village. (Express photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On Saturday, Ramesh Chander sowed <em>bajra</em> (pearl millet) on eight acres using a 50-horsepower tractor-mounted seed drill machine.</p>
+<p>He plans to sow seeds of the ‘Proagro 9001’ hybrid on another six acres next month, after harvesting the standing <em>moong</em> (green gram) crop on that field. “I will grow <em>bajra</em> on 14 acres this year, from nine in 2025 and two acres in 2024,” says the 40-year-old with a total 34-acre holding in Kusambi village of Haryana’s Sirsa district.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The higher <em>bajra</em> acreage is at the expense of <em>narma</em> (cotton). Chander had cultivated the natural fibre crop on 23 acres in 2024, which he reduced to 12 last year: “This time, I may do just one acre”.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Chander gives three reasons for virtually deserting cotton.</p>
+<p>The first is the threat from <em>gulabi sundi</em> or pink bollworm. Till 4-5 years ago, <em>kapas</em> (raw un-ginned cotton) yields were 10-12 quintals per acre. In 2024, Chander’s average fell to 3.5 quintals. Last year, he harvested only 31 quintals from his 12 acres due to the insect pest, whose larvae bore into the bolls (fruits) of cotton plants and feed on the developing seeds and fibre inside, causing yield loss and lint discolouration.</p><div id="taboola-mid-article-personalisation"></div>
+<p><em>Gulabi sundi</em> has emerged as a major threat in the <em>narma</em> belt of Northwest India, covering Bhiwani, Hisar, Fatehabad and Sirsa in Haryana, Mansa, Bathinda, Muktsar and Fazilka in Punjab, and Hanumangarh and Sri Ganganagar in Rajasthan.</p>
+<p>The second reason is labour shortage for picking cotton, with the cost ranging from Rs 12 to Rs 25 per kg. Even if <em>narma</em> is fetching over Rs 8,500 per quintal in the Sirsa wholesale market now, as against Rs 7,500 a year ago, yield uncertainty and rising picking costs have made cotton unattractive for farmers.</p>
+<p><strong>Input crunch</strong></p>
+<p>The third factor has to do with chemical inputs – fertilisers and pesticides.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>For cotton, Chander applies two 50-kg bags of single super phosphate (SSP), half-a-bag of muriate of potash (MOP) and 10 kg of sulphur bentonite per acre during sowing, followed by one bag of di-ammonium phosphate (DAP) and two 45-kg urea bags after 1.5 months.</p>
+<p>He also sprays insecticides such as ‘Coragen’ (Chlorantraniliprole), ‘Proclaim’ (Emamectin Benzoate), ‘Delegate’ (Spinetoram) and Cypermethrin for controlling American bollworm, spotted bollworm, tobacco caterpillars, thrips, jassids and aphids.</p>
+<p>“The total sprays are anywhere from five to 10 over the crop’s life cycle of 180-185 days. And these chemicals don’t work against <em>gulabi sundi</em>,” points out Chander.</p>
+<p>In <em>bajra</em>, per-acre fertiliser use is just two bags of SSP and two urea bags, along with two 80-gram sprays of ‘Proclaim’ to control top borer. “I get 18-20 quintals/acre grain yield from Proagro 9001, which matures in 90-95 days. And only 1-2 irrigations are necessary, compared to 5-7 in cotton,” he adds.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Satyender Singh, Chief Executive Officer (Seeds) at Crystal Crop Protection Ltd, sees a clear trend of Northwest India farmers moving away from cotton.</p>
+<p>“Yield losses from pink bollworm, long growing period, and rising input and labour costs are definitely discouraging them,” notes Singh, whose <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>-based company markets the Proagro 9001, 9190 and 9180 <em>bajra</em> hybrids. Proagro 9001 alone was planted in roughly 1.6 million acres area across Uttar Pradesh, Madhya Pradesh (MP), Rajasthan and Haryana in the 2025 kharif (monsoon) season.</p>
+<p><strong>Planting flexibility</strong></p>
+<p>The <em>bajra</em> Chander would sow in June 15-20 is harvestable three months later, giving him ample time to plant a 130-140 days <em>rabi</em> (winter-spring) mustard crop by mid-October. After that is harvested, he can sow a 60-65 days <em>zaid</em> (summer) <em>moong</em> crop from mid-March to mid-April.</p>
+<p>“<em>Bajra</em> allows farmers to take an extra crop. With cotton (sowing time from mid-April to mid-May), they can only go for wheat in November and there is no scope to plant summer <em>moong</em> after that,” adds Singh.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>What Chander wants from the government is assured minimum support price (MSP)-based procurement: “Last year, I sold my <em>bajra</em> at Rs 2,100 per quintal. Even after adding the Rs 300 bonus under the Haryana government’s Bhavantar Bharpai Yojana, the effective rate of Rs 2,400 was below the official MSP of Rs 2,775/quintal. This time, the MSP has been raised to Rs 2,900/quintal, but they should guarantee it through actual procurement or payment of price difference over the market rate”.</p>
+<p><strong>West Asia woes</strong></p>
+<p>A major uncertainty that Indian farmers are facing ahead of <em>kharif</em> plantings, which will take off with the monsoon rains from June, is fertilisers.</p>
+<p>Between 2016-17 and 2025-26 (April-March), domestic sale of urea has gone up from below 300 lakh to nearly 400 lakh tonnes. Consumption of DAP, SSP and complex fertilisers containing nitrogen, phosphorus, potassium and sulphur in different proportions have also significantly increased over this period (see <em><strong>table</strong></em>).</p>
+<p><img alt="millets" class="lazyloading alignnone size-medium wp-image-10694694" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/fertiliser_table_beautified.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/05/fertiliser_table_beautified.jpg?resize=1536,864 1536w" height="338" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>This year, fertiliser availability is a challenge, because of the unresolved United States-Israel versus Iran conflict and <strong><a class="" href="https://indianexpress.com/article/explained/explained-economics/fertiliser-challenge-india-iran-war-10645383/" rel="noopener" target="_blank">closure of the vital Strait of Hormuz waterway</a></strong> since February 28.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>While the requirement of fertilisers isn’t much in <em>bajra</em>, <em>moong</em> and other pulses, that’s not so with paddy or maize. Chander planted the Pusa Basmati 1401 paddy variety on nine acres in 2024 and 13 acres in 2025. He seeks to take it to 19 acres this year, but the crop needs three bags of urea, one bag of DAP, half-a-bag of MOP and 4 kg of zinc sulphate.</p>
+<p>The challenge is still more in maize.</p>
+<p>Rakesh Karole, a farmer from Makrala village in Pandhana tehsil of MP’s Khandwa district, harvests 26-28 quintals per acre yields in <em>kharif</em> and 28-32 quintals in <em>rabi</em> from the Advanta ‘PAC 741’ and ‘PAC 751’ hybrids over 105-110 and 120-130 days respectively.</p>
+<p>But maize consumes two bags of urea, one bag of DAP, half-a-bag of MOP and 5 kg of zinc sulphate as a first dose after 20-25 days of sowing. It is followed by one bag each of urea and 12:32:16 complex fertiliser after 45 days, and half-a-bag of urea after 75 days.</p>
+<p>This year, the price sentiment isn’t bad for cotton and maize. The West Asia tensions have driven up prices of manmade fibres like polyester and nylon, and also demand for bio-ethanol from maize used in blending with petrol.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>However, the global supply shock in fertilisers as well as petroleum-derived solvents and emulsifiers that go into pesticide formulations may dampen farmer enthusiasm.</p>
+<p>The United Nations had, at India’s initiative, declared 2023 as the International Year of Millets. The Iran crisis and a possible subnormal monsoon could well make 2026 the real breakthrough year for these less nutrient, pesticide and water-intensive crops.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10694671"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/harish-damodaran/">
+<figure>
+<img alt="Harish Damodaran" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/10/harish1.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/harish-damodaran/"><span></span>Harish Damodaran</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2195331"></div><div class="follow_author_title" data-id="Harish Damodaran"></div><div class="follow_author_slug" data-id="harish-damodaran"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Harish Damodaran is National Rural Affairs &amp; Agriculture Editor of The Indian Express. A journalist with over 33 years of experience in agri-business and macroeconomic policy reporting and analysis, he has previously worked with the Press Trust of India (1991-94) and The Hindu Business Line (1994-2014).
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/harish-damodaran/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May eighteenth, twenty twenty-six, at nineteen minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/why-iran-war-monsoon-worries-could-make-2026-indias-year-of-millets-10694671/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-18 02:53 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
