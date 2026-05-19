@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | What makes this summer particularly intense for India, and how better data collection can help | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | What makes this summer particularly intense for India, and how better data collection can help</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/heat-wave-india.jpg?w=1600" alt="Expert Explains | What makes this summer particularly intense for India, and how better data collection can help">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="People protecting themselves from the heat in Ahmedabad." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/heat-wave-india.jpg?w=1600" width="650"/><span class="ie-custom-caption">India Heatwave 2026: People protecting themselves from the heat in Ahmedabad. (Express photo by Bhupendra Rana)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>India Heatwave 2026: As sweltering temperatures are recorded across northwest and central India, the India Meteorological Department (IMD) warned of prolonged to severe heatwave conditions this week.</p>
+<p><a href="https://indianexpress.com/article/india/heatwave-north-central-india-delhi-mercury-45c-10695929/"><strong>Heatwaves are witnessed</strong></a> every summer, so what exactly makes the current season unusual? Who might be worst affected, and how can data help mitigate its effects?<strong> Y Nithiyanandam</strong>, Professor and Head of the Geospatial Research Programme at Takshashila Institution in <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a>, explains.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>What do heat maps indicate about India’s summer?</h2>
+<p>The deep reds and oranges seen in temperature maps over the Indian subcontinent represent regions experiencing elevated land surface or near-surface air temperatures, depending on the dataset used. In climate science and geospatial analysis, such colour gradients are commonly used in satellite observations, weather station data and numerical weather models’ outputs to indicate the intensity and spread of heat visually.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<span class="custom-caption"><img alt="Temperatures in and around India on the afternoon of May 19, 2026. Shades of yellow show temperature between 20 to 30 degrees Celsius, orange between 30 and 40 degrees, and deep reds beyond 40. (Windy.com screengrab)" class="lazyloading wp-image-10697712 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Temperatures-in-and-around-India.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Temperatures-in-and-around-India.jpg 595w, https://indianexpress.com/wp-content/uploads/2026/05/Temperatures-in-and-around-India.jpg?resize=450,432 450w, https://indianexpress.com/wp-content/uploads/2026/05/Temperatures-in-and-around-India.jpg?resize=422,405 422w" height="571" sizes="(max-width: 595px) 100vw, 595px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="595"> Temperatures in and around India on the afternoon of May 19, 2026. Shades of yellow show temperature between 20 to 30 degrees Celsius, orange between 30 and 40 degrees, and deep reds beyond 40 degrees. (Windy.com screengrab)</img></span>
+<p>The current heat pattern over northwest India, central India and parts of Pakistan is partly a regular seasonal phenomenon and partly an intensified heat wave situation. During April and May, these regions naturally experience extreme heating due to high solar radiation, dry continental winds, low soil moisture and the formation of seasonal low-pressure heat zones over Rajasthan and adjoining Pakistan. Therefore, the presence of red and orange shades during the pre-monsoon season is climatologically normal.</p><div id="taboola-mid-article-personalisation"></div>
+<p>However, what is concerning this year is the intensity, persistence and large spatial extent of the heat. Temperatures are remaining abnormally high over prolonged periods with limited nighttime cooling, indicating severe heat wave conditions. Reduced pre-monsoon rainfall, persistent dry air circulation, extensive land surface warming and Urban Heat Island effects (the latter a result of unplanned urbanisation and construction) are further amplifying the situation.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/western-disturbance-el-nino-heatwave-weather-terms-meaning-10678106/">From Western Disturbance to El Niño: The climate terms you’re hearing this summer, explained</a></span></div>
+<p>Climate change is also acting as a background stress multiplier. While heat waves are not new to India, rising baseline temperatures are increasing their frequency, duration and severity, making extreme summer conditions more common across the region.</p>
+<h2>How are heat and temperature maps generated, and how should they be read?</h2>
+<p>All maps showing temperature values are not computed using the same method.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>First, some are simple interpolations of air temperature data measured by weather stations observed at certain points, scaled to cover the entire area of interest. The finer the observation network, the better the accuracy. These stations come from government agencies, private networks, and individual climate enthusiasts.</p>
+<p>Second, remote sensing captures temperature over larger areas through thermal sensors aboard satellites. These measure surface skin temperature, specifically the energy radiated from the ground, which is then translated into surface temperature estimates through physical relationships between emitted radiation and temperature.</p>
+<span class="custom-caption"><img alt="Heat: Kartavya path in New Delhi." class="lazyloading size-medium wp-image-10697583" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/heat-delhi.jpg?resize=600,378" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/heat-delhi.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/heat-delhi.jpg?resize=450,284 450w, https://indianexpress.com/wp-content/uploads/2026/05/heat-delhi.jpg?resize=600,378 600w, https://indianexpress.com/wp-content/uploads/2026/05/heat-delhi.jpg?resize=642,405 642w" height="454" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> Kartavya path in New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>. (Express photo by Haobijam Chinglemba Meitei)</img></span>
+<p>This became a widely used tool for studying thermal variations since the early 1980s, with global daily coverage expanding significantly after 2000, thanks to sensors like the Moderate Resolution Imaging Spectroradiometer (MODIS) and Landsat thermal sensors.</p>
+<p>Third, air temperature values are calculated using numerical weather model simulations. These ingest data from ground stations, satellite-derived land surface temperatures, humidity, solar radiation, cloud cover, rainfall patterns, soil moisture, land use, sea surface temperature, and topography.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The key advantage is predictive capability, between four and 15 days, depending on the model. Platforms like Windy.com use the European Centre for Medium-Range Weather Forecasts (ECMWF) and the Global Forecast System (GFS), the most popular models.</p>
+<p>ECMWF’s Integrated Forecasting System runs deterministic forecasts up to 15 days. IMD operates its own Numerical Weather Prediction (NWP) suite based on an India-adapted GFS and ingests ECMWF data for heat wave guidance and extended-range forecasts.</p>
+<p>So, whenever you see a map showing intense temperatures, first ask — is it showing air or surface temperature? Then question the source. Each method tells its own story, and some carry the imprint of local surface and microclimatic conditions that a global model simply cannot capture accurately.</p>
+<h2>What is driving India’s rising heat — global climate patterns or local factors?</h2>
+<p>The answer is both.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>On the global side, two factors stand out. First, El Niño conditions are developing in the equatorial Pacific, with onset projected between May and July. It is a climate phenomenon marked by changes in sea temperatures along the eastern Pacific Ocean, coupled with fluctuations in the overlying atmosphere.</p>
+<p>Even at this early stage, there are indications of suppressed moisture over the subcontinent and intensifying pre-monsoon heat build-up. The IMD has already projected the 2026 southwest monsoon at 92% of the long-period average (below normal), with El Niño as a primary driver.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/2026-fifa-world-cup-heat-risk-climate-change-10692490/">How climate change and heat stress will impact the 2026 FIFA World Cup</a></span></div>
+<p>Second, long-term anthropogenic warming is steadily raising baseline temperatures. Heat wave frequency in India has been on a consistent upward trend since 1961, with projections indicating a further rise of 12 to 18 days under continued warming trajectories.</p>
+<p>Local factors determine how that heat is felt. Weak western disturbances, prolonged dry spells, and reduced cloud cover intensify conditions significantly. In urban areas, the Urban Heat Island effect, driven by dense infrastructure, vehicles, air-conditioning, and industries, makes cities measurably hotter. In rural areas, forest fires, biomass burning, and barren exposed landscapes amplify surface heating.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The heat we experience is never due to a single factor, and ground-based observations often remain the most reliable measure of local heat stress.</p>
+<h2>How is extreme heat affecting people, livelihoods and ecosystems?</h2>
+<p>Extending well beyond direct temperature readings, heat directly affects humans, animals, and ecosystems, though human consequences are often the most visible.</p>
+<span class="custom-caption"><img alt="Raj Laxmi the elephant enjoys a shower to beat the heat, at the Delhi Zoo in April 2026. " class="lazyloading size-medium wp-image-10697585" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/heat.jpg?resize=600,428" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/heat.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/05/heat.jpg?resize=450,321 450w, https://indianexpress.com/wp-content/uploads/2026/05/heat.jpg?resize=600,428 600w, https://indianexpress.com/wp-content/uploads/2026/05/heat.jpg?resize=567,405 567w" height="514" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"> Raj Laxmi the elephant enjoys a shower to beat the heat, at the Delhi Zoo in April 2026. (Express photo by Praveen Khanna)</img></span>
+<p>The most immediate impact is the decline in productivity among outdoor workers. Daily wage workers, construction labourers, street vendors, and gig workers cannot avoid heat exposure because their livelihoods depend on continuous physical presence. Economic compulsions override precautionary advisories, making this a social vulnerability as much as a climatic one.</p>
+<p>Heat stress also disproportionately affects those in informal settlements where access to cooling, ventilation, green cover, and a reliable water supply is limited. Among vulnerable populations, the elderly and infants face heightened risk as their bodies regulate temperature less efficiently.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Heat also aggravates comorbidities like cardiovascular disease, respiratory illness, and diabetes, and in severe cases leads to dehydration, heat exhaustion, heat stroke, and death. Heat-related mortality, however, remains significantly underreported due to the complexity of direct attribution.</p>
+<p>Ecologically, rising temperatures dry out vegetation, reduce water availability, and stress wildlife and livestock. Prolonged heat and drought conditions create fire-prone landscapes, making forest fires more frequent and intense, which in turn release carbon, destroy canopy cover, and further amplify local surface temperatures.</p>
+<p>Heat is, therefore, no longer a matter of seasonal discomfort alone. It is actively shaping public health, work efficiency, urban living conditions, and ecological stability for millions.</p>
+<h2>How can data and geospatial technologies improve heat mitigation strategies?</h2>
+<p>Without accurate and spatially detailed observations, heat mitigation strategies often remain generic and less effective on the ground.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>One of the key roles of data is to distinguish between global climatic drivers and local heat sources, helping us understand how climate change interacts with urbanisation, land-use changes and local environmental conditions. Geospatial datasets today help map the prevalence of factors like Urban Heat Islands and vegetation loss, enabling targeted interventions rather than one-size-fits-all responses.</p>
+<p>Heat behaviour is highly location-specific. A strategy that works in one city may not work elsewhere because local climate, population density and anthropogenic heat emissions vary significantly. This is why India requires denser weather station networks and improved thermal-monitoring systems.</p>
+<p>There is also an urgent need for dedicated thermal payloads and high-resolution thermal remote sensing systems to continuously monitor land surface temperatures, identify heat hotspots, study forest fires and understand localised thermal behaviour.</p>
+<p>More research and development are required to identify mitigation strategies that work for specific local conditions. Parallel efforts are equally necessary to minimise anthropogenic heat sources through better environmental management, urban planning and energy-use practices.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Heat mitigation, therefore, requires a balanced approach in which both the impacts and the sources of heat are addressed simultaneously through scientifically-informed policy interventions and geospatially-driven planning.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10697560"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May nineteenth, twenty twenty-six, at forty-one minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/heat-wave/" href="https://indianexpress.com/about/heat-wave/">heat wave</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/imd/" href="https://indianexpress.com/about/imd/">IMD</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/expert-summer-intensity-factors-mitigation-data-heat-10697560/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-19 11:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
