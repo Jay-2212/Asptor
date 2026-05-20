@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Who is Veera Pasi, the ‘forgotten hero’ of the 1857 Revolt whose statue Rahul Gandhi unveiled in Raebareli | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Who is Veera Pasi, the ‘forgotten hero’ of the 1857 Revolt whose statue Rahul Gandhi unveiled in Raebareli</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-20</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-veerapasi_expl-pol.jpg?w=1600" alt="Who is Veera Pasi, the ‘forgotten hero’ of the 1857 Revolt whose statue Rahul Gandhi unveiled in Raebareli">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Veera Pasi" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-veerapasi_expl-pol.jpg?w=1600" width="650"/><span class="ie-custom-caption">Senior Congress leader Rahul Gandhi during the unveiling of the Veera Pasi statue in Raebareli on May 20, 2026. Photo: ANI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">On Wednesday, Leader of Opposition in the Lok Sabha Rahul Gandhi unveiled a statue of Veera Pasi, a “forgotten hero” who had fought the British during the Revolt of 1857, in Raebareli. While this was not the first attempt by a political party to woo the Pasi community in <strong><a class="" href="https://indianexpress.com/article/political-pulse/up-cabinet-expansion-signals-bjps-2027-caste-strategy-sticking-to-a-winning-formula-10682977/">Uttar Pradesh</a></strong> through an icon from the community, Gandhi’s move in his parliamentary constituency is significant ahead of the state Assembly election next year.</span></p>
+<p><span style="font-weight: 400">Gandhi also addressed a “Bahujan Swabhiman Sabha” in Veera Pasi’s memory the same day. “While listening to other speakers, I felt that we remember Veera Pasi and Dr Ambedkar, but the ideology they stood for is not being protected properly because, in front of our eyes, an attack is being made on the Constitution,” he said at the event. </span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><b>Who was Veera Pasi?</b></h2>
+<p><span style="font-weight: 400">Veera Pasi was a trusted companion and commander of Rana Beni Madhav Baksh Singh, the ruler of the Shankarpur Estate in modern-day Raebareli during the 19th century. A Dalit belonging to the Pasi caste, Pasi was born on November 11, 1835, into an impoverished family in Lodhwari village of Raebareli district.</span></p>
+<p><span style="font-weight: 400">He lost his parents at an early age and went to live at his sister’s house. In the local dialect, a brother living with his sister’s family was called “Veerna”, which later evolved into the name “Veera”.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/congress-leaders-meet-mayawati-show-cause-notice-up-politics-dalit-vote-10699749/">Senior Congress Dalit leaders at Maya’s door. Why a meeting that wasn’t has UP buzzing</a></span></div>
+<p><span style="font-weight: 400">Pasi was recruited by Singh for his army, after he was impressed by the former’s strength and went on to become one of his most trusted lieutenants. According to local folklore, when the British captured Singh during the 1857 revolt, Pasi displayed remarkable bravery by rescuing Singh from prison. The British government then announced a reward of Rs 50,000 for the capture or information on Pasi’s whereabouts.</span></p>
+<span class="custom-caption"><img alt="Veera Pasi" class="lazyloading size-medium wp-image-10699910" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Senapati_Veera_Pasi.jpg?resize=392,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg 1044w, https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg?resize=294,450 294w, https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg?resize=392,600 392w, https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg?resize=768,1176 768w, https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg?resize=265,405 265w, https://indianexpress.com/wp-content/uploads/2026/05/Senapati_Veera_Pasi.jpg?resize=1003,1536 1003w" height="1598" sizes="(max-width: 1044px) 100vw, 1044px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1044"> A statue of Veera Pasi. Photo: Wikimedia Commons</img></span>
+<p><span style="font-weight: 400">While Veera Pasi doesn’t feature too prominently in the history books, oral history has kept his legacy alive in Raebareli and adjoining areas where the Pasi community resides in sizeable numbers. As per local folklore, Pasi died while trying to protect Singh from the British forces.</span></p>
+<p><b>Dalit history and politics in UP</b></p>
+<p><span style="font-weight: 400">Over the last few years, political parties in UP have worked towards invoking Dalit icons from the past and their contribution to the freedom struggle. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">In 2024, after the general election, Awadhesh Prasad, Samajwadi Party (SP) MP from Faizabad (Ayodhya), had invoked “Veerangana” Uda Devi and “Maharaja” Bijli Pasi, two prominent personalities of the Pasi (Dalit) community while taking oath in the Lok Sabha.</span></p>
+<p><span style="font-weight: 400">Uda Devi was part of the royal guard of Begum Hazrat Mahal of Awadh and participated in the 1857 revolt. She is credited with having mobilised people to take up arms against the British. In November 2022, the SP had commemorated Uda Devi’s death anniversary at its party headquarters.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/chandra-shekhar-aazad-prepares-up-yatra-can-he-shake-up-opposition-math-10655214/">As Chandra Shekhar ‘Aazad’ prepares to set off on UP yatra, can he shake up Opposition math?</a></span></div>
+<p><span style="font-weight: 400">Bijli Pasi is among the most prominent Dalit icons, having ruled over some parts of UP in the medieval period. The <a class="" href="https://indianexpress.com/about/yogi-adityanath/" rel="noamphtml">Yogi Adityanath</a>-led BJP government in UP has announced plans to renovate and redevelop Bijli Pasi’s fort in <a class="" href="https://indianexpress.com/section/cities/lucknow/" rel="noamphtml">Lucknow</a> as a tourist destination.</span></p>
+<p><span style="font-weight: 400">Even Prime Minister Narendra Modi had paid rich tributes to Maharaja Bijli Pasi in December 2025. Adityanath had also joined Modi in praising the ruler, describing him as “a valiant warrior of Lucknow who challenged foreign rule to protect India’s eternal traditions”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Dalit leaders and academics in UP say that icons from the community have largely been “ignored” by historians.</span></p>
+<p><span style="font-weight: 400">Ajay Kumar, assistant professor at Babasaheb Bhimrao Ambedkar University’s sociology department, says that mainstream historical writing has often neglected the contributions and experiences of Dalits, Adivasis, and other marginalised communities.</span></p>
+<p><span style="font-weight: 400">“In resistance to this, these communities have sought to reclaim and restore their historical and cultural heritage. This process is not just about rediscovering the past, but also about reviving identity, self-respect, and political consciousness. Through the creation of self-history, these communities challenge the myths, prejudices, and historical narratives constructed by the mainstream, which kept them marginalised for a long time,” said Kumar.</span></p>
+<p><span style="font-weight: 400">“Since these communities traditionally possessed relatively few written records, their histories survived through folk tales, folk songs, memories, and oral traditions. These oral traditions became important carriers of their social experiences, struggles, and collective consciousness,” he added.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Manoj Paswan, an SP leader from the Pasi community, echoed what Kumar said. He added: “It was Kanshi Ram who brought Dalit icons to the forefront and appealed to the community to not be ashamed of their history and rather be proud of it. Dalit leaders played a crucial role in the freedom struggle, but have not found mention in books as the likes of upper caste icons like Mangal Pandey have. This needs to be corrected.”</span></p>
+<p><b>Pasis and the Dalit vote in UP</b></p>
+<p><span style="font-weight: 400">The Pasis make up around 7 per cent of the state’s Scheduled Caste population, making them the largest group among Dalits in UP after the Jatavs. While they also have significant presence in other states, their largest population is in UP. In the 2024 Lok Sabha election, when the SP won 37 seats, the party had received a boost as five Pasi candidates fielded by the SP had won, compared with three of the BJP.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">With the Mayawati-led Bahujan Samaj Party steadily declining in UP — its vote share fell from 22.23% in the 2017 Assembly election to 12.88% five years later, with the vote share roughly proportional to the population of Jatav-Ravidasi Dalits, who are its core support base — everyone, from the SP and the Congress to the Aazad Samaj Party (Kanshi Ram) led by Chandrashekhar Azad is trying to fill that space.</span></p>
+<p><span style="font-weight: 400">The SP and Congress have both been working to reach out to Dalits by regularly invoking B R Ambedkar and Kanshi Ram. This year, both parties held programmes across the state on Ambedkar’s birth anniversary on April 14.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">After claiming to get overwhelming support of the Dalit community in the 2024 Lok Sabha election, which was evident from the results too, the SP and Congress are both working to ensure that Dalits (around 20% of UP’s total population) support the parties in next year’s Assembly election.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10699890"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/asad-rehman/">
+<figure>
+<img alt="Asad Rehman" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2017/09/asad-rehman.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/asad-rehman/"><span></span>Asad Rehman</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="4833253"></div><div class="follow_author_title" data-id="Asad Rehman"></div><div class="follow_author_slug" data-id="asad-rehman"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="http://asad1_rehman">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Asad Rehman is with the national bureau of The Indian Express and covers politics and policy focusing on religious minorities in India. A journalist for over eight years, Rehman moved to this role after covering Uttar Pradesh for five years for The Indian Express.
+
+During his time in Uttar Pradesh, he covered politics, crime, health, and human rights among other issues. He did extensive ground reports and covered the protests against the new citizenship law during which many were killed in the state.
+
+During the Covid pandemic, he did extensive ground reporting on the migration of workers from the metropolitan cities to villages in Uttar Pradesh. He has also covered some landmark litigations, including the Babri Masjid-Ram temple case and the ongoing Gyanvapi-Kashi Vishwanath temple dispute.
+
+Prior to that, he worked on The Indian Express national desk for three years where he was a copy editor.
+
+Rehman studied at La Martiniere, Lucknow and then went on to do a bachelor's degree in History from Ramjas College, Delhi University. He also has a Masters degree from the AJK Mass Communication Research Centre, Jamia Millia Islamia.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/asad-rehman/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twentieth, twenty twenty-six, at nine minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/who-was-veera-pasi-rahul-gandhi-uttar-pradesh-dalit-10699890/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-20 14:57 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
