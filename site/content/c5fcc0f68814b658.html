@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Experts Explain | How empowering India’s local governments can kickstart innovation and growth | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Experts Explain | How empowering India’s local governments can kickstart innovation and growth</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-21</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-federalism2_expl-pol.jpg?w=1600" alt="Experts Explain | How empowering India’s local governments can kickstart innovation and growth">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="local governments" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-federalism2_expl-pol.jpg?w=1600" width="650"/><span class="ie-custom-caption">The open-air gas chamber that Delhi has remained for decades is a reminder and indictment of cities being missing in debates on federalism. Photo: Praveen Khanna</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><i><span style="font-weight: 400">This is the second of two pieces on the federalism debate and draws upon the authors’ recent book, </span></i><span style="font-weight: 400">A Sixth of Humanity: Independent India’s Development Odyssey</span><i><span style="font-weight: 400">, especially Chapter XIV. You can read the <strong><a class="" href="https://indianexpress.com/article/explained/explained-politics/india-federalism-debate-democracy-fiscal-transfers-expert-explains-10695802/">first part here</a></strong>.</span></i></p>
+<p>“Whatever the reasons, the fact remains our local bodies are not, as a rule, shining examples of success and efficiency…” That is not a contemporary lament, but one expressed in 1925 by the chairman of the municipality of Allahabad, Jawaharlal Nehru. A hundred years on, little has changed.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The third tier of government — comprising <strong><a class="" href="https://indianexpress.com/article/opinion/columns/finance-commission-strengthens-local-bodies-but-at-the-cost-of-states-10622583/">rural and urban local bodies</a></strong> — is prominently absent in the federalism debates, which tend to focus exclusively on the Centre and the states. It is the stepchild of Indian federalism and the offending step-parent is the second tier, namely state governments, directly above and controlling it.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>Dependence on state governments</b></p>
+<p><span style="font-weight: 400">Consider the abject neglect of the urban third tier in personnel, finances and expenditures. </span></p><div id="taboola-mid-article-personalisation"></div>
+<span class="custom-caption"><img alt="Figure 1" class="lazyloading size-medium wp-image-10697710" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/fed-p2-chart1.jpg?resize=600,360" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart1.jpg 1430w, https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart1.jpg?resize=450,270 450w, https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart1.jpg?resize=600,360 600w, https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart1.jpg?resize=768,461 768w, https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart1.jpg?resize=675,405 675w" height="858" sizes="(max-width: 1430px) 100vw, 1430px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1430"> Figure 1. Structure of employment across three tiers of government: China, India, and the United States.</img></span>
+<p>In the United States and China, polar opposites as political systems, nearly two-thirds of government employees work for local governments. In India, just over 10 per cent do (see <i>Figure 1</i>)<span style="font-weight: 400">. As a result, most public services are delivered by the third tier in the former, but very few in India. </span></p>
+<p>Next, consider finances. Self-generated resources, in addition to personnel, are critical to efficient delivery. <i>Figure 2</i> illustrates how poor the performance of urban local bodies (ULBs) has been compared to the other two tiers. The Centre and states have been able to increase the resources they generate for themselves to fund service delivery by a factor of 2 and 2.5, respectively, over nearly six decades.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/delimitation-india-1971-freeze-lok-sabha-seats-10646538/">Expert Explains | Delimitation: At heart of row, value of a vote, fiscal imbalance</a></span></div>
+<p>In contrast, the urban third tier’s share in tax generation has broadly stagnated at a measly 0.3 per cent of GDP. As a result, expenditures by the third tier are abysmally low (less than 1 per cent of GDP) and the states and Centre spend roughly 15 and 20 times more, respectively. Poor own tax generation means that even measly expenditures are funded from outside resources, eviscerating any agency that the third tier might have and reinforcing their dependence on state governments.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="Figure 2" class="lazyloading size-full wp-image-10697714" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/fed-p2-chart2.jpg" height="235" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="394"> Figure 2. Own tax resources (% of GDP).</img></span>
+<p>This is especially striking, given rapid urbanisation and the passage of the 73rd and 74th Amendments granting constitutional status to local governments that came into effect in 1993.</p>
+<p><b>Monetising land</b></p>
+<p>The deficiencies of the third tier have something to do with a deeper pathology relating to land. One manifestation of this is suggested by a contrast between China and India. In relatively land-scarce countries, rapid economic growth leads to rapid increases in land and property values relative to gross domestic product<span style="font-weight: 400"> (GDP). This has been true of China and of India. As such, land provides a potentially buoyant source of fiscal revenues. </span></p>
+<span class="custom-caption"><img alt="Figure 3" class="lazyloading size-full wp-image-10697717" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/fed-p2-chart3.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart3.jpg 519w, https://indianexpress.com/wp-content/uploads/2026/05/fed-p2-chart3.jpg?resize=450,275 450w" height="317" sizes="(max-width: 519px) 100vw, 519px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="519"> Figure 3. Tax and non-tax revenues from land, China and India, 1999-2022.</img></span>
+<p>But as <i>Figure 3</i> shows, over the period of rapid economic growth in the two countries, China was able to fiscalise rising land values, and more from selling land than taxing it. The irony was that a communist country privatised land to capture some of the revenues. China’s land revenues increased from less than 1 per cent of GDP to more than 10 per cent at its peak.</p>
+<p>In contrast, India’s revenues have stagnated at about 1 per cent of GDP through the entire growth phase. Put differently, the Chinese government’s collections from land revenue for every urban resident that was available for spending were about 15 times more than India’s in 1999; at its peak in 2020, this multiple increased to 225. More rapid growth and the superior ability to fiscalise land values increased the revenue envelope for China dramatically, but by very little for India.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The inability to fiscalise land owes to socialist ideology interacting with vested interests, compounded by a controlling second tier and an enfeebled third tier. Socialism inspired misguided laws such as the Urban Land Ceiling Act of 1976, which simply fragmented land into small parcels with little excess identified and a trivial amount acquired by the state for public purposes.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/yogendra-yadav-on-delimitation-what-india-needs-is-a-new-compact-that-isnt-based-on-dominance-10647115/">Yogendra Yadav on delimitation: What India needs is a new compact that isn’t based on dominance</a></span></div>
+<p>Even allowing for this, several state entities — mothballed public sector enterprises, ports, the defence department, state-managed temples — did have vacant or encroached-upon land which has never been monetised. The Indian state never had the monopoly on land that China had and hence could never have sold as much land as China’s local bodies, but it did not even try. Scarcity is the parent of rent-seeking. But perhaps the worst outcome of these laws (along with land use controls and building by-laws) were severe distortions in land and rental markets that were a prime driver of ‘black money”. No sector in India has been as contaminated with black money as the real estate sector.</p>
+<p>The result is that ULBs in India are caught in a low-equilibrium political economy trap. While higher tiers (both Centre and states) use their devolution powers to control and influence lower levels, the latter are both unable and unwilling to tax their proximate citizens. The result is chronic resource constraints with high dependency: a lever of political and administrative control of local governments by states that severely constrains their autonomy.</p>
+<p>This affliction has been particularly pernicious for ULBs, whose low managerial capacity has been a collateral damage of the stranglehold of state governments on appointments. City governments lack the power to appoint municipal commissioners and their senior management teams or over appointments, promotions and disciplining their staff. Even where the functions are notionally transferred to local bodies, the staff remains accountable to the state governments.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><b>Is there a way forward?</b></h2>
+<p>Greater financial resources became available to ULBs through Central government schemes for urban development such as the  Jawaharlal Nehru National Urban Renewal Mission (JNNURM) and its successor, the Atal Mission for Rejuvenation and Urban Transformation (AMRUT), that tied funding to states and cities committing themselves to structural reforms. Successive Finance Commissions have also allocated more resources to the third tier in recent years.</p>
+<p>These additional resources are still a fraction of what ULBs need. More importantly, Central schemes are top-down initiatives with little citizen participation and have been unable to address the binding constraints of the weak administrative and technical capacity of ULBs and the overbearing role of state governments. The truth is that state governments that are sometimes victims of over-centralising by New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> are themselves perpetrators vis-à-vis their own third tier. As the economist Raja Chelliah famously said, everyone wants decentralisation but only for the higher level.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Even as India is becoming more urban, its urban infirmities are putting the brakes on a key locus of innovation and growth. The debates on industrial policy and their role in boosting China’s growth belie the reality that most industrial policies in China are formulated and implemented by its cities and not by bureaucrats in the national or provincial capitals. Fierce competition among cities in China reinforces the fierce competition among firms, driving that country’s exceptional dynamism.</p>
+<p>In India, the lack of competition drags it down, although this is slowly beginning to happen. As New Delhi gets suffocatingly polluted and <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a> immobilisingly congested, people and investors will seek other destinations. The rise of second and third-tier cities — Bhubaneswar, Coimbatore, Indore, Kochi, Mohali, <a class="" href="https://indianexpress.com/section/cities/surat/" rel="noamphtml">Surat</a> — is encouraging but needs to be supported.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The push and pull dynamic unleashed not just by competitive federalism but also by competitive sub-federalisms could emerge as a promising force for change. Another driver could emerge from the growing weight of the urban population. While this will become manifest in the new census, the resulting intra-state delimitation will give greater weight to urban voters.</p>
+<p>Regardless, debates on Indian federalism can no longer be confined to Centre-state relations. Empowering cities and making their governance more accountable must be integrated into these debates as well. The open-air gas chamber that Delhi has remained for decades is a reminder and indictment of cities being missing in debates on federalism.</p>
+<p><i><span style="font-weight: 400">Devesh Kapur is a political scientist and the Starr Foundation Professor of South Asia Studies at the Johns Hopkins University School of Advanced International Studies, Washington <a class="" href="https://indianexpress.com/about/delhi-capitals/" rel="noamphtml">DC</a>.</span></i></p>
+<p><i><span style="font-weight: 400">Arvind Subramanian is an Indian economist and the former Chief Economic Advisor to the Government of India (2014-18). He is currently a Senior Fellow at the Peterson Institute for International Economics, Washington DC.</span></i></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10697687"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May nineteenth, twenty twenty-six, at one minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/india-urban-local-bodies-governance-crisis-experts-explain-10697687/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-21 11:23 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
