@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>10 upcoming projects, 186 km roads, Rs 34,800 crore cost: How is NHAI planning to decongest Delhi | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>10 upcoming projects, 186 km roads, Rs 34,800 crore cost: How is NHAI planning to decongest Delhi</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-21</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/dnd-DEL.jpg?w=1600" alt="10 upcoming projects, 186 km roads, Rs 34,800 crore cost: How is NHAI planning to decongest Delhi">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Noida Link Road beside Akshardham, in New Delhi (source: Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/dnd-DEL.jpg?w=1600" width="650"/><span class="ie-custom-caption">Noida Link Road beside Akshardham, in New Delhi (source: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Ministry of Road Transport and Highways (MoRTH), along with the National Highways Authority of India (NHAI), will begin work on key projects by the end of the year to decongest the national capital, Union Minister Nitin Gadkari said on Tuesday.</p>
+<p>After inspecting the six-lane access-controlled DND-Faridabad-Ballabhgarh corridor with Chief Minister <a class="" href="https://indianexpress.com/about/rekha-gupta/" rel="noamphtml">Rekha Gupta</a>, Gadkari outlined the status of 10 upcoming projects covering 186 km at a cost of Rs 34,800 crore. These projects have been specifically planned to decongest <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> by diverting freight traffic and providing connectivity to key centres in the region such as the Noida International Airport. The 59-km, 6-lane DND-Ballabhgarh corridor is nearing completion and will connect to Delhi-<a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> Expressway and Western Peripheral Expressway.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h3><strong>Why has congestion in Delhi remained a challenge?</strong></h3>
+<p>Despite the continuous development of metro network and increase in buses, the traffic congestion has remained a challenge for Delhi. It is a result of multiple factors involving diverse socio-economic issues, population growth, increasing number of private vehicles, cargo vehicles etc. A Delhi traffic police survey in March 2024 identified congestion at 134 location or stretches, primarily due to ongoing construction works by various civic agencies, encroachment and heavy volume of traffic. Along with this, the agency also found 128 bad conditioned/potholed roads and 97 damaged/encroached footpaths.</p>
+<p>While the problem requires multi-layered solution, involving civic and state authorities, one of them is to divert the cargo vehicles that are not destined for Delhi and they do not touch the city <a href="https://indianexpress.com/article/chandigarh/nitin-gadkari-dnd-faridabad-sohna-highway-travel-time-20-min-10698278/"><strong>roads</strong></a>.</p><div id="taboola-mid-article-personalisation"></div>
+<p>MoRTH and NHAI are primarily responsible for the development and maintenance of the National Highways. However, it has a integral role to play in decongesting Delhi by diverting these cargo vehicles. These highways projects for decongestion are essentially a transit route for the cargo and other vehicles to other states without entering in the city.</p>
+<h2><strong>What are these projects?</strong></h2>
+<p>The highway ministry prepared a Delhi decongestion plan in 2015. It involved the construction of expressways, ring roads, tunnels, elevated corridor to create a modern transport network, which not only provide hassle-free movement, but also save fuel.</p>
+<p>One of these upcoming key projects are connecting Urban Extension Road-II (UER II) to Delhi-Dehradun Expressway. The 17-km and six lane project will connect the newly opened expressway near Tronica city in Ghaziabad. Gadkari said that the alignment of the project is at the final stage and work of this will tentatively begin by December 2026.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“This will help in reducing the traffic congestion on stretches IGI Airport, Barapullah Nala, Mukarba Chowk, Singhu border, Ashram-Badarpur. Also, areas like Dwarka, Rohini, Punjabi Bagh, Gurugram will get direct connectivity with Dehradun expressway,” said Gadkari.</p>
+<p>The another similar project is 65-km highway from Delhi-Dehradun expressway to Noida-Faridabad. It is also schedule to begin by December 2026. The project will act as an integration corridor connecting Delhi-Dehradun, Delhi-Meerut, DND, Faridabad and Yamuna Expressway.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-public-transport-gap-economic-survey-solutions-10694408/">How India’s cities put private vehicles in front, pushing public transport to the back</a></span></div>
+<p>The other proposed project as part of Delhi Decongestion is Delhi-Amritsar-Katra connectivity to UER-II, where the work will tentatively begin by March 2027.</p>
+<p>“With this project, the traffic coming through Delhi-Katra expressway will be diverted to UER-II and Dwarka Expressway. It will help in heavy traffic diversion and make freight movement more efficient,” said Gadkari.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The government has also proposed building a 8-km, 6-lane tunnel from Shiv Murti (near airport) to <a class="" href="https://indianexpress.com/about/nelson-mandela/" rel="noamphtml">Nelson mandela</a> marg at a cost of Rs 7000 crore to provide signal-free connectivity to Vasant Kunj via Dwarka Expressway. Gadkari said that Public Private Partnership Appraisal Committee (PPPAC) approval for the project has been recieved and the work will start after the final approval of the cabinet.</p>
+<p>The other similar project in the region is a 20-km, 6-lane elevated corridor from AIIMS to Gurugram via Mahipalpur. It will be a signal-free corridor between AIIMS, INA, Hauz Khas, Vasant Kunj, Mahipalpur and Gurugram. These areas see heavy traffic even in normal days, let alone peak hours.</p>
+<p>The alignment of the project is at the final stage and work will tentatively start from April 2027. “This project will help in easing traffic pressure on existing Delhi-Gurgaon highway. It will decongest Dhaula kuan, Mehrauli-Gurugram road, Rao Tula Ram Marg,” said the Minister.</p>
+<p><strong>Stretches of state highways</strong></p>
+<p>The other two proposed key projects as part of decongestion plan are service road on UER-II and 0.5-km interchange near Okhla barrage (on Kalindi kunj intersection). The 26-km service road on UER-II at a cost of Rs 6400 crore will help in reducing congestion on main carriage as the local traffic to commercial establishment and residential areas will be diverted.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The Central Road Research Institute (CRRI) had done a feasibility study on diversion of daily traffic at Kalindi Kunj. It had recommended to construct interchange and flyovers at the site.</p>
+<p>Gadkari said that the land acquisition process for this has started and the work will tentatively begin by October 2026. He said that commuters to Noida, Jasola, Sarita Vihar and Faridabad will get signal free connectivity.</p>
+<p>Apart from these seven projects, the state government has handed over three stretches of state highways to develop it as six-lane signal-free express connectors. These are 7.5 km stretch on Ashram to Badarpur, 18.5 km stretch on Haryana-Delhi border to Punjabi Bagh and 6.5 km section on Mehrauli to Delhi-Haryana border. All these projects are also scheduled to begin by December 2026. The development of these three sections were stuck for a long time due to the multiplicity of the departments.</p>
+<p> </p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10698853"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/dheeraj-mishra/">
+<figure>
+<img alt="Dheeraj Mishra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/02/dheeraj-mishra.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/dheeraj-mishra/"><span></span>Dheeraj Mishra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8470614"></div><div class="follow_author_title" data-id="Dheeraj Mishra"></div><div class="follow_author_slug" data-id="dheeraj-mishra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Dheeraj Mishra is a Principal Correspondent with the Business Bureau of The Indian Express. He plays a critical role in covering India's massive infrastructure sectors, providing in-depth reporting on the connectivity lifelines of the nation.
+Expertise &amp; Focus Areas: Mishra’s journalism is focused on two of the country's most capital-intensive and public-facing ministries:
+
+
+ 	
+Ministry of Railways: Tracking the operations, safety, and development of India's vast railway network.
+
+ 	
+Ministry of Road Transport &amp; Highways: Covering policy decisions, infrastructure projects, and highway development.
+
+
+What sets Mishra apart is his rigorous use of the Right to Information (RTI) Actas a primary tool for news gathering. By relying on official data and government records, he ensures a high degree of accuracy and trustworthiness in his reporting. This data-driven approach has resulted in numerous impactful reports that hold public institutions accountable and bring transparency to government operations.
+Find all stories by Dheeraj Mishra here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/dheeraj-mishra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twentieth, twenty twenty-six, at fifty-one minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/nhai-projects-ease-delhi-congestion-10698853/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-21 15:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

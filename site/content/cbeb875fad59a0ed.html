@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India sees relations with China in a bilateral context, Beijing has never seen it that way: Vijay Gokhale | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India sees relations with China in a bilateral context, Beijing has never seen it that way: Vijay Gokhale</h1>
+                <div class="article-meta">
+                    <span>By Ananth Krishnan</span> • <span>THE HINDU NATIONAL</span> • <span>2026-05-21</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71006006"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>In an interview with <i>The Hindu</i>, author Vijay Gokhale, a former Foreign Secretary, explains his research into Chinese decision-making, how China deploys “grey zone coercion”, and the consequences for the future of its relations with India.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>A theme that emerges from the conflicts that you research in this book is that it has never been one single reason that led China to go to war, but rather a confluence of factors, especially the global context.</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									I wrote this book because I thought I should write a companion piece to my earlier book <i>The Long Game</i>. That book was about how the Chinese negotiate with India in various situations. However, given our background, not just in terms of the conflict in 1962 but also because of the current situation where there is tension along the Line of Actual Control (LAC), I felt it was important to study how China engages in conflict, and what are the motivations that lead China to engage in conflict.
+				</img></p><p>
+										The fact is after 1979, the Chinese have not really fought a hot war. But one of the key points I wanted to make in the book is that conflict is not simply a hot war. Grey zone warfare is also a form of conflict. It involves continuous tension with another country using military or largely military means, although not entirely military means because there are economic and psychological levers, and so on. That was the real objective of writing this book, also because I thought it would be helpful to the strategic and policymaking communities in India, as well as to the general public.
+				</p><p>
+										Coming to the objectives, what appeared apparent to me after studying all the conflicts that China has waged, is that it was rarely, if ever, driven purely by operational or territorial objectives. Of course, these were important and continue to be so for China, but it was driven much more by political objectives. China looked at political goals vis-à-vis the other country rather than simply territorial or military objectives.
+				</p><p>
+										The second point is that China has always viewed conflict in a wider global geopolitical context rather than in a narrow bilateral one. If you go through the book, you will see that in practically any conflict China has engaged in — both hot wars and grey zone conflicts — they have looked at where that conflict will place them in the context of the larger global balance of power. That is an extremely important element that I want to flag in my book, because we tend to see India-China relations only in a bilateral context. Beijing has never looked at it that way, and will never look at it that way either. Therefore, we need to study how Beijing looks at India in this much larger global context.
+				</p><p>
+										One of the key elements of the book is looking at how China uses diplomacy and propaganda once it decides to enter a conflictual situation. This is not a reactive approach. The Chinese plan their diplomatic and propaganda initiatives as part of the larger operational strategy towards achieving the specific political objectives they have already identified.
+				</p><p>
+										The book also looks at whether domestic politics has had any impact on how or when China wages war. I felt this was important because we know that in democratic societies, domestic politics inevitably impacts foreign policy. I presumed it was the same in the case of China. But China is such an opaque society and polity that this is not often written about, particularly in the context of China’s wars. As I did my research, I was surprised at how much of a correlation there was, and is, between China’s domestic politics and its decision to use force.
+				</p><p>
+										This is what motivated me to write this book. I think the lessons I have drawn will be important for us going forward, because we are now in a globalised world.  As we recently saw during the [China-U.S.] summit in Beijing, both sides recognise that the international order is collapsing. Both sides are looking to stabilise it in their own way. That is going to impact India as well. How China looks at us will be heavily impacted by how they deal with this collapsing international order.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>The first conflict you explore in the book is with Taiwan in 1958, which underlines your point that it was often different considerations coming together, domestically and globally, that shaped China’s decision-making, rather than one driving factor such as territory.</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									The 1958 conflict, which involved the U.S. and is called the Second Taiwan Strait Crisis, was actually the first big military engagement the Chinese had after the Korean War in 1950. And here they were involved with the most powerful superpower in the world. They had very clear political objectives.
+				</img></p><p>
+										They never accepted the separation of Taiwan from China after 1949. They did not have any opportunity to take it back in the early 1950s because once the Korean War began, the U.S. declared Taiwan to be an unsinkable aircraft carrier and plied Chiang Kai-shek with a lot of military support and weapons. But China never gave up on its dream of seizing the island, and they saw the opportunity in 1958.
+				</p><p>
+										This illustrates my earlier point as to why we must look at China’s motivations in a global context. In 1958, events were rapidly unwinding in West Asia. The British had withdrawn from the Indian Ocean. Both in Iraq and Lebanon, political crises were threatening to disrupt the balance in West Asia. Increasingly, the U.S. was drawn militarily into these politically developing situations. China sensed this was an opportunity because U.S. forces were being pulled out of other theatres, including East Asia, to deal with the developing situation in West Asia. Therefore, Mao Zedong and his colleagues realised that while the U.S. was distracted, China had a better chance to achieve its objectives.
+				</p><p>
+										The objective was not the defeat of the U.S., that was not possible. It related to Taiwan, and their political objectives were flexible. Maximally, they would have liked to take back the island, but they realistically understood that may not be possible. What they certainly intended to do was rewrite the rules of engagement in the Taiwan Strait and force the U.S. into a position where it had to deal with China, a fact they had refused to acknowledge throughout the 1950s. At the 1954 Geneva conference on Korea and Vietnam, [U.S.] Secretary of State John Foster Dulles famously refused to even shake the hand of Zhou Enlai. In other words, the U.S. objective was to keep the People’s Republic of China as a pariah. The Chinese objective was to force the Americans to deal with them directly, and that was the political objective. The military objectives were all then oriented toward that goal.
+				</p><p>
+										It is when you understand that the political objective is critical that you recognise how China played hot and cold on the military objectives with a view to forcing the U.S. towards engaging with them directly. At times they built up military pressure, and at times they withdrew it. They were always careful never to directly attack the Americans, but their objective was to threaten the Taiwanese. They fully understood that the U.S. would not allow Taiwan to fall, because then its credibility in large parts of East and Southeast Asia would be affected.
+				</p><p>
+										So while their maximal political objective of conquering Taiwan was not achieved, their broader political objectives — forcing the U.S. to engage with them directly, compelling the U.S. to stay in the region, and that was in a sense effectively weighing them down, the efforts to divide the Taiwanese and the Americans — all of these political objectives succeeded.
+				</p><p>
+										Finally, there was a domestic element to this. This was an eye-opener for me as well. Mao Zedong had always wanted to speed along economic development because he somehow believed it would be quite easy to industrialise and catch up with the West. Against the advice of Zhou Enlai, he pushed this line. In 1956-57, wiser heads like Zhou Enlai, Deng Xiaoping, and Liu Shaoqi prevailed and advocated against rapid industrialisation. But by 1958, Mao was able to overcome that opposition and announced his famous policy, the Great Leap Forward, which subsequently proved to be a disaster.
+				</p><p>
+										Mao understood that although he had won the political victory, there were powerful people in the Politburo and the party still opposed to this. Therefore, he created this external crisis to unify the party and public opinion behind him. This is a thread that runs through many subsequent crises: a domestic political situation is utilised to unify the nation behind the leader. That was a very big learning for me from the Taiwan Strait crisis.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>Four years later, China goes to war with India. In 1962 as well, besides the territorial issues and the Tibet question which we tend to focus on, you emphasise the importance of the global situation for China, which is perhaps somewhat underappreciated.</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									The more I looked into why 1962 happened, leaving aside the fact we had a border problem, which was getting aggravated with patrolling and counter-patrolling by both sides, which in India we tend to think was the central cause of the conflict, I discovered that this was not necessarily the only cause, or even the most important one.
+				</img></p><p>
+										There were two other important reasons why China went into this conflict with India. Firstly, although the Chinese had never really regarded India as an equal after 1949, they did not dismiss India entirely as a country of no consequence. After all, India and its Prime Minister had a diplomatic stature and international standing. India also had a sizeable economy and had been left with sizeable military power after the British withdrew. Therefore, in every sense, India had the potential to become a rival, and it was always China’s intention to keep that rival in check, if not cut it down.
+				</p><p>
+										The circumstances throughout the 1950s made that difficult because China was in an existential conflict with the U.S., and India had close relations with the U.S. and with the Soviet Union in the late 1950s, making it difficult for China because it felt the global order was favourable to India and unfavourable to themselves.
+				</p><p>
+										Two major developments happened in 1961 and 1962. First, the Russians began to rebalance and take a more neutral position vis-à-vis India and China than they had done in 1959 and 1960. The threat China perceived of the Soviet Union going to India’s side and abandoning them, diminished.
+				</p><p>
+										More importantly, under new President John F. Kennedy, the U.S. readjusted its policy on Taiwan. That readjustment was very critical. The Americans decided that if China were to attack Taiwan, they would come to Taiwan’s defence. But they would not permit, support, or even finance an effort by Chiang Kai-shek to conquer the mainland by force. This was subsequently articulated to the Chinese Ambassador in Warsaw through what was called the Warsaw channel, which was the only official communication line, between their ambassadors in Poland. In June 1962, the American ambassador had conveyed this policy change.
+				</p><p>
+										Noting this, the Chinese well understood that both the U.S. and Soviet Union were now less likely to interfere in any military operation China might launch against India. It is therefore no coincidence that right from early July 1962, Chinese statements became more belligerent and aggressive, ultimately leading to the conflict in October, the objective of which, basically, was to cut India down as a rival. Again, here you see the play of international relations in this relationship.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>In 1962, there was a domestic angle as well for Mao.</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									By 1961, the infamous Great Leap Forward had resulted in mass starvation in China. It remains the single greatest human tragedy of the post-World War II era, and still not admitted to as such by the Chinese. Obviously, the blame fell on Mao because he had pushed the proposal despite the reservations of many of his political colleagues, who began to challenge his authority. Some were sidelined, like Defence Minister Peng Dehuai, but others like Deng Xiaoping and Liu Shaoqi began to take control of economic policy. Mao felt his political power slipping.
+				</img></p><p>
+										To regain it, Mao typically manufactured an external threat. In this case, that was India. He hinted that India was being backed by both the Soviet Union and the U.S., and that it was necessary for the country to unify behind him to deal with this threat. In a sense, it was an effort by Mao to use an external threat to make a political comeback and regain control over the party and State machinery.
+				</p><p>
+										Both political objectives were achieved by the Chinese in 1962. Mao regained his influence to become the undisputed leader of China again. Secondly, the balancing relationship between the U.S. and Soviet Union gave China leeway to operate without fearing either of them would curb or attack it in some manner. The third major achievement was delivering a huge psychological shock to India, which remains perhaps the most lasting outcome of the conflict.
+				</p><p>
+										Again, it was political objectives, not territorial ones, that drove them. You might recall that the Chinese captured much of what is present Arunachal Pradesh and subsequently withdrew from there. If it were a purely territorial objective, they might not have returned that territory. We have to look at the 1962 war in political terms, rather than in purely military terms.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>Before the global environment turned favourable to China in 1961, Zhou Enlai came to India in 1960. At that time, do you think a border settlement would have still been possible?</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									This was a time of maximum pressure on China from both superpowers. The U.S. was very much still an existential threat to China, and the Soviet Union, by 1959, under [Nikita] Khrushchev, had begun to turn against China, withdrawing their nuclear scientists, ending most of their industrial cooperation projects, withholding weapon systems and so on.
+				</img></p><p>
+										When they were under pressure from all sides in 1959-60, it is correct that there was a high-level political decision to settle boundary problems with many of their neighbours. That is unquestionably true, as there is Chinese documentation that supports that. The question is with India, whether they were willing to settle on reasonable terms, or if it was merely an effort to get India to accept de jure what China had already physically taken de facto.
+				</p><p>
+										My view is China required India to settle on terms it was unlikely to agree to. After all, India had protested repeatedly since 1957 about Chinese intrusions not only in Ladakh but also Arunachal Pradesh, then called the North-East Frontier Agency. The Chinese had taken bits and pieces of land in both areas before 1962, so it is unlikely India would have legitimised the status quo in this situation. Therefore, I feel while China may have come with intentions that might have been good, considering the manner in which they baked the cake, that cake would never have risen. The cake would have fallen flat, and it did.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>In the book, you make the point that China has historically never looked at India as an equal and dealt with India according to what suited its broader global objectives at any given point. India, on the other hand, broadly has dealt with China bilaterally. Has that been a constant thread through 75 years?</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									One of the key findings in all my research since 2020 is to validate the point that China never looked at or treated India as an equal power, nor does it today. It treated India and continues to treat India as an adjunct problem or an adjunct threat, should India at any point lean towards either the U.S. or Russia, both of which have posed existential threats to the PRC at different times since 1949.
+				</img></p><p>
+										The fundamental objective of China’s India policy from 1949 until 2026, has been to keep India in a neutral posture. They gave up the possibility of genuine friendship in the late 1950s, but what they do not want is for India to become an adversary or enemy. That would mean India gravitating quickly towards one or the other superpower. They want to keep India neutral primarily because India is the only country, other than the U.S. and Russia, where a two-front conflict is possible if it teams up with them.
+				</p><p>
+										The methods or tactics to keep India neutral have changed over time. When China was under stress, they were accommodative. In the 1950s, when the U.S. posed an existential threat to India, they proposed various ways to resolve the boundary. When the Soviet Union posed a major existential threat to China having invaded Afghanistan in 1979, supported the Vietnamese invasion of Cambodia, and stationed one million troops in Mongolia, Deng Xiaoping made the so-called “package deal” proposal to the Government of India in 1980.
+				</p><p>
+										In the 1990s, when the Soviet Union collapsed and the bipolar world became unipolar, and when the target was painted on China’s back as the largest Communist State still standing, again they became accommodative. That was when we had the 1993 and 1996 agreements to maintain peace and tranquillity and build confidence-building measures (CBMs) along the LAC.
+				</p><p>
+										When China was in a relatively better position internationally, they used coercion to bring India to a neutral position. 1962 was a classic case of trying to force India back into a neutral position via coercion. 1987 was another example. China had normalised relations with the U.S. and was moving toward rapid normalisation of relations with the Soviet Union, and they felt the Government of India under Prime Minister Rajiv Gandhi was becoming assertive, if you remember Operation Brasstacks and Operation Chequerboard. The Sumdorong Chu crisis was created by them in 1987 in an effort to put military pressure on us. The same thing happened in 1998 when India conducted nuclear tests. When the U.S. and other major powers ganged up against us in an effort to prevent India from going nuclear, the Chinese again mounted pressure on us.
+				</p><p>
+										What you see now again is that effort to coerce India into a neutral position because they believe that over the last decade or so, we have tilted increasingly toward the U.S. My main point is this: their objective has remained consistent, which is to keep India neutral. Their methods and tactics change depending on how they find the international environment at any particular point of time.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>Using coercion to push India into a neutral position sounds counterintuitive. Does it not end up having the opposite effect?</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									Actually, there is no correlation between China using military coercion to keep India neutral, and India actually becoming more neutral in a conflict or situation between China and either the U.S. or Russia. In fact, my book demonstrates that each time they have brought such pressure on us, India has tilted toward the U.S. or the Soviet Union rather than the other way around. I am myself rather bemused as to why the Chinese continue to believe that military pressure will lead to India changing its posture.
+				</img></p><p>
+										The only explanation I have to offer is that the PRC itself was born out of conflict and the PLA, or the Red Army as it was called before 1948, was used to seize power. The exercise of force is in the [Chinese Communist] Party’s DNA. It is seen as one of the two key instruments by which you force an adversary, opponent, or neutral party to bend to your will. My view is China has always been sceptical about the value of negotiations. Negotiations are not seen as ends in themselves, but merely a means to an end to achieve an objective, once military pressure has been mounted.
+				</p><p>
+										It is true that in more recent times, China is more sophisticated and utilising not just military pressure but economic pressure, trade, investments, and technology, and we are seeing some of that impacting us today. But the Chinese State still firmly believes that force is a key component in getting you to bend to their will. Therefore they continue to deploy that force towards us. It hasn’t worked in the past, it is unlikely to work in the future, and I think they ought to recognise this sooner rather than later.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>Do you see the border tensions of 2020 as a case of coercion gone wrong for China, given India’s response and the state of relations since?</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									I would certainly characterise it in that manner, although not necessarily in the words you have used. I think their objectives were born out of a concern that India was tilting too rapidly toward the U.S. I have written about this in detail in a new chapter in my book <i>The Long Game</i>. Two developments in particular would have been of concern to them. In December 2019, the Quad, which until then had been handled at the functional or bureaucratic level, was suddenly elevated to the Foreign Ministers’ level, with talk of elevating it to the summit level. Here was the second coming of a platform that China saw as a direct attempt by the U.S. to contain it. Then, in February 2020, President [Donald] Trump made a successful visit to India, resulting in a number of agreements on economic, technological, and military collaboration. This confirmed to the Chinese that the tilt toward the U.S. was continuing to grow. China relied on its default position, which is to use military coercion to correct that tilt.
+				</img></p><p>
+										There is no gainsaying that the sustained military activity at several points along the LAC in Ladakh was a planned activity, and the objective was to militarily coerce you into recognising China has agency, and that it was not particularly pleased with both the direction of India-China relations and how India’s relations with other major powers were going. I believe they used military coercion in 2020 with that objective. Of course, one could have told China this would not succeed.
+				</p><p>
+										India has a habit of not succumbing when direct military threats are applied. Look at 1971. When the Americans moved the Seventh Fleet into the Bay of Bengal, Prime Minister Indira Gandhi said well, I’m still going ahead with the Bangladesh operation. In 1996, when the U.S. threatened India on the nuclear tests, it was temporarily deferred but Prime Minister Vajpayee ultimately went ahead in 1998 in any case. I can quote other instances when external powers try to exercise pressure where India’s core national interests are involved, and it results in India doing exactly the opposite of what they wanted.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"><b>In the book, you write India should be prepared for a period of “armed coexistence” with China, but that a conflict is unlikely. How do you view this next phase of relations?</b></img></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg">
+									The modus vivendi that was worked out between India and China after 1991, that framework has collapsed with the tragic incident in Galwan and Chinese military coercion in 2020. The basic idea behind that, which was that we can peacefully coexist on the boundary and we need not heavily arm the boundary because neither side is going to disturb peace and tranquillity, that understanding has collapsed.
+				</img></p><p>
+										The situation we are in since 2020 is a heavily armed and defended border region on both sides, and that is what I call armed coexistence. This armed coexistence is likely to persist simply because I do not believe either side entirely trusts the other’s intentions or motives. Certainly on the Indian side there are concerns that China is seeking to use situations where India is in difficulties, such as the COVID crisis in 2020 and perhaps subsequent difficult situations, in order to coerce India and to achieve certain political objectives vis-à-vis India.
+				</p><p>
+										Until a new framework for that relationship is built — and that will take time, mutual understanding, efforts by both sides, and a mutual acceptance that both need to coexist at least in some kind of a stable and predictable framework — the situation of armed coexistence will persist. Along with that will persist the view on the Chinese side that continual pressure on the LAC through grey zone military coercion, that is use of military force short of conflict, is the way to keep India in a neutral position, on the defensive, and on the back foot.
+				</p><p>
+										We are going to have a prolonged period of a situation which is very tense along the LAC despite whatever agreements we may reach, because China sees it as a useful tool or method to keep India engaged and distracted. Why do I say that it’s unlikely there will be a very large-scale conflict between the two? I do qualify in my book that at the end of it all, we can never rule that out simply because, as I said, China never looks at India in a purely bilateral context, but in the context of global affairs. If it sees a great opportunity to take action against India, it might do so. But I would still be wary of predicting a large-scale conflict for a few reasons. One, it’s easy for China to maintain pressure on India through methods such as grey zone coercion or through proxies like Pakistan, rather than engaging in a conflict which could be debilitating financially, economically, diplomatically, and politically.
+				</p><p>
+										Secondly, a full-scale kinetic war is usually launched by China after a great deal of consideration and only when they’re sure of a decisive victory. China has to win decisively to win, we only have to not lose to win. So long as we don’t lose, we are going to win. And the India of 2026 is not the India of 1962. I don’t think China will be able to say they can have a decisive victory over India. A  less than decisive victory means they will suffer reputational costs.
+				</p><p>
+										Thirdly, they see other levers now, in addition to grey zone coercion on the border, as a means of keeping India in control. We are increasingly seeing the use of economic sanctions. We are also seeing the possibility of the U.S. and China now virtually trying to come to some kind of global understanding which might allow both of them the flexibility to act more freely. I’m not using the word G2 because that’s not being used by China, but President Trump has used it. If you look at the recent summit, the repeated references to the Thucydides Trap and major country relations point towards China not being averse to the idea of the G2. China thinks it has other leavers now. For a variety of reasons, which I detail in my book, I don’t think that China is really looking at large-scale conflict with India until or unless certain major changes take place in our posture or in our behaviour.
+				</p><p>
+										But what we can fully expect is continued tension, continued application of military coercion in a grey zone format along the LAC, and increasingly the use of proxies — Pakistan as well as perhaps other South Asian countries should China be able to make inroads there — to keep us in check. The objective is very simple: to keep India neutral, and to prevent India from tilting towards any power which is an existential threat to China, which, today, is the U.S.
+				</p></div></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- May 21, 2026 05:44 pm IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71006006" data-title="India sees relations with China in a bilateral context, Beijing has never seen it that way: Vijay Gokhale" data-url="https://www.thehindu.com/news/national/india-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way/article71006006.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; copytext('https://www.thehindu.com/news/national/india-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way/article71006006.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece&amp;t=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale')">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece&amp;text=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale')">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece&amp;text=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale')">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece&amp;title=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://api.whatsapp.com//send?text=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale%20-%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-9249e4d2beed824471cd51ca-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way%2Farticle71006006.ece&amp;title=India%20sees%20relations%20with%20China%20in%20a%20bilateral%20context%2C%20Beijing%20has%20never%20seen%20it%20that%20way%3A%20Vijay%20Gokhale')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71006006" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/india-sees-relations-with-china-in-a-bilateral-context-beijing-has-never-seen-it-that-way/article71006006.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-21 15:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
