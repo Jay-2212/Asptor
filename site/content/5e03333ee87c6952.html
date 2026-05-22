@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Finding it difficult to maximise credit card benefits? Here’s why, and what lies ahead | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Finding it difficult to maximise credit card benefits? Here’s why, and what lies ahead</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/credit-cards.jpg?w=1600" alt="Finding it difficult to maximise credit card benefits? Here’s why, and what lies ahead">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Rewards, cashbacks, and other benefits have been curtailed across issuers." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/credit-cards.jpg?w=1600" width="650"/><span class="ie-custom-caption">Rewards, cashbacks, and other benefits have been curtailed across issuers. (Pixabay)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The ‘r/CreditCardsIndia’ community on the social media platform Reddit has more than 3.5 lakh members. And among all the chatter about CIBIL scores and questions about which credit card may be best for any given level of spending and income, one subject has dominated message boards in recent months: how maximising reward points, cashbacks, air miles, and other benefits has become increasingly difficult.</p>
+<p>Earlier this month, IDFC First Bank capped the validity of reward points earned on some of its credit cards to two years, among other changes, joining a list of banks that have taken steps in recent months that, in the eyes of the consumers, result in the card being ‘devalued’.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Perhaps the devaluation that caused the greatest furore this year was that of the popular Airtel Axis Bank card, which has a pre-tax annual fee of Rs 499. After April 12, among myriad other changes, it went from giving 25% cashback – capped at Rs 250 per month – on Airtel bills paid via the telecom provider’s app to twice the ‘base cashback’ or 1% of what is spent on regular transactions. So, to continue getting Rs 250 cashback every month on Airtel bills, one would have to spend Rs 12,500 on other eligible transactions.</p>
+<p>“This complicates the entire cashback system so much,” one Redditor commented, clearly frustrated. “You have to micromanage your spending + make this your primary card for what? Another ~50-100 rupees savings a month? This is so stupid, gonna have to close this card, it was good while it lasted.”</p>
+<p><strong>Industry-wide devaluation</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>Rewards, cashbacks, and other benefits have been curtailed across issuers. Take American Express’ Platinum Travel, which sets a user back Rs 5,000 every year. Before March 9, users could get up to 40,000 reward points and a Taj voucher for Rs 10,000 by spending Rs 4 lakh in a year; now, they need to spend Rs 7 lakh.</p>
+<p>Then there is <a class="" href="https://www.financialexpress.com/market/hdfc-bank-ltd-share-price/" rel="noopener" target="_blank">HDFC Bank</a>’s Infinia, which has an annual fee of Rs 12,500. Starting April, those who already hold the card must spend at least Rs 18 lakh in 2026-27 or have a ‘Total Relationship Value’ (TRV) of Rs 50 lakh with the bank to retain the card.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/trump-credit-card-cap-india-10465957/">Trump’s 10% credit card rate cap proposal raises hopes, and questions for India</a></span></div>
+<p>Even the <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> SBI Cashback card, with an annual fee of Rs 999 that is waived on annual spending of more than Rs 2 lakh, starting April, capped its 5% monthly cashback on online spends at Rs 2,000 – although an additional Rs 2,000 cashback at 1% rate is available on offline spends – as against Rs 5,000 earlier. Several cards have benefits such as complimentary airport lounge access, usually limited to one or two per quarter, now conditional on a minimum amount being spent the previous month.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>According to Aakash Rachh, CFA and Qualified Financial Advisor at personal finance firm 1 Finance, “The days of a standalone card competing for rewards alone are ending”. As for the current wave of devaluations, recourse is limited for users as reward programmes and benefits are discretionary, and only a change in charges requires at least one month’s notice.</p>
+<p>“The practical workaround most users have adopted is to track their card anniversary dates closely and close or downgrade before the renewal fee hits, rather than seek refunds after the fact. The only formal routes available are a written complaint to the bank, escalation to the RBI Ombudsman if unresolved within 30 days, or filing under the Consumer Protection Act, 2019,” he said.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><strong>The gamers</strong></p>
+<p>The result of the devaluations is that what previously was, for a small section of card users, a fun and rather rewarding game in trying to see which card could fetch them the most benefits, has become a wholesale review of all the cards they hold to see if they are worth the annual fee charged.</p>
+<p>But just how large is this group of credit card gamers?</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>According to a survey conducted last year by SaveSage, a credit card rewards management app, only 5% of users do their own research before picking a card, 4% regularly track their use of reward points, and just 3% “strategically optimise every spend”. With 11.86 crore credit cards issued at the end of March, 3% comes to about 35 lakhs, roughly 10 times the membership of the r/CreditCardsIndia subreddit.</p>
+<p><strong>‘Value over volume’</strong></p>
+<p>Three things “broke at once” for banks and card issuers, according to Rachh of 1 Finance. One, airport lounges got more expensive, with the country’s largest aggregator, DreamFolks, ending domestic operations in the second half of 2025 as airport operators began to directly provide access to lounges. This forced banks into direct partnerships at likely higher costs.</p>
+<p>On the banking side, two issues cropped up: higher credit card defaults and the Reserve Bank of India (RBI), in November 2023, ordering banks to set aside more capital for credit card loans amid worries that personal loans, especially the unsecured variety, were growing too rapidly. As this directly squeezes profits, “generous reward programs are the first cost to be cut”.</p>
+<span class="custom-caption"><img alt="The growth of credit cards in India." class="lazyloading wp-image-10702429 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Credit-card-chart.png" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Credit-card-chart.png 1383w, https://indianexpress.com/wp-content/uploads/2026/05/Credit-card-chart.png?resize=450,264 450w, https://indianexpress.com/wp-content/uploads/2026/05/Credit-card-chart.png?resize=600,351 600w, https://indianexpress.com/wp-content/uploads/2026/05/Credit-card-chart.png?resize=768,450 768w, https://indianexpress.com/wp-content/uploads/2026/05/Credit-card-chart.png?resize=692,405 692w" height="810" sizes="(max-width: 1383px) 100vw, 1383px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1383"> The growth of credit cards in India.</img></span>
+<p>“When the regulator forces banks to hold significantly more capital against every rupee of outstanding credit card balance, banks start asking a different question: is this customer worth it across the entire relationship, not just the card?” Rachh said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>High-value customers are, indeed, what card issuers want. Take SBI Card, for instance, which accounts for 19% of all issued credit cards and payments by them at point-of-sale terminals and online. In January-March, it issued 9.17 lakhs cards and expects to add a similar number in the current quarter with a focus on “high-value, good quality customers, which ultimately add value to the overall financials of the company”, Salila Pande, Managing Director and Chief Executive Officer of SBI Card, said in April.</p>
+<p>The shift to a “value over volume strategy”, according to Santosh Agarwal, Chief Executive Officer at Paisabazaar, has led to credit cards being issued at a slower pace now than immediately after the Covid pandemic, when banks expanded aggressively, including in Tier 2 and Tier 3 cities.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/indian-government-bond-yields-rbi-rate-hike-bets-10701724/">As war pushes up bond yields, why this raises spectre of RBI rate hike amid rupee’s crash</a></span></div>
+<p>According to RBI data, while the number of credit cards in the country has increased almost every month post the lull seen after the global financial crisis of 2008 to stand at 11.86 crore at the end of 2025-26, the year-on-year growth rate has declined sharply from 21% at the end of 2023 to just 8% now. The highest number of cards added in a month was exactly three years ago, in March 2023: 19.37 lakh.</p>
+<p><strong>Revolvers being holstered</strong></p>
+<p>Profits from the credit cards segment are also dwindling due to improved repayment behaviour.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Interest rates on credit cards, some of the highest on any product, are usually north of 25% per year. When someone does not pay the full amount due, interest starts piling up on the unpaid balance. People who pay interest on the balance unpaid amount are called ‘revolvers’ because the credit card facility is akin to a revolving credit line: you borrow, pay back, and borrow again.</p>
+<p><a href="https://indianexpress.com/article/business/banking-and-finance/debt-on-plastic-credit-card-delinquencies-surge-44-to-rs-33886-crore-amid-rising-consumer-spending-10153605/"><strong>The high rate of interest</strong></a> makes credit cards an attractive business proposition for banks, which is why they are willing to stomach initial losses as they expand aggressively in the hope that it bears fruit later. However, post Covid, the share of revolvers has fallen, drying up profits for lenders.</p>
+<p>“…if you look at over the last few years, the decline in the level of revolvers has impacted profitability, but it still remains a very profitable business,” Anindya Banerjee, ICICI Bank’s Group Chief Financial Officer, said last month.</p>
+<p>Just how much has this revolver segment fallen? For SBI Card, the share of revolvers in receivables stood at 22% in January-March, down from 24% in the first three months of 2025 and 40% in January-March 2020. And it’s expected to keep trending down.</p>
+<p><strong>Future play</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>So, what does the future hold for the credit card players? Has the Indian market reached a saturation point? Not even close, Agarwal of Paisabazaar said, although the days of “super-natural growth” of a few years ago may be behind us.</p>
+<p>“Going forward, we might see the credit card landscape evolving into two parts – premium cards for niche segments with high annual fees, tight eligibility but strong value proposition, and standard cards for the larger sections with decent but limited value. The strongest, more curated benefits will be reserved for customers who can bring higher lifetime value for the banks,” he said.</p>
+<p>Rachh of 1 Finance is in agreement, pointing out that credit card penetration in India is only at 5-6% of the population, compared to 82% in the US and 78% for Japan, with 65% of card usage today concentrated in Tier 1 cities.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10702410"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/siddharth-upasani/">
+<figure>
+<img alt="Siddharth Upasani" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2025/06/Siddharth-Upasani-.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/siddharth-upasani/"><span></span>Siddharth Upasani</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10062279"></div><div class="follow_author_title" data-id="Siddharth Upasani"></div><div class="follow_author_slug" data-id="siddharth-upasani"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/SiddharthUbiWan">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Siddharth Upasani is a Deputy Associate Editor with The Indian Express. He reports primarily on data and the economy, looking for trends and changes in the former which paint a picture of the latter. Before The Indian Express, he worked at Moneycontrol and financial newswire Informist (previously called Cogencis). Outside of work, sports, fantasy football, and graphic novels keep him busy.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/siddharth-upasani/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-second, twenty twenty-six, at fifty-eight minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/credit-card/" href="https://indianexpress.com/about/credit-card/">credit card</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/rbi/" href="https://indianexpress.com/about/rbi/">RBI</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/credit-card-points-benefits-india-reduction-outlook-10702410/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-22 07:45 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
