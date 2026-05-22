@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>ExplainSpeaking: To defend, or not to defend (the rupee), that is the question | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>ExplainSpeaking: To defend, or not to defend (the rupee), that is the question</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/rupee_e62779.jpg?w=1600" alt="ExplainSpeaking: To defend, or not to defend (the rupee), that is the question">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="The worsening of the rupee's exchange rate is reflective of a weakness of the Indian economy relative to the rest of the world." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/rupee_e62779.jpg?w=1600" width="650"/><span class="ie-custom-caption">The worsening of the rupee's exchange rate is reflective of a weakness of the Indian economy relative to the rest of the world. (FIle photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em>Dear Readers,</em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Over the past few weeks, the sharp slide in the rupee’s exchange rate has stroked a long-pending debate about the true state of the Indian economy. Be that as it may, the urgent policy decision before the government and the Reserve Bank of India (RBI) is whether to prevent the rupee from further sliding against the US dollar or to let it fall and find its true level.</p>
+<p>For the uninitiated, the rupee’s exchange rate against the US dollar basically changes depending on the relative demand for the two currencies in the foreign exchange (forex) markets. If Indians demand more dollars (either to buy foreign goods or to invest in other countries) than the rupees demanded by foreigners (either to buy Indian goods or to invest in India) then the relative value (exchange rate) moves in favour of the dollar; that is, rupee’s exchange rate worsens, as indeed it has done in the recent past. If foreigners demand more rupees than Indians demand dollars, then the rupee’s exchange rate improves.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>It goes without saying then that the worsening of the rupee’s exchange rate is reflective of a weakness of the Indian economy relative to the rest of the world.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Seen from this lens, it makes sense to focus on bolstering the domestic economy instead of wasting time trying to artificially improve the rupee’s exchange rate.</p>
+<h2><b>How can the rupee’s exchange rate be artificially improved?</b></h2>
+<p>Indians can’t hold dollars with them for regular use within the country. As such, even if they get the dollars on their way back from foreign visits, all dollars flow back to the RBI.</p>
+<p>This stash of dollars with the RBI can be employed by the central bank to artificially boost the rupee’s exchange rate when needed.</p>
+<p>Here’s how.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Imagine a scenario where US investors decide to pull out billions of dollars from their Indian investments with a view to either investing the money back in US firms or in firms of some other countries, say, South Korea.</p>
+<p>Suppose they sell their stake in Indian companies, take the rupees they got as a result to the forex market to get dollars; after all they need dollars to transact outside India.</p>
+<p>This creates a sudden increase in the supply of rupees (without any new demand for those rupees) and an increase in the demand for dollars (without any new supply for dollars).</p>
+<p>The only way to resolve this situation is if the rupee <a href="https://indianexpress.com/article/opinion/editorials/the-steady-fall-of-the-rupee-points-to-challenges-ahead-10674750/"><strong>weakens</strong></a> against the dollar — in other words, if every additional dollar can be bought by exchanging more rupees than before.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>But the RBI can save the rupee’s exchange rate from falling by selling the dollars it has in the forex market. If it does so then the increased demand of dollars will be countered by an increased supply of dollars and the increased supply of rupees will be countered by an increased demand for rupees (by the RBI in return for the dollars it is selling).</p>
+<p>This is referred to as the RBI defending the rupee in the forex market.</p>
+<p><b>How does RBI decide when to defend?</b></p>
+<p>Even though the rupee-dollar exchange rate has become a highly politicised and emotive issue especially since the sharp fall in rupee’s exchange rate during 2012 and 2013, the RBI does not target any specific exchange rate.</p>
+<p>The official policy line from the RBI has always been that it does not target a level (exchange rate) of rupee. Rather, the RBI is only concerned that the movement in rupee’s exchange rate should be orderly regardless of the direction. In other words, the RBI would intervene in the forex market if it thinks the rupee is falling (or rising against  any currency) too fast.</p>
+<p>This makes sense.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>RBI is charged with maintaining financial stability in the economy. Imagine how difficult it would be for you as a consumer (say a student planning their graduate studies in the US) or a trader (whether an exporter or importer) if the rupee’s exchange rate changed dramatically everyday. It would be similar to prices of different goods and services fluctuating wildly on a daily basis; if this happens a consumer would not know the price of a car or a toothpaste on any given day, and it would be difficult for economic activity to happen.</p>
+<span class="custom-caption"><img alt="India's forex and exchange rate movements" class="lazyloading size-medium wp-image-10702613" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png?resize=504,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png 1240w, https://indianexpress.com/wp-content/uploads/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png?resize=378,450 378w, https://indianexpress.com/wp-content/uploads/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png?resize=504,600 504w, https://indianexpress.com/wp-content/uploads/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png?resize=768,914 768w, https://indianexpress.com/wp-content/uploads/2026/05/ExplainSpeaking_snapshot-of-india-s-forex-and-exchange-rate-movements-.png?resize=340,405 340w" height="1476" sizes="(max-width: 1240px) 100vw, 1240px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1240"> <em>India’s forex and exchange rate movements</em></img></span>
+<h3><b>Does such defence work?</b></h3>
+<p>Yes, and no.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/rupee-record-low-vs-dollar-2026-fragile-five-comparison-10665381/">GDP: Is the Indian rupee back to the ‘fragile five’ days of 2013?</a></span></div>
+<p>In the short term, it can work. As indeed was the case in the past few years (<em>see chart</em>) when RBI used its foreign currency reserves to soften the fall of rupee’s exchange rate. The foreign currency reserves (the main constituent of India’s total forex) have stayed roughly at the same level over the past six years as the RBI deployed more and more dollars from its kitty to defend the rupee and make its fall more orderly. The year 2022-23 was a particular example.</p>
+<p>However, there is a flip side as well, as a story in <em>The Indian Express</em> recently showed that Indian policymakers are reflecting on the “counter effects of the artificial stabilisation of the rupee that preceded the slide that began in 2025”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>In other words, over the medium term, the RBI’s decision to sell all that forex (dollars) to defend the rupee is coming a cropper because eventually the rupee has fallen sharply.</p>
+<h2><b>Why can’t the RBI defend the rupee in the same way as it did earlier?</b></h2>
+<p>There are two reasons.</p>
+<p>Firstly, at any point in time, policymakers like to have around 10 months of import cover — a fancy way of describing a situation where India has enough dollars so that Indians can continue importing whatever goods it imports for a period of at least 10 months. This includes people wanting dollars to buy machines, crude oil etc.</p>
+<p>In other words, the RBI’s defence of the rupee is not just about the RBI’s willingness to defend but also its ability to defend. After RBI hits a certain level of forex reserve — say like going below 10 months of import cover — it has to take a pause and <a href="https://indianexpress.com/article/explained/explained-economics/how-the-rupees-fall-is-real-this-time-10395078/"><strong>reconsider</strong></a>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Secondly, and this is a less appreciated aspect and perhaps the biggest constraint that India and RBI face when it comes to defending the rupee: The quality of India’s forex.</p>
+<p>Most of the forex with RBI comes to India in the form of investments into the Indian economy, and not as money earned by selling more goods to the rest of the world. As we have seen in the past couple of years, such money can be pulled out of India if investors take a dim view of India’s growth prospects and or if they like the prospects of some other country better.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/rupee-record-low-vs-dollar-2026-fragile-five-comparison-10665381/">GDP: Is the Indian rupee back to the ‘fragile five’ days of 2013?</a></span></div>
+<p>Another way to look at this situation is that the forex that RBI holds is more a liability than an asset. For instance, China earns its forex by selling more goods to the rest of the world; this is called having a trade surplus. The dollars it gets in return are an asset and cannot be pulled out by any investor. But in India, thanks to our continuing weakness in trade, India spends more dollars buying imports than it earns selling its exports.</p>
+<h2><b>Why not let the rupee fall and find its level?</b></h2>
+<p>Mainstream economists regularly advocate this remedy instead of the RBI going overboard defending the rupee. They argue that a weaker rupee will help India’s exporters, thus boosting exports. Similarly, as the rupee’s exchange rate falls, all imports will become costlier and, as a result, their demand will also fall. The net result will be an elimination of the trade deficit (the gap between exports and imports).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Moreover, if the RBI allows the rupee’s exchange rate to fall then neither RBI would have to draw down India’s forex reserves nor would the prime minister be forced to ask Indians to undertake austerity measures such as voluntarily cutting back on imports of gold, crude and edible oils, etc.</p>
+<p>However, while this recommendation (of letting rupee exchange rate fall) makes sense on paper, in India’s case there are many angularities that suggest that letting the rupee find its own level could end up either not having any impact or, in the worst case scenario, exacerbate the slide in rupee’s exchange rate.</p>
+<p>Here are some reasons why letting the rupee slide argument may not actually work.</p>
+<p>1&amp;<a class="" href="https://indianexpress.com/about/gujarat-titans/" rel="noamphtml">gt</a>; A large part of India’s exports — some analysts peg it as high as 40% of the total — are “re-exports”. In other words, these exports are essentially based on imported goods. As such, a fall in the rupee’s exchange rate makes the imports costlier for Indians just as they make the exports cheaper for the foreigners. In other words, the effect cancels out.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>2&gt;There is another reason why a weaker rupee may not change India’s trade balance (record of exports and imports): In many export goods, India is a price-taker and not a price setter. Take, for example, most textile goods. India competes fiercely with other countries such as Bangladesh. India cannot set the price of their goods lest they be undercut by their Bangladeshi counterparts.</p>
+<p>In such a scenario the foreign firms buying goods from India can point to the fact that the Indian exporter is anyway benefiting from rupee depreciation, and as such the Indian exporter should lower the product’s price in dollar terms.</p>
+<p>Imagine an Indian exporter selling a t-shirt for $1 when one dollar was worth Rs 50. Next season the exchange rate falls and becomes Rs 100 to a dollar. In such a case the foreign buyer will likely force the Indian exporter to reduce the price to say $0.6 for a t-shirt, since this way the Indian exporter would still earn Rs 10 more than what he was earning before the exchange rate fell. The end result is that a falling rupee may not have boosted exports and export-earnings for Indians, as the argument goes in economic textbooks.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>3&gt;  There is a good chance that letting the rupee find its level, especially when it has just lost a lot of value, could actually further push down the rupee’s exchange rate. In other words, depreciation can beget depreciation.</p>
+<p>If an Indian importer looks at the rupee fast losing its exchange rate, they are likely to buy more and more dollars from the forex market because they expect the rupee to weaken in the coming weeks and months. But the more they buy dollars the more the rupee weakens further.</p>
+<p>An exactly different thing happens to Indian exporters albeit with the same result of exacerbating the rupee’s fall. If the rupee has been falling, an exporter may defer accepting that payment because $100 a couple of months down the line will fetch more rupees. This dries up the supply of dollars that were otherwise scheduled to come into the market, thus further stoking the price of dollars.</p>
+<p>4&gt; Something similar happens on the capital account side — that is, with reference to the movement of money for investment purposes, letting the rupee fall may disincentivise investments.</p>
+<p>Suppose, the Indian stock markets give 10% returns in a particular year but during the year the rupee loses 5% of its exchange rate.</p>
+<p>This means an American investing in India would get only about 5% return in dollar terms. This would disincentivise future investments, especially if the foreign investors expect the rupee to slide further; in such a case they may hold back fresh investments.</p>
+<p>But this, in turn, will further show up as a deficit in India’s overall Balance of Payment and will further push down rupee’s exchange rate. Thus the vicious cycle becomes deeply embedded.</p>
+<p>As can be understood from these arguments, the strategy to let the rupee find its level could end up worsening the situation instead of stabilising it.</p>
+<p>As explained, both the strategies — defending the rupee versus letting it find its level — can work or fail depending on the circumstances.</p>
+<p>What do you think should the Indian policymakers do? Share your views and queries at <a class="customAjaxMailExtSwitchTo" data-mode_email="mode=mail_to_individual&amp;email=udit.misra@expressindia.com" data-type="@Compose">udit.misra@expressindia.com</a></p>
+<p><em>Take care,</em></p>
+<p><em>Udit</em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10702550"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-second, twenty twenty-six, at twenty-three minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explainspeaking/" href="https://indianexpress.com/about/explainspeaking/">EXPLAINSPEAKING</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-to-defend-or-not-to-defend-the-rupee-that-is-the-question-10702550/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-22 10:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
