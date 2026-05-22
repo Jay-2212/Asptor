@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>As Trump rating sinks, why Indian markets’ hopes are pinned on US midterm elections | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>As Trump rating sinks, why Indian markets’ hopes are pinned on US midterm elections</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/TMD-DEL.jpg?w=1600" alt="As Trump rating sinks, why Indian markets’ hopes are pinned on US midterm elections">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="President Donald J. Trump and Indian Prime Minister (source: Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/TMD-DEL.jpg?w=1600" width="650"/><span class="ie-custom-caption">President Donald J. Trump and Indian Prime Minister (source: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On Monday, the New York Times/Siena poll of registered American voters showed that Donald Trump’s approval rating had slumped to 37%, the lowest in his second term as President, with nearly two-thirds of voters saying his decision to go to war with Iran was wrong. More importantly, 69% of voters disapproved of how the Republican is handling the cost of living. And the Indian market’s hopes are pinned on Trump being sufficiently concerned with his ratings to focus on home.</p>
+<p>“We are positioned for the war to end,” Seshadri Sen, Head of Research &amp; Strategist at Emkay Global Financial Services, said on Tuesday. Sen, who has a target of 29,000 for the Nifty by the end of 2026-27 – 23% higher than Tuesday’s close of 23,618 – assumes the Strait of Hormuz will reopen and the energy markets will normalise in a month or <a href="https://indianexpress.com/article/business/market/rupee-market-stocks-gift-nifty-cautious-open-10698749/"><strong>two</strong></a>.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>“As we approach the midterms, it will be unsustainable for the Republicans and the US government to have pump prices ruling where they are and political pressure will start to get very intense on the US administration to reach a conclusion to the war,” Sen said, admitting that Emkay’s views “may sound a little bit out of sync with today’s reality, but we are looking ahead”.</p>
+<span class="custom-caption"><img alt="Source: Emkay Global Financial Services" class="lazyloading size-medium wp-image-10698928" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png?resize=600,304" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png 1102w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png?resize=450,228 450w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png?resize=600,304 600w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png?resize=768,389 768w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-One-Source-Emkay-Global-Financial-Services.png?resize=728,369 728w" height="558" sizes="(max-width: 1102px) 100vw, 1102px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1102"> Source: Emkay Global Financial Services</img></span>
+<p>Of course, there is a negative scenario which exists, albeit with a low probability. Should the war go on for three more months, then “all bets are off”: interest rates will rise, consumption will slow, input costs will rise, company margins will get affected, and Nifty could fall to 21,000.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>Pain in the USA</strong></h2>
+<p>Sen’s views echo those of some policymakers, with Ram Singh, one of the six members on the Reserve Bank of India’s Monetary Policy Committee, telling The Indian Express earlier this month that a prolonged West Asia war is not in the interest of any country, including the US, where retail petrol prices, airfares, and government bond yields have surged.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Graphs, Data, and Perspectives</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/rupee-record-low-vs-dollar-2026-fragile-five-comparison-10665381/">Is the Indian rupee back to the ‘fragile five’ days of 2013?</a></span></div>
+<p>Early November, the entire House of Representatives and a third of the Senate will head for elections. While Democrats need to gain three seats in the 435-seat House on a net basis to control it, they need four net wins in the 100-member Senate. And higher energy prices are burning a rather big hole in the pockets of US consumers – according to a new study by Brown University, each household has on average spent more than $300 on petrol and diesel since February 28. This amounts to more than $40 billion for the country as a whole.</p>
+<p>After surging 21.2% sequentially in March, gasoline prices in the US were up 5.4% month-on-month in April, helping propel consumer price inflation to a three-year high of 3.8%, which is seen crossing 4% in May. But it is not just prices that will be on voters’ minds.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“Real wage growth is at best flat, hiring is slow, the labour force is shrinking and the University of Michigan consumer sentiment survey has recently reported the lowest consumer confidence on record in the survey’s 74-year history,” ANZ economists Brian Martin and Bansi Madhavani said on Monday. “Firms also reported slowing sales growth while plans to increase compensation in coming months are declining. For many consumers and businesses, the conflict in the Middle East is offsetting the benefits of the One Big Beautiful Bill Act.”</p>
+<h3><strong>Foreign outflows headache</strong></h3>
+<p>The West Asia energy shock has precipitated a crisis in India: with foreign investors exiting Indian financial markets in droves, the rupee has tumbled to a fresh record low almost every week. On Tuesday, the rupee slumped for the eighth day in a row to end at 96.53 per dollar and is down 5.8% since the war began. The Nifty, meanwhile, has fallen 6.2% since February 27. Over the same period, Foreign Portfolio Investors (FPIs) have pulled out $21.6 billion on a net basis from the Indian stock markets. Government bond yields have also jumped, with the war straining the Centre’s finances.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>“India’s bond market has begun pricing in possible RBI rate hikes later this year, and foreign inflows into Indian bonds have slowed sharply – the 5-day moving average of net buying fell to just $2.1 million against a 20-day average of $47.2 million,” Michael Wan, Senior Currency Analyst at Japan’s MUFG Bank, said on Tuesday.</p>
+<p><strong>Earnings turnaround?</strong></p>
+<p>In terms of sectors, the concerns are deepest on the tech front. For long one of India’s pillars of strength, the country’s IT companies have been left shellshocked over the last few months by the advances made by AI models, who are more than threatening to take away future business. Those tech companies that do adopt AI in their own solutions are seeing their deal values being hit by its efficiencies, popularly called AI deflation. Sen, however, thinks the market is “over discounting” the AI risk and recent selling is “overdone”; while the challenge is real, “it is not existential”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>“The relevance of IT services companies will not go away. The notion that all clients will try to vibe code their way through to the next phase of IT adoption is, I think, a little out of touch with reality,” Sen said.</p>
+<span class="custom-caption"><img alt="Share of sectors displaying more than 25% EPS growth (source: Emkay Financial Services)" class="lazyloading wp-image-10698931 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png?resize=600,301" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png 1186w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png?resize=450,225 450w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png?resize=600,301 600w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png?resize=768,385 768w, https://indianexpress.com/wp-content/uploads/2026/05/Chart-Two-Source-Emkay-Global-Financial-Services.png?resize=728,365 728w" height="594" sizes="(max-width: 1186px) 100vw, 1186px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1186"> Share of sectors displaying more than 25% EPS growth (source: Emkay Financial Services)</img></span>
+<p>Beyond IT, the strategist sees the latest financial results for the first quarter of 2026 as “fairly good”, although the real stress from the war will only get captured in the numbers for the second quarter that ends on June 30. Crucially, Fast Moving Consumer Goods companies have surprised on the upside by reporting strong volume growth in January-March. “There is definitely a strong momentum on consumption and let’s see what happens to that once the war settles down.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10698907"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/siddharth-upasani/">
+<figure>
+<img alt="Siddharth Upasani" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2025/06/Siddharth-Upasani-.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/siddharth-upasani/"><span></span>Siddharth Upasani</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10062279"></div><div class="follow_author_title" data-id="Siddharth Upasani"></div><div class="follow_author_slug" data-id="siddharth-upasani"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/SiddharthUbiWan">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Siddharth Upasani is a Deputy Associate Editor with The Indian Express. He reports primarily on data and the economy, looking for trends and changes in the former which paint a picture of the latter. Before The Indian Express, he worked at Moneycontrol and financial newswire Informist (previously called Cogencis). Outside of work, sports, fantasy football, and graphic novels keep him busy.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/siddharth-upasani/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twentieth, twenty twenty-six, at twenty-two minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/why-trump-linked-to-india-markets-10698907/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-22 02:56 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
