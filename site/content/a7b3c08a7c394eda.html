@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>International Booker Prize at 10: How it became the face of literature in translation | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>International Booker Prize at 10: How it became the face of literature in translation</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Taiwan-Travelogues-Booker.jpg?w=1600" alt="International Booker Prize at 10: How it became the face of literature in translation">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="International Booker Prize" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Taiwan-Travelogues-Booker.jpg?w=1600" width="650"/><span class="ie-custom-caption">Yáng Shuāng-zǐ and Lin King, author and translator of Taiwan Travelogue, which won the International Booker Prize 2026. (Booker Prize)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>“…translation allows writing to transcend the limits of time and space. I believe in literature’s power because, in the life of the mind, literature has never ceded ground nor given up on the dialogue between people,” Yáng Shuāng-zǐ, one half of the winner of this year’s International Booker Prize for her novel, <em>Taiwan Travelogue</em>, translated into English from Mandarin Chinese by Lin King, said at the award ceremony at Tate Modern in London on May 19. What the 41-year-old <a href="https://indianexpress.com/article/books-and-literature/yang-shuang-z-taiwan-travelogue-japanese-memoir-international-booker-10699843/"><strong>writer was articulating</strong></a> was not merely literature’s ability to forge connections, but also the fact that to be monolingual is to hear, at best, half the conversation the world is having with itself.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>One of the world’s most influential awards for fiction in English translation, the International Booker Prize, that marks a decade in its current form, has worked to reward the faith — and courage — of writers who write against the grain of the global literary market, of translators who carry their vision across the impossible distance of languages, and of readers who refuse to be circumscribed by familiarity and comfort.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>The long road to reinvention </strong></p>
+<p>Launched first in 2005 as the Man Booker International Prize, it was a biennial honour awarded to a writer for their entire body of work. Its early recipients, Ismail Kadare, Chinua Achebe, Alice Munro, Philip Roth and László Krasznahorkai, were already literary behemoths and the Prize only served to confirm their stature.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/books-and-literature/taiwan-travelogue-1930s-romance-2026-international-booker-prize-history-10698480/">‘Nuanced, layered, sumptuous’: Taiwan Travelogue, a 1930s romance, makes International Booker Prize history</a></span></div>
+<p>When the original Booker Prize expanded its eligibility in 2015 to admit writers of any nationality writing in English and published in the UK — it was earlier open only to writers from the Commonwealth, Zimbabwe and Ireland — the International Prize, too, changed purpose. It committed for the first time to fiction that had crossed over from another language into English. It also became an annual award for a single work of fiction, written in any language other than English, but available in translation to English-speaking readers.</p>
+<p><strong>Why it matters </strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>This change made room for a long-overdue transformation: the £50,000 prize would be shared equally between author and translator. It acknowledged, formally, that translation is not a mechanical service but a creative act. The translator, for long the invisible figure in world literature, was finally given a seat at the table. Before that, their names would often be missing from the book jacket. The first winner under the new rules was Han Kang’s unsettling and luminous <em>The Vegetarian</em>, translated from Korean by Deborah Smith. In the decade since, the Prize has honoured works from Arabic, Dutch, Polish, Bulgarian, Kannada and more. Last year, Indian writer Banu Mushtaq and translator Deepa Bhasthi won the award for the collection of short stories, <em>Heart Lamp</em>. In 2022, Geetanjali Shree and Daisy Rockwell won for <em>Tomb of Sand</em>.</p>
+<p><strong>What does a decade of winners reveal? </strong></p>
+<p>The International Booker Prize has also worn politics on its sleeves, showing a preference for fiction that grapples with the weight of history — Olga Tokarczuk’s associative, nomadic <em>Flights</em> (2018); Jokha Alharthi’s <em>Celestial Bodies</em> (2019), a tapestry of Omani life across generations; David Diop’s <em>At Night All Blood Is Black</em> (2021), a harrowing meditation on colonial violence. It has championed formally daring, structurally restless books that refuse to give in to the demands of the market, that reflect some of the world’s anxieties — war, displacement, memory, gender and the weight of the past.</p>
+<p><strong>The Nobel connection </strong></p>
+<p>No measure of the Prize’s impact is more striking than the fact that four authors recognised by the International Booker Prize have gone on to receive the Nobel Prize for Literature: Kang, Tokarczuk. Annie Ernaux and Jon Fosse.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/quiet-power-revolutions-what-shines-in-banu-mushtaqs-heart-lamp-10020861/">Quiet power, revolutions: What shines in International Booker Prize winner Banu Mushtaq’s ‘Heart Lamp’</a></span></div>
+<h2>The global indie publishing boom</h2>
+<p>Since 2016, sales of translated fiction in the UK have doubled. Independent publishers, those risk-taking imprints guided by passion and a growing appetite for world literature, form the bulwark of the Prize by consistently drawing attention to fiction from languages and literary cultures often marginal to mainstream Anglophone publishing: In 2025, all six books on the shortlist were published by independent publishers. Sheffield-based And Other Stories, which published Taiwan Travelogue, had also published last year’s winner, <em>Heart Lamp</em>.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10704151"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/paromita-chakrabarti/">
+<figure>
+<img alt="Paromita Chakrabarti" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/Paromita-Chakrabarti.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/paromita-chakrabarti/"><span></span>Paromita Chakrabarti</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951676"></div><div class="follow_author_title" data-id="Paromita Chakrabarti"></div><div class="follow_author_slug" data-id="paromita-chakrabarti"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Paromita Chakrabarti is Senior Associate Editor at the  The Indian Express. She is a key member of the National Editorial and Opinion desk and writes on books and literature, gender discourse, workplace policies and contemporary socio-cultural trends.
+
+Professional Profile
+
+With a career spanning over 20 years, her work is characterized by a "deep culture" approach—examining how literature, gender, and social policy intersect with contemporary life.
+
+Specialization: Books and publishing, gender discourse (specifically workplace dynamics), and modern socio-cultural trends.
+
+Editorial Role: She curates the literary coverage for the paper, overseeing reviews, author profiles, and long-form features on global literary awards.
+
+Recent Notable Articles (Late 2025)
+
+Her recent writing highlights a blend of literary expertise and sharp social commentary:
+
+1. Literary Coverage &amp; Nobel/Booker Awards
+"2025 Nobel Prize in Literature | Hungarian master of apocalypse" (Oct 10, 2025): An in-depth analysis of László Krasznahorkai’s win, exploring his themes of despair and grace.
+
+"Everything you need to know about the Booker Prize 2025" (Nov 10, 2025): A comprehensive guide to the history and top contenders of the year.
+
+"Katie Kitamura's Audition turns life into a stage" (Nov 8, 2025): A review of the novel’s exploration of self-recognition and performance.
+
+2. Gender &amp; Workplace Policy
+"Karnataka’s menstrual leave policy: The problem isn’t periods. It’s that workplaces are built for men" (Oct 13, 2025): A viral opinion piece arguing that modern workplace patterns are calibrated to male biology, making women's rights feel like "concessions."
+
+"Best of Both Sides: For women’s cricket, it’s 1978, not 1983" (Nov 7, 2025): A piece on how the yardstick of men's cricket cannot accurately measure the revolution in the women's game.
+
+3. Social Trends &amp; Childhood Crisis
+"The kids are not alright: An unprecedented crisis is brewing in schools and homes" (Nov 23, 2025): Writing as the Opinions Editor, she analyzed how rising competition and digital overload are overwhelming children.
+
+4. Author Interviews &amp; Profiles
+"Fame is another kind of loneliness: Kiran Desai on her Booker-shortlisted novel" (Sept 23, 2025): An interview regarding The Loneliness of Sonia and Sunny.
+
+"Once you’ve had a rocky and unsafe childhood, you can’t trust safety: Arundhati Roy" (Aug 30, 2025): A profile on Roy’s recent reflections on personal and political violence.
+
+Signature Beats
+
+Gender Lens: She frequently critiques the "borrowed terms" on which women navigate pregnancy, menstruation, and caregiving in the corporate world.
+
+Book Reviews: Her reviews often draw parallels between literature and other media, such as comparing Richard Osman’s The Impossible Fortune to the series Only Murders in the Building (Oct 25, 2025).                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/paromita-chakrabarti/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-third, twenty twenty-six, at two minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/booker-prize/" href="https://indianexpress.com/about/booker-prize/">Booker prize</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-culture/" href="https://indianexpress.com/about/explained-culture/">Explained Culture</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-culture/international-booker-prize-10-years-translated-fiction-10704151/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-23 09:53 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
