@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | In Trump, Putin’s China trips, Xi deployed China’s age-old principles of diplomacy | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | In Trump, Putin’s China trips, Xi deployed China’s age-old principles of diplomacy</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/china-putin-xi-trump.jpg?w=1600" alt="Expert Explains | In Trump, Putin’s China trips, Xi deployed China’s age-old principles of diplomacy">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="China news: US President Donald Trump and Russian President Vladimir Putin in Beijing with Chinese President Xi Jinping this month." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/china-putin-xi-trump.jpg?w=1600" width="650"/><span class="ie-custom-caption">US President Donald Trump and Russian President Vladimir Putin in Beijing with Chinese President Xi Jinping this month. (AP)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In Chinese culture, the legendary Yellow Emperor (known as <em>Huangdi</em>) has been regarded as the mystical founder of imperial China.</p>
+<p>Seen as a supreme deity-like figure, he came to occupy civilizational space, associated with numerous inventions and philosophies. Among other things, he symbolised a hierarchical order in the world system, with authority radiating from the imperial centre. This influenced the concept of ‘tributary states and foreign emissaries’ who would have to accept the primacy of the “Middle Kingdom” (<em>Zhong Guo</em>), as China called itself.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Why does this matter to the world today? From the Han dynasty (206 BCE-220 CE) to the last imperial Qing dynasty (1644-1912), China has conducted foreign relations under the ‘Tributary System’. Inherent to it was the belief that China was culturally and materially superior to others, and states hoping to engage with it were to approach the emperor as his vassal and acknowledge him as the ruler of “all under heaven” (<em>Tianxia</em>). There are some indications that such belief systems are not entirely a thing of the past.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>Xi crafting historic traditions</strong></p>
+<p>While publicly, China may today renounce imperial analogies, especially in the Communist era post-1949, the optics of the diplomacy being crafted by Xi echo the past.</p><div id="taboola-mid-article-personalisation"></div>
+<p>From leaders in <strong><a class="" href="https://indianexpress.com/article/explained/explained-global/west-leaders-germany-merz-china-visit-reason-10549160/">Europe</a></strong> to the <a href="https://indianexpress.com/article/explained/explained-global/trump-us-china-visit-agenda-expectations-10685981/"><strong>Presidents of the United States</strong></a> and Russia heading to Beijing in recent months, there is a perception that Xi is reshaping international diplomacy through a refined version of the Tributary System. The analogy may appear exaggerated, but more often than not, geopolitics and diplomacy are driven as much by symbolism and perception as by legal framework.</p>
+<p>Beijing tends to project itself not only as a major power but as an indispensable pole, around which others must orient themselves. Carefully choreographed grand ceremonials, extensive protocols, subtle messaging, and Xi’s centrality diplomatic imagery reinforce the impression of a political court receiving visitors, rather than peers gathering for negotiations.</p>
+<p>US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> and his Russian counterpart <a class="" href="https://indianexpress.com/about/vladimir-putin/" rel="noamphtml">Vladimir Putin</a>’s visits to Beijing are revealing, coming against the backdrop of a global power shift. Europe, once firmly aligned under the transatlantic partnership, is recalibrating amid strategic uncertainty under Trump. Russia has become economically and politically dependent on China due to Western sanctions stemming from the Ukraine War.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Washington’s approach towards Beijing oscillates between competition and selective engagement. Even then, most commentators agreed that by placing itself on the same stage as the US and refusing to make major adjustments, China has emerged somewhat victorious in the Trump era.</p>
+<h2>Thucydides Trap</h2>
+<p>During Trump’s visit, Xi warned against falling into the Thucydides Trap, referring to historical patterns where a rivalry between a rising power and an established one drifts towards confrontation due to underlying fears of displacement. But the assumption was clear — China is on an upward trajectory.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-china-thucydides-trap-xi-trump-10694183/">US, China, and the Thucydides Trap: Why Xi used the term, what Trump’s response reveals</a></span></div>
+<p>Ancient Greek historian Thucydides theorised it when writing about the Peloponnesian Wars (431-404 BCE) between Athens and Sparta. Harvard University professor Graham Allison later discussed it in the modern context in his book,<em> Destined for War: Can America and China Escape Thucydides’s Trap</em> (2017).</p>
+<p>At the summit meeting, while Trump’s remarks were often flattering, referring to Xi as a ‘great leader’ whom he admired, Xi’s message was carefully calibrated. He stressed that China and the US should avoid strategic fatalism and not repeat the pattern of historical great power collisions. Beijing sought to frame relations with Washington as a managed competition rather than an uncontrolled confrontation.</p>
+<p><strong>Keeping friends close, enemies engaged</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Putin’s visit, which came days after Trump’s, included references to the “unyielding” strategic partnership between Moscow and Beijing, designed to counter Western influence. Xi’s possible calculation may have been two-fold — keep Russia close while ensuring that Moscow-Washington relations never normalise to a point where the latter can redirect full attention towards Beijing.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>Xi’s vocabulary rarely rests on just one historical analogy. While hosting Putin, he would have been mindful of another Chinese strategic concept: ‘Yi Yi Zhi Yi’, or using a barbarian to counter another barbarian. Simply, it suggests playing rivals against each other.</p>
+<p>So, can Xi use Putin as a strategic lever against Trump? China is known for strategic manoeuvring and capitalising on divisions or conflicts between secondary rivals. Although during their meeting, Putin quoted the Chinese proverb “A day apart feels like three autumns” to express how much he values his bond with Xi, he is not a pliable partner. Moreover, Putin harbours his own strategic ambitions.</p>
+<p>International relations experts often cite ‘Yi Yi Zhi Yi’ to explain the nuances of China’s current diplomacy, like cultivating partnerships with secondary powers in the Global South, West Asia and Eurasia to checkmate rivals in the Indo-Pacific. China also manipulates differences between the US, Japan and South Korea to its advantage.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>It engages in strategic diplomacy with European nations, including through trade partnerships, to deter them from fully aligning with Washington’s policies. Historically, China has relied on soft power alliances, leveraging trade and diplomatic manoeuvring to keep its adversaries preoccupied with inter-conflicts, thereby gaining an edge.</p>
+<p>Even though ancient Chinese strategies operated in a limited regional system, and the world today is crowded with middle powers, Xi’s diplomacy increasingly resembles classical Chinese strategic thought at a broad level, adapted to 21st-century geopolitics.</p>
+<p>It seeks to avoid encirclement by adversaries, exploit contradictions and shape the narrative without direct collision. The contest among major powers resembles the Chinese Chess board or <em>Xiang Qi</em>, with Xi resolute in ensuring that the others compete only on the squares of his choosing.</p>
+<p><strong><em>The author is a war veteran, served as Defence Attaché in China and North Korea, and is currently Professor, Strategic and International Relations at Lal Bahadur Shastri Institute of Management, <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</em></strong></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10705583"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-fourth, twenty twenty-six, at thirteen minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/xi-jinping/" href="https://indianexpress.com/about/xi-jinping/">Xi Jinping</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/expert-explains-xi-china-diplomacy-history-lessons-trump-putin-10705583/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-24 17:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
