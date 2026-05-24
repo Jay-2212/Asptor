@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Kerala has announced a new department for welfare of senior citizens | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Kerala has announced a new department for welfare of senior citizens</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-kerala-elderly_expl.jpg?w=1600" alt="Why Kerala has announced a new department for welfare of senior citizens">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Kerala" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-kerala-elderly_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">In 2025, Kerala formed a first-of-its-kind State Elderly Commission, a quasi-judicial forum for protecting the rights and welfare of senior citizens. Photo: File</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The newly elected Congress government in Kerala has announced the formation of a department for the <strong><a class="" href="https://indianexpress.com/article/explained/kerala-policy-elderly-population-10165771/">elderly people</a></strong>, the first such initiative in India. At present, the welfare of the aged comes under the state’s Social Welfare department.</span></p>
+<p><span style="font-weight: 400">Here’s what to know about the initiative and how Kerala’s changing demographic profile prompted the move.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>A state turning grey</b></p>
+<p><span style="font-weight: 400"><strong><a class="" href="https://indianexpress.com/article/india/kerala-is-set-to-become-indias-first-digitally-literate-state-heres-how-10190060/">Kerala</a></strong> is going through a critical phase of demographic transition. With its demographic profile similar to East Asian and European countries, Kerala is India’s most rapidly ageing state. As per the Elderly in India Report of 2021, around 16.5% of the state’s population is aged above 60 and is expected to touch 20.9% of the total population by 2031 compared with the all-India figure of 13.1%.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The old age dependency ratio — the number of the aged per 100 persons of working age group — has risen from 19.6% in 2011 to 26.1% in 2021. This figure is expected to go up to 34.3% by 2031. According to state government data, the number of residents in old age homes in Kerala has increased from 19,149 in 2016-17 to 37,895 in 2024-25.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>Why Kerala is ageing fast</b></h2>
+<p><span style="font-weight: 400">Three reasons are contributing to Kerala’s rapid ageing. Over the years, Kerala’s total fertility rate (TFR) — the average number of children that are born to a woman over her lifetime — has declined and is now 1.35 children per woman in 2023 as per the state’s Vital Statistics data. This is below the national replacement level of 2.1, which indicates the rate required for a population to replace itself across generations.</span></p>
+<p><span style="font-weight: 400">The life expectancy has increased in Kerala owing to better healthcare facilities.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/shashi-tharoor-writes-kerala-must-show-how-an-ageing-population-can-thrive-10614355/">Shashi Tharoor writes: Kerala must show how an ageing population can thrive</a></span></div>
+<p><span style="font-weight: 400">Besides, many in the working age population migrating abroad en masse has turned Kerala into a land of the grey. A major chunk of those who migrate to non-West Asian countries settle there, leaving their aged parents back home. So, there is a large proportion of senior citizens in Kerala, with many households having only aged parents.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">At the same time, a large-scale return of migrants from West Asia after they no longer are of working age adds to the state’s elderly.</span></p>
+<p><b>Geography and demography</b></p>
+<p><span style="font-weight: 400">The India Ageing Report of 2023 said that around 17.5% of Kerala’s rural population comprised individuals aged 60 and above, compared with 15.4% in urban areas. The density of aged people in rural areas is mainly attributed to outmigration of the working age population in search of employment. There are more elderly women than men, especially in advanced ages: sex ratio among those 80-plus is 1651 women per 1000 men.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/economy/india-demography-at-crossroads-elderly-may-outnumber-the-youth-8025664/">India’s demography at crossroads: Elderly may outnumber the youth</a></span></div>
+<p><span style="font-weight: 400">The difference in life span is another factor, with female life expectancy is estimated at around 78.4 years, while that of men is 71.9 years. This has created a large number of women — many of them widows — who live alone without much social and financial support. The data on MGNREGS shows that 88-90% of Kerala’s workforce are women, while the corresponding national average is around 55-59%. Among MGNREGS workers in Kerala, around 38% are aged between 61 and 80 and there is another 1% above 81, which indicates the financial distress of the state’s aged.</span></p>
+<p><b>Health of the elderly</b></p>
+<p><span style="font-weight: 400">As per the Longitudinal Ageing Study in India Wave 1 (2017-18), over 70% of Kerala’s elderly suffer from at least one chronic ailment, with hypertension, diabetes, arthritis, and cardiovascular diseases most prevalent. The India Ageing Report 2023 said that nearly 1 in 4 older adults in Kerala exhibit symptoms of psychological distress. The Kerala State Initiative on Dementia (Smruthipadham) estimates that approximately 4.86% of persons aged 65 and above are affected. This calls for expansion of dementia care services, caregiver training, and public awareness to counter stigma and ensure early diagnosis.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">In 2025, Kerala formed a first-of-its-kind State Elderly Commission, a quasi-judicial forum for protecting the rights and welfare of senior citizens. Around 75% of the aged population is covered under welfare pension schemes.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Kerala has already launched certain community initiatives such as Vayomithram (mobile medical care) and Samayaprabha (daycare)</span><span style="font-weight: 400">.</span><span style="font-weight: 400"> The Kerala Care Palliative Grid has been formed in collaboration with the Digital University Kerala to coordinate palliative care. All voluntary organisations and associations in the field of palliative care are part of the grid. Around 1.5 lakh bedridden people and another ailing 4 lakh are getting care from a palliative care grid, which includes 1,387 government institutions and 1,227 NGOs. </span></p>
+<p><b>The resource challenge ahead</b></p>
+<p><span style="font-weight: 400">The growing graph of senior citizens has thrown up challenges for Kerala in the health and service sectors, mainly on shifting its focus to geriatric care. This requires nurturing a care economy in the state.</span></p>
+<p><span style="font-weight: 400">In 2023, the Directorate of Health Services had found that the state has around 120 geriatricians, 600 nurses trained in elderly care, 400 physiotherapists, and 50 occupational therapists. To meet projected service needs and align with the World Health Organization’s recommended multidisciplinary care model, Kerala should have a workforce of nearly 300 geriatricians, 1,500 nurses, 900 physiotherapists, and 250 occupational therapists by 2030.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10705438"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shaju-philip/">
+<figure>
+<img alt="Shaju Philip" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/shajuphilip.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shaju-philip/"><span></span>Shaju Philip</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952072"></div><div class="follow_author_title" data-id="Shaju Philip"></div><div class="follow_author_slug" data-id="shaju-philip"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shaju Philip is a Senior Assistant Editor at The Indian Express, where he leads the publication's coverage from Kerala. With over 25 years of experience in mainstream journalism, he is one of the most authoritative voices on the socio-political, religious, and developmental landscape of South India.
+
+Expertise, Experience, and Authority
+
+ 	
+Decades of Regional Specialization: Shaju has spent more than two decades documenting the "Kerala Model" of development, its complex communal dynamics, and its high-stakes political environment.
+
+ 	
+Key Coverage Beats: His extensive reporting portfolio includes:
+
+
+ 	
+Political &amp; Governance Analysis: In-depth tracking of the LDF and UDF coalitions, the growth of the BJP in the state, and the intricate workings of the Kerala administration.
+
+ 	
+Crime &amp; Investigative Journalism: Noted for his coverage of high-profile cases such as the gold smuggling probe, political killings, and the state’s counter-terrorism efforts regarding radicalization modules.
+
+ 	
+Crisis Management: He has led ground-level reporting during major regional crises, including the devastating 2018 floods, the Nipah virus outbreaks, and the Covid-19 pandemic response.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shaju-philip/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-fourth, twenty twenty-six, at six minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/kerala-elderly-department-senior-citizen-welfare-ageing-population-10705438/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-24 09:57 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
