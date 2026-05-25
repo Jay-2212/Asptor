@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why road dust is emerging as Delhi’s biggest pollution threat | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why road dust is emerging as Delhi’s biggest pollution threat</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/sust-storm-delhi-explained.jpg?w=1600" alt="Why road dust is emerging as Delhi’s biggest pollution threat">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Environment | 4-letter word everyone in Delhi needs to know: dust" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/sust-storm-delhi-explained.jpg?w=1600" width="650"/><span class="ie-custom-caption"> Aravalli degradation has weakened a natural dust barrier around Delhi. (Express photo by Renuka Puri)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>It is persistent, it lingers in the air. It is inhaled deep into the lungs, it even enters the bloodstream. And it carries toxic metals that can trigger disease, damage lungs, and raise cancer risk, especially among children.</p>
+<p>Meet road dust — the main villain in <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>’s pollution story that is quietly putting your life at risk, every day.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>A January 2026 report by a panel of top experts constituted by the Commission for Air Quality Management (CAQM) identified road dust as a major pollution source in Delhi because it acts as “both a primary emission and a persistent source”. The panel defined road dust broadly to include airborne dust from roads and shoulders, vehicle movement, dry soil, and road wear. It said poor road surfaces, potholes, broken edges, unpaved stretches, road-tyre-brake wear, and debris falling from the transport of construction and demolition (C&amp;D) material all contribute to the dust load.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The report also underlined the mechanism that makes road dust difficult to control: dust deposited on road surfaces is resuspended by vehicular movement, particularly during dry conditions. This keeps pollution levels elevated even in the absence of active dust-generating activities.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Mohammed Rafiuddin, Programme Lead for Clean Air at the Council on Energy, Environment and Water (CEEW), said, “Scientifically, road dust is a very different kind of source compared to C&amp;D dust. It is a line source (spread along a corridor), but at a construction site, the dust generated is from a point source.” In other words, road dust requires corridor-wide, routine removal and surface management, while construction dust depends on site-level containment and enforcement.</p>
+<h2><strong>Why it persists</strong></h2>
+<p>A road-dust committee set up by the CAQM last year said resuspension is driven by continuous dust deposits along road edges and medians, unsuitable road infrastructure design, poor maintenance, and inadequate dust-management practices.</p>
+<p>The committee noted that dust from unpaved medians frequently blows onto carriageways. Irrigation practices can further worsen the problem, as thick hose pipes used for watering median and footpath plantations often spill soil onto roads, which later dries and adds to dust levels. Encroachments and unauthorised parking were also flagged as operational barriers that obstruct cleaning and allow dust to accumulate.</p>
+<p><img alt="4-letter word everyone in Delhi needs to know: dust" class="lazyloading alignnone size-full wp-image-10706058" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/dust-chart-horz.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/dust-chart-horz.jpg 577w, https://indianexpress.com/wp-content/uploads/2026/05/dust-chart-horz.jpg?resize=450,353 450w, https://indianexpress.com/wp-content/uploads/2026/05/dust-chart-horz.jpg?resize=516,405 516w" height="453" sizes="(max-width: 577px) 100vw, 577px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="577"/></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Local roads and secondary streets, the report said, are often excluded from regular maintenance schedules. “Maintenance is often carried out after significant road damage, leading to prolonged dust emissions,” it noted.</p>
+<p>A separate joint study by CSIR-National Environmental Engineering Research Institute (NEERI) and CSIR-Central Road Research Institute (CRRI), submitted to the CAQM on February 7, 2025, noted: “The re-suspension of road dust is influenced by continuous dust deposition at the edges of road medians, poor road design or condition and its maintenance, limited dust management practices.” The study also noted how few road stretches in the capital reported “alarmingly high levels” with PM10 emissions as high as 1700 µg/m3 up to 10 m distance from the road — the permissible limit is 100 µg/m³ (24 hours) and 60 µg/m³ (annual).</p>
+<p>Arpan Patra, Programme Associate at CEEW, said three elements need to be distinguished when assessing road dust: the sources of dust, the share that is wind-blown versus anthropogenic (including construction-related), and the amount of loose material available on road surfaces for resuspension.</p>
+<p>Evidence suggests that road dust is becoming relatively more important as exhaust emissions decline. A multi-city 2023 study led by researchers from IIT Delhi found that even as tailpipe emissions fall with cleaner fuels, non-exhaust sources such as “resuspendable road dust, tyre wear and brake wear” are gaining significance.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The study showed that Delhi’s higher silt load is driven by construction activity, heavy traffic, and dust storms during April and May. Across 32 cities, silt loads ranged from 0.2 g/m² to 111.2 g/m², with Delhi averaging 14.47 g/m².</p>
+<p>Researchers also pointed out that the degradation of the Aravalli range has weakened a natural dust barrier around Delhi, allowing more wind-blown dust to enter the city. Nationwide, the study said, exposure to road dust is linked to more than 10,207 premature deaths annually.</p>
+<h2><strong>What Delhi is doing</strong></h2>
+<p>Along with the clearing of dust by Mechanical Road Sweeping Machines (MRSMs), the Municipal Corporation of Delhi (MCD) deploys a total of 57,000 sanitation workers, sweeping areas where the machines can’t enter.</p>
+<p>But the NEERI-CRRI report flags that mechanised sweeping needs to become more scientific, not just more frequent. “There is a need to prepare a standard operating procedure (SOP) for the operation of mechanical road sweepers on a particular type of road based on scientific study,” it said. The frequency and efficiency of application, and particle-size analysis of lifted dust during and after use, should be studied, it said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Other measures include water sprinklers, mobile anti-smog guns (ASGs), and repair of roads and potholes. The MCD, for instance, has a total of 167 water sprinklers and 63 ASGs installed at roads. There are also processing facilities for construction and demolition waste, Sanitary Landfill Facilities for residual ash and Waste-To-Energy plants to treat non-recyclable waste.</p>
+<h2><strong>What can be fixed — what can’t</strong></h2>
+<p>Experts say Delhi’s natural environment places it at a disadvantage. Rafiuddin said that even with improved road conditions, “there is bound to be some amount of dust always”, which then needs to be actively removed and managed. This is due to the city’s natural baseline for dust from dry summers, frequent dust storms, loose alluvial soil, and relatively low rainfall.</p>
+<p>Some commonly used mitigation measures offer limited benefits. Dipankar Saha, former head of the air laboratory at the Central Pollution Control Board, who led a 2017 pilot study on the efficacy of anti-smog guns, said such measures are ineffective for dust control.</p>
+<p>“There should not be a reliance on water sprinklers or mist guns. They only transport dust from one area to another. Once the particles settle and the surface dries, the dust is re-suspended again. It also leads to humidification,” he said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The CAQM-appointed road-dust committee said in its 2025 report that anti-smog guns “should be deployed selectively on high priority situations”, recommending their use only in emergencies and describing them as “a lower priority for dust control on roads”.</p>
+<p>Instead, the committee called for a standardised framework that combines paving, greening within the right-of-way, and improved maintenance practices, explicitly stating that solutions must go beyond sweeping alone.</p>
+<p>On greening, the report said vegetation helps by arresting airborne dust and preventing resuspension from unpaved areas. It recommended roadside planting with drought-resilient species that are better at trapping dust, such as those with wide canopies and rough or large leaf surfaces. It also suggested practical design measures, including leaving an 8-12 inch gap between soil level and the top of kerb stones to reduce soil blow-over during windy periods.</p>
+<p>This was also echoed by the 2025 CSIR-NEERI joint study, as it flagged poor maintenance and visible dust accumulation along major road stretches, particularly at edges and medians. It called for improved road design, vegetative barriers, and greening using drip-irrigation methods from wastewater alongside metro infra, and a three-tier plantation system to stabilise loose soil and act as dust filters.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h2><strong>Why you should worry</strong></h2>
+<p>Road dust is a major source of PM2.5 and PM10, the fine particles that can penetrate deep into the lungs and enter the bloodstream. Inhaling these particles can cause lung irritation and inflammation, and worsen pre-existing conditions such as asthma and chronic obstructive pulmonary disease, often leading to persistent coughing and wheezing. Long-term exposure to PM2.5 has been linked to premature death, particularly among people with chronic heart or lung disease, and to reduced lung function growth in children.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10706037"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sophiya-mathew/">
+<figure>
+<img alt="Sophiya Mathew" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/06/sophiya-mathew.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sophiya-mathew/"><span></span>Sophiya Mathew</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9398881"></div><div class="follow_author_title" data-id="Sophiya Mathew"></div><div class="follow_author_slug" data-id="sophiya-mathew"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sophiya Mathew is a Correspondent at The Indian Express, based in New Delhi. She joined the Delhi bureau in 2024, and has specialization in Integrated Multimedia Journalism from the Asian College of Journalism (ACJ), Chennai.
+
+Professional Background
+
+Core Beats: Her reporting is primarily focused on the Environment and Education.
+
+Specialization: She has gained recognition for her ground-level reporting on the Yamuna floodplains and the socio-economic challenges faced by those living on its banks. She also focuses on the disparities in Delhi's education system, ranging from elite private schools to government institutions and refugee education.
+
+Recent Notable Articles (December 2025)
+
+Her recent work has been heavily centered on Delhi's severe winter pollution crisis and the government's regulatory responses:
+
+1. The Air Pollution Crisis
+
+"A tale of two cities: Delhi govt schools choke in bad air, private classrooms set up air filters" (Dec 20, 2025): A high-impact feature contrasting the "Clean Air Bubbles" in elite schools with the reality of government school students who are exposed to an equivalent of 17 cigarettes a day due to outdoor exposure.
+
+"Delhi sees season's worst air day, second worst December AQI in nearly a decade" (Dec 15, 2025): An analytical report on the meteorological patterns trapping pollutants in the NCR.
+
+"Delhi bans non-BS VI vehicles from outside: Why curbing vehicular pollution is key" (Dec 17, 2025): Explaining the science behind targeting specific vehicle vintages to lower particulate matter.
+
+2. Enforcement &amp; Regulations
+
+"No fuel at pumps in Delhi without valid PUC certificate from December 18" (Dec 17, 2025): Breaking the news on the environment ministry's strict "No PUC, No Fuel" policy.
+
+3. Education Policy
+
+"Law to regulate school fee in Delhi risks becoming procedural, say parents" (Dec 13, 2025): Investigating the loopholes in the new Delhi School Education (Transparency in Fixation and Regulation of Fees) Bill, 2025.
+
+"Monsoon Session: Private school fee regulation Bill cleared after four-hour debate" (Aug 9, 2025): Covering the legislative passage of the controversial fee hike regulation.
+
+Signature Style
+
+Sophiya is known for her observational depth. Her reporting often includes vivid details from school corridors, hospital waitlists, or the banks of the Yamuna to illustrate how policy failures affect the city's most vulnerable residents. She is a frequent expert guest on the 3 Things podcast, where she explains the complexities of Delhi’s environmental laws.
+
+X (Twitter): @SophiyaMathew1                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sophiya-mathew/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-fifth, twenty twenty-six, at twenty-two minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/delhi-pollution/" href="https://indianexpress.com/about/delhi-pollution/">Delhi Pollution</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/delhi-pollution-dust-word-10706037/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-25 03:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
