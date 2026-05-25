@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why SHANTI Act’s nuclear liability limits are under Supreme Court scrutiny | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why SHANTI Act’s nuclear liability limits are under Supreme Court scrutiny</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Supreme-Court-explained-3.jpg?w=1600" alt="Why SHANTI Act’s nuclear liability limits are under Supreme Court scrutiny">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="SHANTI, nuclear liability" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Supreme-Court-explained-3.jpg?w=1600" width="650"/><span class="ie-custom-caption">The petition challenges SHANTI under Articles 14, 19 and 21 of the Constitution, arguing that the Act's liability structure is a violation of rights the Supreme Court has already declared non-negotiable. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Supreme Court on Tuesday (May 19) described a constitutional challenge to India’s new nuclear energy law it is hearing, as a “very sensitive legislative policy issue.”</p>
+<p>The bench comprising Chief Justice Surya Kant, Joymalya Bagchi and Vipul Pancholi assured the petitioners that it would clarify whether a statutory cap can restrict a court’s power to fix compensation in the event of a nuclear accident.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The petition challenges the Sustainable Harnessing and Advancement of Nuclear Energy for Transforming India (SHANTI) Act, as it allows the “private sector and foreign companies to operate nuclear power plants in India, [and] has also <a href="https://indianexpress.com/article/legal-news/plea-challenging-shanti-act-very-sensitive-legislative-policy-issue-cant-second-guess-says-supreme-court-10698545/"><strong>capped the liability</strong></a> of these operators at an absurdly low level and exempted the supplier from any liability,” in violation of the Constitution.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>“Government can do whatever it wants by way of policy, but it cannot sacrifice Article 21 rights of citizens on the altar of policy,” Advocate Prashant Bhushan, representing the petitioners, told the bench.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>How nuclear liability works and how it changed</h2>
+<p>Before SHANTI, India’s nuclear liability framework rested on the Civil Liability for Nuclear Damage Act, 2010, which established a no-fault regime. Victims of a nuclear incident did not have to prove negligence, only damage.</p>
+<p>The operator of the plant was liable under the law, and the cap per operator for large reactors was Rs 1,500 crores, with “the rupee equivalent of three hundred million Special Drawing Rights or such higher amount as the Central Government may specify by notification.”</p>
+<p>The 2010 Act also included Section 17(b), which gave the operators a right of recourse against suppliers, i.e., if an accident occurred because a manufacturer had supplied defective equipment, the operator who had paid out compensation could recover that amount from the supplier. The provision also covered “supply of equipment or material with patent or latent defects or substandard services.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This was the mechanism that kept manufacturers legally accountable for what they built.</p>
+<p>SHANTI repealed the 2010 Act. Under Section 11, the operator is liable for nuclear damage, but Section 13, read with the Second Schedule, fragments that liability by reactor size.</p>
+<p>A reactor with thermal power of up to 150 MW, which covers fuel cycle facilities and nuclear material transport, carries a maximum operator liability of Rs. 100 crores. Reactors between 150 MW and 750 MW attract Rs. 300 crores. Only the largest reactors, above 3,600 MW, reach the maximum of Rs. 3,000 crores. When the operator’s share is exhausted, Section 14 requires the Central Government to cover the remainder up to the total SDR ceiling. Beyond that, no claim lies against anyone.</p>
+<p>Section 16, which governs recourse against suppliers, narrows that right to two situations: one where it is written into a contract, or where the incident was caused by someone acting with “an intention to cause nuclear damage.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/shanti-bill-how-india-is-overhauling-its-nuclear-power-sector-10429495/">SHANTI Bill: How India is overhauling its nuclear power sector</a></span></div>
+<p>Design defects, manufacturing failures, and substandard components do not independently trigger supplier accountability under the new framework. Whether a supplier faces any liability depends entirely on what the procurement contract says. The old Section 17(b) is gone.</p>
+<p><strong>Why private operators and suppliers were granted protection</strong></p>
+<p>The protections written into SHANTI were the product of a decade of pressure from foreign reactor manufacturers and governments backing them.</p>
+<p>When the 2010 Act was being negotiated during the Indo-US civil nuclear deal, American and French reactor companies argued that Section 17(b)’s right of recourse made India an unattractive market. They wanted supplier liability capped or removed as a condition of entry. The provision survived that pressure in 2010. SHANTI resolved the dispute in the supplier’s favour.</p>
+<p>In SHANTI’s Statement of Objects and Reasons, this is framed as a matter of economic necessity. India has set a target of 100 GW of nuclear capacity by 2047. To reach it, the government determined that private and foreign participation were unavoidable and that a “pragmatic civil liability” framework was required to bring that capital in. The liability structure, caps on operators, no statutory exposure for suppliers, and residual liability absorbed by the state are the price of that participation.</p>
+<p><strong>The constitutional challenge</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The petition challenges SHANTI under Articles 14, 19 and 21 of the Constitution, arguing that the Act’s liability structure is a violation of rights the Supreme Court has already declared non-negotiable.</p>
+<p>The Article 21 argument runs on two tracks. The first is the doctrine of absolute liability, as laid down in the 1987 Shriram Oleum Gas case. That judgment held that an enterprise engaged in a hazardous or inherently dangerous activity is “absolutely liable to make good all damage arising therefrom, wholly independent of fault, negligence, or the exercise of due care.”</p>
+<p>The petition argues that SHANTI “imposes illusory ceilings on liability, exempts operator liability in certain circumstances and completely exempts supplier liability” and that Parliament cannot by statute reduce what the court declared a constitutional obligation.</p>
+<p>The second concerns the Polluter Pays Principle under Article 21, which the court read into the right to life through <em>Indian Council for Enviro-Legal Action</em> (1996). The principle requires that the cost of harm rest with whoever caused it. Under SHANTI, when an operator’s liability is exhausted, the Central Government absorbs the remainder, the cost shifts to the taxpayer. The petition describes this as “shifting the financial burden of a private or commercial profit-driven nuclear activity onto the general public” and argues Parliament cannot legislate that transfer either.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/by-overriding-rti-act-new-law-triggers-transparency-concerns-10429496/">By keeping itself out of RTI ambit, why SHANTI Bill has raised transparency concerns</a></span></div>
+<p>The Article 14 challenge targets the structure of the Second Schedule, which fragments operator liability by reactor size and sets caps, as low as Rs. 100 crores for smaller reactors, that the petition argues bear no rational relationship to the scale of harm a nuclear incident can cause. Arbitrary ceilings on compensation for victims of a hazardous activity, the petition contends, fail the test of reasonableness under Article 14.</p>
+<p>The Article 19(1)(a) challenge goes to Section 39, which empowers the central government to classify nuclear information as restricted and prohibit its publication in any form, overriding the RTI Act.</p>
+<p>The right to information has been held to be a fundamental right flowing from Article 19(1)(a) by the Supreme Court. The petition argues that a blanket power to suppress information about facilities whose accidents could affect entire populations cannot survive constitutional scrutiny, particularly because access to that information is the precondition for any meaningful claim by victims.</p>
+<p>At the hearing, Justice Bagchi said that “When the State, in its own policy, decides to cap liability of a private entity, we are not here to second guess decision making of the State in its subjective.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The CJI framed the court’s concern more narrowly, not whether the caps exist, but whether a court’s power to award compensation can be restricted by them.</p>
+<p>Bhushan pointed out that the total cap, operator and government combined is under Rs 4,000 crores. If the court awards more, the Act provides no mechanism for payment.</p>
+<p><strong>What victims can actually claim</strong></p>
+<p>Under SHANTI, victims of a nuclear incident can claim compensation for loss of life or personal injury, damage to property, economic loss where notified by the government, costs of environmental restoration, and costs of preventive measures taken after an incident. Claims are filed before a government-appointed Claims Commissioner, or before a Nuclear Damage Claims Commission in cases of wider damage. Civil courts have no jurisdiction.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The financial limits determine what that right is worth in practice. The operator’s liability runs from Rs. 100 crores for small reactors to Rs. 3,000 crores for the largest. The government covers anything above that, up to the total of approximately Rs 3,900 crores. The petition sets that figure against the historical record—Three Mile Island cost between USD 970 million and USD 1 billion in 1980 dollars; Chernobyl between USD 235 billion and USD 700 billion; Fukushima an estimated USD 440 to 445 billion. The petition states the SHANTI cap is “roughly a thousand times” lower.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The time limits are a separate problem. Section 67 extinguishes the right to claim within “ten years, in the case of damage to property” and “twenty years, in the case of personal injury to any individual” from the date of the incident.</p>
+<p>Radiation-induced cancers, genetic damage, and congenital conditions can emerge decades after exposure and may not be diagnosable within that window.</p>
+<p>The 2010 Act’s Section 35 explicitly preserved the writ jurisdiction of the Supreme Court and High Courts as an avenue of last resort. SHANTI’s Section 81 bars civil courts. Section 39 empowers the government to classify nuclear information as restricted and prohibit its publication in any form, overriding the RTI Act, thus leaving victims without access to the records needed to establish what went wrong.</p>
+<p>The CJI’s assurance that statutory caps “may not limit the power of the Court to fix compensation” is where the matter rests for now. How that power would be exercised, against whom, and through what mechanism, is what the court will have to work out in July.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10704088"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-third, twenty twenty-six, at thirty-nine minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/nuclear/" href="https://indianexpress.com/about/nuclear/">nuclear</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/nuclear-liability-law/" href="https://indianexpress.com/about/nuclear-liability-law/">Nuclear Liability law</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/shanti-act-nuclear-liability-supreme-court-challenge-10704088/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-25 08:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
