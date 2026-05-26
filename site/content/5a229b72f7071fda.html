@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Explained: The Delhi Gymkhana Club eviction row, and the rules governing land in the capital | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Explained: The Delhi Gymkhana Club eviction row, and the rules governing land in the capital</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-26</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/delhi-gymkhana-club-1.jpg?w=1600" alt="Explained: The Delhi Gymkhana Club eviction row, and the rules governing land in the capital">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="An outside view of the Delhi Gymkhana Club." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/delhi-gymkhana-club-1.jpg?w=1600" width="650"/><span class="ie-custom-caption">An outside view of the Delhi Gymkhana Club. (ANI Video Grab)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Last week, the Union Ministry of Housing and Urban Affairs’s Land and Development Office (L&amp;DO) wrote to the Delhi Gymkhana Club, asking it to vacate its leased premises on Safdarjung Road by June 5.</p>
+<p>The government wanted the land back for <strong><a class="" href="https://indianexpress.com/article/india/government-delhi-gymkhana-club-land-strengthening-defence-infra-reason-10704086/">“strengthening and securing Defence infrastructure”</a></strong>, but the decision to remove the over 100-year-old club has kicked off a controversy and led to a slew of legal challenges in the <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> High Court.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On Tuesday (May 26), the HC recorded Solicitor General Tushar Mehta’s statement that due process of law will be followed for eviction, and refused to issue any further directions. The court order is yet to be uploaded.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>How did the Delhi Gymkhana Club come to be?</h2>
+<p>The colonial-era club has its origins in July 1913, soon after the British Indian government decided to move the capital from <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a> to Delhi in 1911. The land was leased by the government to the Imperial Delhi Gymkhana Club in February 1928, after which the buildings were constructed in the 1930s.</p><div id="taboola-mid-article-personalisation"></div>
+<p>According to official documents, the lease was perpetual, meaning that while there were other conditions, no fixed time frame was attached to it. At the time, the club was meant for British officials, but after Independence, it became a space for members of the Indian bureaucracy, judiciary and armed forces, among others.</p>
+<p>The club’s website states that the building was designed by architect Robert T Russell, who also designed Connaught Place and the Commander-in-Chief’s residence, which later became Teen Murti, the residence of Prime Minister Jawaharlal Nehru. Post-Independence, the club, located at 2, Safdarjung Road, was renamed the Delhi Gymkhana Club.</p>
+<h2>How is land administered in Delhi?</h2>
+<p>After 1947, the Union government came to administer the land in Delhi through its L&amp;DO. It allots land for the development of residential colonies, institutions, clubs, political parties, etc., and administers leases. The leases can be for a fixed period, like 99 years, or perpetual in nature.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/from-imperial-soirees-to-post-independence-delhi-revisiting-history-of-delhi-gymkhana-club-10704908/">7 Maharajas as lifetime members, decades-old waitlist: Story of Delhi Gymkhana Club</a></span></div>
+<p>The lessee pays a fixed ground rent for the land, which, according to the conditions of the lease, can be periodically revised. For residential properties, over the years, more than half have been granted freehold status by L&amp;DO, meaning the ownership status changes to grant the owner full rights. In fact, out of around 60,000 properties on L&amp;DO land, around 35,000 had been converted from leasehold to freehold as of 2021, according to the CAG report that year.</p>
+<p><strong>What is the current controversy?</strong></p>
+<p>In its May 22 letter to the club, the L&amp;DO said it required the 27.3-acre plot for defence infrastructure. The L&amp;DO letter cited clause 4 of the lease that allows the government to “re-enter” the land for a “public purpose”.</p>
+<p>“Whereas, it has been determined that the said premises, located in a highly sensitive and strategic area of Delhi, is critically required for the strengthening and securing of Defence infrastructure and other vital public security purposes. The land is essential to fulfil urgent institutional needs, governance infrastructure, and public-interest projects, integrated with the resumption of adjoining government lands,” the L&amp;DO said.</p>
+<p>The land is located next to the Prime Minister’s residence on Lok Kalyan Marg. The slums on Race Course Road, which are the adjoining government lands referred to in the letter, are being cleared of encroachments currently by the L&amp;DO, pointing to a larger plan to free up the area for another purpose.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>“Whereas, under Clause 4 of the Lease Deed, it is expressly provided that: ‘If the demised premises or any part thereof are required for a public purpose then and in such case it shall be lawful for the Lessor… to re-enter and thereupon this demise and everything contained therein shall cease and determine…’ Now, therefore, in exercise of the powers conferred under Clause 4 of the Lease Deed, the President of India, through the Land &amp; Development Office, hereby determines the Lease and orders re-entry of the aforesaid premises with immediate effect,” the L&amp;DO said.</p>
+<p>The L&amp;DO asked that the premises be handed back on June 5.</p>
+<p>Since 2022, the club has been run by a government-appointed general committee on the orders of the National Company Law Tribunal. The Corporate Affairs Ministry approached the NCLT seeking regulation of the club, which is a registered company under the Companies Act, 1956, alleging that it was being run in violation of norms and mishandled.</p>
+<p><strong>What happens now?</strong></p>
+<p>The club’s general committee met on May 23 and decided to write to the L&amp;DO asking it to consider that there should be “no dislocation of the club”, according to the letter sent by its officiating secretary. The committee said the club’s 14,000 members, who have been paying fees regularly, and 500 employees would be impacted by the L&amp;DO’s decision.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Multiple petitions filed by members and employees of the club were heard in the Delhi High Court.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10708478"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/damini-nath/">
+<figure>
+<img alt="Damini Nath" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2022/11/Damini-Nath-The-Indian-Express.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/damini-nath/"><span></span>Damini Nath</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8269483"></div><div class="follow_author_title" data-id="Damini Nath"></div><div class="follow_author_slug" data-id="damini-nath"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/DaminiNath">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Damini Nath is an Assistant Editor with the national bureau of The Indian Express. She covers the housing and urban affairs and Election Commission beats. She has 11 years of experience as a reporter and sub-editor. Before joining The Indian Express in 2022, she was a reporter with The Hindu’s national bureau covering culture, social justice, housing and urban affairs and the Election Commission.
+Expertise
+
+ 	
+Key Coverage Areas: Damini Nath currently specializes in reporting on two crucial beats:
+
+
+ 	
+Housing and Urban Affairs: Providing in-depth analysis and reporting on India's urban development, policy, and housing issues.
+
+ 	
+Election Commission (EC): Offering authoritative coverage of electoral processes, policies, and the functioning of India's constitutional body responsible for conducting elections.
+
+
+
+
+
+ 	
+Professional Background: Her extensive experience includes roles as a reporter and sub-editor, demonstrating a comprehensive understanding of the journalistic process from fieldwork to final production.
+
+ 	
+Previous Role: Before joining The Indian Express in 2022, she served as a dedicated reporter with The Hindu’s national bureau, where her reporting portfolio included:
+
+
+ 	
+Culture
+
+ 	
+Social Justice
+
+ 	
+Housing and Urban Affairs
+
+ 	
+The Election Commission beat (a consistent area of focus).
+
+
+
+
+Trustworthiness
+Damini Nath's decade-plus career at two of India's most respected and authoritative news institutions, The Indian Express and The Hindu, underscores her commitment to factual, impartial, and high-quality reporting, establishing her as a trusted and credible source for news on urban governance and electoral matters.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/damini-nath/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-sixth, twenty twenty-six, at forty-five minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/delhi-gymkhana-club/" href="https://indianexpress.com/about/delhi-gymkhana-club/">Delhi Gymkhana Club</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/delhi-gymkhana-club-controversy-land-law-10708478/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-26 15:05 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

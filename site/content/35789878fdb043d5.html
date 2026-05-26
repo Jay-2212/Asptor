@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>US indictment of Raul Castro: How Trump might benefit in 2026 midterm elections | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>US indictment of Raul Castro: How Trump might benefit in 2026 midterm elections</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-26</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-raulcastro_expl-geop.jpg?w=1600" alt="US indictment of Raul Castro: How Trump might benefit in 2026 midterm elections">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Raul Castro" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-raulcastro_expl-geop.jpg?w=1600" width="650"/><span class="ie-custom-caption">Former Cuban President Raul Castro in 2012. Raul, who is now 94 but remains politically relevant in Cuba, is the younger brother of the late Cuban revolutionary and former President Fidel Castro. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">On Wednesday (May 20), acting United States Attorney General (AG) Todd Blanche and the Department of Justice formally opened legal proceedings against former Cuban President <strong><a class="" href="https://indianexpress.com/article/world/us-indicts-former-cuba-president-raul-castro-trump-venezuela-raid-10700088/">Raul Castro</a></strong> and five other senior Cuban officials. The individuals have been charged with murder, conspiracy to kill US nationals, and the destruction of aircraft — all stemming from the shooting down of two unarmed civilian planes by Cuban MiG fighter jets in February 1996.</span></p>
+<p><span style="font-weight: 400">US prosecutors claim that Raul Castro, then Cuba’s Defence Minister, reportedly authorised the strikes. Raul, who is now 94 but remains politically relevant in Cuba, is the younger brother of the late Cuban revolutionary and former President Fidel Castro.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">So, why did the US government choose to issue this indictment now, and how does this prosecution further affect US-Cuban relations? We explain.</span></p>
+<h2><b>The 1996 incident</b></h2>
+<p><span style="font-weight: 400">On February 24, 1996, three Cessna 337C planes had entered a zone north of Havana, Cuba’s capital. These planes were operated by Brothers to the Rescue, a Miami-based group founded by exiled Cubans in 1991 to assist refugees and Cuban immigrants.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">A month or so before the shootdown, the group had reportedly dropped anti-government flyers into Cuba.</span></p>
+<p><span style="font-weight: 400">Cuban fighters shot down two of the Cessnas, killing all four men aboard. The third plane, which had four men onboard including carrying the group’s leader José Basulto, managed to escape.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/raul-castro-us-charges-1996-cuba-plane-shootdown-10692378/">Why Raul Castro could face US charges decades after the 1996 Cuba incident</a></span></div>
+<p><span style="font-weight: 400">The Cuban action was considered similar to an act of war, spurring the United Nations to pass Resolution 1067. This resolution condemned the Cuban military action, encouraged the International Civil Aviation Organization to open an investigation, and reaffirmed that even the interception of foreign military aircraft had to be done without endangering any human life inside.</span></p>
+<p><b>Jurisdiction across borders</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">First, we look at how a US court can bypass forums like the International Court of Justice to charge a former head of state.</span></p>
+<p><span style="font-weight: 400">In this case, Blanche has intimated Castro and the other officials to physically face trial in Miami — on US soil. He said: “We expect that he will show up here by his own will, or by another way.”</span></p>
+<p><span style="font-weight: 400">Federal Bureau of Intelligence director Kash Patel backed this, clarifying that this was being treated as an ongoing pursuit. Although an operational timeline has not been stated, the US prosecution is projecting urgency despite demanding a voluntary surrender.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/trump-monroe-doctrine-mexico-colombia-cuba-10456914/">After Venezuela, alarm bells in Mexico, Colombia, Cuba: What’s behind Trump’s latest threats?</a></span></div>
+<p><span style="font-weight: 400">The US is likely to rely on the “passive personality principle”, an established tenet of international law that grants countries the authority to claim jurisdiction over crimes committed against its own citizens in other countries. This is relevant in discussions pertaining to combating international terrorism. Over the years, Cuba has flagged its distrust of this principle at the UN multiple times.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">It also has a historical precedent: in August 1998, London police had arrested former Chilean dictator Augusto Pinochet, acting on a Spanish court warrant charging him for human rights crimes during his 17-year rule (1973-90). This established that former heads of state cannot claim diplomatic immunity for crimes like state-sponsored murder, and it may be used to justify any US military action undertaken to force Castro to comply with the indictment.</span></p>
+<p><b>Tumultuous relations</b></p>
+<p><span style="font-weight: 400">The <strong><a class="" href="https://indianexpress.com/article/world/us-news/us-indicts-raul-castro-cuba-failed-state-marco-rubio-1996-shootdown-10702700/">May 20 indictment</a></strong> is the judicial counterpart to Executive Order (EO) 14404 signed by US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> earlier this month. This EO deploys secondary sanctions against any foreign institution engaging with Cuba, expanding existing sanctions under the International Emergency Economic Powers Act, 1977.</span></p>
+<p><span style="font-weight: 400">It appears to target non-US companies with considerable US assets to discourage them from investing in Cuba. This is paired with EO 14380, which enables the US to impose new tariffs on imports from countries supplying oil to Cuba.</span></p>
+<p><span style="font-weight: 400">Moreover, the US also has an ongoing naval blockade against oil shipments to Cuba, plunging the country into severe rolling blackouts stretching as long as 22 hours. This has pushed Cuba’s already fragile, state-managed power grid past its breaking point.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<span class="custom-caption"><img alt="Marco Rubio" class="lazyloading size-medium wp-image-10705828" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/20260524090L.jpg?resize=600,340" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/20260524090L.jpg 1440w, https://indianexpress.com/wp-content/uploads/2026/05/20260524090L.jpg?resize=450,255 450w, https://indianexpress.com/wp-content/uploads/2026/05/20260524090L.jpg?resize=600,340 600w, https://indianexpress.com/wp-content/uploads/2026/05/20260524090L.jpg?resize=768,435 768w, https://indianexpress.com/wp-content/uploads/2026/05/20260524090L.jpg?resize=716,405 716w" height="815" sizes="(max-width: 1440px) 100vw, 1440px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1440"> US Secretary of State Marco Rubio. Rubio has described Cuba as a “failed state” and a “national security threat”. Photo: ANI</img></span>
+<p><span style="font-weight: 400">While the US embargo and extensive sanctions were present before 1996, the plane shootdowns codified it into law in the form of the Helms-Burton Act, which stripped the White House (and the President) of the power to lift the embargo.</span></p>
+<p><span style="font-weight: 400">Crucially, Title III of the Act weaponised US federal courts against foreign investors by allowing US citizens to sue companies that “trafficked” or derived commercial benefit from property confiscated during the 1959 Cuban Revolution (which Fidel Castro orchestrated to depose the US-backed Fulgencio Batista regime). Today, only the US Congress can lift the blockade — the law mandates this can only happen if Cuba forms a democratic government that explicitly excludes the Castro family.</span></p>
+<p><b>Possible military action</b></p>
+<p><span style="font-weight: 400">This is not the first time that the US has executed military action to facilitate expedited criminal jurisdiction.</span></p>
+<p><span style="font-weight: 400">In 1989, the US military invaded Panama to capture its indicted </span><i><span style="font-weight: 400">de facto</span></i><span style="font-weight: 400"> leader, Manuel Noriega. The decisions in the Noriega case established the precedent that no matter what circumstances brought a person to face trial in the US, they would not dilute the federal jurisdiction of the courts to prosecute them. Effectively, this meant that military extraction from foreign soil would not face repercussions in the face of US criminal proceedings.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">In January 2026, the US captured Venezuelan President Nicolas Maduro during a military raid in Caracas (called Operation Absolute Resolve), after American authorities had charged him with “narcoterrorism”.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">While announcing Raul Castro’s indictment, Blanche stated: “If you kill Americans, we will pursue you. No matter who you are. No matter what title you hold.” In response, Cuban President Miguel Diaz-Canel condemned the charges, dismissing the indictment as a “political manoeuvre, devoid of any legal basis”. He went on to accuse the Trump administration of leveraging legal proceedings to “justify the folly of a military aggression against Cuba”.</span></p>
+<p><b>A US-friendly Cuban regime?</b></p>
+<p><span style="font-weight: 400">The indictment, however, is not the only element of the US’s latest actions against Cuba. </span></p>
+<p><span style="font-weight: 400">Last week, US Secretary of State <strong><a class="" href="https://indianexpress.com/article/world/us-news/us-cuba-tensions-raul-castro-indicted-marco-rubio-national-security-threat-gaesa-10702270/">Marco Rubio</a></strong> described Cuba as a “failed state” and a “national security threat”. He also appeared to reach out to the Cuban populace by offering a $100 million aid package conditional on political reform within the state. He framed the people’s suffering as the byproduct of the Cuban leadership resisting the weight of US sanctions and the embargo.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Rubio also targeted GAESA (Grupo de administration Empresarial), a military-run mega conglomerate that reportedly controls roughly 70% of the Cuban economy. “Cuba is controlled by GAESA”, he said, blaming the conglomerate for hoarding national wealth.</span></p>
+<p><span style="font-weight: 400">As one who is half-Cuban and raised in South Florida, Rubio’s actions indicate an attempt to fracture the relationship between the Cuban people and their leadership. The aggressive US posture, however, is tied to domestic politics: ahead of the midterm elections scheduled for November 2026, the Trump administration is seeking a major foreign policy victory. Indicting a key Castro family member is evidently aimed at energising the conservative-leaning Cuban-American voter base in South Florida, for whom the 1996 incident remains a troubling memory.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10705823"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-fourth, twenty twenty-six, at two minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/raul-castro-us-indictment-cuba-plane-shootdown-trump-2026-midterms-10705823/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-26 15:05 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
