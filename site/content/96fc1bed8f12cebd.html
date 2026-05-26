@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Blurred answer sheets, payment portal collapse: Why CBSE's digital evaluation for Class 12 is facing flak | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Blurred answer sheets, payment portal collapse: Why CBSE's digital evaluation for Class 12 is facing flak</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-26</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/cbse-class-12-results-1.jpg?w=1600" alt="Blurred answer sheets, payment portal collapse: Why CBSE's digital evaluation for Class 12 is facing flak">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Students leaving an examination centre in Chandigarh." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/cbse-class-12-results-1.jpg?w=1600" width="650"/><span class="ie-custom-caption">Students leaving an examination centre in Chandigarh. (Express photo by Kamleshwar Singh)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Central Board of Secondary Education (CBSE) is under fire for its new digital evaluation method, the On-Screen Marking (OSM) system, introduced for Class 12 board examinations this year.</p>
+<p>Students who sought access to the scanned copies of their answer books have flagged blurred answer sheets, missing pages, and, in some cases, received another student’s answer book. The <a class="" href="https://indianexpress.com/about/cbse/" rel="noamphtml">CBSE</a>’s payment system also collapsed last week, deducting additional payments in some cases and smaller-than-required amounts in others.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Officials told <em>The Indian Express</em> that <a href="https://indianexpress.com/article/education/cbse-board-class-10th-12th-osm-education-ministry-seeks-report-cbse-gov-in-10705136/"><strong>students with grievances</strong></a> should wait for the re-evaluation portal to go live and apply through it, but no date has been announced so far. Here’s what to know.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>What is the on-screen marking system?</h2>
+<p>Over 98 lakh answer books belonging to over 18 lakh students were evaluated digitally for the first time, involving Class 11 and 12 teachers across India.</p><div id="taboola-mid-article-personalisation"></div>
+<p>All answer books were marked with a secret code. After they were moved from exam centres to regional offices, the copies were scanned and uploaded to a portal. Evaluators then logged in to the portal and evaluated copies under a marking scheme prepared by a pool of CBSE school teachers.</p>
+<p>In this system, the examiner must mark each step and answer, and in case of misses, the marked answer book cannot be submitted, officials said. The system automatically calculates the total marks.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/neet-ug-computer-based-test-cbt-shift-10691143/">Why NEET-UG is finally shifting to computer-based testing, what can students expect</a></span></div>
+<p>Of over 98 lakh evaluated answer books, around 13,000 were found to be illegible and were evaluated manually.</p>
+<p><strong>So, what went wrong?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The results declared on May 13 showed that the pass percentage had dropped from 88.39% last year to 85.29% this year. The last time a lower pass percentage than this year was recorded was in 2019, when the figure stood at 83.40%. The number of students scoring over 90% has also dropped by around 16% compared to last year.</p>
+<p>After the results came out, parents and students raised concerns, linking the marks to the OSM system, the only new aspect in the evaluation process.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/cbse-board-class-10th-12th-osm-education-ministry-seeks-report-cbse-gov-in-10705136/">CBSE class 12 pass percentage drops to the lowest since Covid. Here’s why</a></span></div>
+<p>To address these concerns, the board announced last week that the price of obtaining a scanned copy of the answer book would be slashed from Rs 700 to Rs 100. The cost of verification (checking the totalling of marks or unmarked answers) would be cut from Rs 500 to Rs 100. Re-evaluation (where specific answers are rechecked) fees would be reduced from Rs 100 per question to Rs 25 per question.</p>
+<p>It also announced that the fee would be refunded if re-evaluation results in an increase in marks, bringing back a system that the board has not followed since 2019 due to difficulties in returning the amount.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The portal to apply for copies of answer books became accessible on May 19. However, it faced glitches, and the initial deadline of May 22 was extended multiple times till Monday (May 25). The board said that the portal faced “unprecedented traffic” and “several attempts of unauthorised interference, which has made it prone to disruptions.” It also said that technical issues resulted in “incorrect fee deduction” and promised a refund for excess payments.</p>
+<p>The board has received an unusually high number of requests for answer book copies this year. Officials told The Indian Express on May 23 that 2.94 lakh applications for 8.56 lakh answer books were received. This is more than twice the 1.31 lakh applications received last year for 2.82 lakh answer books. Of the 8.56 lakh answer books requested, 2.5 lakh copies had been sent out by then.</p>
+<p>Students can apply for verification and re-evaluation only after receiving their answer book copies. The board has said that once the portal for re-evaluation is made available, it will remain open for at least two days after the last answer book copy is provided to applicants.</p>
+<p><strong>What has the board’s stand on OSM been so far?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The board and the Education Ministry have defended the system, arguing it eliminated totalling errors, and made the marking process standardised, objective, and transparent.</p>
+<p>At a press briefing last week, CBSE Chairman Rahul Singh said that OSM evaluations were “code-independent”. This meant that while evaluation was earlier carried out in the same regions, papers could now be sent for evaluation elsewhere, making the process “more consistent and fair across regions.”</p>
+<p>While the board had attempted an on-screen marking system in 2014, it was set aside since there were no facilities to scan answer books without cutting them at the spine, officials said. Since then, better facilities have become available, they added. In 2014, it was implemented for Class 10 in a few regional offices, and for Class 12 in 2015 in the <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> region.</p>
+<p>The current OSM system was approved by the CBSE Governing Body, its highest decision-making authority, last year. At its meeting in June last year, members were told that digital evaluation will reduce errors, “imparity in region-wise evaluation of answer books will be taken care of”, and the examination protocol will be stronger.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Going by the minutes of the meeting, “members (of the Governing Body) suggested that the on-screen marking may be implemented in all subjects only after completion of pilot projects in some subjects across the various Regional Offices of the Board.” The governing body had “noted the suggestion”.</p>
+<p>However, it is learnt that pilot projects were not conducted across the board’s regional offices. A dry run of the OSM evaluation was conducted in January in five schools, where teachers from Kendriya Vidyalayas, Navodaya Vidyalayas, and state government and private schools were trained in the system. Based on recommendations from the three-day process, the system was updated. Training and a mass mock evaluation were conducted for teachers.</p>
+<p><strong>How is the system being fixed now?</strong></p>
+<p>To deal with the technical issues in the post-result services portal, IIT Kanpur and IIT Madras have been roped in. Four public sector banks — Bank of India, Bank of Baroda, Canara Bank and Indian Bank — have also been tasked with assisting the board with its payment gateway and ensuring that automatic refunds are made for excess payments. These steps have been taken on Education Minister Dharmendra Pradhan’s directions.</p>
+<p>Board officials maintain that issues being raised now can only be addressed through the verification and re-evaluation processes. Grievances raised on the portal will be investigated fully, they said.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10707263"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-fifth, twenty twenty-six, at thirty minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/cbse/" href="https://indianexpress.com/about/cbse/">CBSE</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/class-12-results/" href="https://indianexpress.com/about/class-12-results/">class 12 results</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/cbse-on-screen-marking-system-student-concerns-10707263/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-26 02:50 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
