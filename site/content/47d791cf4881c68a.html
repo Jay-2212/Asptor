@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Ranveer Singh-Farhan Akhtar standoff: How Bollywood treat exits and obligations | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Ranveer Singh-Farhan Akhtar standoff: How Bollywood treat exits and obligations</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-farhanvsranveer_expl.jpg?w=1600" alt="Ranveer Singh-Farhan Akhtar standoff: How Bollywood treat exits and obligations">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Ranveer Singh Farhan Akhtar" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-farhanvsranveer_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Federation of Western India Cine Employees called for its members not to work with actor Ranveer Singh (right), amid his dispute with Farhan Akhtar (left), the producer and director of Don 3.</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">It’s not often that disputes involving top names in Bollywood translate into a wider “non-cooperation directive” against an individual — that too, one of its most sought-after actors. But that is exactly what has unfolded this week after the <strong><a class="" href="https://indianexpress.com/article/entertainment/bollywood/fwice-issues-non-cooperation-directive-to-ranveer-singh-over-don-3-exit-10707240/">Federation of Western India Cine Employees (FWICE)</a></strong> called for its members not to work with actor Ranveer Singh, amid his dispute with Farhan Akhtar, the producer and director of <em>Don 3</em>.</p>
+<p dir="ltr">Many in the film industry have criticised the directive as unreasonable and beyond FWICE’s remit. B N Tiwari, the president of FWICE, told <em>The Indian Express</em>, “The federation never wants to go against a particular individual, this is more a message rather than a ban.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">Announced in 2023 with a teaser featuring Singh, <em>Don 3</em>’s fate is now uncertain, with Singh leaving the project a few months ago, weeks before filming began, reportedly due to delays and the lack of a final script. Akhtar and Ritesh Sidhwani, co-founders of the production house Excel Entertainment, are said to have sought around Rs 45 crore from the actor for losses, which he reportedly refused to pay.</p>
+<p dir="ltr">Singh’s representatives said in a statement that he did not want to publicly speak on the matter and refused further comments when approached by <em>The Indian Express</em>. Akhtar also did not respond to a request for comments.</p><div id="taboola-mid-article-personalisation"></div>
+<h2 dir="ltr"><strong>What is FWICE?</strong></h2>
+<p dir="ltr">FWICE is a trade union comprising 38 craft associations with over 5 lakh members, representing everyone from spot boys (who assist in shootings) to artists. It is the biggest such body in Asia and a 70-year-old organisation, Tiwari said.</p>
+<p dir="ltr">To become a FWICE member, a film industry worker first joins any of the 38 associations based on their respective profession, such as the Cine and TV Artistes Association (CINTAA). These bodies hold elections for posts like President, General Secretary, Treasurer, who become members of the FWICE General Council. Elections are held for the FWICE leadership from among them.</p>
+<p dir="ltr">Tiwari, who has worked as a sound engineer for over 50 years and is a director and producer, outlined its functions: “We manage the disputes or problems that come our way, but generally, we work to push for cinema workers’ rights, to see if these rights are being curtailed in any way, and if the government or the film producers are responsible.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/entertainment/bollywood/fwice-selective-outrage-ban-on-ranveer-singh-no-action-on-242-editors-plea-10708301/">FWICE’s selective outrage: Ban on Ranveer Singh, but no action on 242 editors’ 2023 plea</a></span></div></p>
+<p dir="ltr">In case of a dispute, members first approach their respective artists’ associations. But if it doesn’t get resolved, they can turn to FWICE. “Farhan Akhtar went to the Indian Film and Television Directors’ Association (IFTDA), but the issue wasn’t solved there, so he came to the federation, which is the mother body or the final authority. Its decision must be abided by the producers and all other parties,” Tiwari argued.</p>
+<p dir="ltr">However, FWICE is not authorised to ban any individual. So, what happens if their directive is violated? Tiwari said it was intended to compel the parties involved, rather than permanently bar anyone. Singh reportedly did not respond to calls from FWICE, allegedly telling them that the matter did not “come under their jurisdiction.”</p>
+<p dir="ltr">“We want them to come to a resolution; we do not want to level accusations… He is a superstar, I want to support him, but for both parties to reach an agreement, we have to do something. That is what we have done. <em>Bachhe badmaash ho jaate hain toh maa-baap daant dete hain na</em> (When children act naughtily, parents scold them, right)?” Tiwari said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr"><strong>When has FWICE acted in the past on such issues?</strong></p>
+<p dir="ltr">Most recently, FWICE objected to actor Diljit Dosanjh’s inclusion in <em>Border 2</em> (2026) for having starred in a film featuring Pakistani actor Hania Aamir after Operation Sindoor. The film’s shooting began before the Pahalgam attacks.</p>
+<p dir="ltr">“T-Series (the producers of <em>Border 2</em>) apologised to us, they said their film was about to be completed, and if you don’t support us, we will face significant losses. So, we do consider the producer’s argument as well. <em>Hum koi vasooli wale toh log nahi hain</em> (We are not in the business of extortion),” Tiwari said.</p>
+<span class="custom-caption"><img alt="Diljit Dosanjh" class="lazyloading size-medium wp-image-10711186" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/ex-diljit.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg 4080w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=608,405 608w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=1536,1024 1536w, https://indianexpress.com/wp-content/uploads/2026/05/ex-diljit.jpg?resize=2048,1365 2048w" height="2720" sizes="(max-width: 4080px) 100vw, 4080px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="4080"> Actor-singer Diljit Dosanjh. Most recently, FWICE objected to actor Diljit Dosanjh’s inclusion in <em>Border 2</em> (2026) for having starred in a film featuring Pakistani actor Hania Aamir after Operation Sindoor. Photo: Jasbir Malhi</img></span>
+<p dir="ltr">An eight-member committee of office bearers makes such decisions, but for broader issues, discussions are held with the General Council.</p>
+<p dir="ltr"><strong>So, how are such disputes resolved?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Namrata Pahwa, a <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>-based advocate who has worked with film and media clients for over a decade, told <em>The Indian Express</em> that a lot depends on the specific contracts in question. She said, “Before a contract is signed, it goes through many iterations over months, as various verticals chime in. All negotiations should hopefully finish before executing the agreement, on remuneration, responsibilities, etc.</p>
+<p dir="ltr">For a long time, contracts were not essential to an industry where personal relationships and informal ties influence work. But, in the last five to six years, after the <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a> pandemic and with the rise of OTT platforms, they are becoming the norm.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/entertainment/bollywood/is-ranveer-singh-ban-legal-pralay-impact-why-farhan-akhtar-didnt-go-court-10708508/">Is Ranveer Singh ban legal? Its impact on his next Pralay, and why Farhan didn’t go to court</a></span></div></p>
+<p dir="ltr">Pahwa highlighted clauses on termination rights, which account for situations in which someone may leave a project and outline clear obligations for both producers and actors. In their absence, “There are default charges they (actors) would have to pay, which are about five times the amount one would have made from the agreement,” Pahwa said. Sometimes, they are asked to refund with interest for the work done so far.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Payments to actors are made in various stages, given that film production is a long, capital-intensive process with many moving parts. It includes pre-production (planning, budgeting, casting), the actual filming, and post-production (dubbing, marketing, promotions), each step involving numerous tasks. Fees are paid in “tranches”, linked to different stages of completion (say 10% or 50% of the project).</p>
+<p dir="ltr">An actor who has worked on several feature-length films and OTT productions told <em>The Indian Express</em> on the condition of anonymity that a project involving a payment of Rs 8 lakh, for instance, would be split into five or six smaller payments, including one after the project is released.</p>
+<p dir="ltr">While smaller adjustments can be made even after a contract is signed, say on the availability of vanity vans and spot boys, these are based on personal relationships between the actor and the production company. Apart from that, any violation will be taken seriously. “After all, it’s a valid contract that you’re signing. With a big production, it’s not just your time or energies involved. Incredible costs are borne since every stage involves a lot of money. So, if an actor suddenly wants to leave, it shouldn’t be allowed, save for a legitimate breach of contract from the production side,” Pahwa said.</p>
+<p dir="ltr">Alternatives such as mediation and arbitration (a more formal process) are explored before moving on to litigation, and even then, issues are generally settled out of court. Trade unions and associations can only advise and mediate, she added.</p>
+<p dir="ltr"><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">However, actors who aren’t A-listers often have little power in this setup. The actor quoted earlier said, “Negotiations can prove to be tricky. Once a contract is finalised, it all works based on goodwill, and you have to engage in soft negotiations if something comes up.”</p>
+<p dir="ltr">“Things are generally in favour of the producer, not so much the actor… For an average actor, leaving a project in case of disagreement might be turned against you. You need to have a surety you can hold up in court and pay the producer back. So, it’s always skewed. With the OTTs, they make contracts that are very hard lettered, and it’s difficult to move an inch on those. What you can trust is building some sort of a relationship with the production house for certain changes,” he said.</p>
+<p dir="ltr">Due to the precarity of work, actors mostly accept things like poor payments and bulk dates (allowing dates to be blocked despite only a few days of actual work/shooting, resulting in a loss of opportunity), he added.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10711150"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-eighth, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ranveer-singh-farhan-akhtar-don-3-fwice-dispute-10711150/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-28 02:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

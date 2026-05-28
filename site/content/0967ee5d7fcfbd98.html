@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Trump’s likely Iran deal: 60-day ceasefires till mid-term polls, negotiated Hormuz passages | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Trump’s likely Iran deal: 60-day ceasefires till mid-term polls, negotiated Hormuz passages</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Trump_America_25__Memorial_Day.jpg?w=1600" alt="Trump’s likely Iran deal: 60-day ceasefires till mid-term polls, negotiated Hormuz passages">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Iran deal" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Trump_America_25__Memorial_Day.jpg?w=1600" width="650"/><span class="ie-custom-caption">President Donald Trump points as Vice President JD Vance watches during the 158th National Memorial Day Observance coinciding with the nation's 250th anniversary, at the Memorial Amphitheater in Arlington National Cemetery, Monday, May 25, 2026, in Arlington, Va. (AP Photo/Alex Brandon)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><strong>US Iran deal</strong>: A supertanker transporting Iraqi crude to Vietnam proved earlier this month that even with high-stakes naval blockades, workarounds can be managed.</p>
+<p>Agios Fanourios I, a supertanker linked to Geneva-based trader Lytton SA, holding around 2 million barrels of crude, was stopped first by Iranian and then US authorities. It passed the American blockade about a week ago after an intervention from Vietnam’s state oil company PetroVietnam Oil Corporation, Bloomberg reported citing satellite and trade data.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Third-party cargoes are now starting to cross the Strait of Hormuz, a vital waterway through which around 20% of the world’s oil and natural gas flows, with about 10 transits officially reported over the last 24 hours, according to a trade source.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>While this is still a small figure given the number of vessels stuck on both sides of the Strait due to the dual Iranian and American blockades, it is encouragingly higher than on any given day in late April or early May, a shipping sector source told <em>The Indian Express</em>.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The person indicated that this could be in response to demands from specific countries, such as Vietnam in the case of the Agios Fanourios I, and comes in the wake of Trump’s recent China visit, where Beijing seems to have indicated a hands-off approach to resolving the Strait deadlock while unambiguously conveying its point about the Americans keeping off Taiwan.</p>
+<h2>So, where is the US-Iran war headed?</h2>
+<p>The latest <strong><a class="" href="https://indianexpress.com/article/world/us-strikes-iran-hormozgan-strait-of-hormuz-ceasefire-brent-crude-price-10709084/" rel="noopener" target="_blank">deal under discussion by the US and Iran</a></strong> reportedly entails a 60-day ceasefire extension, reopening of the Strait of Hormuz, and an extended plan for taking forward the negotiations over Iran’s nuclear programme.</p>
+<p>In a social media post Sunday, Trump said “constructive” talks were moving ahead, but “both sides must take their time and get it right”. Earlier on Saturday, the US President had said an agreement had been “largely negotiated”, prompting speculation that an announcement could be imminent.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-strikes-on-iran-ceasefire-talks-hormuz-tensions-10708960/">Why US strikes in ‘self-defence’ against Iran threaten progress on talks to end the war</a></span></div>
+<p>Iranian officials also offered similar signals over the weekend, with foreign ministry spokesperson Esmail Baghaei saying the two sides are both “very close and very far” from reaching an agreement.</p>
+<p>According to an independent strategic expert, this deal is tantamount to kicking the can down the road, at least till the upcoming American mid-term elections.</p>
+<p>“In all probability, the 60-day ceasefire will be subject to perhaps two more extensions till November. Trump will likely buy time till the mid-terms and till then, passage of ships through the Strait would be allowed on a negotiated basis. The Iranians will likely continue to charge a toll till their demand for some sanctions relief is agreed to, including the unfreezing of assets. For Tehran, its key demand remains the waiver of sanctions in return for keeping the Strait of Hormuz partly open.”</p>
+<p>The expert said the impasse suits most of the players.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>“The possibility of an escalation of any kind is a looming worry. Given how things are stacked up, the Trump administration will hard sell to its domestic audience that the negotiations are leading to a deal better than the JCPOA (the Joint Comprehensive Plan of Action, the earlier Iran nuclear deal negotiated by Barack Obama); that the Iranians have been hammered sufficiently; a Sunni government has been installed in Syria; while Hamas has been decimated and Hezbollah weakened substantially. The fact that the Iranian regime continues to be in the saddle and the enriched uranium is still in their control are clear failures.”</p>
+<p>For the Iranians, said the expert, the positives include “having shown the US and its allies their place, demonstrating Tehran’s control of the Strait, and its ability to weaponise it going forward. The regime, despite being under fire, is in negotiations to get decades-long sanctions removed. The clerics are even more in control of Tehran than when this war started.”</p>
+<p>Iranian foreign ministry spokesman Baghaei had described a “memorandum of understanding” that is in the works, telling state television Saturday that Iran’s intention was to reach a pact “in the form of a framework, consisting of 14 points”. Baghaei said Tehran was in the process of finalising the memorandum, so further talks could be held within 30 to 60 days “and ultimately a final agreement can be reached”.</p>
+<p>On Monday, visiting US Secretary of State Marco Rubio said in <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> there was a “pretty solid thing on the table in terms of their ability to open up the strait” and “enter into a very real, significant, time-limited negotiation on the nuclear matter.” On the nuclear issue, there is a likelihood that some sort of a broad agreement could be on the table, with specifics and details pushed to the backburner.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>The Israel factor</h2>
+<p>Complicating matters somewhat is that Israel has said it will escalate strikes against Hezbollah in Lebanon, claiming the militia had ignored warnings to halt firing. A renewed escalation of this conflict could potentially be a spanner in the works for US-Iran negotiations.</p>
+<p>Another stumbling block could be Trump’s renewed call for countries in the region to join the Abraham Accords – US-brokered agreements from his first term aimed at getting Arab nations to normalise relations with Israel.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>In a long statement posted on Truth Social, Trump said that any agreement to end the Iran war should include a requirement for several additional countries, including Saudi Arabia and Pakistan, to join the Abraham Accords. Trump said he expects that Saudi Arabia, Qatar, Pakistan, Turkey, Egypt and Jordan would sign up.</p>
+<p>“This, in my view, is a non-starter. It only complicates the situation, especially after the Iran war and how many in the region view Israel. There are protests already emanating from Pakistan, which till now has completely played along,” the source indicated.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The problem for Israel’s <a class="" href="https://indianexpress.com/about/benjamin-netanyahu/" rel="noamphtml">Benjamin Netanyahu</a> is that he has consistently sold this war to his domestic audience as offering the possibility of ensuring regime change in Iran. Far from that, the Iranian regime is more entrenched and more confident, in that it has taken whatever America and Israel could throw at it and survived. More importantly, it possesses a weapon it had never leveraged before: the power to close the Strait of Hormuz.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10708905"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/anil-sasi/">
+<figure>
+<img alt="Anil Sasi" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/anil-sasi.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/anil-sasi/"><span></span>Anil Sasi</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951035"></div><div class="follow_author_title" data-id="Anil Sasi"></div><div class="follow_author_slug" data-id="anil-sasi"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Anil Sasi is the National Business Editor at The Indian Express, where he steers the newspaper’s coverage of the Indian economy, corporate affairs, and financial policy. As a senior editor, he plays a pivotal role in shaping the narrative around India's business landscape.
+Professional Experience Sasi brings extensive experience from some of India’s most respected financial dailies. Prior to his leadership role at The Indian Express, he worked with:
+
+
+ 	
+The Hindu Business Line
+
+ 	
+Business Standard
+
+
+His career trajectory across these premier publications demonstrates a consistent track record of rigorous financial reporting and editorial oversight.
+Expertise &amp; Focus With a deep understanding of market dynamics and policy interventions, Sasi writes authoritatively on:
+
+
+ 	
+Macroeconomics: Analysis of fiscal policy, budgets, and economic trends.
+
+ 	
+Corporate Affairs: In-depth coverage of India's major industries and corporate governance.
+
+ 	
+Business Policy: The intersection of government regulation and private enterprise.
+
+
+Education Anil Sasi is an alumnus of the prestigious Delhi University, providing a strong academic foundation to his journalistic work.
+Find all stories by Anil Sasi here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/anil-sasi/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-sixth, twenty twenty-six, at seventeen minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/trumps-likely-iran-deal-ceasefire-on-repeat-till-midterm-polls-10708905/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-28 02:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

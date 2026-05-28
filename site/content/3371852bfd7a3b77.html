@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | What is normalisation of scores, and why it works in JEE but might not in NEET | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | What is normalisation of scores, and why it works in JEE but might not in NEET</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-neet-normalisation_expl.jpg?w=1600" alt="Expert Explains | What is normalisation of scores, and why it works in JEE but might not in NEET">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="NEET" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-neet-normalisation_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">Examinees of NEET exam finding their roll numbers before entering an exam centre in Kolkata on May 3, 2025. Photo: Express</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The proposed shift of the <strong><a class="" href="https://indianexpress.com/article/india/dharmendra-pradhan-writes-states-smooth-conduct-neet-reexam-june-21-10707410/">National Eligibility-cum-Entrance Test (NEET)</a></strong> from a single-session pen-and-paper (PnP) examination to multi-session computer-based testing (CBT) is primarily driven by repeated controversies over paper leaks, OMR tampering, transportation vulnerabilities, and operational failures. CBT is expected to reduce such risks through encrypted digital delivery and the elimination of printed papers.</span></p>
+<p><span style="font-weight: 400">The NEET-PnP is conducted in a single session, with the same paper for all candidates. Students receive carbon copies of their optical mark recognition (OMR) sheets, allowing independent verification of raw marks directly used for ranking. The system is thus transparent, verifiable, and based on a common benchmark.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">NEET-CBT fundamentally changes this structure. With India’s IT infrastructure reportedly accommodating only about 1.2 lakh candidates per session, conducting NEET for nearly 24 lakh students may require around 20 sessions with different question papers.</span></p>
+<p><span style="font-weight: 400">Since no two papers can be identical in difficulty, comparing raw marks directly is statistically unfair. Rankings, therefore, depend on normalised percentile scores derived through statistical methods rather than directly verifiable raw marks, raising concerns about precision, transparency, fairness, and verifiability, especially since no normalisation method can ever be perfectly error-free or universally accepted.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>How does normalisation work?</b></h2>
+<p><span style="font-weight: 400">The fundamental challenge in multi-session CBT is to fairly compare candidates who attempt different question papers across sessions. The underlying assumption is that candidates appearing in relatively tougher sessions are likely to score lower raw marks than those in easier ones.</span></p>
+<p><span style="font-weight: 400">To compensate for such variations, raw marks are statistically normalised so that candidates are neither unfairly advantaged nor disadvantaged by their allotted session. The premise is that if all sessions have sufficiently similar candidate populations and comparable difficulty distributions, normalised percentile scores should theoretically produce fair rankings.</span></p>
+<p><span style="font-weight: 400">Most likely, the National Testing Agency (NTA) will use the same normalisation methodology for NEET-CBT as in JEE (Main), though NEET would involve nearly double the candidate volume.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/neet-paper-leak-cbt-vs-iit-jee-10701488/">Why Computer-Based Testing may not solve NEET’s paper leak problem</a></span></div>
+<p><span style="font-weight: 400">A candidate’s performance is assessed relative to other candidates in the same session using percentile scoring. A percentile score indicates the percentage of candidates scoring equal to or below a particular candidate. Thus, the topper of every session receives a percentile of 100 irrespective of raw marks, while percentile values at lower scores vary depending on the number of candidates appearing in that session.</span></p>
+<p><span style="font-weight: 400">In the first stage, percentile scores are calculated for each subject and in the aggregate within every session. These are then placed on a common statistical scale to generate normalised scores, called NTA scores — often reported to several decimal places to reduce ties — and final rankings across all sessions.</span></p>
+<p><b>Can normalisation distort merit and ranking?</b></p>
+<p><span style="font-weight: 400">It is the central controversy in multi-session CBT. Since rankings depend on statistically normalised percentile scores, candidates cannot independently verify precisely how normalisation across sessions was computed.</span></p>
+<p><span style="font-weight: 400">In NEET, where even a single mark can change ranks by thousands, tiny normalisation variations may significantly alter outcomes. For example, a candidate scoring 710 in one session may rank below another scoring 680 in another session, potentially affecting admission to institutions such as the All India Institute of Medical Sciences (AIIMS).</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p><span style="font-weight: 400">The concern is not that normalisation is mathematically invalid, but that even small statistical adjustments can significantly alter rankings and admissions, creating distrust when normalised scores fall below actual raw marks.</span></p>
+<p><b>Why will normalisation severely impact NEET, not JEE?</b></p>
+<p><span style="font-weight: 400">NTA already uses normalisation in the Joint Entrance Examination or JEE (Main), where anomalies are evident. Its impact, however, remains limited because about 2.5 lakh top candidates proceed to IIT-JEE (Advanced) for admission to 23 Indian Institutes of Technology and a few other institutions for a few tens of thousands of seats.</span></p>
+<p><span style="font-weight: 400">For them, JEE (Main) mainly serves as an eligibility screening test, since admissions are ultimately based on IIT-JEE (Advanced), a single-session examination conducted without normalisation. For most remaining JEE (Main) candidates as well, precision in normalised scores matters less because lakhs of engineering seats are available across 31 National Institutes of Technology, 26 Indian Institutes of Information Technology, and numerous other public and private institutions, with several thousand seats remaining vacant each year.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/long-reads/latur-sikar-a-tale-of-two-neet-coaching-cities-10703585/">Latur &amp; Sikar: A tale of two NEET coaching cities</a></span></div>
+<p><span style="font-weight: 400">NEET is fundamentally different. Over 20 lakh candidates compete for a very limited number of medical seats, including a few hundred at top institutions such as AIIMS and the Jawaharlal Institute of Postgraduate Medical Education and Research. With extreme rank compression, even fractional percentile differences or minor normalization adjustments may significantly alter ranks and admissions, especially for meritorious candidates near critical cutoffs.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">However, normalisation has a limited impact on management-quota admissions in private colleges, where NEET largely functions as an eligibility examination.</span></p>
+<p><b>What about global digital exams?</b></p>
+<p><span style="font-weight: 400">Global digital examinations such as Scholastic Assessment Test (SAT), Test of English as a Foreign Language (TOEFL), and Graduate Record Examination (GRE) differ fundamentally from NEET and JEE. They are adaptive tests, where subsequent questions depend on responses to earlier ones, unlike NEET and JEE, where all candidates in a session receive the same question set.</span></p>
+<p><span style="font-weight: 400">Moreover, they are not single-criterion rank-based admission tests. They assess aptitude, language proficiency, or academic readiness as only one component of broader admission processes.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">NEET and JEE, in contrast, are single-criterion rank-based admission tests in which rankings alone determine admissions for limited seats.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">China’s Gaokao — perhaps the closest examination to NEET in scale and stakes — still relies largely on raw-score-based merit systems.</span></p>
+<p><b>What is the way forward?</b></p>
+<p><span style="font-weight: 400">Normalisation in NEET-CBT is the biggest challenge, given the scale and stakes of the examination. Question-difficulty balancing, session-equivalence testing, disclosure mechanisms, simulation studies, and independent technical oversight would become essential. Both raw and normalised scores should be disclosed to improve transparency.</span></p>
+<p><span style="font-weight: 400">The system would therefore need to be transparent, verifiable, explainable, and statistically robust. Yet possible ranking distortions are likely to generate distrust and controversy.</span></p>
+<p><span style="font-weight: 400">The larger question is whether an examination in which even a single mark determines life-altering outcomes should shift away from directly verifiable raw-score merit toward statistically processed rankings. Before any transition, alternative models should be openly debated with genuine academic experts rather than only through high-powered committees.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><strong><i>The author is a former computer science professor at IIT Kharagpur, IIT Kanpur, BITS Pilani, and JNU, and a former scientist at the Defence Research and Development Organisation and the Department of Science &amp; Technology.</i></strong></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10708828"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="copyright">© The Indian Express Pvt Ltd</div><div class="ie-first-publish" data-content="This article went live on May twenty-sixth, twenty twenty-six, at thirty-one minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/neet-cbt-normalisation-ranking-concerns-expert-explains-10708828/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-28 02:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
