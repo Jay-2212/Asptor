@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Byju Raveendran sentenced to jail: How the high-flying edtech became a cautionary tale | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Byju Raveendran sentenced to jail: How the high-flying edtech became a cautionary tale</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Byjus.jpg?w=1600" alt="Byju Raveendran sentenced to jail: How the high-flying edtech became a cautionary tale">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="byju" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Byjus.jpg?w=1600" width="650"/><span class="ie-custom-caption">Raveendran has pushed back strongly against the developments, saying the matter was being portrayed in a “misleading” manner even as settlement talks with lenders and investors were nearing completion. (Byjus)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>A Singapore court has sentenced Byju Raveendran, founder of the failed edtech firm Byju’s, to six months in jail for contempt of court, according to a <em>Bloomberg</em> report, marking the latest escalation in the legal and financial troubles engulfing the once high-flying edtech startup. The court held that Raveendran repeatedly failed to comply with orders linked to the disclosure of his assets dating back to April 2024. He was also directed to surrender before the authorities and pay around $71,000 in legal costs.</p>
+<p>The episode caps a dramatic reversal of fortune for what was once India’s most celebrated startup story. At its peak in 2022, Byju’s was valued at $22 billion and counted investors such as BlackRock, Sequoia Capital, General Atlantic and the Qatar Investment Authority among its backers. The company became synonymous with India’s pandemic-era edtech boom. Today, it’s worth zero.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The Singapore case stems from a <a href="https://indianexpress.com/article/world/indian-edtech-firm-byju-raveendran-founder-sentenced-jail-contempt-court-10709892/"><strong>dispute tied to Byju’s</strong></a> offshore investment structures and disclosure obligations linked to investors and creditors pursuing the company across multiple jurisdictions. According to Bloomberg, the contempt proceedings were triggered after Byju Raveendran allegedly failed to comply with repeated court orders requiring him to disclose details of his assets and ownership interests, including documents related to Beeaar Investco Pte, an entity connected to Byju’s corporate structure.</p>
+<p>Action was pursued by parties involved in the broader investor and lender disputes surrounding Byju’s, including entities linked to Qatar-based investors and creditors attempting to trace ownership and movement of assets amid ongoing recovery proceedings.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Raveendran, however, has pushed back strongly against the developments, saying the matter was being portrayed in a “misleading” manner even as settlement talks with lenders and investors were nearing completion. In a statement, he said the Singapore proceedings related to procedural disclosure disputes and did not amount to findings of fraud or wrongdoing. He added that he had “acted in good faith” and accused some parties of creating a “false and one-sided narrative” around him and the company.</p>
+<blockquote class="twitter-tweet">
+<p dir="ltr" lang="en">1/ For months, the lenders (including GLAS Trust and QIA), other stakeholders and us (the founders) have been in advanced settlement discussions. A settlement has been agreed in principle, with only minor residual issues left between certain parties – none involving me. As part…</p>
+<p>— Byju Raveendran (@ByjuofBYJUS) <a class="" href="https://twitter.com/ByjuofBYJUS/status/2059496701107589241?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">May 27, 2026</a></p></blockquote>
+<h2><strong>How Byju’s unravelled</strong></h2>
+<p>The troubles at Byju’s did not emerge overnight. The company’s rapid expansion during the Covid pandemic masked deeper operational and financial issues that later surfaced in public.</p>
+<p>Byju’s grew aggressively through acquisitions, snapping up firms such as Aakash Educational Services, WhiteHat Jr, Great Learning and Epic in a bid to build a global edtech empire. Much of this expansion was fuelled by external capital and debt.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/hdfcs-marketing-spend-row-why-this-raises-questions-on-banks-governance-and-its-code-of-ethics-10709607/">Why row over marketing spend raises questions on HDFC Bank’s governance and code of ethics</a></span></div>
+<p>The first major warning signs emerged when the company delayed filing audited financial statements for FY21. Questions over governance and accounting practices began mounting, with investors increasingly concerned about revenue recognition and cash burn.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The crisis deepened after Byju’s raised a $1.2 billion term loan in the US in 2021 — one of the largest overseas borrowings by an Indian startup. Relations between the company and lenders later deteriorated sharply, with creditors alleging misuse and diversion of funds. US lenders initiated legal action to recover dues tied to the loan.</p>
+<p>By 2023 and 2024, the company was grappling with mounting layoffs, unpaid salaries, delayed vendor payments and resignations of key executives and board members.  Deloitte resigned as the company’s auditor, while several investor-appointed directors also stepped down.</p>
+<p>Legal troubles soon spread across jurisdictions. In India, Byju’s faced insolvency proceedings and disputes with investors. In the US, bankruptcy courts examined allegations linked to the movement of funds from Byju’s Alpha, a special-purpose entity created for the term loan. Meanwhile, Singapore emerged as another legal battleground, with Qatar Holdings pursuing action linked to investment disputes and disclosure obligations.</p>
+<p><strong>From startup icon to cautionary tale</strong></p>
+<p>The downfall of Byju’s has become one of the starkest cautionary tales in India’s startup ecosystem. For years, the company embodied the aspirations of India’s venture capital boom. The collapse has also raised broader questions around corporate governance standards in India’s startup ecosystem.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Founded by former teacher Byju Raveendran, the company initially won praise for popularising digital learning in India. Its aggressive marketing helped it dominate the online education market during the pandemic, when schools were shut, and millions of students turned to online classes.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>But critics say the company’s pursuit of hypergrowth ultimately became unsustainable. The pressure to justify lofty valuations led to expensive acquisitions, rising debt obligations and relentless expansion at a time when the broader edtech market was beginning to cool after the pandemic.</p>
+<p>Over the past few years, multiple families complained about being pushed into expensive long-term learning packages and education loans by Byju’s that they could not comfortably afford. Sales representatives often used high-pressure tactics, targeted anxious parents, and overstated the academic benefits of courses. Several complaints also centred around difficulties in securing refunds after cancellation requests. The controversy damaged Byju’s carefully cultivated image as a trusted education brand and turned public sentiment sharply against the company, especially as stories of financial distress among low to middle-income families began surfacing.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10710328"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/soumyarendra-barik/">
+<figure>
+<img alt="Soumyarendra Barik" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/soumyarendra-barik/"><span></span>Soumyarendra Barik</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7756264"></div><div class="follow_author_title" data-id="Soumyarendra Barik"></div><div class="follow_author_slug" data-id="soumyarendra-barik"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/imsoumyarendra">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Soumyarendra Barik is a Special Correspondent with The Indian Express, specializing in the complex and evolving intersection of technology, policy, and society. With over five years of newsroom experience, he is a key voice in documenting how digital transformations impact the daily lives of Indian citizens.
+Expertise &amp; Focus Areas Barik’s reporting delves into the regulatory and human aspects of the tech world. His core areas of focus include:
+
+
+ 	
+The Gig Economy: He extensively covers the rights and working conditions of gig workers in India.
+
+ 	
+Tech Policy &amp; Regulation: Analysis of policy interventions that impact Big Tech companies and the broader digital ecosystem.
+
+ 	
+Digital Rights: Reporting on data privacy, internet freedom, and India's prevalent digital divide.
+
+
+Authoritativeness &amp; On-Ground Reporting: Barik is known for his immersive and data-driven approach to journalism. A notable example of his commitment to authentic storytelling involves him tailing a food delivery worker for over 12 hours. This investigative piece quantified the meager earnings and physical toll involved in the profession, providing a verified, ground-level perspective often missing in tech reporting.
+Personal Interests Outside of the newsroom, Soumyarendra is a self-confessed nerd about horology (watches), follows Formula 1 racing closely, and is an avid football fan.
+Find all stories by Soumyarendra Barik here.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/soumyarendra-barik/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-seventh, twenty twenty-six, at two minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+</div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/byju-raveendran-singapore-court-jail-contempt-case-10710328/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-28 15:48 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

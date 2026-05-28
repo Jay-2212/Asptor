@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Siddaramaiah steps down: Karnataka's recent history of CM changes, and their effect on elections | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Siddaramaiah steps down: Karnataka's recent history of CM changes, and their effect on elections</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/karnataka-cm-siddaramiah.jpeg?w=1600" alt="Siddaramaiah steps down: Karnataka's recent history of CM changes, and their effect on elections">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Karnataka Chief Minister Siddarmmaiah with Deputy Chief Minister DK Shivakumar in New Delhi." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/karnataka-cm-siddaramiah.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Karnataka Chief Minister Siddarmmaiah with Deputy Chief Minister DK Shivakumar in New Delhi. (Express photo by Anil Sharma)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Senior Congress leader Siddaramaiah on Thursday (May 28) stepped down as Karnataka Chief Minister, clearing the way for the potential ascension of his long-time party rival and deputy D K Shivakumar to the post.</p>
+<p><a href="https://indianexpress.com/article/cities/bangalore/siddaramaiah-resigns-karnataka-chief-minister-congress-power-sharing-10712501/"><strong>The resignation came</strong></a> after a protracted leadership tussle between the two leaders, with the Congress leadership finally taking a decision it had been putting off for months.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><a class="" href="https://indianexpress.com/about/siddaramaiah/" rel="noamphtml">Siddaramaiah</a>, 78, commanded the support of a majority of the Congress MLAs in Karnataka. He was also the Congress’s only OBC chief minister, someone who helped build a coalition of minorities, Backward Classes and Dalits.</p>
+<p>Yet, the party has decided in favour of a leadership change at a crucial moment. Assembly elections are due in 2028 and Siddaramaiah would have been over 80 years old by that time. And though Shivakumar belongs to the Vokkaliga community, he is much younger than Siddaramaiah. Additionally, <a class="" href="https://indianexpress.com/about/rajya-sabha/" rel="noamphtml">Rajya Sabha</a> and MLC elections and polls to the five corporations under the Greater <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a> Authority (GBA) are also around the corner.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>Mid-term leadership changes, however, are nothing new for Karnataka. Only four chief ministers, all from the Congress, have served a full five-year tenure in the history of the state. They are S Nijalingappa (1962-68, when Karnataka was known as Mysuru State), D Devaraja Urs (1972-77), S M Krishna (1999-2004) and Siddaramaiah (2013-18).</p>
+<p>While there have been several reasons for these mid-term changes, such as dismissals and loss of majority, parties have themselves often intervened to change their leadership — often followed by unfavourable election results. Here’s a look at some of the most recent instances of mid-term chief ministerial changes effected by parties in Karnataka and how they fared in the subsequent Assembly election.</p>
+<h2>B S Yediyurappa to D V Sadananda Gowda to Jagadish Shettar (2011, 2012)</h2>
+<p>In this instance, the BJP intervened to change chief ministers twice during a five-year term.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In 2011, its Karnataka stalwart B S Yediyurappa was forced to quit three years into his tenure following corruption allegations. A Lokayukta report on illegal mining recommended action under the Prevention of Corruption Act against him and three of his Cabinet colleagues including the Reddy brothers of Bellary, mining barons-turned-politicians.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/dk-shivakumar-set-to-be-karnataka-cm-congress-troubleshooter-10711839/">After years of ambition and intrigue, D K Shivakumar set to be Karnataka CM</a></span></div>
+<p>In August 2011, Yediyurappa’s protege, D V Sadananda Gowda, was chosen as the chief minister. His shaky tenure, however, ended in just 11 months amid pressure from Yediyurappa, who had backed his elevation. Gowda’s resignation paved the way for rival Jagadish Shettar’s elevation as the state’s third chief minister in four years.</p>
+<p>Behind the transition was the caste divide between the Lingayat community, to which Yeddiyurappa and Shettar belong, and the Vokkalaigas, from which Gowda hails. The change was an attempt by the BJP to stave off a possible rebellion keeping in mind the 2013 Assembly elections that were just ten months away.</p>
+<p>The election, however, was swept by the Congress, which won 121 of the state’s 224 seats. The BJP won just 40 seats in comparison to its 110 in the 2008 polls. The party further suffered the ignominy of not finishing even as the principal Opposition party, as it tied with the Janata Dal (Secular). Shettar blamed the “confusion in the government, divisions in the party and corruption issues’’ for the loss.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>B S Yediyurappa to Basavaraj Bommai (2021)</h2>
+<p>Apart from the Siddaramaiah-Shivakumar episode, the most recent instance of a party leadership intervening in Karnataka’s chief ministership came in 2021. B S Yediyurappa had led the BJP to victory in the 2018 Assembly elections. In July 2021, however, the BJP leadership pushed him to step down amid rumblings of dissatisfaction with his leadership and allegations of misuse of his office for corruption by family members.</p>
+<p>The BJP propelled <a class="" href="https://indianexpress.com/about/basavaraj-bommai/" rel="noamphtml">Basavaraj Bommai</a> into the chief minister’s chair. His tenure, however, was marked by controversies over various issues — from communal polarisation to corruption. The Congress’s anti-corruption campaigns, like the “PayCM” posters, also dented the CM’s image of being an efficient leader. And he found it difficult to escape the shadow of Yediyurappa, the BJP’s foremost leader in the state.</p>
+<p>By the time the 2023 Assembly elections came around, the 63-year-old Bommai, who appeared to have lost the faith of the BJP leadership, was reduced to playing second fiddle to Yediyurappa during election campaigns. The Congress won the May 2023 election in a landslide, and Siddaramaiah became chief minister — until May 2026.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10712576"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-eighth, twenty twenty-six, at fifty-five minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/karnataka/" href="https://indianexpress.com/about/karnataka/">Karnataka</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/siddaramaiah/" href="https://indianexpress.com/about/siddaramaiah/">Siddaramaiah</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/siddaramaiah-steps-down-karnataka-cm-change-history-10712576/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-28 15:48 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
