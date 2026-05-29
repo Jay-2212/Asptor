@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Can’t afford a home? UN report lists factors behind housing crisis | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Can’t afford a home? UN report lists factors behind housing crisis</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Habitat-Report.jpg?w=1600" alt="Can’t afford a home? UN report lists factors behind housing crisis">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="housing, homeownership" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Habitat-Report.jpg?w=1600" width="650"/><span class="ie-custom-caption">The report notes that housing must be developed where livelihoods and social infrastructure such as parks exist, otherwise people are unwilling to relocate. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Have you ever felt that you might not be able to afford to buy your own house? If yes, you are not alone. Across countries, housing prices are slipping out of the budget of most ordinary people. The world is in the midst of a housing crisis as more people move to urban areas and not enough houses are being built, according to the United Nations’ recently released World Cities Report 2026: The Global Housing Crisis: Pathways to Action. The report also flags financialisation as one of the major factors behind this crisis.</p>
+<h2>What is the global housing shortage?</h2>
+<p><img alt="Housing Crisis stats" class="lazyloading alignnone size-medium wp-image-10711848" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/housing_crisis_stats-2.jpg?resize=600,371" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg 2125w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=450,278 450w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=600,371 600w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=768,475 768w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=655,405 655w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=1536,949 1536w, https://indianexpress.com/wp-content/uploads/2026/05/housing_crisis_stats-2.jpg?resize=2048,1265 2048w" height="371" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Up to 3.4 billion people — four out of every 10 people worldwide — lack access to adequate housing. Of this, more than a billion live in informal settlements such as slums, according to the report by the United Nations Human Settlements Programme (UN-Habitat), the highest recorded number. It was released at the Thirteenth World Urban Forum, which was organised by UN-Habitat in Baku, Azerbaijan.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>At the same time, housing affordability pressures continue to intensify. If a household spends more than 30% of its <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> on housing, it is considered housing stress-burdened. Globally, 44% of households spend more than 30% of their income on rent.</p>
+<p>For prospective buyers, affordability is measured using the house price-to-income ratio: housing is considered affordable when the median house price is no more than three times the median household income, while ratios above five indicate severe unaffordability.</p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/anxiety-and-some-hope-a-new-life-at-savda-ghevra-for-families-relocated-from-slums-near-pm-residence-10709496/">Not just Delhi Gymkhana Club: 700 families to shift 45 km away from address near PM’s residence</a></span></div>
+<p>Central and Southern Asia, including India, have seen the sharpest relative rise in price-to-income ratios of any region — up 73% between 2010 (9.7) and 2023 (16.8).</p>
+<p>In 2018, more than half of the new housing units built in the eight largest Indian cities were in the affordable housing segment. This has declined to fewer than two out of every ten units built by 2025, the report notes. Developers prioritise luxury units due to higher margins and demand, placing homeownership out of reach for most families.</p>
+<p><strong>The anatomy of the global crisis</strong></p>
+<p>The roots of the crisis go back to the post-World War II period, the report notes. Facing severe housing shortages and economic depression, governments invested heavily in public housing. But international agencies, including the United Nations, International Labour Organization (ILO) and World Bank, rarely supported this model. Instead, they advocated greater private sector involvement, arguing that mass public housing was too costly, especially for newly independent and transitioning economies.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This critique of public housing laid the foundations for two dominant approaches that continue to shape housing policy: “aided self-help” — where households build or improve homes with support — and the “enabling approach”, under which governments facilitate construction by private players, community associations and others. Yet these programmes often failed to reach the poorest households and sometimes displaced the very populations they intended to support, the report states.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/bias-against-muslims-and-dalits-supreme-court-judge-flags-social-faultlines-10550491/">Bias against Muslims and Dalits: Supreme Court judge flags social ‘faultlines’</a></span></div>
+<p>The state has not only built fewer homes but has also often built them in the wrong locations. A detailed analysis of annual DDA reports by the Centre for Policy Research’s Cities of Delhi project, directed by Partha Mukhopadhyay and Patrick Heller, found that the agency consistently fell behind housing targets and that construction skewed sharply toward higher income groups. “We calculate that of the 979,073 houses built between 2003 and 2010, fewer than 23,000 (2.3%) were built by the DDA,” it said.</p>
+<p>The report also notes that housing must be developed where livelihoods and social infrastructure, such as parks, exist; otherwise, people are unwilling to relocate. More than 50,000 government-built flats remain unoccupied on Delhi’s outskirts due to poor connectivity, lack of livelihoods and political tussles.</p>
+<h2>What is financialisation, and what are its impacts?</h2>
+<p>According to the report, financialisation is one of the major drivers behind the crisis. It refers to the increasing involvement of financial actors, investment instruments and large pools of capital in housing and land markets. Mortgage lenders, private equity funds and corporate landlords have expanded their role in rental and ownership markets, often seeking long-term income and asset appreciation.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>In India, access to home loans increased after liberalisation in 1991 made homeownership more widely accessible. However, the report states that globally, this increased availability of credit allowed lending to grow faster than the construction of new homes. This created feedback loops in which easier access to credit pushed up prices more quickly than supply could respond. In some cases, well-intentioned housing subsidies also contributed to price increases by raising purchasing power without expanding supply. Declining interest rates from the 1980s further encouraged investment in real estate, intensifying demand and price growth.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The effects of financialisation vary depending on local conditions, regulation and supply. In markets with limited supply, informal incomes or weak tenant protections, increased capital flows can lead to evictions, rent hikes and speculative redevelopment. In India, Non-Resident Indians (NRIs) and investors purchase luxury housing as a form of investment. The Supreme Court even flagged the issue last year, calling speculative activity a slow poison for the residential real estate and the middle class as it artificially inflates demand, fuels asset bubbles and prejudices genuine home buyers.</p>
+<p>The report also notes that in better-regulated environments with stronger planning systems, investment has supported new construction, upgrades of older housing and professionally managed rental stock.</p>
+<p><em><strong>The reporter was in Baku at the World Urban Forum on the invitation of UN-Habitat.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10711756"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/devansh-mittal/">
+<figure>
+<img alt="Devansh Mittal" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2025/01/Devansh-Mittal.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/devansh-mittal/"><span></span>Devansh Mittal</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9804105"></div><div class="follow_author_title" data-id="Devansh Mittal"></div><div class="follow_author_slug" data-id="devansh-mittal"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/devanshmittal_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Devansh Mittal is a Correspondent at The Indian Express, based in the New Delhi City bureau. He reports on urban policy, civic governance, and infrastructure in the National Capital Region, with a growing focus on housing, land policy, transport, and the disruption economy and its social implications.
+
+Professional Background
+
+Education: He studied Political Science at Ashoka University.
+
+Core Beats: His reporting focuses on policy and governance in the National Capital Region, one of the largest urban agglomerations in the world. He covers housing and land policy, municipal governance, urban transport, and the interface between infrastructure, regulation, and everyday life in the city.
+
+Recent Notable Work
+
+His recent reporting includes in-depth examinations of urban policy and its on-ground consequences:
+
+An investigation into subvention-linked home loans that documented how homebuyers were drawn into under-construction projects through a “builder–bank” nexus, often leaving them financially exposed when delivery stalled.
+
+A detailed report on why Delhi’s land-pooling policy has remained stalled since 2007, tracing how fragmented land ownership, policy design flaws, and mistrust among stakeholders have kept one of the capital’s flagship urban reforms in limbo.
+
+A reported piece examining the collapse of an electric mobility startup and what it meant for women drivers dependent on the platform for livelihoods.
+
+Reporting Approach
+
+Devansh’s work combines on-ground reporting with analysis of government data, court records, and academic research. He regularly reports from neighbourhoods, government offices, and courtrooms to explain how decisions on housing, transport, and the disruption economy shape everyday life in the city.
+
+Contact
+
+X (Twitter): @devanshmittal_
+Email: devansh.mittal@expressindia.com                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/devansh-mittal/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-eighth, twenty twenty-six, at thirteen minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/global-housing-crisis-india-unaffordable-homes-10711756/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-29 15:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
