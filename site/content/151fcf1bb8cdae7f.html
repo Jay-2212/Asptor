@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Europe's record heat will end soon. But for the world, why the worst may be yet to come | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Europe's record heat will end soon. But for the world, why the worst may be yet to come</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-britainHeat-5col.jpg?w=1600" alt="Europe's record heat will end soon. But for the world, why the worst may be yet to come">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Europe record heat, Europe record heat will end soon, UK Heatwave, Europe Heat Wave, heat wave, El Nino conditions, El Nino effect, global warming, Climate change, Indian express explained, explained news, current affairs" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-britainHeat-5col.jpg?w=1600" width="650"/><span class="ie-custom-caption">A warm spell in May is not entirely unusual for western Europe. This week, however, several places have seen temperatures above 35 degrees Celsius — unprecedented for this month. (AP)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Large parts of western and central Europe are in the grip of an extraordinary heatwave phase, with many places registering temperatures 10 to 15 degrees Celsius higher than normal. Both the UK and France have recorded their highest ever temperature for May. Other countries, including Italy, Germany, Switzerland and Spain, have also been reporting unusually high temperatures.</p>
+<p>A warm spell in May is not entirely unusual for western Europe, but the average temperatures during this time usually hover around 20-22 degrees Celsius. This week, however, several places have seen temperatures above 35 degrees Celsius — unprecedented for this month.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<span class="custom-caption"><img alt="Highest temperatures in Europe." class="lazyloading size-full wp-image-10713396" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/Highest-temperatures-in-Europe.jpg" height="356" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="348"> Highest temperatures in Europe.</img></span>
+<p>The prevailing heatwave has brought back uncomfortable memories of the unprecedented summers of 2022 and 2023 when temperatures in excess of 40 degrees Celsius were recorded at many places in Europe. A large-scale drought in 2022, the worst in living memory, and the record-breaking temperatures in both years resulted in the deaths of tens of thousands of people.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Things are not that bad right now, but this is just the month of May. The core summer months in Europe happen to be June and July, and it was in these months that most of the record-breaking temperatures in 2022 and 2023 were reached.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Incidentally, <a href="https://indianexpress.com/article/world/2023-world-hottest-year-record-eu-scientists-confirm-9102029/"><strong>the extreme European heat of 2022</strong></a> coincided with a very strong La Niña phase in the equatorial Pacific Ocean, which tends to have a cooling impact on the planet. This year, an opposite phenomenon, a strong El Niño, which has a warming effect, is taking shape.</p>
+<p>El Niño and La Niña are two distinct phases of a large ocean-atmosphere interaction over the Pacific region that influence weather patterns worldwide.</p>
+<h2>The ‘heat dome’ effect</h2>
+<p><a href="https://indianexpress.com/article/world/europe-heatwave-france-deaths-uk-record-may-temperatures-heat-dome-explained-10709409/"><strong>The unusual heat in Europe</strong></a> right now is being attributed to the formation of a “heat dome” that is preventing warm air near the ground from rising and dissipating. This is leading to an increase in surface temperatures. ‘Heat dome’ is just a fancy way to describe how heatwaves normally occur. Heatwaves anywhere, including over India, are caused by the emergence of high-pressure air systems in the mid-troposphere, about 7-10 km above Earth’s surface, that trap the heated surface air near the ground. They push down the air and compress it, increasing the temperature in the process.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This same system also prevents cloud formation and precipitation. Local influences can then amplify or weaken this phenomenon. For example, the heat dome effect over India often gets aggravated by the presence of dry soil, the “urban heat island effect” and the movement of hot air blowing from the deserts in the west. The urban heat island effect is a phenomenon where urban areas record higher temperatures than surrounding rural areas because their concrete traps heat during the day and radiates it at night.</p>
+<p>The formation of a heat dome is not an unusual phenomenon in European summers. This year, however, it has happened a little early, resulting in an extremely warm May — possibly the warmest May in several places.</p>
+<p>Interestingly, around the start of this month, Europe was experiencing below-normal temperatures. This rapid, extreme fluctuation in weather — hot and cold, wet and dry — is sometimes described as “climate whiplash”, something that is becoming increasingly common because of climate change.</p>
+<p>The extreme heat over Europe is expected to abate soon. Most forecasts suggest that the heat dome would dissipate by the weekend, and that temperatures would return close to their normal range within a few days.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>Strong El Niño</h2>
+<p>But another threat is looming, not just for Europe but many other parts of the world including India.</p>
+<p>An El Niño phase is emerging in the equatorial Pacific Ocean which is expected to persist through the rest of the year, possibly crossing over to the next year as well.</p>
+<p>El Niño refers to an unusual warming of the surface waters of the equatorial Pacific Ocean, off the coast of north-western coast of South America. It is known to have a warming effect over the planet. Multiple forecasts have suggested that this El Niño could develop into one of the strongest ever.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Climate terms</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/western-disturbance-el-nino-heatwave-weather-terms-meaning-10678106/">From Western Disturbance to El Niño: The climate terms you’re hearing this summer, explained</a></span></div>
+<p>The Climate Prediction Centre of the US’s National Oceanic and Atmospheric Administration, one of the world’s most authoritative agencies tracking the Pacific Ocean, however, says it is too early to make any reliable prediction about its strength.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>“While confidence in the occurrence of El Niño has increased since last month (April), there is still substantial uncertainty about its peak strength,” it said in a bulletin earlier this month.</p>
+<p>“The strongest El Niño events in the historical record are characterized by significant ocean-atmosphere coupling through the summer, and it remains to be seen whether this occurs in 2026,” it said, adding that there was only a one-third chance that the emerging El Niño would be a very strong one. In any case, a stronger El Niño does not necessarily mean stronger all-round impacts, it said. “Stronger El Niño events do not ensure strong impacts; they can only make certain impacts more likely,” it said, emphasising that the relationship between the occurrence of the ocean warming phenomenon and its impact was probabilistic and not deterministic.</p>
+<h2>Less rain, more heat</h2>
+<p>Still, the emergence of El Niño is a worrisome development for India. It is expected to affect the monsoon and push the mercury higher. It is because of the emerging El Niño that the India Meteorological Department (IMD) has forecast below-normal rainfall for the upcoming June-September monsoon season.</p>
+<p>There is no one-to-one correlation between the occurrence of an El Niño and suppressed monsoon rainfall over India. Past records, however, show that monsoon rainfall has remained below normal during an El Niño year in 70% of the instances. This year, the phenomenon is expected to fully mature by July. So, the IMD is expecting that August and September rainfall will be badly affected.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Similarly, there is a strong link between the occurrence of El Niño and the frequency and severity of heatwaves in India. In general, there is a greater chance of prolonged and severe heatwaves occurring in India during an El Niño phase.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10713007"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-ninth, twenty twenty-six, at zero minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/climate-change-3/" href="https://indianexpress.com/about/climate-change-3/">Climate change</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/el-nino-conditions/" href="https://indianexpress.com/about/el-nino-conditions/">El Nino conditions</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/el-nino-effect/" href="https://indianexpress.com/about/el-nino-effect/">El Nino effect</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/europe-heat-wave/" href="https://indianexpress.com/about/europe-heat-wave/">Europe Heat Wave</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-premium/" href="https://indianexpress.com/about/express-premium/">Express Premium</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/global-warming/" href="https://indianexpress.com/about/global-warming/">global warming</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/heat-wave/" href="https://indianexpress.com/about/heat-wave/">heat wave</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/uk-heatwave/" href="https://indianexpress.com/about/uk-heatwave/">UK Heatwave</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+</div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/europe-heatwave-2026-why-strong-el-nino-could-worsen-global-heat-10713007/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-29 08:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

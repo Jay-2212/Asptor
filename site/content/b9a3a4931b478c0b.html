@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Why Quad has never picked up momentum, and takeaways from New Delhi meet | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Why Quad has never picked up momentum, and takeaways from New Delhi meet</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/QUAD-foreign-ministers-1600.jpg?w=1600" alt="Expert Explains | Why Quad has never picked up momentum, and takeaways from New Delhi meet">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Quad" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/QUAD-foreign-ministers-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">Australia's foreign minister Penny Wong, India's S Jaishankar, Japan's Toshimitsu Motegi, and US Secretary of State Marco Rubio at the Quad meeting in New Delhi on May 26. (Photo: X/@DrSJaishankar)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The recent <strong><a class="" href="https://indianexpress.com/article/explained/explained-global/quad-foreign-ministers-meeting-objectives-10708049/" rel="noopener" target="_blank">Quadrilateral Security Dialogue (Quad) held in New Delhi</a></strong>, among the foreign ministers of Australia, India, Japan and the USA, came as an assurance that the grouping remains relevant.</p>
+<p>While the rationale behind the Quad is compelling, it still grapples with the central question — is it a strategic force multiplier or merely a mechanism for consultative dialogue?</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The Indo-Pacific has emerged as the world’s strategic and geo-economic centre of gravity. It hosts critical sea lanes, carrying over 50 per cent of global trade and energy flow. China’s rise, its coercive maritime behaviour, and technological dominance have created shared concerns among the Quad partners.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>What is the Quad?</h2>
+<p>After the Indian Ocean tsunami of December 2004, India, Japan, Australia, and the US came together in an informal arrangement to coordinate disaster relief operations. In 2007, the Quadrilateral Security Dialogue, commonly known as the Quad, kicked off. It never really picked up momentum, and while it was revived in 2017, the Quad at best has sputtered along since.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Chinese Foreign Minister Wang Yi has compared Quad to sea foam, which will just fizzle out.</p>
+<p>The major reasons for this are that the four constituents don’t always have the same aims, and China strenuously opposes the grouping.</p>
+<p>Beijing says the Quad’s purpose is mainly to target China. After the recent meeting on May 26, China’s foreign ministry spokesperson Mao Ning said at a presser, “We do not support ⁠the formation of exclusive cliques or bloc confrontation. No cooperation should undermine mutual trust and cooperation among regional countries.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2>What do its four members want from the Quad?</h2>
+<p>For Australia, Beijing’s intimidating posturing means it has to expand strategic outreach and security partnerships, but it remains heavily dependent on China economically.</p>
+<p>India needs to balance China in view of the shared border and the security calculus. It is also strongly opposed to China’s design of carving out a unipolar Asia, but <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> remains wary of compromising its strategic autonomy.</p>
+<p>Tokyo views Quad as an essential security imperative, given the tensions in the South-East China Seas due to Beijing’s apparently expansionist designs.</p>
+<p>For the US, the Quad is perceived as the pillar of its Indo-Pacific strategy and as the mechanism to balance out China without military confrontation. In fact, Washington perceives the Quad as a networked security architecture that substantiates American primacy in Asia. Under <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>, however, the US seems to be leaning towards a bilateral deal with Beijing.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>These different priorities explain why the Quad’s progress has been incremental rather than decisive. The security cooperation remains constrained, lacking a NATO-like collective defence mechanism, and there is no binding treaty obligation.</p>
+<h2>What are the takeaways from the May 26 Quad meeting?</h2>
+<p>The recent Quad Foreign Ministers meeting has attempted to break fresh ground. The meeting focussed on maritime security, resilient supply chains, critical minerals and energy security amid geopolitical uncertainties.</p>
+<p>Important initiatives were unveiled for enhanced maritime surveillance coordination, an energy security framework and cooperation on critical minerals, to reduce dependence on China and the consequent vulnerabilities of supply chains.</p>
+<p>The grouping also announced its first joint project — development of port infrastructure in Fiji — signalling forward movement from dialogue to concrete deliverables.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>What is Quad Plus?</h2>
+<p>Periodic discussions around ‘Quad Plus’ have surfaced from time to time, although its expansion remains unlikely in the near future. South Korea is among the strongest candidates, given its growing Indo-Pacific orientation. However, China’s sensitivities and Seoul’s focus on the Korean Peninsula remain a constraint.</p>
+<p>France, as an Indo-Pacific resident power with military presence in the region, also makes a convincing option. Paris already works closely with Quad members.</p>
+<p>Vietnam is a natural contender, in view of its disputes with China in the South China Sea and growing strategic convergence with Quad members. However, Hanoi’s policy of avoiding military alliances limits participation.</p>
+<p>United Kingdom, after Brexit and joining the AUKUS alliance (Australia-UK-US), may be inclined to join Quad too, but risks substantiating the Chinese narrative of ‘block politics’. New Zealand has frequently figured in Quad Plus conversations, in view of its close linkage with AUKUS. But Wellington’s cautious foreign policy would avoid an obvious tilt.</p>
+<p><strong>What is the way ahead?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Quad’s future lies in strategic clarity among all members. To ensure organisational depth, the Quad needs to move towards permanent institutional architecture, alongside enhanced military operability, synergised technology partnerships and strengthened maritime capacity building in the Indo-Pacific.</p>
+<p>The real test of Quad is not whether it becomes an Asian NATO, but whether the four democracies, with varying interests, can sustain strategic cooperation in the era of great power competition.</p>
+<p><em><strong>(The writer is a war veteran, currently professor, Strategic-IR, Lal Bahadur Shastri Institute of Management)</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10713094"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-ninth, twenty twenty-six, at seven minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/quad/" href="https://indianexpress.com/about/quad/">Quad</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/why-quad-lacks-momentum-takeaways-delhi-meet-10713094/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-29 08:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
