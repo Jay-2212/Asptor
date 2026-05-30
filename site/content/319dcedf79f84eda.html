@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India’s oil shock could have been much worse — but for China | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India’s oil shock could have been much worse — but for China</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/hormuz_c71cb0.jpg?w=1600" alt="India’s oil shock could have been much worse — but for China">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Hormuz" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/hormuz_c71cb0.jpg?w=1600" width="650"/><span class="ie-custom-caption">Vessels anchored at the Strait of Hormuz, as seen from Musandam, Oman on Saturday. Reuters</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The West Asia war and the consequent closure of the Strait of Hormuz have constricted crude oil flows and sent prices spiralling, particularly for <a href="https://indianexpress.com/article/business/economy/india-strategic-lpg-reserves-30-day-omc-plan-strait-of-hormuz-war-10714501/" rel="noopener" target="_blank"><strong>Asian economies such as India</strong></a>.</span></p>
+<p><span style="font-weight: 400">The situation, however, could have been much worse for large Asian energy importers had it not been for one country — China.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Beijing is the world’s largest crude oil importer, but has sharply reduced its imports of the commodity amid the West Asia crisis.</span></p>
+<p><span style="font-weight: 400">This has freed up supplies from regions unaffected by the strait’s closure — <a href="https://indianexpress.com/article/explained/explained-economics/us-russian-crude-oil-waiver-extension-india-hormuz-crisis-10696843/" rel="noopener" target="_blank"><strong>Russia</strong></a>, West Africa, the Atlantic Basin, and non-Hormuz-dependent West Asian nations — and allowed the likes of India, South Korea, Japan, Thailand and Singapore to snap them up.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">This is what has blunted the oil shock and prevented a deeper supply crunch and even <a href="https://indianexpress.com/article/business/air-india-cuts-june-july-domestic-flights-fourth-jet-fuel-price-iran-war-10710968/" rel="noopener" target="_blank"><strong>higher prices in the region</strong></a> — at least so far.</span></p>
+<p><span style="font-weight: 400">Meanwhile, US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> has said that he is looking to make a “final determination” on moving forward with a deal to <a href="https://indianexpress.com/article/world/trump-wonders-whether-to-move-ahead-with-iran-deal-but-hasnt-yet-decided-10714933/" rel="noopener" target="_blank"><strong>extend the Iran ceasefire</strong></a> and reopen the Strait of Hormuz. Iran, however, says no deal has not been finalised yet</span></p>
+<p><span style="font-weight: 400">So why has China cut down on its oil imports? And, more importantly, how long can it hold back if the crisis persists over the long run? We explain.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><b>West Asia war’s impact on the oil market</b></h2>
+<p><span style="font-weight: 400">The West Asia war, which the US and Israel began on February 28 with strikes on Iran, has led to Tehran halting vessel movements through the critical maritime chokepoint of the Strait of Hormuz.</span></p>
+<p><span style="font-weight: 400">The narrow waterway between Iran and Oman normally accounts for a fifth of global crude oil flows, with a vast majority of that oil going to Asian buyers. The supply through the strait has now been <a href="https://indianexpress.com/article/business/lng-tanker-india-cross-strait-of-hormuz-west-asia-war-dahej-gujarat-10708560/" rel="noopener" target="_blank"><strong>reduced to a trickle</strong></a>.</span></p>
+<p><span style="font-weight: 400">Before the war, 40-50% of India’s oil imports came via the strait. India is the world’s third-largest consumer of crude oil with an import dependency level of more than 88%. </span></p>
+<h2><b>So why did China cut oil imports?</b></h2>
+<p><span style="font-weight: 400">“Chinese crude imports in May month-to-date are tracking around 6.6 mbd (million barrels a day), the lowest level since 2016. Compared with last year’s average, imports from Russia, Africa, and parts of the Americas have declined materially, effectively freeing additional barrels into the broader Asian market,” Sumit Ritolia, manager, modelling &amp; refining at commodity market analytics firm Kpler said in a recent note.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/petrol-diesel-price-hike-fourth-increase-2-weeks-10706230/">Petrol, diesel prices up by over Rs 7 a litre since May 15; OMCs’ losses down, but still at about Rs 600 crore/day</a></span></div>
+<p><span style="font-weight: 400">China’s refinery crude intake has dropped to around 13.5 mbd in May — down 1.92 mbd versus the 2025 average — but the decline in oil demand continues to trail the drop in supplies. This means that China has been drawing on its huge onshore oil inventories. Preliminary data corroborates that trend.</span></p>
+<p><span style="font-weight: 400">Apart from its massive oil inventory and strategic crude petroleum reserves, Beijing’s current reluctance to import oil at normal levels is partly because high fuel prices and tepid economic activity have dampened oil demand, while accelerating the energy transition in the country.</span></p>
+<p><span style="font-weight: 400">“…refiners across South Korea, Japan, Southeast Asia, and India have been able to secure more crude supply than initially expected, allowing refinery throughput to hold up materially better than earlier base-case assumptions despite tighter Middle Eastern flows and Strait of Hormuz disruptions.  This has helped Asia (ex-China) refinery runs recover more strongly than initially expected in May, although overall refining activity remains heavily disrupted versus normal conditions,” Ritolia said.</span></p>
+<h2><b>How China’s reduced imports have helped India</b></h2>
+<p><span style="font-weight: 400">India’s crude imports in May have been strong. While the 2025 average stood at around 4.8 mbd, May imports are currently tracking around 5 mbd, potentially the highest monthly import in May ever, supported primarily by stronger Russian and Venezuelan crude imports, as per Kpler data.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Industry experts and analysts are of the view that oil prices would have been a lot higher had China maintained its crude import levels.</span></p>
+<p><span style="font-weight: 400">“Physical crude oil benchmarks appear to have settled into a $100-$120/bbl (barrel) range over the past two months, after the initial wave of panic buying during the first month of the US-Iran war briefly pushed prices above $150/bbl. Beyond SPR (strategic petroleum reserve) releases by multiple countries—particularly the accelerated drawdown in US stockpiles—one key reason oil prices have not sustainably moved above $150/bbl despite a structural supply loss of 8 mbd from the Middle East is the absence of Chinese buying in the market,” said Muyu Xu, senior crude oil analyst at Kpler.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read </span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/strait-of-hormuz-impact-india-oil-import-crisis-10687301/">West Asia war impact on oil market worse than earlier anticipated: What’s the worry for India?</a></span></div>
+<p><span style="font-weight: 400">Given its high oil consumption and import dependency, India is already bearing the brunt of high oil prices. The country imports 1.8-2 billion barrels of oil a year, and every $1-per-barrel increase in price bumps up its oil import bill by up to $2 billion on an annualised basis. </span></p>
+<p><span style="font-weight: 400">According to a March report by Nomura, India is among the three Asian economies most vulnerable to high oil prices, the other two being Thailand and South Korea. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">It also said that every 10% oil price increase typically widens India’s current account deficit by 0.4% of the GDP. Crude oil alone is the country’s largest merchandise import. </span></p>
+<p><span style="font-weight: 400">According to Commerce Ministry data, crude oil imports in 2025-26 stood at about $135 billion. If oil prices sustain at $100 per barrel in the current financial year and import volumes don’t decline, the oil import bill could be upwards of $200 billion for the year. If the price sustains at a much higher level, the implications would be even graver.</span></p>
+<h2><b>WIll China continue to hold back in the coming months?</b></h2>
+<p><span style="font-weight: 400">China’s oil imports will continue to be a critical variable for India and other major Asian refiners in the foreseeable future. If Beijing’s imports remain subdued, other Asian refiners are expected to continue benefiting from relatively improved oil availability. </span></p>
+<p><span style="font-weight: 400">But any significant recovery in oil imports by China could rapidly tighten oil supply in Asia — unless the Strait of Hormuz disruption is resolved. While Trump has signalled a deal to extend the ceasefire, it is still unclear what a longer-term solution will be.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">The current pattern is expected to persist in the near term, as refiners continue to keep run rates low while staying on the sidelines of the physical crude market. According to Xu, Chinese state-owned refiners are heard to be planning to keep June and July refinery run rates largely unchanged, even as fuel demand typically starts to pick up during the summer season. </span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">China’s independent refiners have also cut back significantly on buying oil from the spot market amid a surge in Russian and Iranian oil prices, which formed a large part of these refiners’ crude slate.</span></p>
+<p><span style="font-weight: 400">“That said, if the US were to maintain the blockade on Iranian cargoes, Chinese independent refiners would have to turn to alternative supplies—most likely Russian crude—and compete for barrels currently taken by other buyers such as India. Given elevated prices, they are more likely to further cut run rates,” Xu said.</span></p>
+<p><span style="font-weight: 400">This means that there could be further oil inventory drawdowns in China, which may prompt Beijing to release state oil reserves, or even step up crude buying. Ultimately, unless oil flows through the Strait of Hormuz normalise, China will have to take a call on when to step up oil imports. And that is when the real oil shock would be visible.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">“To borrow a quote commonly attributed to Napoleon, ‘Let China sleep, for when she wakes, she will shake the world,’ the same may hold true in today’s oil market,” Xu said.</span></p>
+<p><span style="font-weight: 400">“Once China decides to return to the market — likely affecting July onward-loading cargoes — the (global oil market) balance could quickly shift from ‘tight’ to ‘significantly tighter’, especially as European and American refiners ramp up operations to meet peak summer demand amid low fuel inventories.” </span></p>
+<p><span style="font-weight: 400">This could push oil prices up to “levels many had deemed inevitable at the outset of the war”.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10715192"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May thirtieth, twenty twenty-six, at forty-seven minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/china-oil-imports-india-strait-of-hormuz-crisis-explained-10715192/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-30 17:07 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

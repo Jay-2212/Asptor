@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What are the Abraham Accords, and why is Trump linking them with a potential Iran deal? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What are the Abraham Accords, and why is Trump linking them with a potential Iran deal?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/Abraham-Accords.jpg?w=1600" alt="What are the Abraham Accords, and why is Trump linking them with a potential Iran deal?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="PM Benjamin Netanyahu of Israel; US President Donald Trump; Abdullatif bin Rashid Al-Zayani, Bahrain's foreign affairs minister; and Abdullah bin Zayed bin Sultan Al Nahyan, the UAE's foreign affairs minister; at the signing of the Abraham Accords at the White House in Washington, Sept. 2020." decoding="async" height="366" src="https://images.indianexpress.com/2026/05/Abraham-Accords.jpg?w=1600" width="650"/><span class="ie-custom-caption">PM Benjamin Netanyahu of Israel; US President Donald Trump; Abdullatif bin Rashid Al-Zayani, Bahrain's foreign affairs minister; and Abdullah bin Zayed bin Sultan Al Nahyan, the UAE's foreign affairs minister; at the signing of the Abraham Accords at the White House in Washington, Sept. 2020. (NYT File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>US President Donald Trump on Monday (May 25) called on Saudi Arabia, Qatar, Pakistan, Egypt, Turkey and Jordan to sign the Abraham Accords — a step towards recognising and normalising ties with its ally, Israel. The announcement comes amidst continued attempts by the US to negotiate an end to its war with Iran.</p>
+<p>“After all the work done by the United States to try and pull this very complex puzzle together, it should be mandatory that all of these Countries, at a minimum, simultaneously, sign onto the Abraham Accords,” Trump wrote in a social media post. “Those Countries discussed are Saudi Arabia, the United Arab Emirates (already a Member!), Qatar, Pakistan, Turkey, Egypt, Jordan, and Bahrain (already a Member!).”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Pakistan, which has been mediating the US-Iran talks, <a href="https://indianexpress.com/article/world/pakistan-rejects-trumps-invitation-to-normalize-relations-with-israel-says-report-10708212/"><strong>rejected the proposal</strong></a>, with Defence Minister Khawaja Asif saying that joining the accords would clash with the country’s “fundamental ideologies”, including recognition of an independent and sovereign Palestine.</p>
+<p>Trump’s<a href="https://indianexpress.com/article/world/trump-pushes-muslim-leaders-join-abraham-accords-after-war-with-iran-ends-10706843/"><strong> proposition</strong></a> has revived the debate around the Abraham Accords at a time when the region is destabilised by Israel’s war on Gaza, tensions with Iran, and growing anger across the Arab world over Israeli military actions in Palestine, Lebanon and Syria. We explain.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>What are the Abraham Accords?</h2>
+<p>The accords are essentially a series of peace agreements to normalise relations between Israel and Muslim-majority nations, stemming from the fact that upon the establishment of Israel in 1948, Arab states refused to accord diplomatic recognition to it.</p>
+<p>Named after the biblical figure of Abraham, the patriarch in Islam, Christianity and Judaism, the agreements were presented by the US as a framework for peace, regional stability and economic cooperation between Israel and the Arab states.</p>
+<p>Introduced during Trump’s first term in 2020, the accords were framed as a negotiated resolution to the Palestinian issue; in practice, they have largely bypassed the question of Palestinian statehood altogether.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Three countries which had long opposed relations with Israel (the UAE, Bahrain and Morocco) normalised relations with it by signing the accords. The second Trump administration reportedly sought to include Syria, Lebanon — under attack from Israel since March 2026 — and Saudi Arabia, while Somaliland and Kazakhstan have since joined the accords.</p>
+<span class="custom-caption"><img alt="Trump MBS" class="lazyloading size-medium wp-image-10712921" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg 5534w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=608,405 608w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=1536,1024 1536w, https://indianexpress.com/wp-content/uploads/2026/05/IRAN-TRUMP-SAUDI-1.jpg?resize=2048,1365 2048w" height="3689" sizes="(max-width: 5534px) 100vw, 5534px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="5534"> President Donald Trump and Crown Prince Mohammed bin Salman of Saudi Arabia walk along the presidential portraits on the White House Colonnade in Washington, in Nov. 2025. (NYT)</img></span>
+<p>Despite being a US ally, Saudi Arabia has not signed the accords, maintaining that Israel must end its war on Gaza and assent to a two-state solution with an “irreversible, credible, and time-bound path” to an independent Palestinian state.</p>
+<h2>Why is Trump linking the end of the war with the Accords?</h2>
+<p>Faced with yet another conflict – this time of his own making – without an end-date in sight, the US President has sought to fall back on the Accords, one of his defining foreign policy successes of his first term. If this effort proves successful, it would bolster his image as dealmaker-in-chief and help him project control over a situation he increasingly seems unable to contain.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/trumps-likely-iran-deal-ceasefire-on-repeat-till-midterm-polls-10708905/">Trump’s likely Iran deal: 60-day ceasefires till mid-term polls, negotiated Hormuz passages</a></span></div>
+<p>Contrast this with his unsuccessful attempts in his second term to negotiate an end to Israel’s continued war on Gaza and Russia’s war with Ukraine. The escalating stakes of the war initiated by the US and Israel with Iran, its wider fallout on the West Asian theatre and cascading global repercussions are increasingly becoming a political and economic liability for the administration.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Trump also seeks to correct the domestic perception of the war. A poll by the Pew Center on May 1 reported that 62% of Americans surveyed disapprove of Trump’s handling of the military action against Iran. These numbers have held steady since March, when 61% of respondents polled similarly. Regarding the success of US military action, 51% of respondents said it is not going well, an increase from 45% in April.</p>
+<p>Rising oil and gas prices resulting from the effective closure of the Strait of Hormuz, as well as concerns about inflation and broader economic anxiety, have begun to fuel public dissatisfaction with the administration. The Gallup Economic Confidence Index fell to -45 in May, down from -38 in April and its lowest level since October 2022, reflecting growing pessimism about the economy as fuel prices climbed during the conflict with Iran. Parts of Trump’s key voter base, including younger Republicans and MAGA anti-interventionists, have also expressed discomfort about the prospect of another prolonged US war in West Asia.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/trump-iran-strike-threat-hormuz-nuclear-talks-10699841/">As Trump claims ceasefire on ‘life-support’, why US-Iran crisis is far from over</a></span></div>
+<p>Taken together, these outcomes have lowered the Republican Party’s popularity ahead of the midterms in November, a fact that has senior GOP leaders concerned. Some Republican lawmakers and conservative commentators have also expressed unease about the prospect of a prolonged conflict with Iran, reflecting broader divisions within Trump’s political base over deeper US involvement in West Asia. However, Trump was dismissive and told reporters on May 27 that he was not concerned about the upcoming election, and that Iranian leaders had miscalculated if they thought ‌the November midterm elections would force him into a deal.</p>
+<p><strong>What does expanding the Accords mean for the region?</strong></p>
+<p>Effectively, the Accords were intended to create a US-backed regional bloc that integrated Israel more deeply into West Asia through economic, diplomatic and security ties. The participation of the UAE, Bahrain and Morocco has helped legitimise Israel’s presence in parts of the Arab world without resolving the Palestinian question.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>For Washington, expanding the accords would further consolidate a regional alignment built around US allies and countering Iranian influence. Bringing countries such as Saudi Arabia, Qatar or Turkey into the framework would mark a major diplomatic victory for both the US and Israel, especially with Israel facing growing international criticism over Gaza and its military actions across the region.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Omair Anas, professor of International Relations at Ankara Yildirim Beyazit University in Türkiye, told <em>The Indian Express</em> the ceasefire discussions have reached a “serious stage”, with major issues already agreed upon by both sides. However, he noted that Israel views the emerging deal as problematic because it could end the conflict without significant progress on its core demands.</p>
+<p>“The only demand that Israel may wish to bring back is the Gulf countries’ joining of the Abraham Accords. However, no country has agreed to link the issue to the Iran ceasefire,” Anas said.</p>
+<p>The debate over expanding the accords has, therefore, become closely tied to Saudi Arabia’s calculations, given Riyadh’s central role in any future regional realignment. “If the Trump administration insists, it would need to put more pressure on Israel to accept Saudi Arabia’s demands to start an irreversible process towards creating an independent Palestinian state,” Anas said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>He added that Saudi Arabia has repeatedly told Washington that the Abraham Accords are tied to its national security concerns and cannot move forward without credible guarantees on Palestinian statehood. According to Anas, Riyadh is also likely to coordinate closely with Egypt and Pakistan on the issue to avoid a direct confrontation with the Trump administration.</p>
+<p>The political conditions that enabled the accords in 2020 have changed significantly. Israel’s war on Gaza and attacks in Lebanon and Syria have intensified public anger across much of the Arab and Muslim world, making overt normalisation politically harder for several governments.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10712897"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-ninth, twenty twenty-six, at nine minutes past nine in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/abraham-accords-trump-israel-middle-east-10712897/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-30 17:07 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
