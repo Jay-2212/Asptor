@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why do ACs explode in the summer and how can you prevent this? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why do ACs explode in the summer and how can you prevent this?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-31</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/AC-fire-precautions.jpg?w=1600" alt="Why do ACs explode in the summer and how can you prevent this?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="AC fire precautions" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/AC-fire-precautions.jpg?w=1600" width="650"/><span class="ie-custom-caption">ly running electrical appliances can lead to overheating, also due to the high average atmospheric temperature. (Canva)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Retired IAS officer and the first chairman of the Competition Commission of India (CCI), Dhanendra Kumar, 80, died in a fire after a suspected air conditioner (AC) blast at his home in Delhi’s Hauz Khas on Thursday (May 28).</p>
+<p><a href="https://indianexpress.com/article/cities/delhi/dhanendra-kumar-first-chief-of-competition-panel-dies-in-ac-blast-fire-at-delhi-home-10713129/"><strong>The incident is the latest</strong></a> in a series of AC-related fire accidents reported in the National Capital Region this summer. Just this week, a split AC reportedly exploded and triggered a fire on the 15th floor of a residential tower in Ghaziabad’s Indirapuram.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>And, earlier this month, nine people were killed in a blaze at a residential complex in East <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>’s Shahdara, where initial reports also pointed to an AC blast as a possible trigger.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The incidents call attention to a disturbing pattern increasingly unfolding in Indian cities every summer. With higher average temperatures year-on-year and rising nationwide AC sales, the likelihood of such incidents is increasing. Some simple practices, however, can help ensure safety.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>How do ACs catch fire?</h2>
+<p>During the summer, continuously running electrical appliances can lead to overheating, also due to the high average atmospheric temperature. This overheating can degrade an AC’s insulation, melt internal components, and ignite combustible materials inside the unit.</p>
+<p>Another major reason is short-circuiting, which occurs when the flow of electric current in a circuit takes an unintended path. This is not always dangerous, but when a large amount of current is flowing, it can, in turn, generate a great amount of heat. This can melt wires and lead to a fire.</p>
+<p>Generally, MCBs (miniature circuit breakers) are installed to trip the circuit as soon as an overload is detected. The Schneider Electric website states: “MCBs are equipped with a bimetallic strip that is sensitive to heat. If there are high amounts of current flowing through the circuit, it warms up the bimetallic circuit in the MCB, which bends and deflects from its original state. This deflection causes the MCB to ‘trigger’ and release a mechanical latch. This latch disconnects the circuit and disrupts the electrical flow from reaching the connected device.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Later, the MCB switch can be turned on to resume the normal flow of electricity. This safety mechanism may fail if the MCB is faulty, resulting in fires.</p>
+<p><img alt="AC blast" class="lazyloading alignnone size-medium wp-image-10714769" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/05/AC-explosions.jpg?resize=559,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/05/AC-explosions.jpg 650w, https://indianexpress.com/wp-content/uploads/2026/05/AC-explosions.jpg?resize=419,450 419w, https://indianexpress.com/wp-content/uploads/2026/05/AC-explosions.jpg?resize=559,600 559w, https://indianexpress.com/wp-content/uploads/2026/05/AC-explosions.jpg?resize=377,405 377w" height="600" sizes="(max-width: 559px) 100vw, 559px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="559"/></p>
+<p>The Delhi government’s Department of Fire Services states: “About 60% fires are of electric origin on account of electric short circuit, overheating, overloading, use or non standard appliances.”</p>
+<p>According to an official from the Delhi Power Department, house fires are commonly caused by short circuits in electricity meters, switchboards, or due to loose, poor-quality, or faulty wiring. “In AC units, fires usually occur due to gas leakage or overheating in the compressor, which is the outdoor unit. However, in the Hauz Khas incident, the suspected explosion occurred in the indoor unit of the AC, which is uncommon. Sometimes, if there is a spark caused by faulty wiring in a closed room along with a gas leak, it can ignite and lead to an explosion inside the unit as well,” the official said.</p>
+<h2>Is an inverter AC safer than a non-inverter AC?</h2>
+<p>In an AC, a compressor (the external box unit with a fan in split ACs) performs a crucial function. It is responsible for circulating a substance called refrigerant gas through the unit, which helps in the expulsion of warm indoor air.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>A non-inverter AC uses a fixed-speed compressor that runs at full speed until the room reaches the target temperature, then shuts off completely. When the temperature rises, it turns back on at full speed.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/lifestyle/health/5-health-warning-signs-your-ac-needs-servicing-10672058/">5 warning signs your AC needs servicing</a></span></div>
+<p>During extreme heat and prolonged use, this creates higher electrical and mechanical stress, which can overheat components such as the compressor, capacitor or wiring. If the unit is old, poorly maintained, or exposed to voltage fluctuations, it can lead to short circuits and fires — often referred to as “AC blasts”.</p>
+<p>On the other hand, an inverter AC regulates the compressor speed gradually instead of constantly switching on and off. While this variability reduces stress in the system, it’s not foolproof. Fires can still occur due to overheating of electronic circuit boards, faulty wiring, refrigerant leakage, poor installation, voltage fluctuations or lack of maintenance.</p>
+<h2>How do I know if my AC is posing a safety risk?</h2>
+<p>According to Haier, some common signs of a potential blast include unusual noises from the unit, frequent cycling on and off, inconsistent cooling of the room, and burning smells/smoke. Professional repair services should be called in to fix these issues.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>What are some precautions for preventing AC fires?</h2>
+<p>In the case of split ACs, both the inside and outside units are potential fire hazards. Usually, the inside unit comprises the evaporator (which removes the heat from the air), the blower and the filter nets. The outside unit includes the compressor.</p>
+<p>Here are some dos and don’ts to ensure your AC is in good health:</p>
+<ul>
+<li>
+<div dir="auto">Avoid continuous use for long hours. Doing this can overheat the machine. If prolonged use is necessary, experts recommend setting the temperature between 22°C and 25°C, depending on room conditions. A very low setting can stress the system.</div>
+</li>
+<li>LG’s manual for ACs says that both indoor and outdoor wiring connections must be secured tightly, and the cable should be routed properly so that there is no force pulling the cable from the connection terminals. Weak connections can cause heat generation or fire.</li>
+<li>Ensure that the circuit breaker and fuse are in good condition.</li>
+<li>If your locality witnesses frequent electricity fluctuations, consider installing a stabiliser, which can protect your appliance by supplying constant current to it. Inverter ACs, however, generally do not require this addition.</li>
+<li>
+<div dir="auto">Watch for green rust on copper pipes. A large amount of green corrosion or rust on the copper pipes in the outdoor compressor unit may indicate a gas leak.</div>
+</li>
+<li>Any modifications or installations in the setup should be done with the help of authorised repair centres. Regular maintenance is recommended. Haier also recommends regularly cleaning the dust that settles on air filters, since it can hinder air flow and put pressure on the system.</li>
+<li>The indoor unit should not come in contact with water.</li>
+<li>Do not place objects in direct proximity to the outdoor unit. Letting dry leaves and other debris accumulate around the unit can be dangerous. Leaves could also attract small animals that can enter the unit.</li>
+<li>Do not frequently switch the appliance on and off. The main power switch must be turned off if it is not used for a long time.</li>
+</ul>
+<p><em><strong>With inputs from Alok Singh and Rishika Singh</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10713386"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May twenty-ninth, twenty twenty-six, at thirty-five minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/air-conditioner/" href="https://indianexpress.com/about/air-conditioner/">Air Conditioner</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ac-blast-fire-delhi-summer-reasons-prevention-10713386/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-31 03:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Trump’s war with Iran may leave the US waiting years to rebuild key missile stockpiles | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Trump’s war with Iran may leave the US waiting years to rebuild key missile stockpiles</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-05-31</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/trump-missiles.jpg?w=1600" alt="Trump’s war with Iran may leave the US waiting years to rebuild key missile stockpiles">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Trump, missiles, CSIS report" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/trump-missiles.jpg?w=1600" width="650"/><span class="ie-custom-caption">President Donald Trump during a meeting with his Cabinet in the Cabinet Room of the White House in Washington, May, 27, 2026. (NYT)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The strategic costs of President Donald Trump’s <a href="https://indianexpress.com/article/world/us-iran-war-news-live-updates-ceasefire-donald-trump-10715070/"><strong>war with Iran</strong></a> may be more lasting than the conflict itself, according to a new report.</p>
+<p>Inventories of several critical US missiles, including the Tomahawk cruise missiles, used to strike targets deep within enemy territory, and THAAD interceptors, which defend against incoming missiles and drones, have been depleted, according to the Center for Strategic &amp; International Studies in its latest report titled “Rebuilding U.S. Missile Inventory: A Multiyear Project”.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Here is what to know.</p>
+<h2>Why will it take so long to replenish these weapons?</h2>
+<p>The challenge lies in production timelines. Advanced missile systems require lengthy procurement cycles, specialised components and limited manufacturing capacity. Even after Congress approves funding, it could take years before new missiles are delivered to operational inventories.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>This problem did not begin with the Iran conflict, argues Mark Cancian, one of the authors of the CSIS report. He told the <em>Associated Press</em> that the roots of the issue can be traced to the end of the Cold War, when the Pentagon reduced purchases of advanced munitions and defence contractors scaled back production capacity.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The report notes that several missile systems face production lead times of nearly three years, while additional delays stem from contracting processes and supply-chain constraints.</p>
+<p>Russia’s war with Ukraine had already exposed strains in Western munitions production, with Washington and its allies scrambling to replenish weapons transferred to Kyiv. The Iran conflict has added further pressure on some of the Pentagon’s most important missile inventories.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/iran-nuclear-programme-uranium-enrichment-explained-10715718/">As US-Iran deal hangs in balance, a look at the core issue: Iran’s nuclear programme</a></span></div>
+<p>The challenge is compounded by competing demand. The US is simultaneously rebuilding its own inventories, supplying Ukraine and fulfilling weapons orders from allies and partners, meaning newly produced missiles cannot automatically be diverted to Pentagon stockpiles.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This scenario has created a temporary vulnerability window, given the time needed to replenish its military stockpile, the Washington think tank said.</p>
+<p>A previous CSIS report from April said four key munition categories had been depleted by more than half their prewar inventory levels: Tomahawk Land Attack Missiles, THAAD interceptors, Patriot missiles, and SM-3 and SM-6 ship-based missiles.</p>
+<p>The impact, however, will not be uniform. While some missile inventories could recover within months, others may take until the end of the decade to return to prewar levels.</p>
+<p><strong>Which weapons could take years to replenish?</strong></p>
+<p></p>
+<p>The reported timelines assume current procurement plans and projected deliveries.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="color: #800000"><strong>Tomahawks:</strong></span> Long-range precision strike weapons used to hit targets deep inside enemy territory from ships and submarines.</p>
+<p>According to the report, over 1,000 Tomahawks were expended. Given that its production time is at least 34 months (or nearly three years), recovery of this stockpile is not expected to happen until 2030-31 despite the large orders.</p>
+<p><span style="color: #800000"><strong>THAAD (Terminal High Altitude Area Defence) Interceptors:</strong></span> Missile-defence systems designed to destroy incoming ballistic missiles at high altitudes.</p>
+<p>The system saw heavy use during the Iran conflict, but historically low production rates mean a complete recovery of inventory would not be possible until the end of 2029. Manufacturer Lockheed Martin plans to expand its annual production capacity from 96 currently to 400.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="color: #800000"><strong>Patriot Interceptors:</strong></span> Air-defence missiles used to protect against aircraft, cruise missiles and ballistic missile attacks.</p>
+<p>Their demand comes simultaneously from the US military, Ukraine and foreign customers. According to the report, inventories may not return to prewar levels until around mid-2029, despite a major procurement request in the FY2027 <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a>.</p>
+<p><span style="color: #800000"><strong>SM-3 and SM-6 missiles:</strong></span> These are ship-launched interceptors, used primarily for missile and air defence, and are expected to return to prewar levels between late 2028 and early 2029.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><strong>And which weapons can be replenished more quickly?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="color: #800000"><strong>JASSM (Joint Air-to-Surface Standoff Missile):</strong></span> A long-range cruise missile launched from aircraft. Despite heavy use during the conflict, inventories are expected to recover by mid-2027 because of strong existing production.</p>
+<p><span style="color: #800000"><strong>PrSM (Precision Strike Missile):</strong></span> The US Army’s next-generation long-range strike missile. Recovery is projected by late 2026, making it the fastest-replenishing system examined in the report.</p>
+<p><strong>Why does this matter?</strong></p>
+<p>The report flags as a concern the period during which inventories remain below prewar levels while the US continues to meet military commitments elsewhere. Many of the same missile systems depleted during the Iran campaign feature prominently in US military planning for the Indo-Pacific, where defence officials have increasingly focused on the possibility of a confrontation with China.</p>
+<p>The depletion of these stockpiles may carry costs beyond the battlefield. In an April article for Foreign Affairs, CSIS analysts Jon B Alterman and Ali Vaez argued that the Iran conflict offers Russia and China an opportunity to gather intelligence on US military systems and operational tactics, potentially yielding insights that could prove useful in future conflicts.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Some of the most important missile stockpiles may not return to pre-war levels until the end of the decade, according to CSIS.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10716097"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on May thirty-first, twenty twenty-six, at two minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-trump-missile-stockpiles-recovery-timeline-iran-conflict-10716097/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-05-31 03:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
