@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What is CBSE’s On-Screen Marking system and how does it compare with global practices? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What is CBSE’s On-Screen Marking system and how does it compare with global practices?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-01</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/osm-explained.jpg?w=1600" alt="What is CBSE’s On-Screen Marking system and how does it compare with global practices?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="What is CBSE's On-Screen Marking system and how does it compare with global practices?" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/osm-explained.jpg?w=1600" width="650"/><span class="ie-custom-caption">On-Screen Marking, or OSM, is a digital evaluation system in which teachers assess scanned copies of answer books on a computer rather than checking physical scripts. (Image: AI Generated)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Central Board of Secondary Education’s (CBSE) decision to shift Class 12 evaluation to a fully digital On-Screen Marking (OSM) system this year has sparked debate after students reported blurred answer-book scans, missing pages and, in some cases, being shown another candidate’s answer script.</p>
+<p>While the controversy has focused attention on the rollout, the idea behind digital evaluation is not new. Examination boards in countries such as the United Kingdom have used various forms of online marking for years. At the same time, education experts warn that technology can support assessment, but cannot replace the professional judgement of teachers.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>What is On-Screen Marking (OSM)?</strong></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>On-Screen Marking, or OSM, is a digital evaluation system in which teachers assess scanned copies of aswer books on a computer rather than checking physical scripts.</p>
+<p>Students still write their examinations in conventional answer booklets. The change begins after the exam, when answer books are scanned, uploaded onto a secure platform, anonymised and distributed digitally to evaluators.</p><div id="taboola-mid-article-personalisation"></div>
+<p><a class="" href="https://indianexpress.com/about/cbse/" rel="noamphtml">CBSE</a> says the idea is not new. The Board first explored OSM in 2014 but did not proceed because suitable scanning technology was not available. At the time, answer books often had to be cut from the spine before scanning, creating the risk of pages being mixed up.</p>
+<p><strong>Why did CBSE decide to adopt OSM now?</strong></p>
+<p>According to CBSE, the objective was to make evaluation more uniform, efficient and secure. The Board believed digital evaluation would reduce regional variations in marking, eliminate clerical mistakes in totalling marks, improve monitoring of evaluators and strengthen the overall examination process.</p>
+<p>Before implementation, CBSE conducted a dry run involving teachers from Kendriya Vidyalayas, Navodaya Vidyalayas, state government schools and private schools. Dr. Latika Gupta, Assistant Professor of Education, argues that the very premise of OSM is flawed.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“Its whole goal is speedy checking. If you scan and make answer books available on a computer, it will lead to speedy checking and therefore results can be declared sooner. But that itself is a faulty understanding of evaluation,” she said.</p>
+<p>According to Gupta, evaluation is not merely about checking answer scripts and declaring results. “Teachers meet at centres, discuss, arrive at a collective understanding. There are subject heads who also evaluate copies and discuss them. Teachers grow in the process,” she said.</p>
+<p><strong>What do researchers say about digital evaluation?</strong></p>
+<p>Research from countries that have used online marking for years generally points to improved consistency. A study commissioned by Britain’s examinations regulator found that “markers using online marking systems showed greater consistency in the application of mark schemes than those using traditional paper-based methods.”</p>
+<p>Assessment researcher Victoria Crisp has argued that digital systems offer better opportunities for standardisation and quality monitoring.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>At the same time, experts caution that technology does not eliminate mistakes altogether. Researchers from Cambridge Assessment have noted that digital marking changes the nature of errors rather than removing them completely. Problems related to scanning quality, software performance and implementation can still affect outcomes.</p>
+<p>Speaking to <em>The Indian Express</em> Edward Vickers, Professor of Comparative Education at Fukuoka University in Japan, believes the current controversy may say more about implementation than about the concept itself. “The real question with the Indian system and this current scandal seems to me to be maybe not the system itself or not the idea behind it, but the practicalities of whether it was trialled, how it was trialled, how it was piloted,” he said.</p>
+<p>Vickers said any transition affecting millions of students required extensive consultation with teachers and examiners. “What seems to have happened suggests that the system wasn’t ready, the CBSE itself wasn’t ready, the teachers weren’t ready. So what was the rush?” he asked.</p>
+<p><strong>How do examination boards abroad use digital marking?</strong></p>
+<p>Major UK examination boards such as Assessment and Qualification Alliance (AQA), Oxford Cambridge and RSA Examination ( OCR) and Pearson Edexcel which conducts exams like the A-levels have used online marking for many years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Scripts are scanned centrally and distributed electronically to examiners. In some cases, examiners do not mark entire answer books; instead, they evaluate specific questions across thousands of scripts, helping improve consistency.</p>
+<p>According to Britain’s regulator Ofqual, online marking was introduced primarily to improve quality control, increase efficiency and strengthen examiner monitoring.</p>
+<p>Vickers stated that the British system differs from many Asian examination systems because GCSE and A-level examinations frequently include long-form written responses and essays.</p>
+<p>“Technology can help with distributing students’ answers to markers and making the process more efficient,” he said. “But we need to be very careful about seeing technology as taking over the role of actually assessing students’ answers.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Earlier this year, Ofqual also issued guidance on the use of artificial intelligence in assessment, emphasising that human examiners must remain responsible for final decisions.</p>
+<p>“The human markers have to be in charge. Students and parents need to have faith in the system,” Vickers said.</p>
+<p>The International Baccalaureate (IB), whose examinations are taken in more than 150 countries, also relies heavily on digital evaluation. Scanned scripts are accessed online by examiners around the world, while senior examiners monitor marking quality through moderation and standardisation exercises.</p>
+<p>“The technology is supposed to be assisting human markers to do the marking. It isn’t the technology itself doing the marking,” Vickers added.</p>
+<p><strong>What concerns are being raised about CBSE’s rollout?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Beyond technical glitches, educators have questioned whether the system was introduced too quickly.</p>
+<p>“A 17- or 18-year-old writes for three hours. Their handwriting cannot be expected to remain stable throughout. However advanced your scanners are, they will misunderstand some things,” Gupta said.</p>
+<p>She also noted that subjects such as Geography, Biology, Physics and Mathematics involve diagrams, figures and pencil work that may not always reproduce clearly on scanned copies.</p>
+<p>According to Gupta, another concern is the possibility of widening inequalities between schools. “Private schools that can afford secure infrastructure and machines will be in a better position. Government schools may not be. It could institutionalise inequality,” she said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>She also questioned the broader philosophy behind reducing the role of teachers in assessment, pointing to China’s Gaokao examination as an example of a large-scale assessment system that continues to rely heavily on human evaluation.</p>
+<p>“Reducing the human element in education and assessment is not a good idea. It is a very problematic idea,” she said.</p>
+<p><strong>Is OSM the future of evaluation?</strong></p>
+<p>Most major examination boards have already adopted digital marking in some form, suggesting that technology will continue to play a growing role in assessment.</p>
+<p>“This reform is aimed at the mechanics part of education and evaluation. It is not aimed at the real content part of evaluation,” Gupta said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Meanwhile Vickers said Digital systems can play a useful role, but only if they support rather than replace professional judgement. “The technology should be assisting human markers,” he added.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10717716"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/">
+<figure>
+<img alt="Vidheesha Kuntamalla" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/01/vidheesha.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/"><span></span>Vidheesha Kuntamalla</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8400215"></div><div class="follow_author_title" data-id="Vidheesha Kuntamalla"></div><div class="follow_author_slug" data-id="vidheesha-kuntamalla"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vidheesha Kuntamalla is a Senior Correspondent at The Indian Express, based in New Delhi. She is known for her investigative reporting on higher education policy, international student immigration, and academic freedom on university campuses. Her work consistently connects policy decisions with lived realities, foregrounding how administrative actions, political pressure, and global shifts affect students, faculty, and institutions.
+
+Professional Profile
+
+Core Beat: Vidheesha covers education in Delhi and nationally, reporting on major public institutions including the University of Delhi (DU), Jawaharlal Nehru University (JNU), Jamia Millia Islamia, the IITs, and the IIMs. She also reports extensively on private and government schools in the National Capital Region.
+
+Prior to joining The Indian Express, she worked as a freelance journalist in Telangana and Andhra Pradesh for over a year, covering politics, rural issues, women-centric issues, and social justice.
+
+Specialisation: She has developed a strong niche in reporting on the Indian student diaspora, particularly the challenges faced by Indian students and H-1B holders in the United States. Her work examines how geopolitical shifts, immigration policy changes, and campus politics impact global education mobility.
+
+She has also reported widely on:
+* Mental health crises and student suicides at IITs
+* Policy responses to campus mental health
+* Academic freedom and institutional clampdowns at JNU, South Asian University (SAU), and Delhi University
+* Curriculum and syllabus changes under the National Education Policy
+
+Her recent reporting has included deeply reported human stories on policy changes during the Trump administration and their consequences for Indian students and researchers in the US.
+
+Reporting Style
+Vidheesha is recognised for a human-centric approach to policy reporting, combining investigative depth with intimate storytelling. Her work often highlights the anxieties of students and faculty navigating bureaucratic uncertainty, legal precarity, and institutional pressure. She regularly works with court records, internal documents, official data, and disciplinary frameworks to expose structural challenges to academic freedom.
+
+Recent Notable Articles (Late 2024 &amp; 2025)
+
+1. Express Investigation Series
+JNU’s fault lines move from campus to court: University fights students and faculty (November 2025)
+An Indian Express investigation found that since 2011, JNU has appeared in over 600 cases before the Delhi High Court, filed by the administration, faculty, staff, students, and contractual workers across the tenures of three Vice-Chancellors.
+
+JNU’s legal wars with students and faculty pile up under 3 V-Cs | Rs 30-lakh fines chill campus dissent (November 2025)
+The report traced how steep monetary penalties — now codified in the Chief Proctor’s Office Manual — are reshaping dissent and disciplinary action on campus.
+
+2. International Education &amp; Immigration
+‘Free for a day. Then came ICE’: Acquitted after 43 years, Indian-origin man faces deportation — to a country he has never known (October 2025)
+
+H-1B $100,000 entry fee explained: Who pays, who’s exempt, and what’s still unclear? (September 2025)
+
+Khammam to Dallas, Jhansi to Seattle — audacious journeys in pursuit of the American dream after H-1B visa fee hike (September 2025)
+
+What a proposed 15% cap on foreign admissions in the US could mean for Indian students (October 2025)
+
+Anxiety on campus after Trump says visas of pro-Palestinian protesters will be cancelled (January 2025)
+
+‘I couldn’t believe it’: F-1 status of some Indian students restored after US reverses abrupt visa terminations (April 2025)
+
+3. Academic Freedom &amp; Policy
+Exclusive: South Asian University fires professor for ‘inciting students’ during stipend protests (September 2025)
+
+Exclusive: Ministry seeks explanation from JNU V-C for skipping Centre’s meet, views absence ‘seriously’ (July 2025)
+
+SAU rows after Noam Chomsky mentions PM Modi, Lankan scholar resigns, PhD student exits SAU
+A series of five stories examining shrinking academic freedom at South Asian University after global scholar Noam Chomsky referenced Prime Minister Narendra Modi during an academic interaction, triggering administrative unease and renewed debate over political speech, surveillance, and institutional autonomy on Indian campuses.
+
+4. Mental Health on Campuses
+In post-pandemic years, counselling rooms at IITs are busier than ever; IIT-wise data shows why (August 2025)
+
+Campus suicides: IIT-Delhi panel flags toxic competition, caste bias, burnout (April 2025)
+
+5. Delhi Schools
+These Delhi government school grads are now success stories. Here’s what worked — and what didn’t (February 2025)
+
+‘Ma’am… may I share something?’ Growing up online and alone, why Delhi’s teens are reaching out (December 2025)                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June first, twenty twenty-six, at twenty-nine minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/central-board-of-secondary-education/" href="https://indianexpress.com/about/central-board-of-secondary-education/">Central Board of Secondary Education</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/cbse-on-screen-marking-system-global-practices-10717716/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-01 03:44 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
