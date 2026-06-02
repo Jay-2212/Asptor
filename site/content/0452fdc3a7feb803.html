@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Who are the Tana Bhagats of Jharkhand and why are they opposing a highway project? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Who are the Tana Bhagats of Jharkhand and why are they opposing a highway project?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/tana-delete.jpg?w=1600" alt="Who are the Tana Bhagats of Jharkhand and why are they opposing a highway project?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Villagers allege the area falls under the Fifth schedule of the Constitution.. (Express photo)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/tana-delete.jpg?w=1600" width="650"/><span class="ie-custom-caption">Villagers allege the area falls under the Fifth schedule of the Constitution.. (Express photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Tana Bhagat community of Jharkhand is protesting a national highway project under the Bharatmala scheme in the villages of Gumla, claiming it threatens ancestral land, forests, religious sites, agricultural livelihoods and community spaces in a Scheduled Area protected under special Constitutional provisions.</p>
+<p>At the heart of the conflict is the acquisition of land for the widening of NH-43 from Gumla towards the Chhattisgarh border.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>What is the project about?</strong></p>
+<p>The stretch of the 32.4-km road on the Jharkhand-Chhattisgarh border is a part of the Raipur-Dhanbad Economic Corridor. Also known as the Raipur-Dhanbad Expressway, it is a 700-km four-lane access-controlled expressway that will provide faster connectivity to industrial hubs, and coal and mining zones between the two states. With cost of around Rs 1200 crore, the project will reduce travel time between the two cities from 16 to 9 hours.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The January 2023 notification issued under Section 3A of the National Highways Act declared the Centre’s intention to acquire land for the highway project and invited objections from affected persons. A subsequent notification issued under Section 3D in April 2023 stated that ‘objections received during the process had been considered and rejected, after which the acquisition was declared final’.</p>
+<p><strong>What are the villagers saying?</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>Villagers alleged that the area falls under the Fifth Schedule of the Constitution, which deals with the issues of tribal communities, and that autonomous Gram Sabhas in Scheduled Areas have the power to approve or reject such projects. They claimed no approval or consent was taken from the Gram Sabhas before proceeding with the project. They said that under the Panchayats (Extension to Scheduled Areas) Act, 1996 (PESA Act) too, Gram Sabhas in Scheduled Areas are empowered to take decisions on matters related to land, resources, and development projects.</p>
+<p>Only this year, the Jharkhand High Court pulled up the state government, directing it to implement the PESA Act and frame the necessary rules. Following this, the Jharkhand cabinet approved the PESA Rules.</p>
+<span class="custom-caption"><img alt="Protest against land reacquisition in Jharkhand (Express photo)" class="lazyloading wp-image-10720861 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/bhagat-delete.jpg?resize=600,450" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/bhagat-delete.jpg 700w, https://indianexpress.com/wp-content/uploads/2026/06/bhagat-delete.jpg?resize=450,338 450w, https://indianexpress.com/wp-content/uploads/2026/06/bhagat-delete.jpg?resize=600,450 600w, https://indianexpress.com/wp-content/uploads/2026/06/bhagat-delete.jpg?resize=540,405 540w" height="525" sizes="(max-width: 700px) 100vw, 700px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="700"> Protest against land reacquisition in Jharkhand. (Express Photo)</img></span>
+<p>“The project is not just the violation of PESA but also the violation of Chotanagpur Tenancy Act (CNT) 1908. The Tana Bhagat community, who are historically recognised for their significant contribution to the Indian anti-colonial movement have to face this day now,” Lothe Oraon, patron and acting president of the Zameen Bachao Sangharsh Samiti, said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>According to official records, after the main notification was issued in January 2022, the Gumla Deputy Commissioner conducted a survey and stated that the original alignment passed through an eco-sensitive zone and the Palkot Wildlife Sanctuary. The administration later approved NHAI’s “Option 3” alignment, stating that the revised route did not affect any Sarna Sthal or Adivasi religious sites.</p>
+<p>Adivasi activists claim otherwise. “Religious sites of Sarna adivasis, like in Katkaya village that falls under the Raidih block, are affected. Multiple pahan (tribal priest) lands and agricultural lands of Tana Bhagats are coming in the path. We will challenge this in court,” claimed Jyoti Kujur, an adivasi activist.</p>
+<h2><strong>Who are Tana Bhagats?</strong></h2>
+<p><a href="https://indianexpress.com/article/political-pulse/jharkhand-adivasis-tana-bhagat-self-rule-5th-schedule-8227462/"><strong>Tana Bhagats</strong></a> are Adivasis from the Oraon tribe of the Chotanagpur region who are known for their resistance against the British colonial rule, zamindars, taxation, and other exploitative policies. The movement was led by Jatra Bhagat in 1914.</p>
+<p>Over time, the movement became closely associated with Gandhian ideology, with followers wearing white clothes, white caps, carrying the tricolour, and practising the principles of non-violence. According to tribal activists and Sarna scholars, the Tana Bhagats also adopted certain cultural practices, including abstaining from animal sacrifice, alcohol consumption, and some customary religious practices followed by other Sarna and Christian Adivasi communities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Currently, Tana Bhagats are mainly concentrated in Jharkhand districts such as Gumla, Ranchi, Lohardaga, Latehar, Chatra, Simdega, Khunti, and Palamu. Their population is estimated to be over 20,000, with some communities also residing in parts of Chhattisgarh.</p>
+<p><strong>What is the government’s stand?</strong></p>
+<p>According to Gumla District Land Acquisition Officer (DLAO) Maheshwar Mahto, the administration has not officially received any protest related to the Bharatmala project. “No protest has come to me,” Mahto told The Indian Express, adding that his department’s role is limited to land acquisition.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/research/how-jharkhands-tribes-have-fought-for-their-rights-through-centuries-9654183/">How Jharkhand’s tribes have fought for their rights through centuries</a></span></div>
+<p>He said the land acquisition notification was already issued in 2023, while arbitration proceedings under Section 3G were conducted last year.</p>
+<p>Mahto said that once the award is declared under the provisions of the National Highways Act, notices were served to the concerned raiyats (landholders), informing them about the compensation amount and asking them to submit documents. “After verification, the payment is transferred directly into beneficiaries’ bank accounts through the PFMS system,” he said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Asked about concerns raised by villagers over land acquisition in a Scheduled Area and whether special legal provisions such as the Chotanagpur Tenancy (CNT) Act apply, Mahto maintained that the acquisition is being carried out strictly under the National Highways Act, 1956.</p>
+<p>NHAI official SK Gautam, while speaking to The Indian Express, said that around 85 per cent of the affected population had already accepted compensation amounting to nearly Rs 380 crore.</p>
+<p>However, Gautam alleged, “A small section of people from the affected villages had recently turned violent and were behaving like ‘anti-social elements’…some members of the protesting group allegedly attacked company personnel and obstructed the work.”</p>
+<p>Ahmad Belal Anwar, Divisional Forest Officer (DFO), Gumla told The Indian Express that nearly three kilometres of the proposed 32.4-km diversion road would pass through forest land. He said the project had already received Stage-I forest clearance, but the final working permission was still pending.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10720826"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubham-tigga/">
+<figure>
+<img alt="Shubham Tigga" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/08/Shubham-1.jpeg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubham-tigga/"><span></span>Shubham Tigga</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8905937"></div><div class="follow_author_title" data-id="Shubham Tigga"></div><div class="follow_author_slug" data-id="shubham-tigga"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubham Tigga is a Correspondent at The Indian Express, presently based in Pune, where he covers the intersections of infrastructure, labor, and the modern economy. His reporting focuses on civil aviation, urban mobility, the gig economy, and workers' unions, providing critical insights into how transit and commercial sectors impact the daily lives of citizens.
+
+Expertise &amp; Background
+Before moving to Pune, he reported extensively from his home state of Chhattisgarh, where he focused on Indigenous (Adivasi) issues, environmental justice, and grassroots struggles in mainland India. This experience gives him a unique lens through which he analyzes the impact of large-scale infrastructure projects on local communities.
+
+Academic Foundation
+He is an alumnus of the prestigious Asian College of Journalism (ACJ), where he honed his skills in investigative reporting and ethical journalism. His academic training, combined with his field experience in Central India, allows him to navigate complex socio-economic landscapes with nuance and accuracy.
+You can reach out to him on LinkedIn                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubham-tigga/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June second, twenty twenty-six, at thirty-seven minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/tana-bhagat-jharkhand-oppose-highway-10720826/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-02 16:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
