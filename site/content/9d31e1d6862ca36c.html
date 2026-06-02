@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From Sonny Rollins to Kendrick Lamar: A brief history of the jazz-rap movement | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From Sonny Rollins to Kendrick Lamar: A brief history of the jazz-rap movement</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Sonny-Rollins-Detroit-2012.jpg?w=1600" alt="From Sonny Rollins to Kendrick Lamar: A brief history of the jazz-rap movement">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="jazz-rap" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Sonny-Rollins-Detroit-2012.jpg?w=1600" width="650"/><span class="ie-custom-caption">Sonny Rollins at Detroit Jazz Festival, August 31, 2012. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">On May 25, legendary saxophonist Sonny Rollins bid the world goodbye. Over a career spanning seven decades, Rollins won a lifetime Grammy and was colloquially dubbed the “greatest living improviser” <a href="https://indianexpress.com/article/opinion/editorials/sonny-rollins-saxophone-colossus-and-a-seeker-10711289/"><strong>ever</strong></a>.</p>
+<p dir="ltr">He possessed an unparalleled ability to invent complex melodies on the spot, and was unrivalled in his ability to carve out unscripted notes without sheet music. This inherently raw unpredictability is the same lifeblood that would fuel hip-hop music.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The chaos of a saxophone during a set does not differ greatly from the freestyle rap a Master of Ceremonies (MC) might lyricise. Unsurprisingly, Rollins’ melodic swing and wide-open saxophone breaks proved a natural canvas for hip-hop producers. At the dawn of the 90s, Rollins, alongside pioneers like Herbie Hancock and Donald Byrd, inadvertently laid the sonic foundations for what would become the jazz-rap movement.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">Fast forward to today, and this influence remains pervasive. Kendrick Lamar, arguably the most recognisable voice in the contemporary space, revived this fusion on his critically acclaimed album <em>To Pimp A Butterfly</em>, which featured a collective of live jazz artists like Terrace Martin, Kamasi Washington, and Thundercat. Similarly, acclaimed artists like Mac Miller, Tyler, The Creator, and producer Madlib have heavily leaned on jazz aesthetics to shape their defining sounds.</p><div id="taboola-mid-article-personalisation"></div>
+<h2 dir="ltr">What is jazz-rap?</h2>
+<p dir="ltr">At its core, jazz-rap is a fusion genre that bridged the improvisational complexity of jazz with the rhythmic flow and lyrical potency of hip-hop. It is fundamentally built on the art of sampling. Instead of relying on aggressive synthesisers, 90s producers dug through crates of old vinyl records to isolate and loop micro-seconds of upright basslines, muted trumpets, and smooth drum patterns. This reliance on sampling dusty jazz records gave the genre its signature sophisticated, swinging, and introspective sound.</p>
+<p dir="ltr">MC Guru’s 1993 album <em>Jazzmatazz, Vol. 1</em> brought jazz standards artists—especially Donald Byrd—into the hip-hop studio in an attempt to cement the bridge between the two styles.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p dir="ltr">Hip-hop, however, remained markedly different from jazz, which had attained the status of a ‘high art’ through decades of gentrification. Gritty and unabashedly unapologetic about its street origins, the initial connection between the two was not a calculated artistic statement.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">“Some of the jazz borrowing was purely practical,” musicologist Justin A. Williams, author of <i>Rhymin and Stealin: Musical Borrowing in Hip-Hop </i>and the editor of <em>The Cambridge Companion to Hip-Hop</em>, told <em>The Indian Express</em>. “Hip-hoppers’ parents had a lot of jazz in their record collections. Nas’s dad was a jazz musician. I think DJ Premier’s dad had a lot of records. So it was what was around. To cite Joseph Schloss, people were sampling because it was beautiful rather than to make a statement or point things out.”</p>
+<h3 dir="ltr">How did the genre originate?</h3>
+<p dir="ltr">The origins of jazz rap lie in the unprecedented success of its sister genre, gangsta rap. Gangsta rap, a rap sub-genre focused on the lived experiences, culture and values of urban gangs in the US, took off in the early 1990s. With the unprecedented success of N.W.A’s <em>Straight Outta Compton</em> (1988)—selling three million records without relying on radio play or commercial publicity—record labels were quick to recognise the emergence of a new frontier.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-culture/hip-hop-origins-explained-8891016/">How teenagers from the Bronx invented hip-hop 50 years ago</a></span></div></p>
+<p dir="ltr">As fresh faces like Dr Dre and Snoop Dogg burst onto the scene, hip-hop’s corporatisation began in earnest. Conglomerates like Time Warner and Universal Music (then MCA) did not shy from spending big money, with Universal purchasing a 50% stake in Interscope Records for a reported $200 million by 1996.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">“This power shift, and white-owned labels like Universal Music (then MCA Entertainment) and Interscope Records, meant that those in power chose gangsta rap as the dominant form of rap,” says Williams. “Gangsta rap became a target for the voyeurism of young white suburban teenagers in America who didn’t know much of that world.”</p>
+<p dir="ltr">This corporate obsession with one genre left enough space open for new paths to be whittled. Groups like A Tribe Called Quest (ATCQ) and Digable Planets deviated from simply narrating stories. “In a way, jazz rap offered an alternative which was more in the minority and could be seen as a more ‘niche’ taste for consumers,” Williams said.</p>
+<p dir="ltr">Jazz rap went beyond the raw streets of African-American communities and did not shy away from diving into eclectic social commentary. Moving past tales of violence (a crucial element of gangsta rap), groups like ATCQ documented local action. In their 1990 classic, <em>Can I Kick It?,</em> the late Phife Dawg (part of the ATCQ trio) would reference New York City’s elections, rapping:</p>
+<p dir="ltr">“Mr Dinkins, would you please be my mayor? / You’ll be doing us a really big favour.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Similarly, Digable Planets’ <em>La Femme Fetal</em> advocated for abortion rights, casting a sharp look at the legality of gender. Jazz rap cemented itself as a form of expression deeply linked to shared communal progress and political awareness.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p dir="ltr"><strong>Gentrification and ‘high art’</strong></p>
+<p dir="ltr">The cultural gentrification of jazz in the 1980s proved to be a key lever which contributed to the eventual popularity of jazz rap.</p>
+<p dir="ltr">Shifting away from its gritty settings, jazz saw a major overhaul of its identity, with institutions like the Lincoln Centre lending their weight to this shift. Accompanying this was the rise of the ‘Young Lions’, a cohort of classically trained Black musicians who in the 1980s self-consciously repositioned jazz as a high-art form worthy of institutional prestige. The most famous of this group was Wynton Marsalis, the current director of the Lincoln Centre.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Coinciding with the physical displacement of artists from neighbourhoods due to rising rents, jazz was dragged out of the smoky corner clubs where it existed and was locked into concert halls and university classrooms. It would go on to alienate the younger, lower-income African-American communities that had pioneered the genre in the past.</p>
+<p dir="ltr">This cultural shift was documented in the discography of the 1990s, with Spike Lee’s 1990 film Mo’ Better Blues tackling the romanticisation of jazz. The film’s scratch-heavy anthem ‘Jazz Thing’, composed by rapper duo Gang Starr, proved to be the breath of fresh air listeners were gasping for. Emboldened, Gang Starr’s Guru (real name Keith Elam) took a step forward in 1993 with the release of his studio album titled <em>Jazzmatazz, Vol. 1</em>.</p>
+<p dir="ltr">Featuring legends of the craft such as Donald Byrd and Lonnie Liston Smith, Jazzmatazz tried what no one had before—hip-hop artists and jazz musicians under the same roof. The album was praised by TIME magazine for its “jazzy undercurrents that give the album a laid-back quality that refutes the riotous stereotype of rap”.</p>
+<p dir="ltr">Accentuated by young producers pulling readily available records to sample, it invited labels like ‘conscious rap’. The artists themselves “weren’t consciously trying to be high art but many record reviewers picked up on it,” Williams said. “It kind of got out of the hands of the artists.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h3 dir="ltr">Science of Sound</h3>
+<p dir="ltr">The dawn of digital sampling proved to be another important lever fueling the musical revolution. The introduction of digital samplers—specifically the Akai MPC60 in 1988—changed the game. Allowing producers to isolate micro-seconds of audio, they could then chop these sounds into individual pieces and assign them to the sampler’s rubber pads. This allowed artists to physically play fragments of older records like new instruments.</p>
+<p dir="ltr">Previously a financially heavy affair, the breaking of this barrier to entry allowed the youth from economically weaker sections of society to try their hand at musical expression.</p>
+<p dir="ltr">Producers no longer needed a band. Instead, they could drop a needle on a 1970s jazz or funk record, find a two-second drum break, and create a new sound. These drum breaks—the sonically “open” sections of funk records stripped of melodic clutter—provided a precise yet roomy canvas for MCs to step in and use their voices as lead instruments.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p dir="ltr">A crucial technique of the era involved using low-pass filters to hack complex jazz tracks. If a producer found an upright bassline of choice that was buried under loud trumpets, they would digitally filter out the high-frequency horns. What remained was a thick, muddy, underwater bassline that gave 90s hip-hop its signature heavy, head-nodding bounce.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">However, this break would not last for long. As hip-hop exploded into a billion-dollar industry, copyright lawyers and publishers tightened the belt. The sampling era birthed in the 90s has since become heavily regulated.</p>
+<p dir="ltr">Today, clearing a two-second jazz sample can cost an artist the vast majority of their song’s publishing royalties or result in massive lawsuits. Furthermore, ethnomusicologist Justin Patch has argued that modern sampling can act as a sonic form of gentrification—stripping a marginalised sound of its original history to create aesthetic capital for wealthier audiences.</p>
+<p dir="ltr">This has created a fascinating paradox in the modern music business: while 90s producers used samplers because they couldn’t afford live musicians, today’s artists employ live musicians because they can’t afford the samplers.</p>
+<p dir="ltr">“Playing with live musicians helps to save money from sample clearance, so there is a practicality there,” Williams explains. As a result, contemporary heavyweights like Kendrick Lamar and Anderson. Paak frequently skip the digital crates entirely, opting to bring live jazz musicians—like Terrace Martin, Robert Glasper, or DOMi &amp; JD Beck—directly into the studio.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p dir="ltr">Yet, even as production techniques return to live instrumentation, the cultural shift remains undeniable. Just as jazz moved from underground clubs to elite university classrooms, hip-hop is currently experiencing the same elevation, punctuated by artists like Kendrick Lamar winning Pulitzer Prizes.</p>
+<p dir="ltr">“I think hip-hop is becoming gentrified as jazz was, and the jazz influence is still there, kind of helping push that gentrification,” Williams says.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10718882"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June second, twenty twenty-six, at twenty minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-culture/" href="https://indianexpress.com/about/explained-culture/">Explained Culture</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-culture/sonny-rollins-to-lamar-jazz-rap-history-10718882/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-02 03:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Did Pope Leo’s AI encyclical give Anthropic a legitimacy boost ahead of its IPO push? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Did Pope Leo’s AI encyclical give Anthropic a legitimacy boost ahead of its IPO push?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Leo-Amodei-1.jpg?w=1600" alt="Did Pope Leo’s AI encyclical give Anthropic a legitimacy boost ahead of its IPO push?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Anthropic IPO, Pope Leo, Pope Leo encyclical, Magnifica Humanitas" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Leo-Amodei-1.jpg?w=1600" width="650"/><span class="ie-custom-caption"> The Holy See has not endorsed Anthropic, and there is no evidence to suggest the encyclical had any effect on the company’s valuation or IPO plans. (NYT Photos)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Last week, Pope Leo XIV unveiled the <em>Magnifica Humanitas</em>, a wide-ranging treatise warning against the blind adoption of artificial intelligence, the moral risks of unchecked technological power, and reaffirming the primacy of human consciousness.</p>
+<p>However, adding another layer of significance to this historic event was the presence of Anthropic co-founder Christopher Olah, who spoke at the Vatican presentation.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Mere days later, the company secured $65 billion in its latest funding round and reached a valuation of $965 billion, making it the world’s most valuable AI startup. And on Monday (June 1), the company confidentially <a href="https://indianexpress.com/article/technology/tech-news-technology/anthropic-files-for-ipo-as-ai-startup-behind-claude-prepares-historic-us-stock-market-debut-10719359/"><strong>filed for a US IPO</strong></a>, with no details publicly available about the offering.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The timing raises a pertinent question: did the Vatican’s engagement with Anthropic merely reflect the company’s growing influence, or did it help transfer a form of legitimacy beyond capital valuation?</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>The <em>Magnifica Humanitas</em></strong></h2>
+<p>Popes have written letters to the faithful since the early Church, while the encyclical in its modern form is credited to Pope Benedict XIV (1740-58). An encyclical is essentially a letter to the Roman Catholic faithful that offers authoritative teachings on issues posing a moral or social challenge. In the holy scheme of things, an encyclical does not have the legal status of a papal bull — a formal public decree or charter by the church. However, encyclicals are regarded as authoritative guidelines informing the lifestyle and choices of the faithful.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>The <em>Magnifica Humanitas</em>, or Magnificent Humanity, is the <a href="https://indianexpress.com/article/world/pope-leo-xiv-magnifica-humanitas-ai-regulation-manifesto-just-war-theory-10707091/"><strong>first by Leo XIV</strong></a> since he became pope last year. Notably, he signed the document on May 15, the date when his predecessor in name, Pope <a class="" href="https://indianexpress.com/section/horoscope/leo/" rel="noamphtml">Leo</a> XIII, signed the monumental <em>Rerum Novarum</em> (On Capital and Labour) in 1891. Leo XIII issued this document in the wake of the Industrial Revolution, addressing the needs of the working class and defending workers’ rights.</p>
+<p>Leo XIV has attempted a similar feat, identifying artificial intelligence as the great influence of our time, one that needs to be “disarmed”. AI needs to be “freed from logics that turn it into an instrument of domination, exclusion and death,” he announced on May 25.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Anna Rowlands, St Hilda Professor of Catholic Social Thought and Practice at Durham University and a member of the encyclical’s launch panel, wrote in <em>The Conversation</em> that <em>Magnifica Humanitas</em> was a landmark: a papal text focused centrally on AI, launched by the Pope himself “in the presence of the very industry it sought to critique”.</p>
+<p><strong>Anthropic in the room</strong></p>
+<p>Since its founding in 2021, Anthropic has cultivated the image of the safety-conscious frontier AI company. Its flagship offering, the GenAI chatbot Claude, is trained to adhere to a constitution, which in its most recent iteration this January lays out the company’s mission as ensuring the world “safely makes the transition through transformative AI”.</p>
+<p>In recent months, this posturing has taken on a political dimension, with Anthropic landing on the Pentagon’s blacklist after it expressed concerns about the government using its AI tools, including Claude, in what it called “mass surveillance” and “fully autonomous weapons”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/anthropic-ceo-amodei-ai-humanity-warning-distraction-10497656/">How Anthropic CEO Amodei’s warning about ‘AI destroying humanity in the future’ is a distraction</a></span></div>
+<p>And in May, the Vatican became the most visible institutional stage for that public moral posture.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>That presence was controversial within the launch conversation itself. Rowlands wrote that Anthropic’s inclusion on the panel was welcomed by some as a sign of serious engagement with the sector, but seen by others as risking Vatican naïveté about corporate capture or privileging the voices of capital.</p>
+<p>In his remarks at the Vatican, Olah acknowledged that frontier AI labs, including Anthropic, operate under incentives that can conflict with “doing the right thing”, from commercial viability and geopolitical pressure to pride and ambition. He argued that AI companies needed people “outside those incentives” who could act as “earnest, thoughtful critics”.</p>
+<p>The <a class="" href="https://indianexpress.com/article/explained/this-word-means-holy-see-9957162/" rel="noamphtml">Holy See</a>, for its part, has been building an AI-governance position for years. Rowlands noted that this concern did not emerge suddenly, pointing to the Vatican’s decade-long conversations with the AI sector through initiatives such as the Minerva Dialogues.</p>
+<p>In 2020, the Vatican enlisted tech companies such as Microsoft and IBM to sign the Rome Call for AI Ethics, an AI pledge that outlined core principles for AI regulation. And in 2023, Pope Francis called for an international treaty for AI regulation, saying the morality of AI researchers and developers did not make up for the lack of human values in their technology. Leo carried this tradition forward, telling the cardinals who elected him that the Church owed it to the world to offer the “treasury of its social teaching” to confront the challenges posed by AI on “human dignity, justice and labour.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Pope Leo announced the launch of a study group a day after signing the encyclical. The Vatican also hosted “Preserving Human Voices and Faces,” a public AI-governance forum days before the encyclical’s publication, bringing together church officials, academics, journalists and activists, but neither Anthropic nor other major frontier AI companies were named as attendees by <em>Vatican News</em>.</p>
+<p><strong>What legitimacy means for Anthropic</strong></p>
+<p>Anthropic has come a long way since its early days of positioning itself as the careful competitor in the AI race — a reputation that is heavily contested. Its latest funding round and <a class="" href="https://www.financialexpress.com/market/ipo/" rel="noopener" target="_blank">IPO</a> filing reveal a company that matters differently. This is underscored by its latest model, Mythos, whose reported use has exposed thousands of vulnerabilities across open-source projects and critical digital systems. Anthropic is now asking to be trusted with systems whose failures, misuse or deployment choices could spill over into cybersecurity, labour, public infrastructure and governance.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>This is where its Vatican appearance became symbolically useful. The Holy See has not endorsed Anthropic, and there is no evidence to suggest the encyclical had any effect on the company’s valuation or IPO plans. But Olah’s presence in the room placed the company squarely inside a moral conversation about AI at the moment when it needed to be seen as both powerful and responsible.</p>
+<p>It also serves Pope Leo’s purposes by extending the encyclical’s reach beyond the faithful and bringing the Church into dialogue with an unlikely partner. The encyclical captures this, singling out “major economic and technological actors”. His remarks to Olah suggested that he was willing to engage them directly rather than speak only over their heads. When Leo thanked Olah and accepted his invitation to “walk together”, he was signalling that the Church’s AI intervention was not meant only for the faithful, but also for the companies building the technology.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>With Anthropic gaining proximity to one of the world’s most powerful sources of moral authority, and the Vatican gaining access to a firm that shapes the very technology it has warned against, it remains to be seen whether this engagement translates into greater accountability for Anthropic or merely greater legitimacy.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10719356"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June second, twenty twenty-six, at thirty-five minutes past eight in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/artificial-intelligence/" href="https://indianexpress.com/about/artificial-intelligence/">artificial intelligence</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/pope-leo-xiv/" href="https://indianexpress.com/about/pope-leo-xiv/">Pope Leo XIV</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-ai/did-pope-leos-ai-encyclical-help-legitimise-anthropic-ahead-of-its-ipo-push-10719356/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-02 03:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
