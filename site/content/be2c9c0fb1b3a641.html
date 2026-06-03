@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>A new pill can double survival time for deadliest cancer: An expert explains why this is a gamechanger | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>A new pill can double survival time for deadliest cancer: An expert explains why this is a gamechanger</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-03</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Pancreatic_Cancer_Drug__2286-420cf.jpg?w=1600" alt="A new pill can double survival time for deadliest cancer: An expert explains why this is a gamechanger">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Pancreatic cancer drug" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Pancreatic_Cancer_Drug__2286-420cf.jpg?w=1600" width="650"/><span class="ie-custom-caption">A microscope image shows pancreatic cancer cells, nuclei in blue, growing as a sphere encased in membranes, red. AP file</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">A new experimental pill is offering hope for patients of <a href="https://indianexpress.com/article/lifestyle/health/has-risen-nearly-30-why-doctors-are-seeing-more-pancreatic-cancer-in-their-30s-and-40s-10511329/" rel="noopener" target="_blank"><strong>pancreatic cancer</strong></a>, one of the deadliest and hardest-to-treat forms of the disease.</span></p>
+<p><span style="font-weight: 400">Results from a large international trial presented at the American Society of Clinical Oncology (ASCO) annual meeting showed that daraxonrasib, a once-daily oral drug, nearly doubled survival time in patients with advanced pancreatic cancer whose disease had progressed despite earlier treatment.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The drug works by targeting KRAS, a cancer-driving gene mutation found in the vast majority of pancreatic tumours and one that researchers have spent decades trying to effectively shut down. The findings have generated excitement among oncologists because progress in treating pancreatic cancer has historically been slow.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">“For years, the average (median) survival for patients with advanced pancreatic cancers has hovered around one year. It was six months in the late 1990s and just about 9-12 months three decades later. Improvements in survival have been minimally incremental despite active research over the last two decades,” says Professor Anant Ramaswamy, specialist in GI cancers and Geriatric Oncology, Tata Memorial Centre, <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>. </span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">“In such a scenario, the impact of an oral pill improving or rather, doubling survival in pre-treated patients with pancreatic cancer is great news. Also, this is just the beginning for this new class of drugs. Patients and oncologists can expect more improvements in the times to come,” he told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">. </span></p>
+<p><b>Why has pancreatic cancer remained so difficult to treat compared with some other cancers?</b></p>
+<p><span style="font-weight: 400">There are multiple reasons. First, a majority of patients (70-90%) are diagnosed at an advanced stage and that itself is a major limiting factor. Second, while a number of other cancers have had targeted agents and immunotherapy markedly improving survival, till date these have not shown significant effects in pancreatic cancer. Third, and a bit technically, in pancreatic cancer, it’s not just the tumour but also the surrounding tissue around the tumour (called the stroma) that have been very resistant to available treatment approaches.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><b>What role does the KRAS gene play in pancreatic cancer? The drug is described as “locking onto” the mutated KRAS gene. In simple terms, how does it work?</b></p>
+<p><span style="font-weight: 400">RAS is a protein that is ubiquitously expressed in almost all cell types in the human body. It is encoded for by a gene called RAS gene. Mutations (damaging alterations in the gene which cause cancer) in the RAS gene family (of which KRAS is the most common) affect approximately 20% of all cancers. Approximately 80% of pancreatic cancers have alterations in the KRAS gene, which has made it a major area of research in pancreatic cancers.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/why-pancreatic-cancer-goes-unnoticed-heres-how-you-can-control-risk-factors-9681091/">Why pancreatic cancer goes unnoticed</a></span></div>
+<p><span style="font-weight: 400">Basically, when the KRAS gene is mutated, it becomes continually active or ‘ON’ mode by binding to some small molecules in the cells and then ensures that there is disruption of activity in normal cells. That’s how these cells become dysregulated and cancerous. Daraxonrasib inhibits this state from inside the cell and suppresses pathways that are involved in perpetuating cancer cell growth. It is the first drug of its class that has shown such successful results, though many drugs with similar activity are in the pipeline and should emerge in a few years.</span></p>
+<p><b>What makes daraxonrasib different from existing treatments?</b></p>
+<p><span style="font-weight: 400">Daraxonrasib is the first drug of its category that has shown to successfully inhibit RAS activity, including the various subtypes of RAS as well, irrespective of whether RAS is mutated or not. This makes it a notable triumph in the era of precision oncology.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><b>The drug appeared to cause fewer severe side-effects than chemotherapy. What kinds of side-effects did patients experience?</b></p>
+<p><span style="font-weight: 400">Even though it is an oral drug, daraxonrasib had a significant incidence of side-effects almost on a par with chemotherapy, to which the drug was compared. The common side effects included a skin rash, loose motions, oral ulcers, vomiting and vomiting like sensations, tiredness and fall in haemoglobin levels, among others. About one-third of patients required reduction in dose as well. Since it is a new drug, oncologists and physicians over the world will slowly learn to use this drug so that side effects can be ameliorated to some extent.</span></p>
+<p><b>Which patients are most likely to be eligible for this treatment?</b></p>
+<p><span style="font-weight: 400">As of now, patients with pancreatic cancer, who have previously received chemotherapy and have worsening disease, are candidates for receiving daraxonrasib. However, clinical trials and studies are already exploring these drugs in patients who are treatment-naïve (meaning an individual has never received therapy or medication for a specific medical condition or disease) and I think that these will possibly be used earlier rather than later in pancreatic cancers as well as other cancers in the coming times.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><b>Can this drug have applications beyond pancreatic cancer?</b></p>
+<p><span style="font-weight: 400">Daraxonrasib as well as other drugs similar to it, which inhibit activity of RAS, are being explored in a number of cancers since RAS mutations are noted in about 20% of all cancers. They are actively being evaluated in lung and colon cancers since these are relatively common and have a high incidence of RAS mutations.</span></p>
+<p><b>What about accessibility and drugs?</b></p>
+<p><span style="font-weight: 400">The drug is not available in India but with the kind of scope it has, I think this class of drugs will soon make their way to India. Everyone is interested in these drugs because of their potential to treat a number of cancers. Informally, we have heard that there is a long waiting list even to get into clinical trials evaluating RAS inhibitors. So, we will have to wait and see with regard to accessibility of daraxonrasib and other such drugs to Indian patients.</span></p>
+<p><b>What does this breakthrough tell us about the future of precision medicine in cancer treatment?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Precision medicine is an important component of cancer treatment and it is heartening to note that research has yielded an exciting molecule representative of precision medicine in a difficult to treat cancer like pancreatic cancer. </span></p>
+<p><span style="font-weight: 400">Precision medicine has already transformed the management of certain cancers like lung cancers. With more research, oncologists like me can hope for more personalised and precise treatments for our patients in the future. At the same time, we also need to remember that the basics of cancer therapy — surgery, chemotherapy, and radiotherapy — are very important and precision medicine has to work in tandem with these specialties to ensure that our patients receive the best possible treatment.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10721700"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/columnist/rinku-ghosh/">
+<figure>
+<img alt="Rinku Ghosh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2021/11/rinku.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/columnist/rinku-ghosh/"><span></span>Rinku Ghosh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7625937"></div><div class="follow_author_title" data-id="Rinku Ghosh"></div><div class="follow_author_slug" data-id="rinku-ghosh"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rinku Ghosh is the Health Section Lead at The Indian Express, where she oversees the publication’s comprehensive health, wellness, and medical science vertical. With years of experience in high-impact journalism, Rinku specializes in translating complex medical research into actionable insights for the public. Her reporting spans a wide spectrum—from deep-dives into childhood obesity and the effects of urban pollution to the frontiers of medical technology, such as the use of AI and nanobots in cancer treatment.
+Authoritativeness: As a veteran editor at one of India’s most trusted news organizations, Rinku has interviewed world-renowned experts, including cardiologists from the Mayo Clinic, oncologists from AIIMS, and researchers from the Indian Institute of Science (IISc). Her column often serves as a primary source for "Explained" features, where she breaks down global health trends, vaccine safety, and public health policy. Her work is recognized for bridging the gap between clinical data and the lived experiences of patients.
+Trustworthiness: Rinku’s editorial approach is rooted in the "Journalism of Courage" philosophy, prioritizing evidence-based science over healthcare myths. In an era of medical misinformation, she ensures that every piece of advice—whether regarding chronic disease management or nutritional supplements—is backed by peer-reviewed studies and verified by leading medical practitioners.                        <a class="more-abt-author" href="https://indianexpress.com/profile/columnist/rinku-ghosh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June third, twenty twenty-six, at zero minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-health/daraxonrasib-pancreatic-cancer-survival-trial-results-10721700/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-03 09:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
