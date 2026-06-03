@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Key health and population indicators, anaemia data: What went missing from NFHS-6 findings | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Key health and population indicators, anaemia data: What went missing from NFHS-6 findings</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-03</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-nfhs_expl-health.jpg?w=1600" alt="Key health and population indicators, anaemia data: What went missing from NFHS-6 findings">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="NFHS" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-nfhs_expl-health.jpg?w=1600" width="650"/><span class="ie-custom-caption">NFHS-5 data showed that there was an increase in anaemia levels despite the government’s Anaemia Mukt Bharat programme that provided iron-folic acid tablets to girls and women in order to address iron-deficiency anaemia. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">While the recently released <strong><a class="" href="https://indianexpress.com/article/health-wellness/sharp-rise-in-obesity-diabetes-in-five-years-since-2019-shows-latest-health-survey-10714931/">National Family Health Survey-6 (NFHS-6)</a></strong> has shown several gains — increase in health insurance cover, increase in internet and mobile phone use by women, and increase in coverage of key vaccines — it is the <strong><a class="" href="https://indianexpress.com/article/health-wellness/missing-from-national-family-health-survey-key-indicators-linked-to-sex-ratio-cancer-screening-access-to-basic-facilities-10719161/">omitted statistics</a></strong> that has come into focus.</span></p>
+<p><span style="font-weight: 400"> The fact sheet — a detailed report is yet to be released — omits several key data points such as population-level statistics, indicators related to women’s and children’s health, family planning, and data on Central government schemes such as the Swachch Bharat Abhiyan (sanitation) and the Ujjwala Yojana (cooking fuel). These were omitted despite the questions having been asked during the survey.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><b>Missing data</b></h2>
+<p><span style="font-weight: 400">The number of key indicators went down from 131 in NFHS-5 to 101 in the recently released NFHS-6. With several key indicators missing from the fact sheet, sources from the Union Health Ministry said that it was an attempt at “data harmonisation”.</span></p>
+<p><span style="font-weight: 400">“Several of the data points in the NFHS are already reported independently by other government surveys and reports. These parameters were removed from the survey in an effort towards data harmonisation and to reduce confusion,” a source said.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">They cited the example of the total fertility rate (TFR) — the average number of children a woman is expected to have in their lifetime — that remained in the NFHS fact sheet leading to confusion. “The NFHS reported the TFR as 2 while the SRS (Sample Registration System) reported it as 1.9 — leading to speculations over whether the population was stable or on the decline.” A replacement level TFR — the number needed to exactly replace one generation by the next — is considered to be 2.1.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/fhs-6-survey-data-released-child-nutrition-stunting-maternal-health-gaps-10715703/">Nearly 1 in 3 Indian children still underweight: What NFHS-6 says about childhood nutrition</a></span></div>
+<p><span style="font-weight: 400">The data point, missing from the NFHS-6 fact sheet, which are reported by other surveys or reports include:</span></p>
+<p><b>Vital statistics:</b><span style="font-weight: 400"> Population-level indicators such as population-level sex ratio and sex ratio at birth, which were removed from the NFHS-6, are reported in the SRS. The most recent SRS report puts the sex ratio at birth — an indicator of societal preference for male children — at 918 girls per 1,000 boys.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Data on registration of births and deaths can be found in the Civil Registration System (CRS) data, the latest of which shows that 92% of deaths and 95% of births in the country are registered. Data on neonatal, infant, and under-5 mortality can also be found in the SRS report. As mentioned, the data on TFR that has been retained in NFHS-6 is present in SRS as well.</span></p>
+<p><b>Sanitation and fuel:</b><span style="font-weight: 400"> While the data on use of cooking gas and access to sanitation facilities, which were removed from the NFHS-6 fact sheet, can be found in the reports by the National Sample Survey Office, some of the data points that have been retained, such as access to improved drinking water and use of internet and mobile phone, can also be found in this survey.</span></p>
+<p><span style="font-weight: 400">The government’s Ujjwala Yojna focuses on providing 1.6 crore LPG connections to facilitate a move towards cleaner cooking fuel. The Swacch Bharat Mission targets making the country open defecation free with access to toilets. </span></p>
+<p><b>Health programmes:</b><span style="font-weight: 400"> While some of the missing data on various health programmes can be found elsewhere — data on HIV can be found in the HIV Estimates released by the national programme or vaccination coverage on the WHO immunisation portal — there are many questions related to access of care that are not answered in any government survey.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Take, for example, data on the type of contraceptive being used, whether health workers have talked about family planning or informed women of the side effects of the contraception methods used by them, or whether a child suffering from diarrhoea has access to ORS and zinc supplements cannot be found in other surveys. The data point on the out-of-pocket expenditure on each delivery has also been removed from the fact sheet. While the National Health Accounts does provide an estimate on the out-of-pocket health expenses, it does not have a metric specifically for deliveries.</span></p>
+<p><b>Cancer screening:</b><span style="font-weight: 400"> Data on screening of the three most common types of cancers — breast, cervical, and oral — also remains missing from the factsheet. More than 1.5 lakh Ayushman Arogya Mandirs or primary health centres have been upgraded since 2018 to provide screening and care for non-communicable diseases, including the three cancers.</span></p>
+<p><span style="font-weight: 400">A 2024 NITI Aayog report, however, found that the uptake of cancer screening was very low. It said that among all of the facilities visited that have been functional for over a year, less than 10% of facilities had completed a single round of NCD screening in the population. NFHS-5 data showed that only 0.9% of persons were screened for breast and oral cancers and 1.9% for cervical cancer. </span></p>
+<p><b>The challenge of anaemia</b></p>
+<p><span style="font-weight: 400">Another missing data point from the NFHS-6 report is the estimates on prevalence of anaemia. This metric, however, was not included in the survey itself after experts said that the current way to measure it using a drop of blood from a finger prick can overestimate prevalence.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Venous blood drawn from an IV can better estimate anaemia burden, the experts said. Data on anaemia prevalence using venous blood samples will be reported by the Diet and Biomarker survey conducted by the National Institute of Nutrition, which is likely to be released soon, the source said.</span></p>
+<p><span style="font-weight: 400">The challenge, however, will be that there will be no way of comparing the new data with the previous estimates of anaemia. This, experts say, could have been solved with overlapping data on anaemia prevalence being present in the current dataset. </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/nfhs-vi-calls-for-a-nutrition-rethink-10718660/">NFHS-VI calls for a nutrition rethink</a></span></div>
+<p><span style="font-weight: 400">Importantly, the move to remove anaemia prevalence came after the NFHS-5 data showed that there was an increase in anaemia levels despite the government’s Anaemia Mukt Bharat programme that provided iron-folic acid tablets to girls and women in order to address iron-deficiency anaemia. The survey found that in children between the ages of 6 and 59 months, anaemia increased to 67.1% from 58.6% in the previous round of survey conducted in 2015-16. In women between the ages of 15 and 49 years, it increased to 57% from 53.1% and in pregnant women it went up to 52.2% from 50.4%.</span></p>
+<p><span style="font-weight: 400">The current survey, however, has retained data on mothers who received iron-folic acid supplementation for more than 100 days and more than 180 days — both of which have shown a significant increase. The states have since also started to move towards IV iron supplementation in women with severe anaemia and those in the late stages of pregnancy.</span></p>
+<p><b>Important findings</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Some of the other important findings of the survey were as under:</span></p>
+<p><b>Ageing population:</b><span style="font-weight: 400"> The data shows a slight decline in the number of people below the age of 5 and 15 years, reducing from 8.2% to 8% and 26.5% to 25.5% respectively. There has also been a slight increase in the proportion of people of 60 years and above — increasing to 12.9% in NFHS-6 from 11.8% in NFHS-5.</span></p>
+<p><b>Insurance coverage:</b><span style="font-weight: 400"> There has been a significant increase in the insurance coverage of households with the expansion of the government’s Ayushman Bharat scheme, with the coverage jumping from 41% to 60.2% between the two rounds of survey. </span></p>
+<p><b>Increase in internet usage:</b><span style="font-weight: 400"> The number of women who have ever used the internet has jumped from 33.3% in NFHS-5 conducted between 2019-21 to 64.3% in NFHS-6 conducted between 2023-24. This number increased from 51.2% to 80.5% among men.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><b>Contraception:</b><span style="font-weight: 400"> The survey shows that while there has been an increase in the use of contraception, there has actually been a decrease in the use of modern methods such as condoms, pills, IUDs, and hormone injections. The use of these modern methods of contraception has reduced from 56.4% recorded in NFHS-5 to 52.7% in NFHS-6.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><b>Blood sugar, hypertension:</b><span style="font-weight: 400"> The survey shows that while there has been an increase in elevated blood sugar levels, there has been a decline in blood pressure.</span></p>
+<p><span style="font-weight: 400">High blood sugar levels were recorded among 17.8% of women and 20.9% of men in NFHS-6 as compared with 13.5% of women and 15.6% of men in NFHS-5. High blood pressure levels, on the other hand, were recorded among 19.4% of women and 22.1% of men as compared with 21.3% of women and 24% of men in the previous round. </span></p>
+<p><b>Low weight, obesity:</b><span style="font-weight: 400"> Prevalence of both low-weight adults and obese or overweight adults has increased. The number of men and women with BMI under 18.5 was recorded to be 19.7% in NFHS-6 as compared with 18.7% women and 16.2% men in NFHS-5. When it comes to being overweight or obese, the proportion of women with BMI over 25 was recorded to be 30.7% and men 27.3% in NFHS 6 as compared with 24% women and 22.9% men in NFHS-5.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10720634"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/anonna-dutt/">
+<figure>
+<img alt="Anonna Dutt" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2021/12/Pic-2-4.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/anonna-dutt/"><span></span>Anonna Dutt</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7687061"></div><div class="follow_author_title" data-id="Anonna Dutt"></div><div class="follow_author_slug" data-id="anonna-dutt"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/AnonnaDutt">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Anonna Dutt is a Principal Correspondent who writes primarily on health at the Indian Express. She reports on myriad topics ranging from the growing burden of non-communicable diseases such as diabetes and hypertension to the problems with pervasive infectious conditions. She reported on the government’s management of the Covid-19 pandemic and closely followed the vaccination programme.
+
+Her stories have resulted in the city government investing in high-end tests for the poor and acknowledging errors in their official reports.
+
+Dutt also takes a keen interest in the country’s space programme and has written on key missions like Chandrayaan 2 and 3, Aditya L1, and Gaganyaan.
+
+She was among the first batch of eleven media fellows with RBM Partnership to End Malaria. She was also selected to participate in the short-term programme on early childhood reporting at Columbia University’s Dart Centre. Dutt has a Bachelor’s Degree from the Symbiosis Institute of Media and Communication, Pune and a PG Diploma from the Asian College of Journalism, Chennai. She started her reporting career with the Hindustan Times.
+
+When not at work, she tries to appease the Duolingo owl with her French skills and sometimes takes to the dance floor.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/anonna-dutt/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June second, twenty twenty-six, at forty-three minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-health/nfhs-6-fact-sheet-missing-health-population-anaemia-data-10720634/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-03 16:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
