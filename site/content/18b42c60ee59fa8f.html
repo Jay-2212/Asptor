@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How a literary prize highlighted the growing challenge of AI use in writing worldwide | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How a literary prize highlighted the growing challenge of AI use in writing worldwide</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-03</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-ai-writing_expl-ai.jpg?w=1600" alt="How a literary prize highlighted the growing challenge of AI use in writing worldwide">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="AI" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-ai-writing_expl-ai.jpg?w=1600" width="650"/><span class="ie-custom-caption">Using machine learning to tell apart whether something is written by a human or AI is one approach. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Criticism is not uncommon in the aftermath of a literary prize announcement. But the uproar after the British literary magazine </span><i><span style="font-weight: 400">Granta</span></i><span style="font-weight: 400"> announced the regional winners of its annual short story prize last month was literary criticism of a different kind: allegations of the use of artificial intelligence (AI).</span></p>
+<p><span style="font-weight: 400">Within days of the magazine naming this year’s winners of the <strong><a class="" href="https://indianexpress.com/article/books-and-literature/sharon-aruparayil-asia-region-commonwealth-short-story-prize-10691296/">Commonwealth Short Story Prize</a></strong>, allegations surfaced that some of the winning entries showed signs of AI-generated text. The turn of events has not just highlighted the increasing usage of AI in creative and other forms of writing but also put the role of tools that claim to detect AI-generated text under scrutiny. We explain.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>The controversy</b></p>
+<p><span style="font-weight: 400">Since 2012, </span><i><span style="font-weight: 400">Granta</span></i><span style="font-weight: 400"> has been publishing the winners of the Prize — awarded in partnership with the Commonwealth Foundation — for five geographies: Africa, Asia, Canada and Europe, the Caribbean, and the Pacific. The overall winner is to be announced on June 30.</span></p>
+<p><span style="font-weight: 400">Days after the magazine announced the winners, many social media users began calling out Trinidadian writer Jamir Nazir’s short story “The Serpent in the Grove” (winner for the Caribbean), with one citing the AI detector tool Pangram to call it “100% AI generated” and a “Turing Test of sorts”.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">The Turing Test, proposed by British mathematician Alan Turing in the 1950s, is a test of a machine’s ability to exhibit intelligent behaviour that a human evaluator cannot distinguish from that of a human. To date, it is considered a benchmark for AI.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/world/commonwealth-prize-winning-story-ai-generated-10700698/">Did AI write this Commonwealth Prize-winning story?</a></span></div>
+<p><span style="font-weight: 400">Similar allegations were directed at two other winners, Indian writer Sharon Aruparayil (Asia) and Malta’s John Edward DeMicoli (Canada and Europe), again using Pangram. The remaining two — Lisa-Anne Julien (South Africa, Africa) and Holly Ann Miller (New Zealand, Pacific) — were, however, assessed to be “fully human-written”.</span></p>
+<p><span style="font-weight: 400">In a written response, Aruparayil <strong><a class="" href="https://indianexpress.com/article/books-and-literature/commonwealth-short-story-prize-sharon-aruparayil-ai-10701910/">earlier told </a></strong></span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that “no AI tools were used at any stage in the writing, editing, or development process” of her story.</span></p>
+<p><b>Machine learning</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">To understand how these tools claiming to detect AI-generated text work, one must first know the science of machine learning (ML). In simple terms, ML refers to the use of data and statistics to build an AI system: this is done by feeding large datasets into a computer so that it can think and reason like a human — or even at superhuman levels.</span></p>
+<p><span style="font-weight: 400">“So you would take lots of examples of AI-written content and human-written content and feed it to a big model to do the classification for you. The model, through data, learns signals like, ‘Oh, AI models tend to use em dashes’, or use the word ‘imperative’ or ‘delve’. These are statistical patterns that large ML models can learn when they’re fed lots of examples of both human writing and AI writing,” Danish Pruthi, assistant professor at the Indian Institute of Science <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a>, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p>
+<p><span style="font-weight: 400">When allegations of AI started flying in after the prize announcement, a lot of them pointed to the “tells”: signs that a piece of text is AI-generated. (The term comes from the card game poker, where it refers to an involuntary change in a player’s body language that gives clues about their next move.)</span></p>
+<p><span style="font-weight: 400">Pruthi said that besides em dashes or certain words, other tells include text that is organised in bullet points — often with a heading of what the bullet is about. Also, even though AI-generated text tends to conclude things neatly, Pruthi said that “human conclusions sometimes introduce new content, but model conclusions rarely do”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">He also cited the instance of “negative parallelism”: a rhetorical writing style marked by the formulaic “Not X, but Y” structure. “For instance, ‘These headphones are not just hearing devices, but sound-cancelling devices.’ Models are very commonly doing that now,” he said.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/commonwealth-prize-ai-story-writer-granta-10703115/">Commonwealth Prize AI controversy shows: The writer who took the shortcut, failed the story</a></span></div>
+<p><span style="font-weight: 400">As to where these tells come from, Pruthi said research was ongoing but there were no clear answers yet.</span></p>
+<p><span style="font-weight: 400">“One common hypothesis is that after you pre-train a model, you post-train it to make it safe and useful and able to follow instructions. That’s typically done by contracting annotators and data vendors who create examples to answer questions of different types,” he said.</span></p>
+<p><span style="font-weight: 400">“A lot of those datasets, which are private and constructed by large frontier labs, have these cues. People who are writing those answers write in this way, and therefore models replicate that behaviour,” he added.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><b>Can ChatGPT/Claude be a good detector?</b></h2>
+<p><span style="font-weight: 400">Pruthi said using ML to tell apart whether something is written by a human or AI is just one approach: one that even Pangram — the AI detector at the heart of the matter — also uses. He added that people now want to move beyond this “binary framing” of what is AI versus human. “They (as in the entire research community) are figuring out what the extent of collaboration is. Is it lightly assisted by an AI, moderately assisted by an AI, [or] heavily assisted by an AI?”</span></p>
+<p><span style="font-weight: 400">In a statement following the allegations, </span><i><span style="font-weight: 400">Granta</span></i><span style="font-weight: 400">’s publisher Sigrid Rausing had said that the magazine had used the AI chatbot Claude to evaluate Nazir’s story as to “whether it was AI-generated”. “The response was long, concluding that it was ‘almost certainly not produced unaided by a human’,” the statement said.</span></p>
+<p><span style="font-weight: 400">According to Pruthi, asking Claude, ChatGPT, or Gemini whether something is AI-written is a “very bad idea”. “The model is not specifically trained for this. So it might take an educated guess, but that isn’t going to be very accurate… This happens to be a task where you care about accuracy a great deal because of it being high stakes,” he said.</span></p>
+<span class="custom-caption"><img alt="Olga Tokarczuk" class="lazyloading wp-image-10720909 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/ex-OlgaTokarczuk_expl-ai.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"> Recently, Nobel Prize-winning Polish writer Olga Tokarczuk’s comments about using AI for research while writing her last novel had invited criticism. Photo: Wikimedia Commons</img></span>
+<p><span style="font-weight: 400">The other key difference, Pruthi said, is that a lot of detectors are tuned in such a way to ensure “false positives are low”. A false positive refers to an instance when a detector flags something human-written as AI-generated, as opposed to a false negative, wherein an AI-generated text might pass off as human.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">“So they will specifically set the model, or set the thresholds, in such a way that the chance of incorrectly flagging a human-written text as AI is very, very low,” he added.</span></p>
+<p><span style="font-weight: 400">AI detectors are also distinct from tools detecting plagiarism: Pruthi said that these were “two entirely different tasks”. Since plagiarism largely concerns copying intellectual work without attribution, “plagiarism detectors tend to sophisticatedly score how well a given idea/work matches with existing work”.</span></p>
+<p><span style="font-weight: 400">“On the contrary, AI detectors just try to estimate whether a piece of text could be AI-generated given lots of examples they’ve seen,” he said.</span></p>
+<p><b>How reliable are these tools?</b></p>
+<p><span style="font-weight: 400">Pruthi said that Pangram — which claims a false positive rate of 1 in every 10,000 cases (0.01%) — is quite reliable, which was backed by some independent studies.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">But he sounded a word of caution, saying that an ML model would “obviously not be 100% accurate all the time”. Using the analogy of spam classification in emails, he said: “We still develop ML models to detect what is spam and what is not. There too, the content, the words used, the way it is phrased — all that is helpful to figure out whether it is spam or not. We still get a few examples wrong, where an important email might land in spam or vice versa.”</span></p>
+<p><span style="font-weight: 400">This is because these tools have limitations. According to Pruthi, ML models are more likely to be wrong when there are fewer words, since there aren’t enough signs to tell confidently whether something’s AI-written or human-authored.</span></p>
+<p><span style="font-weight: 400">Another limitation is what Pruthi called “low-entropy text”, which refers to text that is generally precise and accurate in nature — and thus hard to classify.</span></p>
+<p><span style="font-weight: 400">“Let’s say if I ask you, ‘Give me all the states of India in alphabetical order.’ The states you will produce are one clear, definitive answer, whereas what a model will produce will also be the same answer… You will not be able to tell whether it’s coming from a model or a human,” he said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">Similarly, code — written instructions that tell a computer to execute a certain task — can also “be tricky to detect” at times. “There’s only a certain way it can be written,” Pruthi added.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Pruthi mentioned another limitation — one that he and his colleagues presented in a recent paper at an ML conference — in a scenario when one slightly polishes a piece of text using a language model. “Even though the base ideas and content were written by you, instead of saying that it is slightly edited or mixed text, models might flag it as fully AI-generated,” he said.</span></p>
+<p><span style="font-weight: 400">This can dissuade writers from even refining their writing using AI, out of fear that their work could be mistakenly flagged as AI-generated. “The mob believes the machine, and the machine gets to control the narrative of what deserves to be ‘human-written’,” Arupayiril had told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p>
+<p><span style="font-weight: 400">Pruthi said that while cases like Arupayiril’s were unfortunate, AI text detection “saves writers’ lives and careers in a different way”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">“There’s a lot of AI slop on the internet right now. A lot of Kindle books that are published are fully AI-written,” he said. “So if a good detector is able to weed out most of that and at least label that this is AI-generated, then maybe a careful reader can choose not to consume that content. In some way, good AI detectors are helping channel attention to legitimately human-written content.”</span></p>
+<p><b>Impact on writers and publishers</b></p>
+<p><span style="font-weight: 400">Recently, Nobel Prize-winning Polish writer Olga Tokarczuk’s comments about using AI for research while writing her last novel had invited criticism. Although Tokarczuk later clarified she did not use AI in the writing process itself, Pruthi believed transparency was key. “If writers are using and benefitting from AI, they can appropriately disclose it,” he said.</span></p>
+<p><span style="font-weight: 400">Jane Friedman, an American publishing professional with over two decades of industry experience, concurred. “Everyone needs to be on the same page about where these tools are touching the process and, to the best of everyone’s ability, track how they’re being used,” she told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p>
+<p><span style="font-weight: 400">According to her, there was a lack of trust around the use of AI itself. “One of the problems here is that everyone is kind of doing their own thing behind the curtain. Part of that has to do with the taboo around it and everyone being uncertain about the technology and the different attitudes towards it,” she said.</span></p>
+<p><span style="font-weight: 400">In terms of using AI responsibly, Friedman cited a recent report by </span><i><span style="font-weight: 400">The New York Times</span></i><span style="font-weight: 400"> that mentioned how a non-fiction book published in the US included quotes that were fabricated by AI. “This is a classic example of people either trusting the AI too much or not yet having the skill to use it in a way that avoids these sorts of mistakes,” she said.</span></p>
+<p><span style="font-weight: 400">She, however, felt that writers will eventually get smarter. So, the onus was on everyone working in publishing or related industries such as media or academia to be on the same page, despite their “very good reasons to be anti-AI”.</span></p>
+<p><span style="font-weight: 400">“I think just saying, ‘I don’t want to deal with it and you can’t make me’, seems somewhat childish or naive. At some point, you have to realise that this technology is here,” she said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10720880"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/abhinav-chakraborty/">
+<figure>
+<img alt="Abhinav Chakraborty" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2026/02/Untitled-design-2-1.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/abhinav-chakraborty/"><span></span>Abhinav Chakraborty</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10517613"></div><div class="follow_author_title" data-id="Abhinav Chakraborty"></div><div class="follow_author_slug" data-id="abhinav-chakraborty"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Abhinav Chakraborty is a journalist with a keen interest in politics, world affairs, features, and long form. He is a former HR professional with experience across People Operations.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/abhinav-chakraborty/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June third, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-ai/ai-detection-tools-granta-pangram-writing-controversy-10720880/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-03 03:48 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
