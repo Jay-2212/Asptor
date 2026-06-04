@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>AI solved an 80-year maths problem. Here’s why this matters beyond mathematics | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>AI solved an 80-year maths problem. Here’s why this matters beyond mathematics</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-erdos_expl-ai.jpg?w=1600" alt="AI solved an 80-year maths problem. Here’s why this matters beyond mathematics">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="AI Erdos problem" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-erdos_expl-ai.jpg?w=1600" width="650"/><span class="ie-custom-caption">Hungarian mathematician Paul Erdős posed the planar unit distance problem in 1946. Photo: Wikimedia Commons/Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">For generations, mathematicians have tried and failed to solve an <strong><a class="" href="https://indianexpress.com/article/technology/artificial-intelligence/openai-claims-ai-breakthrough-says-its-model-solved-80-year-old-math-problem-10700933/">80-year-old problem</a></strong>. In May, an artificial intelligence (AI) model successfully tackled it.</span></p>
+<p><span style="font-weight: 400">OpenAI, the maker of ChatGPT, said one of its internal models had made a breakthrough with the challenge first posed by Hungarian mathematician Paul Erdős in 1946 — the planar unit distance problem. The mathematician was known for creating such challenges, which are collectively known as “<strong><a class="" href="https://indianexpress.com/article/technology/artificial-intelligence/google-deepmind-ai-solves-erdos-math-problems-10708913/">Erdős problems</a></strong>”.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Claims of AI models solving maths problems are not new, attracting criticism as well as scepticism. </span></p>
+<p><span style="font-weight: 400">Experts, however, say this particular result stands out. Had a human carried it out, it would merit publication in a top math journal, they say. “No previous AI-generated proof has come close” to meeting those high standards, wrote Tim Gowers, a mathematician at the University of Cambridge, in commentary for OpenAI.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Thomas Bloom, a researcher at the University of Manchester who maintains the website <em>erdosproblems.com</em>, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that he had ranked the “unit distance problem” among his top 10 Erdős problems and expected that a solution was still a long way off. These breakthroughs, according to him, matter because they show that AI is capable of doing real research.</span></p>
+<h2><b>The planar unit distance problem</b></h2>
+<p><span style="font-weight: 400">The problem is deceptively simple. Take a piece of paper and place some dots on it. As you keep adding dots — even up to the millions and trillions — how do you ensure that you get the maximum pairs of dots that are at the same distance from each other?</span></p>
+<p><span style="font-weight: 400">Erdős posited that the best strategy to get the maximum number of equal-distance pairs is to arrange them in a shape roughly resembling a square grid.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">For decades, mathematicians thought that this was indeed the best way but could not find a proof. “Like most people, I was expecting a proof,” said Bloom, who is among nine mathematicians who have verified this result.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/ai-detection-tools-granta-pangram-writing-controversy-10720880/">Is everything on the internet now written by AI? The science of AI detection tools, how efficient they are</a></span></div>
+<p><span style="font-weight: 400">But the OpenAI model, instead of solving the problem, disproved the square-grid assumption, “discovering an entirely new family of constructions that performs better”, according to OpenAI.</span></p>
+<p><span style="font-weight: 400">This means that it essentially found a new pattern — one that is difficult to represent visually — drawing from different fields of mathematics to show that it was possible to get even more equal-distance pairs.</span></p>
+<p><b>Maths and AI models</b></p>
+<p><span style="font-weight: 400">AI models that once struggled with basic arithmetic are now solving SAT problems and tackling Olympiad-level benchmarks. Some of these claims, however, have attracted scrutiny.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">In October 2025, OpenAI’s former Chief Product Officer Kevin Weil said on X that GPT-5 had found solutions to 10 Erdős problems. He later deleted this post. </span></p>
+<p><span style="font-weight: 400">At that time, Bloom had described the claim as a “dramatic misrepresentation”, saying it only found existing literature.</span></p>
+<p><span style="font-weight: 400">This is exactly why the new result is so significant. Rather than simply drawing on existing data, it shows that the AI model was able to “read academic papers and understand them well enough to apply them in new ways”, said Bloom.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/technology/artificial-intelligence/why-mathematicians-signed-leiden-declaration-ai-10721732/">Why hundreds of mathematicians have backed a declaration against unchecked AI use</a></span></div>
+<p><span style="font-weight: 400">Days after the Open AI announcement, Google DeepMind also said its AI system AlphaProof Nexus had solved nine Erdős problems.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">So why is solving maths problems so important in the field of AI? According to Bloom, with creative writing, people can argue about whether something is well-written or not. “With a mathematical proof, it’s either right or wrong, and everyone who’s read and understood it can agree on which.”</span></p>
+<p><b>Disproving the conjecture</b></p>
+<p><span style="font-weight: 400">“Modern mathematics is very specialised, and people tend to have depth rather than breadth… a powerful technique from another field might have applications in a completely different field that all humans have missed,” said Bloom.</span></p>
+<p><span style="font-weight: 400">But unlike humans, AI systems are less constrained by assumptions about which fields connect naturally.</span></p>
+<p><span style="font-weight: 400">What makes the Erdős result specifically striking is how the AI model drew from multiple domains, Sayan Ranu, a professor at the Indian Institute of Technology <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">. “The model solved a problem in discrete geometry using tools from algebraic number theory, branches of mathematics that experts had not previously connected to this question.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">By gathering literature and synthesising information across vast domains, AI models can appear more efficient in certain fields than an expert working in a single field. It can dig for solutions tirelessly.</span></p>
+<p><b>Some caveats</b></p>
+<p><span style="font-weight: 400">Despite advancements in automation, experts said verification still requires human intervention. “The model did not invent something fundamentally new that nobody saw coming,” Sébastien Bubeck, who is leading OpenAI’s mathematical explorations, told </span><i><span style="font-weight: 400">Scientific American</span></i><span style="font-weight: 400">. “It just executed like an amazing mathematician.”</span></p>
+<p><span style="font-weight: 400">Ranu said high-profile successes can be misleading. “LLMs (large language models) continue to hallucinate. They have improved, but they still make trivial errors on elementary math today, errors that simply don’t make the headlines.”</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/meta-ai-support-bot-hack-instagram-prompt-injection-10722499/">How hackers used Meta’s own AI to break into Instagram accounts</a></span></div>
+<p><span style="font-weight: 400">Highlighting the element of luck, he said a model that cracks a deep open problem in one run may fail at a much simpler calculation in another. So, while these landmark results are real, they do not mean the systems are reliably correct.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">While OpenAI relied on human mathematicians to verify and simplify the output, Google DeepMind had linked their AI to coding verifiers like Lean.</span></p>
+<p><span style="font-weight: 400">“With formal proof systems like Lean, the AI can produce code that demonstrates the proof is correct without the need for a human to check each line carefully — all they need to do is check the headline is accurate,” said Bloom.</span></p>
+<p><b>So why do these results matter?</b></p>
+<p><span style="font-weight: 400">Bloom said, “These results in pure mathematics may have little effect on most people’s lives, but once AI can do that with maths papers, it could start to do the same with biology, physics, medicine, engineering.”</span></p>
+<p><span style="font-weight: 400">Ranu said that the ultimate setup is a hybrid, where automation acts as a filter, with humans as the final arbiter for the hard cases.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">According to him, the models are already arriving at original scientific reasoning in a meaningful way, though a gap remains between these systems and the physical world. This, he said, is the next frontier where real progress will be seen.</span></p>
+<p><span style="font-weight: 400">The result, he believes, settles a common misconception that LLMs are essentially a more powerful Google search, retrieving answers from a giant database.</span></p>
+<p><span style="font-weight: 400">But here’s the catch. These models are far from perfect, as reflected in Ranu’s cautionary note that LLMs make mistakes while sounding confident, so what they say must be verified. He pointed out that they are not yet better than the very best specialists in a given field, such as a leading mathematician on a problem they have spent decades on.</span></p>
+<p><span style="font-weight: 400">Erdős’ favourite problem, thus, became a test of whether AI has moved beyond simple retrieval of information, like search engines do. “This problem had no answer to retrieve. The model produced a new construction that humans had not found in eighty years of trying. That is reasoning and creation, not search,” Ranu said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10722693"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourth, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-ai/openai-erdos-problem-ai-solves-80-year-old-math-challenge-10722693/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-04 03:45 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
