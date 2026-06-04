@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Government is freezing jet fuel prices for airlines. How will this scheme work and can it curb airfares? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Government is freezing jet fuel prices for airlines. How will this scheme work and can it curb airfares?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/05/ex-airindia_expl-econ.png?w=1600" alt="Government is freezing jet fuel prices for airlines. How will this scheme work and can it curb airfares?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Fuel prices" decoding="async" height="366" src="https://images.indianexpress.com/2026/05/ex-airindia_expl-econ.png?w=1600" width="650"/><span class="ie-custom-caption">Air India has made substantial cuts to its international flight schedule. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">A Union government scheme will <a href="https://indianexpress.com/article/business/cabinet-approves-10000-crore-atf-jet-fuel-price-stabilisation-fund-flights-10722226/" rel="noopener" target="_blank"><strong>freeze jet fuel prices</strong></a> for airlines in an attempt to shield them from the West Asia energy crisis.</span></p>
+<p><span style="font-weight: 400">Public sector oil marketing companies (OMCs) have set the price of aviation turbine fuel (ATF) under the Rs 10,000-crore price stabilisation fund scheme at Rs 115 per litre, or Rs 1.15 lakh per kilolitre (kl), in <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Although this fixed price is about Rs 10 per litre higher than the capital’s current ATF price, the mechanism is expected to protect airlines if prices go higher than the level frozen under the scheme, which may be likely given the extreme price volatility in the international market.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">Here’s a look at what the scheme proposes, whether it will lead to lower airfares, and how it comes at a crucial moment for Indian carriers and oil companies that have been battered by the energy shock.</span></p>
+<p><b>What is the jet fuel scheme?</b></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Under the scheme, cleared by the Union Cabinet Wednesday, OMCs will sell jet fuel to participating Indian airlines for domestic as well as international flights at the fixed price mentioned above, irrespective of the price fluctuations in the international market.</span></p>
+<p><span style="font-weight: 400">The OMCs will be compensated for their losses from the price stabilisation fund when they incur losses on ATF sales. When international prices fall, the gains will be used to offset the financial support that was provided and transferred back to the Consolidated Fund of India.</span></p>
+<p><span style="font-weight: 400">According to Civil Aviation Ministry Director Rohit Raj, while the fixed price for jet fuel at <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> airport would be Rs 114.50 per litre, while at <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Chennai</a> airport, it would be about Rs 139 per litre. Jet fuel prices vary across airports owing to differences in levies imposed by states. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The government expects the move to rein in runaway airfares due to fuel price pressure. “For passengers, the most important benefit of this decision is that it will help to moderate sudden increases in the airfare that often result from sharp spikes in fuel prices. By reducing the exposure of airlines to extreme fuel price fluctuations, the government aims to minimise the pass-through of such costs to travellers and provide a greater fare stability,” Raj said.</span></p>
+<p><span style="font-weight: 400">Jet fuel prices have gone up significantly in the international market owing to Iran’s closure of the Strait of Hormuz in response to the US and Israel’s attack.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/china-oil-imports-india-strait-of-hormuz-crisis-explained-10715192/">India’s oil shock could have been much worse — but for China</a></span></div>
+<p><span style="font-weight: 400">OMCs have been selling ATF at a loss for domestic flights, hurting their financial health. They are also bearing losses on other fuels: petrol, diesel and cooking gas sold to households. </span></p>
+<p><span style="font-weight: 400">Indian airlines, too, have been struggling, particularly in international flight operations, as they are required to pay the full market-linked price for overseas operations. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The government expects this arrangement, which will be in place for up to three years, to ease the pain for OMCs as well as Indian airlines amid this extreme fuel price volatility.</span></p>
+<p><span style="font-weight: 400">Raj said that this is a fixed, temporary, one-time arrangement, and there is no possibility of changing the benchmark in the future. “Once prices stabilise, the OMCs will pay back to the Consolidated Fund of India. Once trueing up happens, the whole scheme will end. This is for three years or when the trueing up of the fund happens, whichever is earlier,” he said. </span></p>
+<p><span style="font-weight: 400">It is a voluntary facility only available to Indian airlines, and not to foreign carriers. It will be implemented through an agreement between the airlines and the OMCs, under which the carriers will have to procure ATF exclusively from the OMCs for up to three years, “subject to annual review or until the advance amount is fully recovered, whichever is earlier”.</span></p>
+<p><span style="font-weight: 400">On being asked about the scheme’s implementation timeline, Raj said that while it is not possible at this stage to give a clear timeline, it should happen soon. He added that the modalities are being worked upon and the airlines have been informed. They now need to express their interest in availing the scheme as it is an optional mechanism, and not mandatory.</span></p>
+<p><b>How will this fixed price math work?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Usually, ATF accounts for about 40% of Indian airlines’ operational costs; the price surge had led to a further increase to 55-60%, according to an Indian airline association. The hike in jet fuel prices resulted in most major airlines increasing fuel surcharges, particularly for international flights, even as they claimed that the surcharges would set off only a part of the cost escalation. The government said that the West Asia crisis pushed up international jet fuel prices to Rs 142 per litre in May from Rs 60.50 per litre in March, an increase of 135%.</span></p>
+<p><span style="font-weight: 400">According to Raj, Rs 60.5 per litre was the base ATF price — without government taxes and other charges — on March 1. This went up to as high as Rs 142 per litre in subsequent weeks. </span></p>
+<p><span style="font-weight: 400">In the monthly price revision announced on April 1, however, the OMCs hiked the price by only 25% for domestic flights, while it should have more than doubled in line with international price benchmarks. For international flights, however, the full pass-through was implemented.</span></p>
+<p><span style="font-weight: 400">“If you apply 25% to the March base price of Rs 60.5 (per litre), the figure of Rs 75.62 comes. When you apply excise and VAT at Delhi, the selling price was about Rs 104. This price was because of capping. Under the new mechanism…we are moving towards a fixed price mechanism,” Raj said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/air-india-cuts-june-july-domestic-flights-fourth-jet-fuel-price-iran-war-10710968/">Air India cuts June-July domestic flights by a fourth amid jet fuel price surge due to Iran war</a></span></div>
+<p><span style="font-weight: 400">He explained that the fixed price has been frozen at the base price level, excluding all charges and taxes like VAT, central excise, airport charges, and fixed differentials like freight, insurance, and profit margin of the OMCs. For domestic operations, that price has been fixed at Rs 86.32 per litre, while for international flights, it is Rs 104.49 per litre.</span></p>
+<p><span style="font-weight: 400">“If we take the example of Delhi for domestic operations, when we add airport charges and fixed differentials, it comes to Rs 96.83. Over and above that, when we add VAT and central excise, it will be Rs 115…Similarly, for international operations, the price fixed across India would be 104.49. Over and above that, you apply airport charges and fixed differentials and arrive at Rs 115. There is no VAT or central excise on international operations when airlines procure ATF. So, in essence, Rs 115 is the fixed selling price at Delhi for both domestic and international,” Raj said.</span></p>
+<p><span style="font-weight: 400">On Monday, in their monthly revision of ATF prices, the OMCs kept the price unchanged for scheduled domestic flights for the second month in a row. Additionally, relief also came for Indian carriers in the form of a 27% cut in jet fuel price for international flights. With this cut, the price of jet fuel for international flights came down to levels similar for domestic flights.</span></p>
+<p><b>How the fuel price surge is battering airlines, oil companies</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Indian airlines’ international flight operations were already under stress owing to the closure of Pakistan’s airspace since late April last year. Now, the West Asia war has added to the pain, with additional airspace curbs as well as the jet fuel price spike. </span><span style="font-weight: 400">West Asia accounts for a significant chunk of international air traffic to and from India.   </span></p>
+<p><span style="font-weight: 400">While all major Indian carriers have been affected by the crisis, Air India has been hit the worst. This is because it is the only Indian airline with significant operations to and from Europe and North America, with most of these long-haul flights passing through the West Asia corridor.</span></p>
+<p><span style="font-weight: 400">Air India will operate about 27% fewer international flights in June-August than it did in the corresponding period of last year. For June-July, the airline has cut domestic flights by about 27% from April-May levels.</span></p>
+<p><span style="font-weight: 400">As for the adverse impact of the price surge on the OMCs, Petroleum Ministry Joint Secretary Sujata Sharma had said Monday that the oil companies were incurring under-recoveries of close to Rs 30 per litre, or Rs 30,000 per kl, on sale of jet fuel for domestic flights. The price stabilisation mechanism, however, will be prospective in nature and won’t cover the under-recoveries incurred by the OMCs so far on jet fuel sales, Information and Broadcasting Minister Ashwini Vaishnaw told reporters at a news briefing on Wednesday.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10724396"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourth, twenty twenty-six, at twenty-eight minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/jet-fuel-price-freeze-scheme-explained-airfares-airlines-india-10724396/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-04 18:24 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
