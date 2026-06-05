@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Explained: Gujarat’s new police range for Pakistan border, with implications for national security | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Explained: Gujarat’s new police range for Pakistan border, with implications for national security</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-05</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/gujarat-pakistan-border.jpg?w=1600" alt="Explained: Gujarat’s new police range for Pakistan border, with implications for national security">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="BSF vigil at BP 1175 of the India-Pakistan border near Lakhpat in Gujarat. (" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/gujarat-pakistan-border.jpg?w=1600" width="650"/><span class="ie-custom-caption">BSF vigil at BP 1175 of the India-Pakistan border near Lakhpat in Gujarat. (Express photo by Nirmal Harindran)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Gujarat government on Thursday (June 4) divided the International Border (IB) with Pakistan into two major police jurisdictions or ranges.</p>
+<p>Apart from the existing Border Range that includes Kutch, India’s largest district, the creation of the new Banaskantha Range will result in the eastern portion of the border falling under a new Range Inspector General.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>What are these divisions, and what was the rationale for the move?</p>
+<h2><strong>Police ranges near Pakistan border</strong></h2>
+<p>A senior police official told <em>The Indian Express</em> that any police range usually has three police districts. Banaskantha will be Gujarat’s 10th police range, after <a class="" href="https://indianexpress.com/section/cities/ahmedabad/" rel="noamphtml">Ahmedabad</a>, Vadodara, <a class="" href="https://indianexpress.com/section/cities/gandhinagar/" rel="noamphtml">Gandhinagar</a>, <a class="" href="https://indianexpress.com/section/cities/surat/" rel="noamphtml">Surat</a>, Rajkot, Junagadh, Bhavnagar, Dahod Panchmahal and Border Range.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>On May 20, 1995, the Rajkot Range was bifurcated, creating the Border Range. The latter had jurisdiction over Kutch (West), Kutch (East), Patan and Banaskantha districts (comprising the entire international border with Pakistan). This includes 406.87 km of land border and 238 km of marine border, totalling 645 km.</p>
+<p>The new Banaskantha Range will include Banaskantha, Patan and the new Vav Tharad districts, bordering Pakistan to the west and Rajasthan to the north. The Rajkot Range will now be left with Rural Rajkot, Jamnagar, Devbhumi Dwarka and Surendranagar jurisdictions, effectively the upper Saurashtra region of Gujarat.</p>
+<p><strong>Change after Operation Sindoor</strong></p>
+<p>Following the Operation Sindoor conflict with Pakistan in May 2025, Vav-Tharad was carved out of Banaskantha as a new district in October that year. The government stated the decision was aimed at easing administration, with Banaskantha being the second-largest district in the state in terms of area.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/ahmedabad/from-desert-to-sea-how-gujarat-has-ramped-up-security-along-the-border-9991870/">From desert to sea: How Gujarat has ramped up security along the border</a></span></div>
+<p>This is said to have contributed to the creation of a new police range for better internal administration, border management and coordination with security agencies, with another IG-rank officer now holding the fort in the eastern flank, headquartered at Palanpur. At the time, the<a href="https://indianexpress.com/article/political-pulse/bhupendra-patel-government-row-over-carving-new-district-out-of-banaskantha-9760094/"><strong> Congress criticised the move</strong></a>, with Banaskantha one of its few remaining bastions in the BJP-dominated state.</p>
+<p>When asked about the reorganisation, DGP Dr KLN Rao, the in-charge chief of Gujarat Police, told <em>The Indian Express</em>, “We have been planning it for the last six months. Apart from border management and other issues, a new district (Vav-Tharad) was created last year. We didn’t want to burden the Border Range with another police jurisdiction. So, we decided to carve out a new range altogether.”</p>
+<p>In March this year, before the Banaskantha Range was officially created, Parixita Rathod was transferred from CID Crime and appointed its first Range IG.</p>
+<p>Rao added, “The creation of the new range gives space for better supervision with two Inspectors General. Earlier, it was a huge responsibility for the Border Range IG who had to look after the entire stretch of the international border. With two IGs, they can concentrate on their own areas and take up the border issues in a specialised manner.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>Challenges in policing border areas</h2>
+<p>On the policing issues in jurisdictions adjacent to the Pakistan border, DGP Rao said, “Some of the major issues here are the security of the large number of workers employed close to the border in the energy and solar parks. The police there also have to manage the border villages, the migration within and from outside the country, patrol the international border and handle the menace of drug trafficking. The reorganisation will also help in better coordination with intelligence and security agencies such as the Border Security Force (BSF), Indian Coast Guard (ICG) and the Indian Air Force (IAF).”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/iran-war-monsoon-salaya-port-critical-gujarat-dhow-trade-10712725/">Iran war &amp; the monsoon: Why Salaya port is critical to Gujarat’s dhow trade</a></span></div>
+<p>“With this reorganisation, the Border Range IG now just has to handle the border in Kutch,” he added.</p>
+<p>The official notification stated that the Kutch district, spread over 310 square km and encompassing two police jurisdictions (East and West), would continue to remain under Border Range. Further, Morbi district, which was under Rajkot Range as per the 1995 notification, has now been included in the Border Range. Notably, Morbi is not connected to any land or sea border but is the entrance to the Little Rann of Kutch in upper Saurashtra.</p>
+<p>The move also comes soon after <a href="https://indianexpress.com/article/explained/what-are-bsf-powers-amit-shah-10713809/"><strong>Union Home Minister Amit Shah visited</strong></a> Rajasthan in late May and directed authorities to strictly enforce a ‘zero tolerance’ policy towards illegal constructions within 15 kilometres of the country’s borders and demolish all such structures.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10724394"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/brendan-dabhi/">
+<figure>
+<img alt="Brendan Dabhi" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/08/Your-paragraph-text-1.jpg?w=80" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/brendan-dabhi/"><span></span>Brendan Dabhi</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9541835"></div><div class="follow_author_title" data-id="Brendan Dabhi"></div><div class="follow_author_slug" data-id="brendan-dabhi"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Brendan Dabhi works with The Indian Express, focusing his comprehensive reporting primarily on Gujarat. He covers the region's most critical social, legal, and administrative sectors, notably specializing at the intersection of health, social justice, and disasters.
+
+Expertise
+
+ 	Health and Public Policy: He has deep expertise in healthcare issues, including rare diseases, Antimicrobial Resistance (AMR), the complex logistics of organ transplants, and public health challenges like drug-resistant TB and heat health surveillance. His on-ground reporting during the COVID-19 pandemic and Mucormycosis was critical in exposing healthcare challenges faced by marginalized communities in Gujarat.
+ 	Social Justice and Legal Administration: He reports on the functioning of the legal and police system, including the impact of judicial philosophy, forensics and crucial administrative reforms (. He covers major surveillance and crackdown exercises by the Gujarat police and security on the international border.
+ 	Disaster and Crisis Management: His work closely tracks how government and civic bodies respond to large-scale crises, providing essential coverage on the human and administrative fallout of disasters including cyclones, floods, conflict, major fires and reported extensively on the AI 171 crash in Ahmedabad.
+ 	Civic Infrastructure and Governance: Provides timely reports on critical civic failures,  including large scale infrastructure projects by the railways and civic bodies, as well as  the enforcement of municipal regulations and their impact on residents and heritage.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/brendan-dabhi/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourth, twenty twenty-six, at nine minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/gujarat/" href="https://indianexpress.com/about/gujarat/">Gujarat</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/international-border/" href="https://indianexpress.com/about/international-border/">international border</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/pakistan/" href="https://indianexpress.com/about/pakistan/">Pakistan</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/gujarat-new-police-range-pakistan-border-security-impact-10724394/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-05 08:14 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
