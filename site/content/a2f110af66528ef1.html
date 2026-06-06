@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Power subsidies are slowing household solar adoption. A solution: More subsidies | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Power subsidies are slowing household solar adoption. A solution: More subsidies</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-06</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/solar.jpg?w=1600" alt="Power subsidies are slowing household solar adoption. A solution: More subsidies">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Solar" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/solar.jpg?w=1600" width="650"/><span class="ie-custom-caption">Finding land for large solar parks is a problem. This is why decentralised power is important. Nirmal Harindran/File</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">India has been rapidly scaling up its <a href="https://indianexpress.com/article/cities/delhi/clean-electricity-in-india-helps-decline-in-global-power-production-10647496/" rel="noopener" target="_blank"><strong>renewable energy capacity</strong></a> in recent years.</p>
+<p dir="ltr">This growth has been led by solar power, which now accounts for close to 30% of India’s total installed electricity capacity. The country added more than 50 gigawatts (GW) of solar energy capacity in the last couple of years and, in 2025, added more solar power than any other country in the world except China.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">To accelerate this transition to clean energy, the government has been running two flagship programmes for decentralising solar power generation — that is, incentivising households and farmers to generate electricity locally.</p>
+<ul>
+<li dir="ltr"><strong>PM Suryaghar Yojana</strong> targets installation of rooftop solar units on one crore households. It offers every beneficiary free electricity up to 300 units every month, and cash subsidy for equipment.</li>
+<li dir="ltr"><strong>PM-KUSUM</strong> (Pradhan Mantri Kisan Urja Suraksha Evam Utthan Mahabhiyan) is aimed at farmers, helping them set up small solar plants on their unused land, or install grid-connected or standalone solar water pumps for irrigation needs. Farmers can earn additional income by selling solar electricity produced on their land, or save on diesel or power bills on traditional water pumps.</li>
+</ul>
+<p dir="ltr">Both schemes, backed by a combined <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> of around Rs 95,000 crore, have had their successes, but have performed well below their full potential till now. Why is that happening? We explain.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr"><strong>Uneven progress</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">Together, PM Suryaghar Yojana and PM-KUSUM have resulted in the installation of about 13 GW of decentralised solar power against a target of 40 GW by the end of the current financial year.</p>
+<p dir="ltr">The PM-KUSUM scheme, launched in 2019, was supposed to achieve its targets by 2022, but was extended till the end of this financial year owing to the pandemic disruption.</p>
+<p dir="ltr">The most successful component of the programme has been the incentive to farmers to set up standalone, off-grid, solar water pumps. Government figures show that more than 10.9 lakh new solar water pumps have been installed against the target of 14 lakh.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">But it is the uneven progress of these programmes across different states that is quite revealing. The two programmes have done very well in certain states and extremely poor in others.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/india-energy-storage-renewable-power-grid-explained-10681344/">India is rapidly scaling up renewable energy. Now it needs to store it</a></span></div></p>
+<p dir="ltr">Gujarat, Maharashtra and Kerala have seen significantly higher offtake rates for the PM Suryaghar rooftop solar scheme compared to states such as <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a> and Karnataka, or even the relatively low energy-access states of Bihar and Jharkhand.</p>
+<p dir="ltr">In fact, the five best performing states under the scheme — Gujarat, Maharashtra, Uttar Pradesh, Kerala and Rajasthan — account for nearly 70% of the nearly 33 lakh rooftop installations so far.</p>
+<p dir="ltr"><strong>Free electricity hindering adoption</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">One of the main reasons for the low adoption of these schemes in certain large states is power subsidies. Several state governments offer either free electricity or highly subsidised power to domestic and agricultural consumers.</p>
+<p dir="ltr">When electricity is already free, or heavily subsidised, people do not have an incentive to spend on the upfront costs of installation to get relatively free solar power. This is true for not just the PM Suryaghar rooftop programme but also the PM-KUSUM scheme that targets agricultural consumers.</p>
+<p dir="ltr">Take Punjab for instance. It already offers 300 units of free electricity to domestic consumers every month, and completely free power for all agricultural tubewells.</p>
+<p dir="ltr">Punjab, which spent more than Rs 20,000 crore on power subsidy bills last year, has low adoption rates for both solar schemes.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-spot-electricity-prices-volatility-solar-power-demand-10717181/">Why electricity prices on India’s power exchanges are crashing by day and spiking at night</a></span></div></p>
+<p dir="ltr">The relatively low offtake of PM Suryaghar in Tamil Nadu, Karnataka and <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> is also attributed to their subsidy structure. Last year, Karnataka and Tamil Nadu had electricity subsidy bills of Rs 27,000 crore and Rs 15,700 crore, respectively. States such as Gujarat, Kerala and Maharashtra, on the other hand, have relatively high electricity tariff rates, particularly for high consuming customers.</p>
+<p dir="ltr">The Estimates Committee of Parliament flagged this issue in a recent report on the progress of these two schemes. When the committee sought to know the reasons for the low adoption of the PM Suryaghar in some states, it was told by the Ministry of New and Renewable Energy that one of the primary reasons was free electricity already being offered.</p>
+<p dir="ltr">The ministry said that since the effective electricity tariff for domestic consumers was near zero in many states, or even zero in some cases, installing a rooftop system did not seem financially attractive to many.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">The upfront cost of equipment can be a few lakh rupees, which can only be recovered over time through the use of 300 units of free electricity and sale of excess power being produced.</p>
+<p dir="ltr"><strong>More subsidies</strong></p>
+<p dir="ltr">Ironically, the response to this hurdle has been more subsidies. States such as Uttar Pradesh and Rajasthan are among those that offer highly subsidised power to their domestic and agricultural consumers. They have still managed to do remarkably well on PM Suryaghar and PM-KUSUM schemes, mainly by offering additional financial incentives — on top of what is already available under the scheme — to make it easy for the consumers to buy the equipment and make the switch to solar power.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-solar-cell-mandate-june-1-concerns-10712163/">Solar projects must now use only locally made cells: Why this raises concerns</a></span></div></p>
+<p dir="ltr">This still makes sense because these additional incentives are a one-time expenditure for the state as against the unending recurring liability that power subsidies entail.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">In fact, the Estimates Committee seemed to endorse such measures. It suggested that the government should explore ways to make it easier for the consumers to pay the upfront costs in the two schemes and avail of the benefits.</p>
+<p dir="ltr"><strong>The heat link</strong></p>
+<p dir="ltr">Decentralised solar power generation is a crucial component in the larger scheme of India’s clean energy transition. While power demand is expected to continue to rise substantially in the coming decades, the availability of land for setting up large solar parks is already becoming a problematic issue. In any case, electricity coming in from the grid, even if contributed by solar energy, would have to be subsidised for the consumers.</p>
+<p dir="ltr">That is one politically sensitive issue no government would be able to withdraw from, even though subsidies are becoming increasingly unsustainable. The PM Suryaghar programme, if fully implemented, is estimated to save the government about Rs 75,000 crore every year in electricity costs, according to the report of the Estimates Committee.</p>
+<p dir="ltr">The rising electricity demand can only be met by further expansion of solar, and other renewables. Solar is now all set to take over from hydroelectricity as the second largest source of electricity generation in the country. Traditionally, hydropower was the go-to source for meeting the additional electricity demand during the summer season. The monsoon rains had an absolutely critical role to play in filling up the reservoirs that produce hydroelectricity.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">But large hydropower capacity has stagnated now. In any case, the increase in power demand has gone so high, it cannot be met with hydropower alone. Recent peak demands, in April and May this year, during the day were managed largely through solar power.</p>
+<p dir="ltr">Decentralised solar power gets increasingly relevant in a year like the current one, when the rainfall is expected to be low, and temperatures very high, resulting in very high power demands. This year is not an isolated case. Such situations are fast becoming the norm, and decentralisation can help in cushioning the impact.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10726748"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June sixth, twenty twenty-six, at forty-seven minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/india-solar-adoption-challenges-explained-10726748/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-06 07:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
