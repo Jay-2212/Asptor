@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Cockroach Janta Party at Jantar Mantar: Why major protests happen at this Delhi venue | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Cockroach Janta Party at Jantar Mantar: Why major protests happen at this Delhi venue</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-06</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/jantarmantar.jpeg?w=1600" alt="Cockroach Janta Party at Jantar Mantar: Why major protests happen at this Delhi venue">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="CJP protest" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/jantarmantar.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Cockroach Janta Party at Jantar Mantar: The Cockroach Janta Party (CJP) protest at Jantar Mantar in New Delhi on Saturday. ANI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">Cockroach Janta Party Protest Explained: Hundreds gathered at Delhi’s Jantar Mantar on Saturday, answering a call from the online youth movement Cockroach Janta Party (CJP), to protest irregularities in examinations and seek Union <a href="https://indianexpress.com/article/india/cockroach-janata-party-protest-live-updates-demonstration-at-jantar-mantar-tomorrow-demand-for-dharmendra-pradhans-resignation-10726103/" rel="noopener" target="_blank"><strong>Education Minister Dharmendra Pradhan’s resignation</strong></a>.</p>
+<p dir="ltr">The protest was called by Abhijeet Dipke, the founder of the CJP. He warned of protests across India if <a href="https://indianexpress.com/article/cities/delhi/jantar-mantar-protest-cockroach-janta-party-abhijeet-dipke-dharmendra-pradhan-resignation-wangchuk-10727226/" rel="noopener" target="_blank"><strong>Pradhan did not resign</strong></a>. Also among those at the site was Ladakhi activist Sonam Wangchuk.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The CJP began life as an Instagram account last month. Its name was inspired by a courtroom comment by Chief Justice of India Surya Kant, comparing some youth to cockroaches. Within days, the account gained millions of followers before being blocked.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">The protest marks the CJP’s first attempt to translate the online momentum into on-ground action. The choice of venue is also symbolic. Jantar Mantar was the place where a then little-known social activist called Anna Hazare began a fast against corruption in 2011.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">The CJP protest is simply the latest in a long line of protests — small and large — that have taken place there over three decades.</p>
+<p dir="ltr">But how did a lane abutting the 18th-century astronomical observatory become <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>’s dissent square? Here’s a look at its history and the prominent protests it has hosted.</p>
+<p dir="ltr"><strong>How Jantar Mantar became the site for protests</strong></p>
+<p dir="ltr">Jantar Mantar was not always Delhi’s protest hotspot. That distinction belonged to Boat Club, in the heart of the capital, and within earshot of North Block, South Block and Parliament.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">The moment Boat Club would forever come to be associated with came in 1988. For a week beginning October 25, nearly 5,00,000 farmers led by farm leader Mahendra Singh Tikait occupied its lawns. They left after assurances of concessions from the Rajiv Gandhi government, but had etched themselves in the collective memory of Delhi by that time.</p>
+<p dir="ltr">Later, as the Ram Janmabhoomi-Babri Masjid movement gripped the country, the Congress-led government, already rattled by the farmers’ protest, banned gatherings at Boat Club.</p>
+<p dir="ltr">It became apparent to successive governments that any protest venue had to be controlled.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">The Boat Club farmers' protest</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/farmers-protest-mahendra-singh-tikait-rajiv-gandhi-7093241/">Thirty-two winters ago, the hookah, the hukumat</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">This is when the story of Jantar Mantar as a protest site begins in 1993.</p>
+<p dir="ltr">At the time, it seemed like the ideal venue. Though close to Parliament, it was not large enough to hold a big crowd. Besides, the topography of Jantar Mantar, with its two main entry and exit points, was easier to manage.</p>
+<p dir="ltr">There was no ordinance, no official declaration, yet the tree-lined boulevard connecting Tolstoy Road to the Ashoka Road roundabout came to be the only place in New Delhi where Section 144 was not imposed.</p>
+<p dir="ltr"><strong>The NGT ban and the Supreme Court’s overruling</strong></p>
+<p dir="ltr">In October 2017, the National Green Tribunal (NGT) appealed to the Supreme Court to ban protests at Jantar Mantar after some residents of the area argued that they had to put up with noise pollution and unhygienic surroundings. The NGT asked authorities to shift protesters to an alternative site — Ramlila Maidan, about 4 km away.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">The tribunal cited three grounds while issuing these directions — there is no executive order that demarcates Jantar Mantar as a ‘protest site’, that it’s marked as a ‘residential area’ in the Delhi Master Plan and finally, that the agitations caused noise pollution.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/neet-paper-leak-protest-jantar-mantar-cjp-10727053/">A textbook, an overnight train, an 11-year-old: the faces of the CJP protest at Jantar Mantar</a></span></div></p>
+<p dir="ltr">In July 2018, however, the Supreme Court ruled against a total ban on protests in the Jantar Mantar and Boat Club area, subject to regulations regarding the manner in which they are organised and the number of people attending the protests.</p>
+<p dir="ltr"><strong>The prominent protests at Jantar Mantar</strong></p>
+<p dir="ltr">Among the most prominent demonstrations at Jantar Mantar in recent times was the one <a href="https://indianexpress.com/article/opinion/columns/wrestlers-protest-icons-on-mat-offer-new-kind-inspiration-8593607/" rel="noopener" target="_blank"><strong>by the country’s top wrestlers</strong></a> against Wrestling Federation of India chief <a class="" href="https://indianexpress.com/about/brij-bhushan-sharan-singh/" rel="noamphtml">Brij Bhushan Sharan Singh</a> in 2023.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Olympic medallists Vinesh Phogat, Sakshi Malik and Bajrang Punia led a months-long sit-in, accusing Singh of sexual harassment and demanding his arrest. The protest drew nationwide attention and became one of the most high-profile public agitations in recent years.</p>
+<p dir="ltr">The venue has been the site of various other landmark political protests.</p>
+<p dir="ltr">On April 5, 2011, Anna Hazare, then a relatively unknown social activist from Maharashtra, began a hunger strike there to root out corruption and to demand a Lokpal Bill. The movement snowballed, with prominent activists such as Prashant Bhushan and <a class="" href="https://indianexpress.com/about/arvind-kejriwal/" rel="noamphtml">Arvind Kejriwal</a> joining in, finally leading to the birth of the Aam Aadmi Party (AAP).</p>
+<p dir="ltr">Between March and April 2017, debt-ridden farmers from <a class="" href="https://indianexpress.com/section/cities/chennai/" rel="noamphtml">Tamil Nadu</a> held an agitation in the national capital for 40 days and demanded a Rs 40,000-crore drought relief package, debt waiver and setting up of the Cauvery Management Board by the Centre. They carried out dramatic protests, including using skulls, holding dead rats in their mouths to indicate that they will be forced to eat rodents if the situation worsens.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">On December 19 2019, a massive crowd gathered there to protest against the Citizenship Amendment Act.</p>
+<p dir="ltr">The protest site was also witness to protests against the death of 19-year-old Arunachali student Nido Tania in 2014; the justice for Nirbhaya campaign in 2012, among others.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10727221"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June sixth, twenty twenty-six, at seven minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/jantar-mantar-protest-site-history-delhi-explained-10727221/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-06 13:36 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
