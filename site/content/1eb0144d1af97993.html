@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Supreme Court framed a Victim Protection Plan for human trafficking survivors | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Supreme Court framed a Victim Protection Plan for human trafficking survivors</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-06</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-humantrafficking_expl-law.jpg?w=1600" alt="Why Supreme Court framed a Victim Protection Plan for human trafficking survivors">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="human trafficking" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-humantrafficking_expl-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">On rehabilitation, the Supreme Court held that victims of trafficking for CSE have a constitutional right to rehabilitation, which flows from Articles 21 and 23 of the Constitution. Photo: Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Supreme Court last month said that considering that the “existing vacuum seriously impairs the fundamental rights” of the victims of trafficking for commercial and sexual exploitation (CSE), it was “left with no option but to pass detailed directions” by framing a Victim Protection Plan. This will operate until Parliament enacts a law on the protection and rehabilitation of <strong><a class="" href="https://indianexpress.com/article/india/supreme-court-sex-workers-trafficked-criminal-charges-10717295/">victims of CSE</a></strong>.</span></p>
+<p><span style="font-weight: 400">A bench comprising Justices JB Pardiwala and R Mahadevan held: “We are aware that a single plan will not be the answer to all the trials and tribulations victims face. However, our effort here… should reflect an endeavour to give the victim centre stage and to prioritise their needs… an attempt to view victims not as passive beings but as agents in need of empowerment”. “It should reflect a commitment to the victims that this Court will accord them the dignity that was always theirs,” the bench said.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>Background of the case</b></p>
+<p><span style="font-weight: 400">The litigation traces to a 2004 petition filed by Prajwala, a <a class="" href="https://indianexpress.com/section/cities/hyderabad/" rel="noamphtml">Hyderabad</a>-based anti-trafficking organisation, which argued that victims of commercial sexual exploitation were treated as “criminals” rather than “victims or survivors” and that the absence of a comprehensive “Victim Protection Plan” made rescue and rehabilitation efforts ineffective.</span></p>
+<p><span style="font-weight: 400">In December 2015, the Supreme Court disposed of the petition after noting that the government was committed to establishing an Organised Crime Investigation Agency (OCIA) and constituting an Inter-Ministerial Committee to prepare a comprehensive anti-trafficking law. The court expressed hope that OCIA would be “set up” by September 2016 and would be functional by December 2016.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/delhi-hc-refuses-quash-dunki-route-human-trafficking-fir-10646435/">Delhi HC refuses to quash ‘dunki route’ human trafficking FIR: ‘Wider impact on society’</a></span></div>
+<p><span style="font-weight: 400">Neither proposal materialised. Draft anti-trafficking Bills were prepared in 2016, 2017, 2018, and 2021, but none became law. The 2018 Bill was passed by the Lok Sabha but lapsed with the dissolution of the 16th Lok Sabha.</span></p>
+<p><span style="font-weight: 400">The proposal for OCIA was dropped, with the Centre instead empowering the National Investigation Agency (NIA) to investigate trafficking offences by amending the NIA in 2019. Prajwala returned to the Supreme Court in 2022, alleging non-compliance with the commitments on which the 2015 order rested.</span></p>
+<p><b>On dignity and rehabilitation</b></p>
+<p><span style="font-weight: 400">On dignity, the bench said that every person possesses dignity “simply because they are human”. Trafficking violates this directly as “the entire transaction proceeds as though their humanity is irrelevant and they are nothing more than mere objects”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">It also said that “the right to live with dignity is not a static condition. It is shaped by the circumstances a person lives in.” To negotiate from a position of choice, the court said, a person has to be in position with income and means of an independent livelihood, the lack thereof makes them an easy target. Such material deprivation, the court said, does not merely diminish dignity but “creates conditions in which their dignity can be stripped away altogether”.</span></p>
+<p><span style="font-weight: 400">The court said that victims of CSE “carry a deep and pervasive stigma” and “it is their dignity as persons whose identity and suffering deserve acknowledgement that is fundamentally undermined”.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/2-years-in-captivity-odisha-teen-was-looking-for-job-to-pay-for-mothers-surgery-but-local-man-trafficked-her-to-up-10724556/">2 years in captivity: Odisha teen was looking for job to pay for mother’s surgery, but local man trafficked her to UP</a></span></div>
+<p><span style="font-weight: 400">On rehabilitation, it held that victims of trafficking for CSE have a constitutional right to rehabilitation, which flows from Articles 21 and 23 of the Constitution. Article 23 states: “Traffic in human beings and beggar and other similar forms of forced labour are prohibited, and any contravention of this provision shall be an offence punishable in accordance with law.”</span></p>
+<p><span style="font-weight: 400">The court traced its reasoning to the </span><i><span style="font-weight: 400">Bandhua Mukti Morcha</span></i><span style="font-weight: 400"> and </span><i><span style="font-weight: 400">Neerja Choudhary 1984</span></i><span style="font-weight: 400"> judgments, which had held that identifying and freeing bonded labourers was not enough and that rehabilitation is equally important. Taking note, the bench held: “There is no basis, in law or in reason, to hold that it applies to bonded labourers but not to victims trafficked for CSE. Both are victims of exploitative structures and both are protected by Article 23. To draw such a distinction would be to betray the spirit of this Court’s dictum in each of those cases.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The court said that “the goal is not merely to punish the perpetrator but also to empower the victims by guaranteeing and realising their rights”. </span></p>
+<p><b>Section 17: Problem and consent </b></p>
+<p><span style="font-weight: 400">The bench examined Section 17 of the Immoral Traffic (Prevention) Act (ITPA), 1956, which governs what happens after a person is removed from a brothel during a raid.</span></p>
+<p><span style="font-weight: 400">It noted that the provision treats women trafficked into prostitution, a woman who was trafficked but later continued in sex work voluntarily, and a woman who entered sex work voluntarily, alike. A “one-size-fits-all approach” risks becoming “counterproductive” and “may violate their rights and dignity”.</span></p>
+<p><span style="font-weight: 400">Two directions followed: the court held that magistrates must first conduct an inquiry to identify voluntary adult sex workers, for whom the question of “rescue” does not arise. Victims consent must be “the primary and governing consideration” in decisions on detention in a protective home or reintegration with family.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/delhi-high-court-acquits-sonu-punjaban-geeta-arora-trafficking-minor-case-10598617/">‘Contradictions, improvements and inconsistencies’: Delhi High Court punches holes in prosecution case, acquits Sonu Punjaban in minor girl’s trafficking case</a></span></div>
+<p><span style="font-weight: 400">Speaking to </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">, Debangana Chatterjee, assistant professor – social science at the National Law School of India University, said that the distinction the court draws between voluntary and involuntary sex work does not hold on the ground.</span></p>
+<p><span style="font-weight: 400">“A lot of times, when we go and speak with some of them, they would say that at the beginning they were not doing that out of their own will, it’s not essentially a choice. But then after being in a brothel, let’s say, 5 or 10 years, that becomes a part of life,” she said. </span></p>
+<p><span style="font-weight: 400">The recognition itself is meaningful, she said, noting that the judgment could serve as a “safeguard where a lot of times these women could be protected” from police high-handedness. “That recognition matters to a certain extent to destigmatise it, and just to be able to talk about it.”</span></p>
+<p><span style="font-weight: 400">Consent, in practice, operates under what she described as “dire structural conditions” that make a clean determination of voluntariness difficult. “Unless you have a sense of what exactly ‘voluntary’ entails, this becomes really difficult to decipher.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><b>Victim Protection Plan </b></h2>
+<p><span style="font-weight: 400">Alongside recognising a constitutional right to rehabilitation, the Supreme Court framed a detailed Victim Protection Plan covering every stage from rescue to reintegration. The plan states that victims should not be treated like criminals, and rehabilitation cannot ordinarily be imposed without “free and informed consent”.</span></p>
+<p><span style="font-weight: 400">The bench also directed that the strengthening of anti-human trafficking units be headed by officers of Deputy Superintendent of Police-rank and notify them as police stations for registering and investigating trafficking cases. The units have been tasked with maintaining databases on traffickers and victims, coordinating rescue operations, and working with social workers, child welfare officials and other departments.</span></p>
+<p><span style="font-weight: 400">During rescue operations, victims are not to be arrested, subjected to verbal or physical abuse, or photographed and filmed in a manner that reveals their identity. The court also directed special attention for children, transgender persons, persons with disabilities and those with mental illnesses.</span></p>
+<p><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>7</p>
+<p><span style="font-weight: 400">Post rescue, victims cannot be kept in lock-ups or detained overnight in police stations, must be provided legal aid, medical care and counselling, and must be produced before the appropriate authority without delay. Before ordering long-term custody or rehabilitation measures, magistrates are required to hear the victim and, where necessary, conduct an inquiry into whether an adult woman is engaging in sex work voluntarily. Throughout the process, the victim’s consent is to remain the governing consideration, except where there are recorded concerns about safety or coercion.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">For those placed in protective homes, the court said such institutions should not resemble prisons. Each survivor is to be assigned a case worker and provided an individual care plan covering healthcare, counselling, education, skill development, livelihood support, and access to government schemes. The plan also requires the creation of bank accounts for long-term residents, periodic review of rehabilitation plans, legal assistance, and mechanisms to report abuse within homes.</span></p>
+<p><span style="font-weight: 400">The court clarified that adult women engaged in prostitution voluntarily may seek rehabilitation if they choose to do so.</span></p>
+<p><span style="font-weight: 400">Chatterjee said that rehabilitation programmes often fail because they are built on institutional ideas of what survivors ought to do rather than what they actually want. Many women seek practical support such as “education for their children, a beautician course or vocational training, means to start a small business… These are the places where rehabilitation should actually work. Not put them in a particular home, which also turns exploitative at times,” she added.</span></p>
+<p><b>On OCIA</b></p>
+<p><span style="font-weight: 400">The bench declined the creation of OCIA but said that Sections 7, 8, and 20 of the ITPA should be amended. These sections currently expose trafficking victims to prosecution.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">The bench said that the parliament should rethink mandatory fixed-period detention in protective homes, recognise the rights of voluntary adult sex workers, noting “the rights of sex workers can exist without there being a right to sex work” and enact a comprehensive standalone trafficking law.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10725981"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fifth, twenty twenty-six, at forty-three minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/supreme-court-victim-protection-plan-trafficking-survivors-10725981/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-06 02:55 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

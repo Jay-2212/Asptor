@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>FIFA World Cup 2026: Why the new AI-enabled ball promises better decisions, fewer surprises | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>FIFA World Cup 2026: Why the new AI-enabled ball promises better decisions, fewer surprises</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-06</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/bellinghamnew.jpg?w=1600" alt="FIFA World Cup 2026: Why the new AI-enabled ball promises better decisions, fewer surprises">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="fifa world cup, FIFA World Cup 2026, World Cup football, FIFA World Cup 2026 AI-enabled ball, FIFA World Cup 2026 artificial intelligence enabled ball, artificial intelligence, Indian express explained, explained news, current affairs" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/bellinghamnew.jpg?w=1600" width="650"/><span class="ie-custom-caption">England midfielder Jude Bellingham controls the ball during a training session in Florida on Tuesday. (AP)
+</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Every four years when the FIFA World Cup comes around, official sponsor Adidas creates a new iteration of the ball that will be used. This time, as the world further integrates artificial intelligence (AI) models into everyday use-case scenarios, the humble football now finds itself an AI-enabled entity, loaded with a sensor specifically built to track its movements.</p>
+<p>But the Trionda, this edition’s ball, is notable for more than its modern sensor. It has the lowest number of panels ever used to make a football. And, unlike the mercurial Jabulani ball used during the 2010 World Cup, it promises far fewer surprises than what many players had to contend with in South Africa.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>The early World Cup football</h2>
+<p>The Telstar ball was created for the 1970 FIFA World Cup. Made of 32 panels, it was coloured black and white so that it would be more clearly visible to television audiences in a pre-colour TV era.</p>
+<p>Its iconic design is what immediately comes to mind when you think of a football. It is from this foundation that the modern football has evolved.</p>
+<p><img alt="fifa world cup, FIFA World Cup 2026, World Cup football, FIFA World Cup 2026 AI-enabled ball, FIFA World Cup 2026 artificial intelligence enabled ball, artificial intelligence, Indian express explained, explained news, current affairs" class="lazyloading alignnone size-medium wp-image-10726303" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/football-graphic.jpg?resize=600,495" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/football-graphic.jpg 1037w, https://indianexpress.com/wp-content/uploads/2026/06/football-graphic.jpg?resize=450,371 450w, https://indianexpress.com/wp-content/uploads/2026/06/football-graphic.jpg?resize=600,495 600w, https://indianexpress.com/wp-content/uploads/2026/06/football-graphic.jpg?resize=768,633 768w, https://indianexpress.com/wp-content/uploads/2026/06/football-graphic.jpg?resize=491,405 491w" height="495" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p><div id="taboola-mid-article-personalisation"></div>
+<h2>How different is the Trionda from the Telstar?</h2>
+<p>A lot. For starters, this ball is like an electronic appliance — it needs to be charged for 90 minutes for six hours of play. This is because it contains a sensor inside — something Adidas first adopted with the Al Rihla ball used at the 2022 World Cup in Qatar.</p>
+<p>This is how this “connected ball technology” works. The Trionda has a 500 hz ‘inertial measurement unit’ motion sensor inside one of its four panels, with counterbalances placed on all other panels as well to ensure that its flight remains true. An inertial measurement unit measures and reports an object’s specific force, orientation, and how fast it rotates or revolves around an axis.</p>
+<h2>What is the purpose of the chip?</h2>
+<p>Football authorities are attempting to cut down the often prolonged decision-making time that has followed the introduction of the virtual assistant referee (VAR) system. The sensor chip inside the Trionda sends razor-sharp ball-movement data to officials and hastens the process of making offside decisions.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“We can track every event, every interaction the player has with the ball. Every location at any given moment is being tracked by a local positioning system,” said Hannes Schaefke, Football Innovation Lead for Adidas. “So this sensor essentially sends a signal 500 times per second, to anchor points around the stadium.”</p>
+<h2>How will AI help in making quicker VAR calls?</h2>
+<p>The sensor will be complemented by pitchside sensors, which track player movements. FIFA has also chosen to scan each footballer at the tournament, and VAR will also use a 3D digital avatar of the player.</p>
+<p>Combine all this information gathered — add AI to the mix — and FIFA and Adidas believe there lies a path to issuing lightning-fast offside calls and other VAR checks like accidental handballs and accurate player tracking.</p>
+<p>Many countries have found themselves on the losing end of a match based on a decision that went against them. World Cups have famously amplified those calls — be it Diego Maradona’s handball against England in 1986 or Frank Lampard’s ghost goal against Germany in 2010. FIFA is hoping to minimise such incidents.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>How will the Trionda perform?</h2>
+<p>The makeup of the Trionda is unlike any other football. While technology plays a big part, it is also a football that — just like the Jabulani, or the Al-Rihla used in Qatar — has its own characteristics.</p>
+<p>Chief among those are the Trionda’s similarities to the Jabulani. Both balls are tetrahedrons: four triangles, three of which meet at every point. For the Trionda, the panels are curved but have three points, like a typical triangle.</p>
+<p>The Jabulani, used in 2010, was notorious for its wild trajectories. Made of eight thermally bonded panels, the ball was the smoothest ever created by Adidas. The drag from that smoothness was what led to its unpredictability and unpopularity among footballers. But the Trionda is different and has a failsafe in place.</p>
+<p>Adidas has deliberately made the Trionda’s surface rough. It has added three deep grooves in each panel and a host of microtextures (microscopic, raised patterns engineered onto the upper surface). The physics is similar to golf balls that have dimples. The result should be evenly distributed drag that helps the ball go faster but doesn’t necessarily compromise its trajectory through the air.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>Does it come with complications?</h2>
+<p>A team of scientists led by Professor John Eric Goff used a wind tunnel and five World Cup balls: Jabulani (2010), Brazuca (2014), Telstar 18 (2018), Al Rihla (2022), and Trionda (2026). Their experiments showed that the Trionda “exhibited the smallest measured critical speed among the five balls in both tested orientations”.</p>
+<p>The researchers noted: “A long ball struck with great force may land several meters shorter than expected… Our experiment analyzed a no-spin state, so further research is needed that takes into account external variables in real matches such as spin, humidity and temperature.” The results were published in the journal Applied Sciences.</p>
+<h2>What does its design denote?</h2>
+<p>The 2026 FIFA World Cup will be the first time three countries will host the tournament. Keeping that in mind, the Trionda is made on a white base, with red, blue, and green-coloured graphics across the four panels of the ball.</p>
+<p>There is also the graphic of a maple leaf, an eagle and a star to denote the three hosts: Canada, Mexico, and the US.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10726300"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June sixth, twenty twenty-six, at zero minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/artificial-intelligence/" href="https://indianexpress.com/about/artificial-intelligence/">artificial intelligence</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/fifa-world-cup/" href="https://indianexpress.com/about/fifa-world-cup/">fifa world cup</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/fifa-world-cup-2026/" href="https://indianexpress.com/about/fifa-world-cup-2026/">FIFA World Cup 2026</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sports/fifa-world-cup-2026-why-the-new-ai-enabled-ball-promises-better-decisions-fewer-surprises-10726300/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-06 02:55 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
