@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>A new scheme targets Delhi-NCR’s older trucks and buses to tackle air pollution. Here’s why it matters | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>A new scheme targets Delhi-NCR’s older trucks and buses to tackle air pollution. Here’s why it matters</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-07</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-delhincr-airpollution_expl.jpg?w=1600" alt="A new scheme targets Delhi-NCR’s older trucks and buses to tackle air pollution. Here’s why it matters">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="air pollution" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-delhincr-airpollution_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">Air pollution in New Delhi on November 24, 2025. Photo: Amit Mehra</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Union Cabinet on Wednesday (June 3) approved a two-year <strong><a class="" href="https://indianexpress.com/article/cities/delhi/tackling-air-pollution-in-focus-cabinet-nod-for-rs-9585-crore-scheme-to-replace-old-trucks-buses-in-delhi-ncr-10723059/">clean mobility scheme</a></strong> to reduce air pollution in the Delhi-National Capital Region (NCR) that will incentivise replacement of older trucks and buses with BS-VI or stricter emission-compliant vehicles. Government vehicles will be excluded from this scheme.</span></p>
+<p><span style="font-weight: 400">BS refers to Bharat Stage, a set of emission standards to regulate and reduce vehicular air pollution. While BS-IV regulated tailpipe pollutants like nitrogen oxides (NOx), carbon monoxide (CO), and particulate matter (PM), BS-VI introduced stricter limits on such tailpipe emissions besides pushing cleaner fuels and advanced onboard diagnostics.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">There have been Union government and <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> government schemes introduced and implemented in the past few years to incentivise a transition to electric vehicles or BS-VI vehicles, including for buses, such as the PM-eBus Sewa. The new scheme, however, specifically targets BS-IV vehicles as well as older trucks and buses compliant with BS-IV emission norms in Delhi-NCR.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The scheme is likely to benefit 2.07 lakh (1.91 lakh trucks and 16,329 buses) owners in Delhi-NCR, said a government statement on the Cabinet decision. While scrapping is mandatory for BS-III or older vehicles, BS-IV vehicles may either be scrapped or sold outside NCR, only in places which are not covered by the National Clean Air Programme.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>Why targeting clean mobility transition is vital</b></h2>
+<p><span style="font-weight: 400">Delhi-NCR suffers from <strong><a class="" href="https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/why-air-pollution-needs-a-long-term-solution-not-a-reactive-approach-10469403/">extreme air pollution</a></strong> and the predominant sources of pollution are transport sector, dust, industrial pollution, and biomass burning. These sources are both local as well as regional within a broader geographical airshed.</span></p>
+<p><span style="font-weight: 400">The contribution of these sources, though, varies depending on the season, as meteorological factors play a crucial role in saturation or dispersal of pollutants.</span></p>
+<p><span style="font-weight: 400">Vehicular emissions remain a key concern as Delhi-NCR’s vehicle fleet is high at 2.98 crore vehicles and it is growing at 7% per annum, as per government data. Earlier this year, a meta-analysis of multiple emission source apportionment studies from 2015 and 2010 by a panel of air quality experts attributed 23% of winter PM2.5 pollution and 19% of summer PM2.5 emissions to the transport sector.  This expert panel was tasked by the Commission for Air Quality Management (CAQM) in Delhi-NCR to assess reasons behind the worsening of air quality in the region.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/churu-dust-storm-aravallis-shield-weakening-10717028/">You saw Churu dust storm videos. Aravallis protect Gangetic plains from that, but shield is weakening</a></span></div>
+<p><span style="font-weight: 400">One of the most important studies on source apportionment has been the August 2018 study by The Energy and Resources Institute and The Automotive Research Association of India, which had found that the transport sector accounted for 40% of CO and 63% of NOx emissions in Delhi-NCR. Moreover, within the transport sector, trucks and buses account for 36% of PM2.5 emissions, which are lethal, fine particles that go deep inside lungs and enter the bloodstream too, causing respiratory and cardiovascular ailments.</span></p>
+<p><span style="font-weight: 400">Even as the share of trucks and buses compliant with older emission norms is only 3% of the total fleet, their emission load is disproportionate to their stock. It is estimated that one pre-BS norms heavy-duty vehicle pollutes as much as 14 times of the modern, BS-VI compliant vehicles. The official government note on the Cabinet decision stated that even a BS-IV vehicle emits 2.7 times more than its BS-VI counterpart, making the transition to cleaner technology an important step to reduce air pollution.</span></p>
+<p><b>Emission potential and vehicle stock</b></p>
+<p><span style="font-weight: 400">As per official data submitted to the Supreme Court in December 2025 by CAQM, goods carrier vehicles — including light, medium and heavy goods — accounted for 4.1% of the region’s fleet as on August 31, 2025. In absolute numbers, they account for 11.80 lakh of the total 2.88 crore vehicle fleet.</span></p>
+<p><span style="font-weight: 400">Buses account for only 0.6% of 1.61 lakh of the 2.88 crore fleet in the region. However, of these 1.61 lakh buses, only 34,449 are compliant with BS-VI fuel emission norms while 1,26,549 fall in the pre-BS to BS-IV-compliant category.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/delhis-pollution-level-has-dipped-but-that-doesnt-mean-policymakers-can-rest-easy-10678312/">Delhi’s pollution level has dipped. But that doesn’t mean policymakers can rest easy</a></span></div>
+<p><span style="font-weight: 400">BS-II standards came into force from April 1, 2000, for four-wheelers and from October 24, 2001 for medium and heavy commercial vehicles. BS-III and BS-IV standards came into force from April 1, 2005 and April 1, 2010, respectively. Last year, CAQM submitted to the Supreme Court that even though a vehicle might be fit otherwise, it would still be emitting pollutants as per its BS standard, which are outdated.</span></p>
+<p><span style="font-weight: 400">The CAQM-constituted panel of air quality experts had noted in their report that older vehicles, particularly those operating beyond their regulatory life, exhibit higher emission intensity due to engine deterioration and compromised emission control performance.</span></p>
+<p><span style="font-weight: 400">In its June 4 press statement welcoming the Cabinet’s decision, the Centre for Science and Environment said that older, legacy vehicles lack advanced efficient emission control systems like BS-VI variants, such as diesel particulate filters and selective catalytic reduction.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">“As engines age, components undergo severe wear-and-tear, causing incomplete combustion and massive release of emissions. Replacing old vehicles that met weaker emissions standards compared to the current BS-VI vehicles standards highlights the critical importance of this targeted phase-out,” CSE said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">It went on to state that a single 15-year-old legacy commercial vehicle emits 11 times higher PM and six times higher NOx than a modern BS-VI-compliant diesel vehicle. An old BS-I heavy-duty diesel truck is designed to emit up to 35 times higher PM compared to a new BS-VI vehicle, CSE added.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10725620"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikhil-ghanekar/">
+<figure>
+<img alt="Nikhil Ghanekar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80">
+</img></figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikhil-ghanekar/"><span></span>Nikhil Ghanekar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9279959"></div><div class="follow_author_title" data-id="Nikhil Ghanekar"></div><div class="follow_author_slug" data-id="nikhil-ghanekar"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/NGhanekar">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> An award-winning journalist with 14 years of experience, Nikhil Ghanekar is an Assistant Editor with the National Bureau [Government] of The Indian Express in New Delhi. He primarily covers environmental policy matters which involve tracking key decisions and inner workings of the Ministry of Environment, Forest and Climate Change. He also covers the functioning of the National Green Tribunal and writes on the impact of environmental policies on wildlife conservation, forestry issues and climate change.
+
+Nikhil joined The Indian Express in 2024. Originally from Mumbai, he has worked in publications such as Tehelka, Hindustan Times, DNA Newspaper, News18 and Indiaspend. In the past 14 years, he has written on a range of subjects such as sports, current affairs, civic issues, city centric environment news, central government policies and politics.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikhil-ghanekar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fifth, twenty twenty-six, at five minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/delhi-ncr-clean-mobility-scheme-bs4-trucks-buses-air-pollution-10725620/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-07 13:58 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
