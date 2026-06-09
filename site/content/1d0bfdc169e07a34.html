@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>With record-high spending, what is driving Japan’s changing defence outlook? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>With record-high spending, what is driving Japan’s changing defence outlook?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-09</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/jp-del.jpg?w=1600" alt="With record-high spending, what is driving Japan’s changing defence outlook?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Japan Self Defence Forces and US Marines at the closing ceremony of exercise Resolute Dragon in Kumamoto, Japan (source: Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/jp-del.jpg?w=1600" width="650"/><span class="ie-custom-caption">Japan Self Defence Forces and US Marines at the closing ceremony of exercise Resolute Dragon in Kumamoto, Japan (source: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>For decades after World War II, Japan’s pacifism has been a core aspect of its national identity.</p>
+<p>It now appears to be shifting towards a more proactive defence policy — stepping up defence spending, loosening decades-old arms export restrictions, and debating the revision of a key constitutional clause that renounces war.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>This increasingly muscular stance under Prime Minister Sanae Takaichi — with US encouragement — has increased tensions with China, which has accused Tokyo of following a reckless policy of “new militarism” that could destabilise the region. Chinese President, Xi Jinping had reportedly castigated PM Takaichi during US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>’s visit to Beijing in May.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Those tensions came to a head in November when Takaichi told parliament that a hypothetical Chinese attack on Taiwan was an “existential crisis” for Japan and would justify deploying its self-defence forces. The next month, Japan announced a record $58-billion defence <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a>, capping 12 straight years of increasing outlays.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">On May 31, at the Shangri-La dialogue in Singapore, Japanese Defence Minister Shinjiro Koizumi rejected China’s accusations of “new militarism” and vowed to keep strengthening the military.</p>
+<p>Japan’s steady increase of its defence budget in recent years has sparked anger in China and protests at home. Why is Japan doing this? What do its renewed <a href="https://indianexpress.com/article/explained/explained-global/japan-defence-strategy-build-up-explained-8332311/"><strong>defence</strong></a> interests indicate? We explain.</p>
+<p><strong>Before World War II and after</strong></p>
+<p>Between 1931 and 1945, the Japanese Empire launched a ruthless expansion campaign across East Asia, including China and Korea, that left millions dead.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Japan’s defeat in World War II, however, led to a fundamental transformation of its military architecture. In 1951, under Prime Shigeru Yoshida, Japan adopted a framework focused on national economic recovery while adopting pacifism as a constitutional building block. Under this strategy, known as the ‘Yoshida Doctrine’, Japan minimised its military armaments and entrusted national security to the US.</p>
+<p>“Essentially, Japanese security was designated to the US after World War II,” Ken Moriyasu, Senior Fellow at the Hudson Institute in Washington <a class="" href="https://indianexpress.com/about/delhi-capitals/" rel="noamphtml">DC</a>, told <em>The Indian Express</em>. Even to this day, Japan maintains US military bases.</p>
+<h3><strong>How Abe laid the grounds for a shift…</strong></h3>
+<p>Japan’s famous pacifist clause is enshrined in Article 9 of its Constitution. The clause permanently renounces war as a sovereign right and prohibits the country from maintaining military forces.</p>
+<p>Despite this, Japan does maintain an armed presence called the Self-Defense Forces (SDF), drawing on the UN Charter’s recognition of the right to self-defence. For many years, the SDF was only allowed to engage in defensive action should an assault be launched on the Japanese homeland.</p>
+<p>This changed in 2014-15.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Japanese Prime Minister Shinzo Abe expanded Article 9’s definition of what constituted acts of self-defence. Simply put, this allowed the SDF’s legal deployment should American military forces be attacked. Abe’s reasoning was that any degradation of America’s regional foothold directly undermined Japanese survival.</p>
+<p>It is this defence blueprint which the latest evolutions in Japanese security policy trace its roots to.</p>
+<p>In 2022, Japan also officially designated China as a strategic challenge in its National Security Strategy. This strategy is due for review at the end of this year.</p>
+<p><strong>….and how Takaichi is accelerating it</strong></p>
+<p>Building on Abe’s legacy, current Prime Minister Takaichi has accelerated the shift away from the current self-defence framework that just encompasses the Japanese mainland, and has encouraged the revision of Article 9.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<span class="custom-caption"><img alt="Security Environment surrounding JapanSource: Defence of Japan, 2025" class="lazyloading wp-image-10731326 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/jap-sec-map-DEL.jpg?resize=600,562" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/jap-sec-map-DEL.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/06/jap-sec-map-DEL.jpg?resize=450,421 450w, https://indianexpress.com/wp-content/uploads/2026/06/jap-sec-map-DEL.jpg?resize=600,562 600w, https://indianexpress.com/wp-content/uploads/2026/06/jap-sec-map-DEL.jpg?resize=433,405 433w" height="674" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> <strong>Security Environment surrounding Japan</strong> Source: Defence of Japan, 2025</span>
+<p>Japan is currently in the fourth year of a five-year programme to double its annual arms spending to 2% of GDP — topping an unofficial 1% cap. This would put it on track to become the world’s third-largest defence spender by 2027, only behind the US and China.</p>
+<p>It has been transforming its southern Ryukyu island chain into a network of fortified outposts. Islands such as Yonaguni, just 110 km from Taiwan, are set to receive surface-to-air missile systems by 2030 as part of Tokyo’s effort to strengthen its deterrence capabilities.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/c-raja-mohan-japan-military-doctrine-trump-america-and-xi-china-10719609/">C Raja Mohan writes: In navigating US and China, Japan is imagining a new Asia story</a></span></div>
+<p>And in April, Japan overturned its self-imposed ban on export of lethal weaponry, a move that will help build up its defence industrial base. That month, it signed a $7-billion deal to supply 11 Mogami-class frigates to Australia.</p>
+<p>What this means is that Japan is no longer confined by its previously self-imposed export restrictions. Earlier, its defence exports were limited to five categories: rescue, transport, warning systems, surveillance and minesweeping technology. Now, its exports can also include products like fighter aircraft, ships, submarine parts and repair services.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The overturning of this export ban, however, does not establish a clear green channel for equipment trade and acquisition. Japan has signed memorandums of understanding with 17 countries, including India. But its internal clearances and frameworks limit its potential trade even with these countries with whom it shares agreements.</p>
+<h3><strong>What’s behind the shift?</strong></h3>
+<p>One factor behind this could be US President Donald Trump’s evolving priorities that have likely shaken Tokyo’s faith in American security commitments.</p>
+<p>Beijing’s massive maritime build-up and increasingly assertive posture around Taiwan are seen as threats to Japan’s vital sea lanes and raise the possibility of a regional conflict that could draw in the US, Japan’s principal security guarantor. This is, however, not the only concern in Tokyo.</p>
+<p>Ken Moriyasu said: “China’s strategy is to build a fortress in Eurasia, with pipelines and railroads that are out of the reach of US influence. Russia, Iran and North Korea are key partners in this effort.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>He said he sees “great power competition” shifting from the Indo-Pacific to the Eurasian inland.</p>
+<p>Japan is also looking to bolster its flawed defence manufacturing base.</p>
+<p>Japanese defence contractors are unaccustomed to bidding on the open market since they have historically had only the government as their main demand. The manufacturing capacity is also limited. “They would need customers outside the SDF and the US if they were to ramp up production,” Moriyasu said.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/upsc-current-affairs/upsc-essentials/how-indias-defence-spending-is-aligned-with-its-regional-ambition-10072298/">How India’s defence spending is aligned with its regional ambition</a></span></div>
+<p><strong>Japan divided?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Japan’s evolving defence outlook has not been without controversy. It has seen massive anti-war protests swell outside the National Diet (Japan’s bicameral legislative) with crowds varying between a thousand to 30,000.</p>
+<p>Beyond deep seated anti-war sentiments, the protests also come in the face of economic anxiety. In the midst of a weakening yen, trillions in social welfare have been passed in supplementary aid to shield citizens from ballooning electricity and address fuel costs. Consequently, tax hikes for defence spending have been strongly opposed.</p>
+<p>There is, however, growing acceptance of the need to strengthen Japan’s defence capabilities and the deteriorating security environment.</p>
+<p>Indeed, a public opinion poll by <em>Kyodo News</em> in May 2024 indicated that a record 51% of survey-takers were in favour of amending Article 9. The poll, however, also said that 65% of the survey-takers did not feel rushed to debate general overarching revisions to the constitution.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>For the younger generation, their security reality might be completely different than for the generations before.</p>
+<p>In the FY2024 Domestic Public Opinion Survey on Japan’s Diplomacy, 81.5% of respondents agreed that the security environment around East Asia is becoming more severe. Nearly 60% viewed strengthening cooperation with the US and allies as an important way to prevent further decline, while almost half (47.4%) support reinforcing Japan’s own defence capabilities.</p>
+<p>Surveys also show that support for further enhancing Japan’s defence capacity remains strong. For instance, more than 60% of voters in a 2023 survey by the <em>Asahi Shimbun</em> newspaper approved bolstering defence capabilities, a trend that has persisted since Russia’s invasion of Ukraine.</p>
+<p>Japan’s younger generation has witnessed China’s aggressive military growth in the 21st century and North Korea’s successive ICBM tests near the seas of Japan. They are now facing a Trump administration that threatens to withdraw security guarantees for NATO members unless they tangibly increase their defence spending.</p>
+<p>Ultimately, Japanese opinion finds itself stretched between the younger generation born into an era of uncertainty and wavering American support in contrast with a post-war generation that believes dismantling its pacifist ideology is a recipe for disaster.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10731240"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June ninth, twenty twenty-six, at forty-five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/japan/" href="https://indianexpress.com/about/japan/">Japan</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/record-high-spending-japan-defence-budget-10731240/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-09 11:13 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
