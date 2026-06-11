@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Trump’s $100,000 H-1B visa fee struck down: For Indian professionals, why some damage may already have been done | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Trump’s $100,000 H-1B visa fee struck down: For Indian professionals, why some damage may already have been done</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-11</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/H-1B_Visas_Explainer_44381-227a1.jpg?w=1600" alt="Trump’s $100,000 H-1B visa fee struck down: For Indian professionals, why some damage may already have been done">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="H-1B" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/H-1B_Visas_Explainer_44381-227a1.jpg?w=1600" width="650"/><span class="ie-custom-caption">President Donald Trump signing the executive order on H-1B visas in September last year. US Commerce Secretary Howard Lutnick is also seen. AP File</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">A US federal judge’s decision to strike down President Donald Trump’s controversial $100,000 fee on new H-1B visas will come as some relief to employers, but many foreign workers have already faced much of its brunt. </span></p>
+<p><span style="font-weight: 400">Last week, US District Judge <a class="" href="https://indianexpress.com/section/horoscope/leo/" rel="noamphtml">Leo</a> Sorokin of Massachusetts ruled that the fee was unlawful, concluding that it functioned as a tax that the President lacked the authority to impose without Congressional approval.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Trump had <a href="https://indianexpress.com/article/india/donald-trump-h-1b-visa-fees-massive-immigration-overhaul-10260612/" rel="noopener" target="_blank"><strong>signed a proclamation in September 2025</strong></a> that increased the fee for H-B visas to $100,000 annually — making it prohibitively expensive for tech companies to hire Indian and other foreign professionals. <span style="font-weight: 400">The administration said increased cost was necessary to discourage employers from relying on foreign workers instead of Americans.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The ruling, which blocks this change, </span>is particularly significant for Indians who account for the overwhelming majority of H-1B beneficiaries every year. <i>The Indian Express</i> spoke to a former US immigration official as well as immigration attorneys to understand how the increased fee affected foreign workers and how the latest court ruling may not be the final word on the matter.</p><div id="taboola-mid-article-personalisation"></div>
+<p><b>What is the H-1B programme and how did the fee affect it?</b></p>
+<p><span style="font-weight: 400">The H-1B visa allows US employers to hire foreign nationals in specific occupations or roles that require at a minimum a bachelor’s degree and a body of specialised knowledge. Congress has capped approvals at 65,000 per year for most private employers, with an additional 20,000 for holders of advanced degrees. Universities, nonprofit research organisations and government research bodies are exempt from this cap and can file petitions at any time.</span></p>
+<p><span style="font-weight: 400">Before the $100,000 proclamation, the petition fees ranged from $960 to $7,595. Trump signed the proclamation in September 2025, citing concerns that the programme had been used to replace American workers with foreign labour at lower wages, particularly in STEM (Science, Technology, Engineering and Mathematics) fields. The issue also held political resonance for a section of Trump supporters.</span></p>
+<p><b>Why did the court strike down the fee?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">According to the ruling, the central question was whether the $100,000 payment was a legitimate immigration penalty or an unlawful tax.</span></p>
+<p><span style="font-weight: 400">Judge Sorokin concluded that the fee functioned as a tax regardless of what the administration chose to call it. Because the US Constitution grants Congress, not the President, the authority to levy taxes, the court held that the measure exceeded executive power.</span></p>
+<p><span style="font-weight: 400">Robert Bray, a retired Immigration Officer with the United States Citizenship and Immigration Services (USCIS) Fraud Detection and National Security division, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that the judge’s reasoning was heavily influenced by a recent Supreme Court decision involving tariffs.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-court-rejected-trump-h1b-visa-fee-reason-10731625/">‘Arbitrary’ and ‘capricious’: Why US court rejected Trump’s $100,000 fee for H-1B visas</a></span></div>
+<p><span style="font-weight: 400">“As I read the ruling, the court used the recent Supreme Court case Learning Resources to infer that the $100,000 fee was comparable to a tariff and thus defined the fee as a tax,” Bray said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">According to Bray, once the court characterised the payment as a tax, much of the government’s legal defence collapsed. “This essentially negated almost all of the government’s arguments to defend the $100,000 fee,” he said.</span></p>
+<p><span style="font-weight: 400">Bray added that while the administration may have had policy reasons for wanting to discourage foreign hiring, the legal foundation behind the measure appeared weak.</span></p>
+<p><b>Why is the ruling important for Indians?</b></p>
+<p><span style="font-weight: 400">Indian citizens receive more than 70% of all H-1B visas issued annually and dominate the technology, engineering, healthcare and consulting sectors that rely heavily on the programme.</span></p>
+<p><span style="font-weight: 400">Washington <a class="" href="https://indianexpress.com/about/delhi-capitals/" rel="noamphtml">DC</a>-based immigration attorney Rajiv Khanna told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that the ruling restores predictability to a system that many workers felt had become increasingly unstable.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">“The decision is significant for Indians and for everyone else who has an H-1B or aspires to have an H-1B,” Khanna said. “There is a system in place and that system cannot be disturbed at the whim or fancy of a government that decides matters without any empirical evidence of what will work, what will not work, and what they are trying to correct,” he said.</span></p>
+<p><span style="font-weight: 400">He also described the judgment as a reminder that the US remains governed by legal checks and balances.</span></p>
+<p><b>Has the fee already affected Indian workers?</b></p>
+<p><span style="font-weight: 400">While the court ruling is being celebrated by many immigration advocates, some lawyers say damage may already have been done.</span></p>
+<p><span style="font-weight: 400">Asel Williams, a founding immigration attorney at New York City-based Williams Law, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">: “Indian professionals on H-1B and STEM OPT status have already felt the impact of the $100,000 H-1B fee introduced last year.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">OPT, or Optional Practical Training, allows international students on F-1 visas to work in the US after graduation in jobs related to their field of study. Students can generally work for 12 months under regular OPT, while STEM graduates receive an additional 24-month extension.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/us-opt-crackdown-indian-students-h1b-concerns-10692141/">Why US is cracking down on a post-study work programme that Indians depend on for H-1B visas</a></span></div>
+<p><span style="font-weight: 400">According to her, many employers became reluctant to sponsor foreign workers once the fee was announced. “Fewer companies are willing to sponsor Indian nationals, terminations are rising, and I am receiving a growing number of inquiries from laid-off H-1B holders with only 60 days to secure new employment,” she said.</span></p>
+<p><span style="font-weight: 400">Williams argued that immigration restrictions have coincided with broader technological disruptions in the labour market. “These layoffs are being driven by a combination of AI displacement and increasingly restrictive H-1B policies. The damage to Indian H-1B holders and STEM OPT workers has in large part already been done,” she said.</span></p>
+<p><span style="font-weight: 400">Similarly, Bray noted that the fee appeared to suppress demand for new H-1B sponsorships. “The number of H-1Bs originating in other countries was reduced exponentially,” he said.</span></p>
+<p><b>How did the fee affect employers?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">The administration had argued that the fee would discourage overreliance on foreign labour and encourage employers to hire Americans.</span></p>
+<p><span style="font-weight: 400">However, immigration attorneys say the practical effect was to create substantial barriers for businesses that depend on highly skilled workers.</span></p>
+<p><span style="font-weight: 400">Khanna said the fee created significant problems for companies that routinely move personnel into the US for specialised projects.</span></p>
+<p><span style="font-weight: 400">“The $100,000 fee had definitely created a huge barrier,” he said. “Larger companies doing project work could not bring their employees onshore and that was one of the biggest problems.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-green-card-rule-change-indians-10704749/">How US’s tighter Green Card rules will affect Indians — and the options before them</a></span></div>
+<p><span style="font-weight: 400">The consequences were particularly severe for workers who had already obtained H-1B status but later lost their jobs. “For people who got laid off on an H-1B and had to leave the US to come back, they would have had to pay $100,000,” Khanna said. “That was one of the biggest pain points.”</span></p>
+<p><span style="font-weight: 400">“In critical sectors like healthcare and academia, people were having a lot of difficulty because there were no waivers available,” he added.</span></p>
+<p><b>Could this case create a broader precedent?</b></p>
+<p><span style="font-weight: 400">The most important aspect of the case may not be the H-1B programme itself but the legal reasoning underlying the judgment.</span></p>
+<p><span style="font-weight: 400">Bray described the ruling as potentially precedent-setting because it limits how future administrations can impose immigration-related charges without congressional approval.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">“The fact that the judge used the Supreme Court decision on tariffs to make a determination that this fee is actually a tax is a huge precedent-setting decision and certainly needs to be settled,” he said.</span></p>
+<p><span style="font-weight: 400">The US Congress retains the authority to enact immigration-related taxes or fees through legislation. “Congress can always pass legislation imposing a fee or tax,” Bray added.</span></p>
+<p><span style="font-weight: 400">However, Khanna believes the current political climate makes major immigration legislation unlikely. “Passing laws is very difficult, especially passing laws or legislative corrections to immigration issues,” he said. With midterm elections approaching, lawmakers may be reluctant to support measures that could be portrayed as either anti-immigration or pro-immigration.</span></p>
+<h2><b>What should H-1B holders watch for now?</b></h2>
+<p><span style="font-weight: 400">Despite the ruling, experts are advising caution. </span></p>
+<p><span style="font-weight: 400">A legal challenge from the government is expected. </span><span style="font-weight: 400">Bray believes the dispute may ultimately reach the Supreme Court because of the broader constitutional questions involved. “My feeling is that it will go to the Supreme Court mainly to deal with the court calling the fee a tax,” he said.</span></p>
+<p><span style="font-weight: 400">Khanna explained that the administration generally has about 30 days to file an appeal and could simultaneously seek a stay of the judgment.</span></p>
+<p><span style="font-weight: 400">“If they tack on a stay request or an interim stay request, they could get a hearing within a couple of weeks, sometimes even earlier,” he said. “If the stay is granted, then this ruling does not come into effect until the appeal is decided, which can take a few months.”</span></p>
+<p><span style="font-weight: 400">Williams urged foreign workers to avoid assuming that the court decision resolves broader immigration uncertainties. “I recommend that H-1B holders avoid international travel,” she said.</span></p>
+<p><span style="font-weight: 400">“The recent court ruling does not automatically make it easier to obtain an H-1B visa through consular processing. Both the US Department of State and DHS retain discretion to deny any H-1B petition,” Williams added.</span></p>
+<p><em><strong>With inputs from Amaal Sheikh</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10732861"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/">
+<figure>
+<img alt="Vidheesha Kuntamalla" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/01/vidheesha.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/"><span></span>Vidheesha Kuntamalla</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8400215"></div><div class="follow_author_title" data-id="Vidheesha Kuntamalla"></div><div class="follow_author_slug" data-id="vidheesha-kuntamalla"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vidheesha Kuntamalla is a Senior Correspondent at The Indian Express, based in New Delhi. She is known for her investigative reporting on higher education policy, international student immigration, and academic freedom on university campuses. Her work consistently connects policy decisions with lived realities, foregrounding how administrative actions, political pressure, and global shifts affect students, faculty, and institutions.
+
+Professional Profile
+
+Core Beat: Vidheesha covers education in Delhi and nationally, reporting on major public institutions including the University of Delhi (DU), Jawaharlal Nehru University (JNU), Jamia Millia Islamia, the IITs, and the IIMs. She also reports extensively on private and government schools in the National Capital Region.
+
+Prior to joining The Indian Express, she worked as a freelance journalist in Telangana and Andhra Pradesh for over a year, covering politics, rural issues, women-centric issues, and social justice.
+
+Specialisation: She has developed a strong niche in reporting on the Indian student diaspora, particularly the challenges faced by Indian students and H-1B holders in the United States. Her work examines how geopolitical shifts, immigration policy changes, and campus politics impact global education mobility.
+
+She has also reported widely on:
+* Mental health crises and student suicides at IITs
+* Policy responses to campus mental health
+* Academic freedom and institutional clampdowns at JNU, South Asian University (SAU), and Delhi University
+* Curriculum and syllabus changes under the National Education Policy
+
+Her recent reporting has included deeply reported human stories on policy changes during the Trump administration and their consequences for Indian students and researchers in the US.
+
+Reporting Style
+Vidheesha is recognised for a human-centric approach to policy reporting, combining investigative depth with intimate storytelling. Her work often highlights the anxieties of students and faculty navigating bureaucratic uncertainty, legal precarity, and institutional pressure. She regularly works with court records, internal documents, official data, and disciplinary frameworks to expose structural challenges to academic freedom.
+
+Recent Notable Articles (Late 2024 &amp; 2025)
+
+1. Express Investigation Series
+JNU’s fault lines move from campus to court: University fights students and faculty (November 2025)
+An Indian Express investigation found that since 2011, JNU has appeared in over 600 cases before the Delhi High Court, filed by the administration, faculty, staff, students, and contractual workers across the tenures of three Vice-Chancellors.
+
+JNU’s legal wars with students and faculty pile up under 3 V-Cs | Rs 30-lakh fines chill campus dissent (November 2025)
+The report traced how steep monetary penalties — now codified in the Chief Proctor’s Office Manual — are reshaping dissent and disciplinary action on campus.
+
+2. International Education &amp; Immigration
+‘Free for a day. Then came ICE’: Acquitted after 43 years, Indian-origin man faces deportation — to a country he has never known (October 2025)
+
+H-1B $100,000 entry fee explained: Who pays, who’s exempt, and what’s still unclear? (September 2025)
+
+Khammam to Dallas, Jhansi to Seattle — audacious journeys in pursuit of the American dream after H-1B visa fee hike (September 2025)
+
+What a proposed 15% cap on foreign admissions in the US could mean for Indian students (October 2025)
+
+Anxiety on campus after Trump says visas of pro-Palestinian protesters will be cancelled (January 2025)
+
+‘I couldn’t believe it’: F-1 status of some Indian students restored after US reverses abrupt visa terminations (April 2025)
+
+3. Academic Freedom &amp; Policy
+Exclusive: South Asian University fires professor for ‘inciting students’ during stipend protests (September 2025)
+
+Exclusive: Ministry seeks explanation from JNU V-C for skipping Centre’s meet, views absence ‘seriously’ (July 2025)
+
+SAU rows after Noam Chomsky mentions PM Modi, Lankan scholar resigns, PhD student exits SAU
+A series of five stories examining shrinking academic freedom at South Asian University after global scholar Noam Chomsky referenced Prime Minister Narendra Modi during an academic interaction, triggering administrative unease and renewed debate over political speech, surveillance, and institutional autonomy on Indian campuses.
+
+4. Mental Health on Campuses
+In post-pandemic years, counselling rooms at IITs are busier than ever; IIT-wise data shows why (August 2025)
+
+Campus suicides: IIT-Delhi panel flags toxic competition, caste bias, burnout (April 2025)
+
+5. Delhi Schools
+These Delhi government school grads are now success stories. Here’s what worked — and what didn’t (February 2025)
+
+‘Ma’am… may I share something?’ Growing up online and alone, why Delhi’s teens are reaching out (December 2025)                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vidheesha-kuntamalla/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June tenth, twenty twenty-six, at forty-nine minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/h1b-visa-fee-ruling-trump-indian-workers-explained-10732861/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-11 16:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
