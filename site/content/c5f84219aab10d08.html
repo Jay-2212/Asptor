@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>One year of AI 171 crash that killed 260 people: What probe report could focus on | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>One year of AI 171 crash that killed 260 people: What probe report could focus on</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/air-india-crash-1600.jpg?w=1600" alt="One year of AI 171 crash that killed 260 people: What probe report could focus on">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="AI 171" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/air-india-crash-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">AI 171, travelling from Ahmedabad to London, crashed moments after taking off on June 12, 2025. (File photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>June 12, Friday, marks the first anniversary of the <strong><a class="" href="https://indianexpress.com/article/business/aviation/air-india-171-crash-families-four-victims-sue-boeing-honeywell-us-court-allege-negligence-faulty-fuel-control-switches-10257548/" rel="noopener" target="_blank">deadly Air India flight AI 171 crash</a></strong> that killed 260 people. The one-year mark is also when air crash investigators are typically expected to reveal some of their findings. All eyes, therefore, are on India’s Aircraft Accident Investigation Bureau (AAIB).</p>
+<p data-end="972" data-start="621">There are two primary theories about the likely causes of the Boeing 787-8 Dreamliner crash. The first is pilot action, widely reported in Western media. The second is a catastrophic electrical or systems failure, a theory that has found support among India’s pilot community, a section of aviation safety experts and even a few Boeing whistleblowers.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p data-end="1335" data-start="974">The trigger for the crash, as identified in the AAIB’s preliminary report released after a month of the accident, was transitioning of both engine fuel control switches from ‘RUN’ to ‘CUTOFF’ position almost immediately after liftoff from <a class="" href="https://indianexpress.com/section/cities/ahmedabad/" rel="noamphtml">Ahmedabad</a>. The critical question is this: How did the switches, which control the flow of fuel to the engines, transition?</p>
+<p data-end="1709" data-start="1337">Over the past year, the AAIB and other wings of the Ministry of Civil Aviation have been tight-lipped about the investigation, save for the preliminary report and press releases to clarify or deny Western news reports based on leaks in the US or Europe. In the run-up to the crash’s first anniversary, too, there is silence on what the AAIB will put out, and in what form.</p><div id="taboola-mid-article-personalisation"></div>
+<p data-end="2066" data-start="1711">The indications are that the agency may not be able to furnish the full investigation report, and could instead issue an interim report or a status update. According to recent reports by <em>Reuters</em> and <em>Bloomberg</em>, the final report is expected to be delayed by a few months as the detailed technical analysis of the ill-fated aircraft’s engines is yet to be completed in the US.</p>
+<p data-end="2292" data-start="2068">Experts say there is no compulsion on the AAIB to release the full report by June 12. In fact, there is no hard deadline, given that air crash investigations are complicated exercises that can take several years to complete.</p>
+<h2><strong>Global norms on air crash report timelines</strong></h2>
+<p>As per the International Civil Aviation Organization’s (ICAO) Annex 13, which lists international standards and recommended practices for aircraft accident investigations, the final investigation report should be made public “as soon as possible and, if possible, within twelve months”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“If the report cannot be made publicly available within twelve months, the State conducting the investigation shall make an interim statement publicly available on each anniversary of the occurrence, detailing the progress of the investigation and any safety issues raised,” the ICAO Annex 13 says.</p>
+<p data-end="3187" data-start="2994"><img alt="AI 171" class="lazyloading alignnone size-medium wp-image-10735887" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/airprobes.jpg?resize=600,331" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg 1445w, https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg?resize=450,248 450w, https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg?resize=600,331 600w, https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg?resize=768,424 768w, https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg?resize=728,402 728w, https://indianexpress.com/wp-content/uploads/2026/06/airprobes.jpg?resize=150,83 150w" height="331" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>Air crash probes are complex. They require detailed analysis of a range of items — flight data, cockpit recordings, maintenance records, crew training histories, aircraft systems, manufacturing documentation, and simulator testing.</p>
+<p>Investigators also have to coordinate with various international stakeholders, including plane makers, engine manufacturers and foreign investigation agencies. In the case of AI 171, the AAIB has received technical support from the US National Transportation Safety Board (NTSB) as the plane and its engines were manufactured in the US.</p>
+<p>Notably, amid speculation that the AAIB might release an interim report listing additional findings in the probe, pilots’ body Federation of Indian Pilots (FIP) has urged the probe agency to not issue any interim report and only issue the final report when it is ready. FIP has been strongly opposed to the theory that the crash was a result of human action, and has been insisting that the tragedy appears to have been caused by technical issues with the aircraft.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Express</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/long-reads/air-india-crash-a-year-later-two-men-and-a-phone-call-from-london-kaise-ho-aap-10732087/">‘Theek ho?’: Air India crash killed son, his Pakistani friend calls daily</a></span></div>
+<p>The pilots’ association feels that an interim report, while the investigation is still on, could fuel conspiracy theories and speculation, something that was evident after the preliminary report was released last July.</p>
+<p>“It is earnestly requested that the ICAO Annex 13 does not stipulate that the investigative agency needs to submit an ‘INTERIM REPORT’. The INTERIM REPORT will lead to greater confusion and speculations. Such an action could be detrimental to the investigations being done by the AAIB. Moreover, such a report cannot be conclusive due to further investigations being carried out,” FIP chief C S Randhawa wrote in a June 5 letter to AAIB Director General GVG Yugandhar.</p>
+<h2>AI 171 preliminary report, speculation, and theories</h2>
+<p data-end="2504" data-start="2316">The preliminary findings narrowed the focus to the transitioning of the fuel control switches from ‘RUN’ to ‘CUTOFF’ within a second of each other, moments after the plane became airborne.</p>
+<p data-end="2992" data-start="2506">The preliminary report said that in the cockpit voice recording, one of the pilots was heard asking the other why he cut off the fuel, to which the other pilot responded saying he did not. There has been speculation on whether the switches were flipped by one of the pilots — inadvertently or otherwise — or whether the transition signal to the system was due to a technical, mechanical or software issue. The AAIB report did not state that either pilot physically flipped the switches.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p data-end="3187" data-start="2994">The selective exchange in the preliminary report led many to believe that it pointed a finger at the flight crew, particularly the flight’s captain Sumeet Sabharwal, a highly experienced pilot.</p>
+<p data-end="3296" data-start="3189">Some Western news outlets reported that the probe was zeroing in on deliberate action by one of the pilots. Italian newspaper <em>Corriere della Sera </em>said that Indian investigators “are preparing to write in their final report that the plane crashed because one of the pilots turned off the two fuel switches”.</p>
+<p data-end="3296" data-start="3189"><span class="embed-youtube" style="text-align:center; display: block;"></span></p>
+<p data-end="3411" data-start="3298">Pilot bodies objected to the preliminary report and the insinuations that followed, as did some aviation experts.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p data-end="3573" data-start="3413">The AAIB, too, has pushed back against the narrative that the preliminary report had sufficiently established deliberate pilot action as the cause of the crash.</p>
+<p>The FIP and Sumeet Sabharwal’s father Pushkar Raj Sabharwal also filed a writ petition in the Supreme Court, challenging the fairness of the AAIB probe, apart from demanding that the government should initiate a judicial investigation into the crash, instead of relying on the AAIB probe.</p>
+<p>Some safety experts have suggested that the aircraft may have suffered a major electrical failure as it took off, which could have shut fuel supply to the engines, and the flight data recorder would have recorded it as the fuel control switches moving to the CUTOFF position even if they didn’t actually move physically.</p>
+<p>Moreover, a US-based aviation safety advocacy group claimed in January that the aircraft that crashed in Ahmedabad on June 12 had experienced a number of engineering, manufacturing, quality, and maintenance problems in its service life of 11 years, leading to electrical systems failures. In a whistleblower report to the US Senate Permanent Subcommittee on Investigations (PSI), the Foundation for Aviation Safety (FAS) alleged that critical <strong><a class="" href="https://indianexpress.com/article/explained/defects-in-air-india-plane-10490465/" rel="noopener" target="_blank">safety concerns pertaining to the Boeing 787 aircraft</a></strong> fleet persist.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The campaign group also suggested that “latent defects” could be a cause of the accident and remain a concern. A latent defect is a “hidden flaw in an aircraft’s design, manufacturing, or maintenance that can remain undetected for years until triggered, potentially causing sudden cascading failures and a catastrophe,” it said.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10734197"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June eleventh, twenty twenty-six, at twenty-five minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/ahmedabad-air-india-crash/" href="https://indianexpress.com/about/ahmedabad-air-india-crash/">Ahmedabad Air India crash</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/ai-171-crash-anniversary-aaib-reveal-aviation-disaster-10734197/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-12 15:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

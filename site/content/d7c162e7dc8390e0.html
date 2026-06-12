@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Amid debate over Adivasi identity, recalling the icon who helped define it: Birsa Munda | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Amid debate over Adivasi identity, recalling the icon who helped define it: Birsa Munda</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2024/06/Untitled-design-2-6.jpg?w=1600" alt="Amid debate over Adivasi identity, recalling the icon who helped define it: Birsa Munda">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Birsa Munda statue." decoding="async" height="366" src="https://images.indianexpress.com/2024/06/Untitled-design-2-6.jpg?w=1600" width="650"/><span class="ie-custom-caption">Birsa Munda was born on November 15, 1875, at a time when his community was witnessing major changes amid the advent of British colonial rule. (Via Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><div class="gs">
+<div class="">
+<div class="ii gt" id=":1in">
+<div class="a3s aiL" id=":1gy">
+<div id="avWBGd-506">
+<div dir="ltr">
+<p dir="ltr">On June 9, the death anniversary of the iconic Adivasi leader and freedom fighter Birsa Munda, several tribal organisations in Jharkhand took a pledge to “protect his legacy”.</p>
+<p dir="ltr">This pledge came amid the fresh demands for “delisting” — removing tribal converts to Christianity or Islam from the Scheduled Tribes (ST) list — that have reignited a <a href="https://indianexpress.com/article/explained/st-status-after-conversion-adivasi-delisting-debate-10715937/" rel="noopener" target="_blank"><strong>long-running debate over Adivasi identity</strong></a>. The latest delisting demand was made last month at a tribal gathering attended by Union Home Minister <a class="" href="https://indianexpress.com/about/amit-shah/" rel="noamphtml">Amit Shah</a> in <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The tribal organisations in Jharkhand said during the pledge event that Birsa Munda’s vision was rooted in Adivasi identity, sovereignty and land rights, and accused right-wing groups of attempting to reinterpret that outlook.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">So what did Birsa stand for? More than 125 years after his death, here’s a look at the tribal leader’s life, beliefs and legacy.</p><div id="taboola-mid-article-personalisation"></div>
+<h2 dir="ltr"><strong>Who was Birsa Munda?</strong></h2>
+<p dir="ltr">Birsa Munda is one of the most influential figures in the history of the Chotanagpur plateau, the mineral-rich region spanning Jharkhand and adjoining states.</p>
+<p dir="ltr">Revered by many as “Dharti Aba” (father of the Earth), he is remembered for leading the Ulgulan, or the “Great Tumult” — a movement against colonial rule and “diku” (non-tribal outsider) zamindars amid the growing encroachment on Adivasi land and cultural institutions in the closing years of the 19th century.</p>
+<p dir="ltr">Birsa’s influence, however, extended beyond the borders of the current Jharkhand state to the remote villages of Maharashtra, Chhattisgarh, Madhya Pradesh and more.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">In his seminal study Birsa Munda and His Movement, historian K S Singh described Birsa as a religious reformer, social mobiliser and political leader who transformed the Munda tribal society.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/remembering-birsha-mundas-spirit-from-ulgulan-to-tribal-assertion-10361376/">Remembering Birsa Munda’s spirit: From Ulgulan to tribal assertion</a></span></div></p>
+<p dir="ltr">Adivasi historian Joseph Bara similarly argues that Birsa cannot be understood merely as the leader of an agrarian uprising. Rather, he articulated a broader vision of Adivasi identity, autonomy and self-rule (Adivasi disum).</p>
+<p dir="ltr">Bara notes that his prominence in mainstream political and public discourse grew significantly during the decades preceding and following the creation of Jharkhand in 2000.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">Today, he is one of India’s most widely recognised Adivasi icons, occupying a central place in debates around Adivasi identity, land rights, religion and self-governance.</p>
+<p dir="ltr"><strong>His early life and influences</strong></p>
+<p dir="ltr">Birsa Munda was born on November 15, 1875, in Ulihatu village in present-day Khunti district. His father, Sugna Munda, was also known as Masih Das after embracing Christianity. Sugna Munda is believed to have been associated with the Sardari movement, an earlier mobilisation by Munda and Oraon Adivasis against the erosion of traditional land rights and the growing influence of diku (outsider) landlords and intermediaries.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/birsa-munda-tribal-hero-life-legend-8278163/">Life, legend of tribal icon Birsa Munda</a></span></div></p>
+<p dir="ltr">The penetration of Adivasi territories by outsiders had begun before British rule, but colonial land policies gave it unprecedented legal backing. Through measures such as the Permanent Settlement of 1773, the British empowered these revenue intermediaries to extract rent from lands traditionally governed under systems such as Khuntkatti. As customary rights eroded, many Adivasis faced growing indebtedness, land dispossession and forced labour, while village institutions lost control over their resources and affairs.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">These developments became a major reason for agrarian unrest and resistance across Chotanagpur.<span class="im"><br/>
+</span></p>
+<p dir="ltr">According to family accounts shared by Budhram Munda, a descendant of the family, Birsa spent parts of his early childhood at his uncle’s village before studying at missionary schools in Chaibasa.</p>
+<p dir="ltr">During this period, he came into contact with Christian missionary education and was known by the Christian name “Daud”, which some family members also recall as “David”.</p>
+<p dir="ltr"><strong>From resistance to statehood</strong></p>
+<p dir="ltr">The Ulgulan, led by Birsa Munda, reached its climax at Dombari Buru, a hill in a Khunti village, in January 1899. This was where thousands of Birsa’s followers gathered to assert their rights over land and challenge British authority, according to historian K S Singh.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<span class="custom-caption"><img alt="Birsa Munda" class="lazyloading size-medium wp-image-10733706" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/birsa-arresy.jpg?resize=600,381" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/birsa-arresy.jpg 717w, https://indianexpress.com/wp-content/uploads/2026/06/birsa-arresy.jpg?resize=450,286 450w, https://indianexpress.com/wp-content/uploads/2026/06/birsa-arresy.jpg?resize=600,381 600w, https://indianexpress.com/wp-content/uploads/2026/06/birsa-arresy.jpg?resize=638,405 638w" height="455" sizes="(max-width: 717px) 100vw, 717px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="717"/> Birsa Munda after his arrest in 1900. Wikimedia Commons</span>
+<p dir="ltr">The British forces eventually surrounded the hill and fired into the crowd. In Adivasi memory, this was a massacre that killed hundreds, though official records estimate a much lower toll. Arrested on February 3, 1900, in the forests of Porahat after months on the run, Birsa Munda died in Ranchi Jail on June 9, 1900. Colonial records attributed his death to complications arising from cholera and chronic dysentery, though suspicions of poisoning have persisted among sections of his followers and in popular memory.<span class="im"><br/>
+</span></p>
+<p dir="ltr">While the British may have crushed the uprising, Dombari Buru became a symbol of Adivasi resistance.</p>
+<p dir="ltr">The episode compelled the colonial administration to initiate land reforms that culminated in legal recognition of Khuntkatti rights and later the Chotanagpur Tenancy (CNT) Act, 1908.</p>
+</div>
+<p dir="ltr">Khuntkatti, also known as Bhuinhari among Oraons, was the traditional Adivasi system of collective land ownership and governance prevalent among the Mundas of the Chotanagpur region. Under the system, the descendants of the original settlers who cleared forests and established a village, known as Khuntkattidars, held collective rights over the village territory.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Ethnographer and missionary Father John-Baptist Hoffmann, one of the foremost scholars of Munda society, argued that the Mundari Khuntkatti system could not be understood through conventional categories of private property. He described it as neither a tenancy nor a holding in the ordinary legal sense, but a distinct form of land stewardship in which Khuntkattidars “hold the land in their own right”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/president-droupadi-murmu-writes-birsa-mundas-enduring-legacy-9670391/">President Droupadi Murmu writes: Birsa Munda’s enduring legacy</a></span></div>
+<p dir="ltr">The CNT Act, 1908, was enacted by the British colonial government after decades of Adivasi resistance to protect the customary land rights of Adivasis in the Chotanagpur region. Father J B Hoffmann is widely regarded as one of the principal architects of the legal framework that informed the CNT Act of 1908. The central objective behind CNT was preventing the transfer of Adivasi land to non-Adivasis and legally recognising traditional land tenure systems such as Khuntkatti and Bhuinhari. Despite being misused by the cooperation of bureaucrats and the migrants, the Act remains one of the strongest legal safeguards against the alienation of tribal land in Jharkhand.<span class="im"><br/>
+</span></p>
+<div dir="ltr">
+<p dir="ltr">Bara writes that the aspiration for Adivasi self-governance articulated during Ulgulan was later channelled into the movement for a separate Jharkhand under Jaipal Singh Munda in the mid-1900s.</p>
+<p dir="ltr"><strong>Religious views</strong></p>
+<p dir="ltr">Budhram Munda says that Birsa’s association with missionary education ended after a disagreement with church authorities over remarks about the Munda tribal community.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">After distancing himself from Christianity, Birsa came under the influence of Vaishnavism for some time through a local guru of the village.</p>
+<p dir="ltr">“He was jailed in 1885 for two years and, eventually, after being released, he started preaching his teachings towards life and nature…,” said Budhram Munda. Birsa was arrested by the colonial authorities on charges of breaching the peace, assembling crowds, and inciting people against the British government, Christian missionaries, and diku zamindars.<span class="im"><br/>
+</span></p>
+<p dir="ltr">These teachings created a religious movement that came to be known as the Birsait faith, different from Sarnaism (the traditional tribal faith), Christianity and Hinduism.</p>
+<p dir="ltr">His followers attribute various miracles to him and consider him a messiah, referring to him as “Bhagwan” and the aforementioned “Dharti Aba”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/birsa-munda-death-anniversary-life-9382021/">The significance of the tribal leader’s contributions</a></span></div></p>
+<p dir="ltr">Budhram Munda said: “Bhagwan Birsa never targeted any particular religion. He opposed both the outsiders from the caste society who were appointed as zamindars, and the Christian missionaries, as he saw them as part of the same system of exploitation,” he said.</p>
+<p dir="ltr">Opposing the demand for delisting of Christian tribals from the ST list, Budhram Munda said that the descendants of Kanu Munda, the elder brother of Birsa’s father Sugna Munda, have followed Christianity for generations. He argued that Adivasi identity is determined by ancestry and community, not religion.</p>
+<p dir="ltr">According to him, despite differences in worship, all Adivasis trace their origins to the same supreme creator, Singbonga.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10733209"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubham-tigga/">
+<figure>
+<img alt="Shubham Tigga" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/08/Shubham-1.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubham-tigga/"><span></span>Shubham Tigga</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8905937"></div><div class="follow_author_title" data-id="Shubham Tigga"></div><div class="follow_author_slug" data-id="shubham-tigga"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubham Tigga is a Correspondent at The Indian Express, presently based in Pune, where he covers the intersections of infrastructure, labor, and the modern economy. His reporting focuses on civil aviation, urban mobility, the gig economy, and workers' unions, providing critical insights into how transit and commercial sectors impact the daily lives of citizens.
+
+Expertise &amp; Background
+Before moving to Pune, he reported extensively from his home state of Chhattisgarh, where he focused on Indigenous (Adivasi) issues, environmental justice, and grassroots struggles in mainland India. This experience gives him a unique lens through which he analyzes the impact of large-scale infrastructure projects on local communities.
+
+Academic Foundation
+He is an alumnus of the prestigious Asian College of Journalism (ACJ), where he honed his skills in investigative reporting and ethical journalism. His academic training, combined with his field experience in Central India, allows him to navigate complex socio-economic landscapes with nuance and accuracy.
+You can reach out to him on LinkedIn                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubham-tigga/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June eleventh, twenty twenty-six, at thirty minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/birsa-munda-legacy-ulgulan-adivasi-identity-explained-10733209/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-12 15:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

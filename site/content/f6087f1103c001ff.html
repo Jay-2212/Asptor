@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Graphs, Data and Perspectives: Anatomy of India’s (un)Employment over the past decade | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Graphs, Data and Perspectives: Anatomy of India’s (un)Employment over the past decade</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/gdp-del.jpg?w=1600" alt="Graphs, Data and Perspectives: Anatomy of India’s (un)Employment over the past decade">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Cockroach janta party supporters at a protest against against the NEET Paper leak demanding the resignation of Union Education Minister Dharmendra Pradhan (Express Photo)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/gdp-del.jpg?w=1600" width="650"/><span class="ie-custom-caption">Cockroach Janta Party supporters at a protest against against the NEET Paper leak demanding the resignation of Union Education Minister Dharmendra Pradhan in Lucknow. (Express photo by Vishal Srivastav)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The past week saw the BJP-led NDA government at the Centre celebrate its achievements, especially the fact that Narendra Modi has become the longest continuously serving elected Prime Minister of India.</p>
+<p>At the same time, stories pointing to growing unrest among India’s youth have made headlines of late: Be it in the form of disillusionment that forced the launch of a political party-cum-movement or 18-year-olds poring over government tenders to investigate what ails the school examination set-up. Public focus has shifted from merely economic growth numbers to job creation.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Indeed, the following lines by writer Mokokoma Mokhonoana could well describe how many in India currently feel: “If heaven really exists: then heaven is the job, hell is unemployment, while life is merely an interview.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2><strong>How to read employment data?</strong></h2>
+<p>Before getting into deciphering what happened to jobs over the past decade, here are some clarifications on data and concepts.</p><div id="taboola-mid-article-personalisation"></div>
+<p>First, a note on data. This edition of GDP will use employment data from Centre for Monitoring Indian Economy (CMIE), a leading private company.</p>
+<p>The reason being that CMIE data provides a continuous and comparable series of data since 2016 onwards. The official data, released by surveys done by India’s Ministry of Statistics and Programme Implementation (MoSPI) has undergone a lot of changes during this period.</p>
+<p>Up until 2011-12, MoSPI used to release Employment-Unemployment Surveys (EUS). But these were done once every five years. Then in 2017-18, MoSPI replaced the quinquennial EUS with the annual PLFS (Periodic Labour Force Survey). The very first PLFS in 2017-18 found that unemployment had hit a 45-year high. It lost credibility when the government itself ran it down for flawed methodology before the 2019 general election, and accepted them after the election results.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Last week's GDP column</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/kerala-fiscal-crisis-reforms-explained-10725396/">The Kerala development model was once looked up to. What went wrong?</a></span></div>
+<p>Since 2025, the PLFS’s annual reporting cycle has been changed; from treating July to June as a year to treating January to December as the year. It also made some changes to the methodology of PLFS.</p>
+<p>As such, even though the methodology and definitions of CMIE and MoSPI surveys are different, this column is using CMIE simply because it can provide a clearer, comparable and fuller picture of employment in the decade gone by.</p>
+<p>Second, a brief understanding of key variables. Often public discourse is dominated by the unemployment rate. But in India’s case, another variable — the employment rate — is arguably the more important one. Here’s why.</p>
+<p>Imagine the total population of a country to be 100. Suppose that only 60 out of these 100 are above the age of 15 years. These 60 constitute the workforce of the <a href="https://indianexpress.com/article/explained/explained-indias-unique-jobs-crisis-8062853/"><strong>country</strong></a>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Further suppose that only 50 of these 60 are looking for a job; the other 10 could include people like a 22-year-old who is busy pursuing higher education or a 30-year-old man who is disillusioned and has stopped looking for a job. These 50 constitute the labour force of the country.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/indias-two-youths-from-unemployed-graduates-to-credit-score-chasers-10668200/">unemployed graduates and credit score chasers matters</a></span></div>
+<p>Now, when the data shows that the unemployment rate (UER) is, say, 10%, that does not mean that only 10 people are unemployed. That’s because the UER is calculated as a share of the total labour force. A 10% UER means 10% of 50, or five people who are looking for jobs but are unable to get them.</p>
+<p>Now imagine a scenario where these five unemployed people also get disillusioned with not finding a job after repeated efforts and decide to sit out. The workforce will still stay 60 but the labour force will shrink from 50 to 45.</p>
+<p>What is more relevant is that with those five unemployed people out of the labour force, the UER rate will fall to 0%. That’s because all the other 45, who were looking for a job, still hold a job.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>So, the UER can go from 10% to 0% but it may still not capture the distress in the job market. This example is crucial because often this is what happens in India. Unlike developed countries, where the size of the labour force as a percentage of the workforce (technically called the Labour Force Participation Rate or LFPR) stays stable, in India it often fluctuates. (See <em>Chart 1</em>)</p>
+<span class="custom-caption"><img alt="Chart 1" class="lazyloading wp-image-10736917 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/UNGDP_CHART_1_LFPR.png" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_1_LFPR.png 1492w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_1_LFPR.png?resize=450,204 450w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_1_LFPR.png?resize=600,273 600w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_1_LFPR.png?resize=768,349 768w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_1_LFPR.png?resize=728,331 728w" height="678" sizes="(max-width: 1492px) 100vw, 1492px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1492"/> <em>Chart 1</em></span>
+<p>This affects the UER and leads to incorrect reading of the stress in the job market. Imagine the exact opposite scenario. If all 60 in the workforce started demanding a job — that is, the labour force became equal to the workforce — the UER would shoot up because now there will be 15 people looking for a job and without it, out of a total of 60. That’s a UER of 25%.</p>
+<p>One way out is to look at the Employment Rate (ER). This is basically the number of people with a job as a percentage of the total working-age population. A rising ER shows that a higher percentage of people in a particular age group or cohort have a job. The ER bypasses the confusion created by the fluctuations in the size of the labour force.</p>
+<h2><strong>So what happened to employment?</strong></h2>
+<p>Let’s first look at the overall Employment Rate in the country between 2016-17 and 2025-26.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<span class="custom-caption"><img alt="Chart 2" class="lazyloading wp-image-10736920 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/UNGDP_CHART_2_ER_overall_.png" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_2_ER_overall_.png 1492w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_2_ER_overall_.png?resize=450,204 450w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_2_ER_overall_.png?resize=600,273 600w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_2_ER_overall_.png?resize=768,349 768w, https://indianexpress.com/wp-content/uploads/2026/06/UNGDP_CHART_2_ER_overall_.png?resize=728,331 728w" height="678" sizes="(max-width: 1492px) 100vw, 1492px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1492"/> <em>Chart 2</em></span>
+<p>As <em>Chart 2</em> shows, the percentage of working-age people (15 years and above) with a job was 42.7% in 2016-17, and it is 38.7% at the end of March 2026. According to CMIE, around 406 million Indians had a job in 2016-17 and in 2025-26, this number rose to 438 million. But this rise of 32 million was not enough because the underlying working-age population of India grew faster. That is why the ER is lower today than roughly a decade ago.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/state-of-employment-in-india-what-a-new-report-says-about-youths-women-concerns-caution-9237158/">State of employment in India: What a new report says about youths and women, concerns and caution</a></span></div>
+<p>For men, the ER has fallen from 70.5% to 64.8% and for women it has fallen from 11.8% to 9.4% over the same period.</p>
+<p><strong>What happened to ER when according to age group?</strong></p>
+<span class="custom-caption"><img alt="Table 3" class="lazyloading wp-image-10736906 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/TABLE_3.png?resize=600,263" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png 1940w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png?resize=450,197 450w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png?resize=600,263 600w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png?resize=768,336 768w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png?resize=728,319 728w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_3.png?resize=1536,673 1536w" height="850" sizes="(max-width: 1940px) 100vw, 1940px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1940"/> <em>Table 3</em></span>
+<p><em>Table 3</em> shows that the ER has fallen in all age groups barring two — 25 to 29 years and 55-59 years. It is also noteworthy that the falls are sharper than the increments, and that is what explains the overall fall in ER.</p>
+<h3><strong>Did education matter?</strong></h3>
+<span class="custom-caption"><img alt="Table 4" class="lazyloading size-medium wp-image-10736909" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/TABLE_4.png?resize=600,318" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png 1922w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png?resize=450,239 450w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png?resize=600,318 600w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png?resize=768,408 768w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png?resize=728,386 728w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_4.png?resize=1536,815 1536w" height="1020" sizes="(max-width: 1922px) 100vw, 1922px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1922"/> <em>Table 4</em></span>
+<p><em>Table</em> 4 maps how the Employment Rate changed over the past decade for people with different levels of educational achievement. All groups show a lower ER now than a decade ago. There are differences. For instance, the cohort with only primary education has seen the sharpest decline in ER especially when compared to graduates where the ER has fallen by lesser degree. In 2016-17, for instance roughly 51% of all graduates had a job. In 2025-26, this percentage had fallen but only to about 49%.</p>
+<p><strong>Did religion matter?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<span class="custom-caption"><img alt="Table 5" class="lazyloading wp-image-10736911 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/TABLE_5.png?resize=600,452" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/TABLE_5.png 1390w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_5.png?resize=450,339 450w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_5.png?resize=600,452 600w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_5.png?resize=768,578 768w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_5.png?resize=538,405 538w" height="1046" sizes="(max-width: 1390px) 100vw, 1390px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1390"/> <em>Table 5</em></span>
+<p>Table 5 shows the ER data for the four biggest religions. All have seen a decline barring Christians. A decade ago, 43% of working-age Hindus had a job and this percentage has fallen to 39% while the ER for Muslims and Sikhs has slid to 37%.</p>
+<p><strong>Did caste matter?</strong></p>
+<span class="custom-caption"><img alt="Table 6" class="lazyloading size-medium wp-image-10736914" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/TABLE_6.png?resize=600,376" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png 1820w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png?resize=450,282 450w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png?resize=600,376 600w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png?resize=768,481 768w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png?resize=647,405 647w, https://indianexpress.com/wp-content/uploads/2026/06/TABLE_6.png?resize=1536,962 1536w" height="1140" sizes="(max-width: 1820px) 100vw, 1820px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1820"/> <em>Table 6</em></span>
+<p><em>Table</em> 6 maps the data for different caste groups. The “intermediate castes” grouping refers to castes such as Marathas, Jats, Gujjars, and others who often aspire to be included in the OBC category.</p>
+<p>The data shows that none of the caste groupings could buck the trend of a lower ER as of 2025-26 (as against 2016-17).</p>
+<p><strong>Conclusion</strong></p>
+<p>The data on Employment Rate shows that while things may be improving from the lows of 2020 and 2021, broadly speaking, across different cohorts, a lower percentage of people hold a job now than a decade ago.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>In other words, joblessness is a secular problem in India.</p>
+<p>Often, governments focus on growth rates of the overall economy as the one metric that defines success. <a href="https://indianexpress.com/article/explained/explained-economics/indian-economy-gdp-growth-slowdown-goldilocks-analysis-10654208/"><strong>You can read this piece</strong></a> to understand how India has done on GDP growth over the past 12 years.</p>
+<p>To some extent this is justified because the growth of gross domestic product (or GDP) shows that the total market price of all the goods and services being produced in a country is growing. A fast growing GDP is considered to be the necessary condition for improvement in all other metrics such as health, education and employment etc.</p>
+<p>Of course, as India’s own example perhaps shows, GDP growth may be a necessary condition but it is not a sufficient condition for all-around improvement.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Many academics, such as Ashoka Mody (who wrote the book India is Broken), have argued that India should be paying greater attention to job creation. That, unless employment gets prime focus, the country will not choose policies that improve employment. Other economists, such as Pronab Sen and Ravi Srivastava, have in the past pointed out that existing policies are designed more to boost GDP than to create more jobs.</p>
+<p>India’s growth model seems to be failing Indians where it matters the most: Creating jobs and boosting incomes commensurate with the <a href="https://indianexpress.com/article/explained/explained-economics/gdp-inflation-vs-affordability-meaning-indians-incomes-comparison-10714624/"><strong>growth of the overall GDP</strong></a>. And this is a criticism that predates the 12 years under PM Modi, although the situation has become worse in the past decade in many ways.</p>
+<p>What does not help matters is that over the past decade many countries across the world are turning insular and treating trade and immigration as a zero-sum game. Think Brexit in the UK, and Trump’s ill-advised tariff mania, not to mention India raising tariff barriers, turning away from Regional Comprehensive Economic Partnership (RCEP) and adopting the “Swadeshi” model of growth. A world less open for trade, hurts countries such as India that have an ambitious goal ahead of them. Not to mention the threat of Artificial Intelligence and how rapidly it can disrupt the job market for Indians.</p>
+<p>Between a lop-sided growth model within the country, slowbalisation (or slower globalisation), and the AI threat, the odds are stacked against India. When the famous science fiction writer Arthur C Clarke wrote that “the goal of the future is full unemployment” his hope was “so we can play”. In present-day India, the word “unemployment” evokes a far more distressing future.</p>
+<p>What should policymakers do to address the situation? Share your views and queries at <a class="" href="http://udit.misra@expressindia.com" rel="nofollow, noopener" target="_blank">udit.misra@expressindia.com.</a></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10736892"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twelfth, twenty twenty-six, at fourteen minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/unemployment/" href="https://indianexpress.com/about/unemployment/">unemployment</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/anatomy-of-employment-india-last-decade-10736892/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-12 15:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
