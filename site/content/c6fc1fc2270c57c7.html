@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Modi heads to France today: How trust has underpinned India-France ties | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Modi heads to France today: How trust has underpinned India-France ties</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-modimacron-5col.jpg?w=1600" alt="Modi heads to France today: How trust has underpinned India-France ties">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Modi heads to France, Modi France visit, Narendra Modi France visit, G7 leaders’ summit, Narendra Modi, Emmanuel Macron, India-France ties, India-France relations, Indian express explained, explained news, current affairs" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-modimacron-5col.jpg?w=1600" width="650"/><span class="ie-custom-caption">Prime Minister Narendra Modi with French President Emmanuel Macron in Mumbai in February. (X/@narendramodi)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Prime Minister Narendra Modi is headed to France over the weekend for a bilateral visit as well as the G7 leaders’ summit. He will be in Nice on June 13 and 14, in Evian on June 16 and 17 for the summit, and in Paris on June 17 and 18.</p>
+<p>This is the Prime Minister’s seventh official visit to France since 2014 and follows French President Emmanuel Macron’s visit to India on February 17-19, when bilateral relations were elevated to a “Special Global Strategic Partnership”. France is one of India’s most preferred partners in Europe, and the relationship, built on strategic autonomy and respect, has been a success story over the last several decades.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The forthcoming visit is a testament to New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>’s durable ties with Paris.</p>
+<h2>What to expect from the bilateral visit…</h2>
+<p>The key thrust of the bilateral visit will be tech and innovation.</p><div id="taboola-mid-article-personalisation"></div>
+<p>In Nice, Modi, alongside Macron, will inaugurate the Bharat Innovates event that brings together top innovation startups from India, France and the world. More than 120 Indian companies and startups, and prominent business leaders from France and other countries, are expected to participate in the event, being held during India-France Year of Innovation.</p>
+<p>The Prime Minister will hold a bilateral summit with President Macron in Nice, the first since the elevation of ties to a “Special Global Strategic Partnership”.</p>
+<p>On June 18 in Paris, alongside Macron, Modi will attend the VivaTech Summit, Europe’s largest technology and startup event. The Vivatech Summit will host an Indian pavilion, the largest one at the summit this year.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2>…and the G7 summit</h2>
+<p>The West Asia conflict has set off an energy crisis shock for India and the world and put the lives of Indians living in the region at risk. The recent US attacks on ships sailing through the Strait of Hormuz have killed Indian sailors.</p>
+<p>With US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> attending the G7 Summit, India has an opportunity to convey its concerns on a matter that has hit its security and economic interests.</p>
+<p>In that context, France and Europe will be an important partner, as it is a common understanding that the continuation of the war is not in anyone’s interest.</p>
+<h2>Ties defined by history…</h2>
+<p>To understand the durability of India-French ties, let’s take the example of the famous French politician Jacques Chirac. In 1976, as India faced global criticism over Prime Minister Indira Gandhi’s Emergency, the French Prime Minister agreed to be the chief guest at the Republic Day celebrations.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>He returned as the Republic Day chief guest 22 years later, this time as President, and launched the Strategic Partnership with India. The Strategic Partnership was India’s first with any Western nation, and France’s first with a non-Western nation.</p>
+<p>Just months later, in May, India conducted the Pokhran-II nuclear tests. Western powers criticised India and imposed sanctions — but France did not.</p>
+<p>The visits are testament to French pragmatism and foresight in how it diplomatically managed the sensitive nature of the ties. The strongest link between the two countries, which has led to the innovation and tech partnership, is “strategic trust”.</p>
+<h2>… and based on trust</h2>
+<p>Political understanding is extremely important, and that is visible at the highest levels. One of the prime examples of the leadership-level trust was displayed when India reached out to Macron at the last minute in December 2023 — after US President <a class="" href="https://indianexpress.com/about/joe-biden/" rel="noamphtml">Joe Biden</a> had declined the invitation for the Republic Day celebrations in January 2024. Then the Indian envoy to France reached out to Élysée Palace directly, and the French President didn’t hesitate to bail out India, despite knowing fully well that he was Delhi’s second choice.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The Indian Prime Minister returned the favour in 2025, when he headlined the AI summit in France.</p>
+<p>The larger trust is on display again as India has again been invited for the G7 Summit in Evian on June 16-17. France believes that India’s presence at the G7 reflects its standing as a leading voice of the Global South and a key partner in addressing shared global challenges.</p>
+<p>In fact, if one goes back in history, the French Presidency had invited India to participate in the G8 summit (Russia was expelled after the Crimea annexation in 2014, and the grouping became G7) for the first time ever in 2003. PM Atal Bihari Vajpayee attended the summit at the invitation of President Chirac.</p>
+<p>France again invited India in 2019, and that was PM Modi’s first G7 summit in Biarritz, France. Since then, India has been participating in the summits — this will be India’s 13th participation at the G7 Summit and Prime Minister Modi’s seventh consecutive participation at the meet.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2>A wide range of partnerships</h2>
+<p>At a time when the world has become unpredictable and volatility is the norm, trust has become a rare commodity. In the case of India and France, the strategic trust, built over years of the strategic partnership, has matured in fields as critical as defence, nuclear energy and space.</p>
+<p>Defence: The India-France defence collaborations run deep and wide, spanning the entire spectrum from air and naval assets to helicopter engines and missiles. Some flagship examples of cooperation include the Rafale aircraft, Scorpene submarines and Shakti helicopter engines.</p>
+<p>Space: In this sector, there is the rich legacy of six-decade-old cooperation between <a class="" href="https://indianexpress.com/about/isro/" rel="noamphtml">ISRO</a> and the French national space agency CNES. The highlights include joint launches, development of satellites such as Megha-Tropiques and SARAL, and collaboration in India’s human spaceflight mission Gaganyaan. The two are also looking at another satellite mission, TRISHNA.</p>
+<p>Nuclear: With the passing of the Sustainable Harnessing and Advancement of Nuclear Energy for Transforming India (SHANTI) Act, there is a great opportunity for collaboration among Indian and French industry. On Small Modular Reactors/Advanced Modular Reactors, India and France signed a Declaration of Intent on cooperation in this sector in February 2025.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Tech: Tech partnerships are built on a high-level of trust. As an Indian diplomat told The Indian Express: “One will never hand one’s phone to a stranger or a person who one doesn’t trust fully. The same holds true for high-level tech partnership, where high-level trust and confidence is needed between governments, systems and leaders. That’s how the India and France tech partnership has matured.”</p>
+<p> </p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10737070"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubhajit-roy/">
+<figure>
+<img alt="Shubhajit Roy" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/untitled-3.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubhajit-roy/"><span></span>Shubhajit Roy</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951102"></div><div class="follow_author_title" data-id="Shubhajit Roy"></div><div class="follow_author_slug" data-id="shubhajit-roy"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="http://ShubhajitRoy">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubhajit Roy, Diplomatic Editor at The Indian Express, has been a journalist for more than 25 years now. Roy joined The Indian Express in October 2003 and has been reporting on foreign affairs for more than 17 years now. Based in Delhi, he has also led the National government and political bureau at The Indian Express in Delhi — a team of reporters who cover the national government and politics for the newspaper. He has got the Ramnath Goenka Journalism award for Excellence in Journalism ‘2016. He got this award for his coverage of the Holey Bakery attack in Dhaka and its aftermath. He also got the IIMCAA Award for the Journalist of the Year, 2022, (Jury’s special mention) for his coverage of the fall of Kabul in August 2021 — he was one of the few Indian journalists in Kabul and the only mainstream newspaper to have covered the Taliban’s capture of power in mid-August, 2021.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubhajit-roy/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirteenth, twenty twenty-six, at zero minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/emmanuel-macron/" href="https://indianexpress.com/about/emmanuel-macron/">Emmanuel Macron</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/narendra-modi/" href="https://indianexpress.com/about/narendra-modi/">Narendra Modi</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/modi-heads-to-france-today-how-trust-has-underpinned-india-france-ties-10737070/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-13 08:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

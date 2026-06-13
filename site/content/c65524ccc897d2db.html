@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What Delhi HC ruled in quashing NewsClick case on foreign funding, cheating | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What Delhi HC ruled in quashing NewsClick case on foreign funding, cheating</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/newsclick.jpg?w=1600" alt="What Delhi HC ruled in quashing NewsClick case on foreign funding, cheating">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="ED officials look through files at the NewsClick office during a raid in New Delhi." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/newsclick.jpg?w=1600" width="650"/><span class="ie-custom-caption">ED officials look through files at the NewsClick office during a raid in New Delhi. (Express photo by Tashi Tobgyal)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In an order made public on Wednesday (June 10), the Delhi High Court quashed an FIR registered by the Economic Offences Wing (EOW) of Delhi Police and a money laundering case initiated by the Enforcement Directorate (ED) against <em>NewsClick</em> and its founder, Prabir Purkayastha.</p>
+<p>Both proceedings stemmed from a 2020 complaint alleging that the media company had received Foreign Direct Investment through an artificially inflated share transaction to circumvent FDI limits on digital news media.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The ruling came nearly six years after the FIR was first registered. Justice Neena Bansal Krishna held that even accepting the state’s allegations in their entirety, the essential ingredients of the charged offences were not made out.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The continuation of the FIR, the court said, was “a gross abuse of the process of law.” It further held that the ED’s proceedings amounted to “an arbitrary attack and abuse of powers on the free and impartial journalism of the Petitioners.”</p>
+<p><strong>Facts of the case</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>The EOW registered the FIR in August 2020 on a complaint forwarded by an undersecretary in the Ministry of Information and Broadcasting (I&amp;B). It was alleged that <em>NewsClick</em> had received $1.5 million from an entity incorporated in the US state of Delaware at a supposedly overvalued share price.</p>
+<p>The allegation primarily rested on the claim that by pricing its shares at a premium, <em>NewsClick</em> was trying to get around the 26% FDI cap. However, a Press Note introduced the cap in September 2019, while the investment agreement had been signed in March 2018 and the $1.5 million was received in April 2018 — more than a year before the restriction existed.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/what-uapa-sections-have-been-invoked-against-newsclick-8967236/">What UAPA sections have been invoked against NewsClick</a></span></div>
+<p><em>NewsClick</em> had also written to the I&amp;B Ministry in December 2017, before any investment was received, asking whether online news portals fell within the FDI restrictions applicable to print media. The ministry replied in January 2018 that “online publications on website/web portal do not fall under the ambit of print media.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Essentially, the state alleged an attempt to evade a yet-to-be-enacted law from a company that had preemptively sought clarity on regulatory aspects.</p>
+<p><strong>Share price, siphoning angle</strong></p>
+<p>On the share price itself, Foreign Exchange Management Act (FEMA) regulations require that shares issued to foreign investors be priced at or above fair value.</p>
+<p><em>NewsClick</em> had obtained an independent valuation that set the fair value at Rs 9,188 per share. The agreed price of Rs 11,510 per share was arrived at after negotiation. The court held that this was “an economic decision… which does not spell out any criminal offence.”</p>
+<p>The state also questioned the existence of the investing entity, Worldwide Media Holdings LLC, saying that a company by that name had earlier been voided in Delaware. The court noted that the investor was a separate company incorporated later under the same name and noted that the investigation had produced no material to show that the entity was non-existent.</p>
+<p><strong>How the investigation proceeded</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Within a week of the 2020 FIR, the ED registered an Enforcement Case Information Report (ECIR, similar to an FIR) and began money laundering proceedings under the Prevention of Money Laundering Act (PMLA) based on the same complaint. The FIR was registered for criminal breach of trust, conspiracy and cheating.</p>
+<p>In October 2023, the Special Cell of <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> Police arrested Purkayastha under the Unlawful Activities (Prevention) Act (UAPA) following <a href="https://indianexpress.com/article/cities/delhi/newsclick-case-delhi-high-court-allegations-rejected-10734465/"><strong>a <em>New York Times</em> report alleging</strong></a> links between the news portal’s funding and Chinese state propaganda.</p>
+<p>In that case, Purkayastha spent seven months in Tihar Jail before the Supreme Court declared his arrest void in May 2024, on the grounds that the written grounds of arrest had not been furnished to him or his counsel before the remand order was passed.</p>
+<p>The latest HC order addressed only the EOW FIR and the ED proceedings.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>An early status report, signed by an ACP of the EOW and emailed to <em>NewsClick’s</em> lawyers in July 2021, also recorded that the RBI had confirmed to the EOW that the FDI inflow to <em>NewsClick</em> was under the automatic route (not requiring prior RBI approval). There had been no delay in share issuance or reporting, and no violation of FEMA regulations.</p>
+<p>When the EOW subsequently filed a fresh status report before the court, that reference was removed entirely, and no explanation was offered for it. The court observed that this correspondence was “sufficient to explain that there were no violations by petitioner”. The regulator whose domain the alleged offence fell within (the RBI) had cleared the transaction. The investigating agency had not disclosed this to the court.</p>
+<p><strong>Siphoning argument untenable</strong></p>
+<p>The state also alleged that more than 45% of the FDI had been “siphoned off” through salary payments, consultancy fees, and rent, pointing to expenditure that exceeded revenue in the years under scrutiny.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/judgment-indicates-what-we-have-always-held-says-newsclick-founder-after-delhi-hc-quashes-money-laundering-charges-10733874/">‘Judgment vindicates what we’ve always held’: NewsClick founder after Delhi HC quashes money laundering charges</a></span></div>
+<p>The court disposed of this, saying that “when a Company is functioning especially in the business of digital print media, such expenses are bound to occur. Even if it is accepted that there were over payments and excessive expenditure incurred by the Petitioner, then too it does not disclose any criminal offence.”</p>
+<p><strong>Ingredients for criminal charges not made out</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Section 415 of the IPC defines cheating as “Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person… is said to ‘cheat.’” Section 406 requires an entrustment that was then misappropriated.</p>
+<p>In both cases concerning <em>NewsClick</em>, the court inquired who the victim was. Worldwide Media Holdings LLC, the entity that had actually transferred the money, had never filed any complaints. The court noted that nothing had emerged “even during the investigations… that there was any person who was aggrieved or who was cheated by the Petitioner.”</p>
+<p>Sobhan Singh, the original complainant, had no direct stake in the transaction at all. A commercial investment in exchange for shares, the court held, cannot by any reading constitute an entrustment within the meaning of Section 406. “The offence of cheating, even if all the allegations made are admitted, is not established,” the court said.</p>
+<p><strong>Status of ECIR</strong></p>
+<p>Once the FIR was quashed, the ED’s money laundering case lost its legal foundation. PMLA proceedings require a predicate scheduled offence, which results in the generation of money that is later laundered.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Drawing on the Supreme Court’s ruling in Vijay Madanlal Choudhary v. Union of India (2023), the court held that where the predicate case is quashed, no action for money laundering can survive against the same person in relation to the same property.</p>
+<p>The ECIR was quashed as a consequence. The separate petition seeking a copy of the ECIR, which the ED had for years refused to provide, describing it as an internal document, was disposed of as infructuous.</p>
+<p><strong>Criminal conspiracy</strong></p>
+<p>The ED alleged that Purkayastha, Jason Pfetcher (manager of Worldwide Media Holdings) and Neville Roy Singham (American businessman mentioned in the <em>NYT</em> story) had conspired to bring foreign funds into India under the guise of investment. An offence under criminal conspiracy under IPC Section 120B was made out.</p>
+<p>The court rejected the argument, holding that a conspiracy requires an agreement to commit an illegal act or a legal act through illegal means. Apart from what it described as “bald assertions,” the court found no material showing any such agreement or illegal objective and that the allegation of conspiracy could not survive independently.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10735099"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June eleventh, twenty twenty-six, at one minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/newsclick/" href="https://indianexpress.com/about/newsclick/">NewsClick</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/delhi-hc-newsclick-conspiracy-order-reason-10735099/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-13 08:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
