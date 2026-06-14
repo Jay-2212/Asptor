@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Red, white and black & blue: Why Trump has brought UFC cagefighting to the White House | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Red, white and black & blue: Why Trump has brought UFC cagefighting to the White House</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/UFC-white-house-Main.jpg?w=1600" alt="Red, white and black & blue: Why Trump has brought UFC cagefighting to the White House">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="UFC Freedom 250" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/UFC-white-house-Main.jpg?w=1600" width="650"/><span class="ie-custom-caption">The arena for the UFC Freedom 250 fight card on the South Lawn of the White House, in Washington, Saturday, June 13, 2026. AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr"><em><strong>Written by Kartikeya Bhattacharyya</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The White House is all set to host its first ever professional sporting event as part of <a href="https://indianexpress.com/article/world/us-news/trump-cancel-great-american-state-fair-freedom-250-musician-backof-10717578/" rel="noopener" target="_blank"><strong>celebrations marking America’s 250th year of independence</strong></a> — the bloody and brutal spectacle of mixed martial arts (MMA).</p>
+<p dir="ltr">The Ultimate Fighting Championship (UFC), the world’s largest MMA promotion, is organising the seven-fight card titled ‘UFC Freedom 250’ on June 14 (Monday morning India time), which is not only the US Flag Day but also President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>’s 80th birthday.</p>
+<p dir="ltr">The White House’s South Lawn, which usually hosts diplomatic gatherings and visiting heads of state, has been transformed into a 4,000-seater makeshift arena called “The Claw”, complete with an eight-sided caged ring at its centre. Another 80,000 people are expected to view the blend of striking and grappling from an adjoining ground called the Ellipse.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">Critics have questioned whether it is appropriate for the White House to organise an event such as this to mark US independence. So how did a sport once branded “human cockfighting” by former presidential candidate John McCain make it all the way to the South Lawn?</p>
+<p dir="ltr">Part of the answer lies in MMA’s explosion in popularity, which has seen it overtake boxing as the world’s leading combat sport.</p>
+<span class="custom-caption"><img alt="Trump and Dana White" class="lazyloading size-medium wp-image-10738423" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/President_Donald_Trump_and_Dana_White_596720.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Trump with Dana White at the Oval Office. Wikimedia Commons</span>
+<p dir="ltr">But the real driver is its increasing political influence, thanks to Trump’s long-standing relationship with the UFC and its president, Dana White. The sport has become increasingly associated with the political right and, by extension, Trump himself. Here’s how that happened.</p>
+<p dir="ltr"><strong>Trump’s long association with MMA</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">In 2001, back when MMA was viewed by many as a violent bloodsport and struggled to secure legitimate venues, Trump stepped in to host UFC events at the Trump Taj Mahal in Atlantic City.</p>
+<p dir="ltr">An avid fan of combat sports, Trump also partnered with clothing brand Affliction in 2008 to launch Affliction Entertainment, a short-lived MMA promotion. The organisation staged two events featuring several former UFC champions before folding.</p>
+<p dir="ltr">Despite Trump’s attempts to challenge the UFC, White would later become one of his strongest allies. He campaigned for Trump during his successful 2016 presidential run against Hillary Clinton, even though he previously supported Democratic politicians. Their relationship deepened during the <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a> pandemic, when Republican-controlled Florida allowed the UFC to resume hosting events while much of the sporting world remained shut.</p>
+<p dir="ltr">Following the attack on the US Capitol by Trump supporters in January 2021, UFC events increasingly became one of the few major public spaces where Trump continued to receive overwhelmingly enthusiastic receptions.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="Trump UFC" class="lazyloading size-medium wp-image-10738425" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Trump-at-a-UFC-event.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/Trump-at-a-UFC-event.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Donald Trump at a UFC event in 2025. White House photo by Daniel Torok/Wikimedia Commons</span>
+<p dir="ltr">His appearance at UFC 264 in July 2021 drew massive cheers from fans. White also encouraged Trump’s outreach to younger audiences through podcasts and internet personalities, organising one of the first podcast appearances of Trump’s second-term campaign push in 2024 with internet personalities the Nelk Boys.</p>
+<p dir="ltr">Trump’s appearances at UFC events have since <a href="https://indianexpress.com/article/news-today/trump-ufc-314-miami-standing-ovation-cheers-elon-musk-rowd-of-thousands-9941637/" rel="noopener" target="_blank"><strong>become regular spectacles</strong></a>, often featuring fighters climbing out of the Octagon cage to greet him after victories. His latest appearance, at UFC 327 on April 12, took place on the same night US Vice President J D Vance announced that peace talks with Iranian Foreign Minister Abbas Araghchi had failed in Pakistan.</p>
+<p dir="ltr">The White House card comes as Trump faces mounting scrutiny over his ties with convicted sex offender Jeffrey Epstein, his cabinet’s use of taxpayer money and his war against Iran, which has set off an economic crisis. It also coincides with a steep slide in Trump’s approval ratings ahead of a difficult midterm election cycle in November.</p>
+<p dir="ltr"><strong>An event draped in patriotism</strong></p>
+<p dir="ltr">UFC is promoting Freedom 250 as the biggest event it has ever staged.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">But more than its star-studded line-up, the fight card has attracted attention for its overtly patriotic imagery. Six of the seven bouts feature at least one American fighter, while two are all-American contests.</p>
+<p dir="ltr">One of the fighters on the card, featherweight Steve Garcia, was a close friend of the assassinated far-right figure Charlie Kirk.</p>
+<p dir="ltr">The fighters’ kits and a special championship belt have been designed in the colours of the American flag, and the evening will begin with a rendition of the US national anthem, “The Star-Spangled Banner”.</p>
+<span class="custom-caption"><img alt="Trump UFC" class="lazyloading size-medium wp-image-10738428" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/championship-belt.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/championship-belt.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> The championship belt designed in the colours of the American flag, on display at the Oval Office. White House photo by Molly Riley/Wikimedia Commons</span>
+<p dir="ltr">Much of the audience is expected to comprise members of the US military, as tickets have not been put up for public sale.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr"> The planned White House card follows multiple UFC training sessions conducted for FBI agents this year, underscoring the promotion’s growing proximity to the Republican administration.</p>
+<p dir="ltr">The relationship deepened on June 11, when US Secretary of State Marco Rubio and White signed a memorandum of understanding to use the UFC as a tool of American diplomacy, with fighters and senior executives set to serve as cultural ambassadors overseas.</p>
+<p dir="ltr"><strong>Criticism from MMA fighters</strong></p>
+<p dir="ltr">The political nature of Freedom 250 has drawn criticism from within and outside the MMA world.</p>
+<p dir="ltr">Current UFC middleweight champion Sean Strickland said he would have been willing to fight on the card if fans were allowed to attend, adding that he did not want to participate merely to “go hang out with the Epstein list”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">Former UFC lightweight title challenger Gray Maynard also criticised the event, calling it a fight card for “his (Dana White’s) king Trump’s birthday”.</p>
+<p dir="ltr">When an image of the ongoing construction work on the White House grounds for both the UFC fight and the ballroom was shared, Hillary Clinton mocked the event. “This is what Trump’s done to the people’s house: a third of it is rubble. Another third is a cage match. What a metaphor,” she tweeted.</p>
+<p dir="ltr">White, however, has continued to reject accusations that the event is political, insisting that anyone who loves America would appreciate the card.</p>
+<p dir="ltr">Despite the criticism, a flagship event from a promotion with significant appeal among young audiences, scheduled for June 14 — a day that coincides with both Flag Day and Trump’s 80th birthday — may be exactly the kind of political pageantry the US President needs to secure a major public relations win as he continues to come under fire from domestic opponents and foreign rivals.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10738373"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourteenth, twenty twenty-six, at fourteen minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sport/" href="https://indianexpress.com/about/explained-sport/">Explained Sport</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sports/" href="https://indianexpress.com/about/explained-sports/">Explained Sports</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/ufc-at-the-white-house-trump-dana-white-politics-explained-10738373/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-14 03:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

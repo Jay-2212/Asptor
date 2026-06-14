@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Henry Nowak’s murder in the UK spurred diversity debate, drew in JD Vance and Elon Musk | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Henry Nowak’s murder in the UK spurred diversity debate, drew in JD Vance and Elon Musk</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Henry_Nowak_DEL.png?w=1600" alt="Why Henry Nowak’s murder in the UK spurred diversity debate, drew in JD Vance and Elon Musk">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Henry Nowak on CCTV, leaving for night-out shortly before his murder (source: Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Henry_Nowak_DEL.png?w=1600" width="650"/><span class="ie-custom-caption">Henry Novak on CCTV, leaving for night-out shortly before his murder (source: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>An independent watchdog is set to inspect the UK’s Hampshire police following the recent murder of 18-year-old Henry Nowak, which has led to debates on policies on Diversity, Equity and Inclusion (DEI) and immigration.</p>
+<p>Novak, a White British student, was stabbed by British Nihang Sikh Vickrum Digwa, 23, last December in Southampton. Digwa received a life sentence on June 1, with a minimum term of 21 years, and was charged with murder and possession of a bladed article in a public place.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Newly released police footage showed officers on the scene treating Nowak as the aggressor and Digwa as the victim. Not until Nowak had keeled over from excessive blood loss did the police administer medical aid and call for an ambulance. Nowak attempted to alert them to his stabbing, to which an officer replied: “No mate, I don’t think so…”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The discourse has also seen figures such as billionaire businessman Elon Musk and US Vice President JD Vance chime in.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>The Henry Nowak murder</strong></h2>
+<p>Nowak, a University of Southampton student, encountered Digwa in Portswood, Southampton, around 11.30 pm while walking home.</p>
+<p>According to the BBC, Nowak began filming Digwa on his phone upon noticing the long blade in his possession and asked him if he was a “bad man” before Digwa grabbed the phone. He then used the 21-inch-long blade to stab Nowak five times on his chest and legs. Digwa called emergency services and alleged that Nowak had directed racist slurs at him and pulled on his turban. His brother and parents had already arrived at the scene.</p>
+<p>Footage later showed that Nowak told the police, “I’ve been stabbed… I can’t breathe.” However, Digwa’s false allegations resulted in the police handcuffing Nowak while pinning him to the ground, and taking about three minutes to recognise his rapidly deteriorating condition.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/belfast-riots-anti-immigrant-violence-northern-ireland-10737030/">Belfast riots: What we know so far, and why the flare-up is not a one-time event</a></span></div>
+<p>During Digwa’s sentencing, the judge acknowledged the religious obligation to carry a kirpan, but distinguished it from the blade actually used, stating that it varied from common kirpans in terms of length. Further, Digwa’s claims of racism and physical abuse were categorically rejected. His mother was also convicted for aiding in hiding the murder weapon in the family home.</p>
+<h3><strong>DEI debate</strong></h3>
+<p>Questions have been raised about the DEI protocols followed by police in the aftermath of the murder. The National Police Chiefs’ Council (NPCC) said it will review its Anti-Racism Commitment document, which states that “producing equality of policing outcomes does not mean treating everyone ‘the same’.”</p>
+<p>The integration of DEI principles can be traced to inquiries like the Macpherson Report (1999), following the murder of an 18-year-old Black man, and the Casey Review (2023) on the Metropolitan police’s internal culture. They concluded that the Metropolitan Police Force suffered from institutional racism and discrimination, prompting national mandates focussed on adding DEI protocols into standard operating procedures.</p>
+<p>In 2022, the national Police Race Action Plan for England was launched, with Hampshire releasing its own plan. Nearly £1 million was invested in officer training on issues of bias, aggression, and policing protocols when dealing with ethnic minorities — historically the subject of police brutality.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>However, this system of hyper-awareness toward possible racism could have contributed to impaired decision-making in the Nowak case, in addition to Digwa’s claims. Essentially, it resulted in a failure where ideological compliance and the fear of mishandling a racial grievance likely superseded basic emergency response. At the same time, data show a lower representation of ethnic minorities within the UK policing system, and despite DEI mandates, reports of discrimination are not uncommon.</p>
+<p>Sarah Jones, Minister for Policing and Crime, said the anti-racism document was being reviewed. “We think the language is wrong and gives the wrong impression,” she said, but clarified that “I don’t think it affects how our training is done.”</p>
+<p><strong>Political fallout</strong></p>
+<p>The incident has been the topic of polarised domestic debate and protests. Hundreds of people clashed with officers in Southampton during a protest on June 9. Minor skirmishes involving the British Sikh community have been reported nationwide.</p>
+<p>Judge William Mouseley KC, the presiding judge at Digwa’s hearing, explicitly clarified that this must be treated as a criminal act disconnected from the tenets of Sikhism.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Prime Minister Keir Starmer has stated that this incident does not reflect communal <a href="https://indianexpress.com/article/cities/chandigarh/uk-citizen-gets-life-imprisonment-without-remission-for-2022-elderly-couples-killings-10486060/"><strong>aggression</strong></a>. He hit back against Nigel Farage, leader of the populist right-wing party Reform UK, who urged the British public to respond with “pure, cold rage,” claiming that Nowak’s final moments exposed a “two-tier” policing culture.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/uk-riots-asylum-immigration-protests-9507777/">How a knife attack triggered a wave of far-right protests across the UK</a></span></div>
+<p>While Starmer has focused on knife crime as a bigger issue, the larger discussion comes amid a period when issues around immigration and social minorities have become politically polarising. Just last year, a rally termed ‘Unite the Kingdom’ saw over 100,000 attendees in London, led by a right-wing influencer.</p>
+<h3><strong>American interests, British disagreements</strong></h3>
+<p>The British populists’ arguments have also come as a bat signal for the American right wing. VP Vance publicly condemned what he claimed was the failure of “European elites” to stop mass invasion, in a post on X. He called for “righteous anger” from the people of Britain.</p>
+<p>Musk, for his part, concurred with a post by a Reform UK MP stating that the British government should have condemned Digwa to death. He further offered to fund a wrongful death lawsuit against the officers on the scene.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Essentially, the Nowak murder provides the American right-wing with a use case to further their ideology, since the Trump administration has also actively pushed against DEI and immigration. On his first day of office in January 2025, one of the many executive orders that US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> signed was titled “Ending Radical And Wasteful Government DEI Programs And Preferencing”.</p>
+<p>And, despite Digwa’s status as a citizen, the murder has been conflated with broader criticisms of migration patterns. Vance has pushed a hardline view, stating that Nowak “died the same way a civilisation dies”. This narrative suggests that multiculturalism in Western nations is resulting in anti-White prejudice and has found resonance among some Trump and Reform UK supporters.</p>
+<p>In a conversation with the BBC, the UK’s Deputy Prime Minister David Lammy said he spoke to Vance on June 5 and informed him that the killing “has got nothing to do with mass migration” and that he failed to recognise the “caricature” of Western civilisation he painted. Mark Nowak, Henry’s father, also publicly stated that “We do not want his death to be used to create further division, hatred or tension.”</p>
+<p>The commentary further fits into a recent pattern of US leaders criticising Europe over immigration and social policies, which has at times invited condemnations from the likes of former German Chancellor Olaf Scholz. More pressingly, it might have to do with the mid-term elections due in the US this November.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>In a Downing Street press release, Starmer alluded to these comments: “We have seen people trying to interfere in our democracy and seeking to stir up division on our streets.” Refraining from outrightly criticising the US government, the statement added that their relationship remained “incredibly strong.” Ed Davey, leader of the UK’s Liberal Democrats, said the Trump administration was “attacking our democracy, not in secret, but openly” and Starmer needed “to show some backbone.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10736379"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twelfth, twenty twenty-six, at fourteen minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/nowak-muder-draws-in-vance-and-musk-10736379/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-14 03:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
