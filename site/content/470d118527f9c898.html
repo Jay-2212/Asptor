@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Can India cool down without heating up? Experts Explain why sustainability is key | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Can India cool down without heating up? Experts Explain why sustainability is key</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-india-cooling_expl-clim.jpg?w=1600" alt="Can India cool down without heating up? Experts Explain why sustainability is key">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="heat" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-india-cooling_expl-clim.jpg?w=1600" width="650"/><span class="ie-custom-caption">As summers arrive earlier and grow longer and more intense, India’s cooling needs are rising sharply. Photo: Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by</strong> <b>Pranjali Chowdhary and Nimish Singh</b></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Extreme heat has moved beyond seasonal discomfort to become a public health, labour and infrastructure challenge. During <strong><a class="" href="https://indianexpress.com/article/opinion/columns/hot-nights-hidden-risks-the-evolving-face-of-indias-heat-waves-10708472/">heatwaves</a></strong>, access to cooling can determine whether people sleep, work, study, recover from illness, or avoid heat stress. This matters especially for the elderly, children, outdoor workers, people with chronic illness, and those in poorly ventilated homes.</span></p>
+<p><span style="font-weight: 400">As summers arrive earlier and grow longer and more intense, India’s cooling needs are rising sharply. The question is no longer whether people need cooling, but whether India can deliver it without worsening electricity stress, air pollution, and emissions.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>India’s power demand outlook</b></p>
+<p><span style="font-weight: 400">India’s peak power demand has already touched record levels this summer, rising from 252.07 gigawatts (GW) on April 24 to 270.8 GW on May 21, 2026. Much of this increase is linked to heat and growing use of cooling appliances.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Demand is expected to rise further as more households adopt air-conditioners (ACs) and heatwaves become more frequent and intense. Cooling is likely to become a major driver of peak electricity demand, particularly during hot evenings when pressure on the grid is already high.</span></p>
+<h2><b>The cooling paradox</b></h2>
+<p><span style="font-weight: 400">India needs more cooling to protect people from dangerous heat, but conventional cooling can also worsen the heat problem. Cooling appliances increase electricity demand and, when generated primarily from fossil fuels, add to carbon dioxide emissions.</span></p>
+<p><span style="font-weight: 400">Cooling systems also use refrigerants such as hydrofluorocarbons (HFCs), which are</span><span style="font-weight: 400"> refrigerant gases used in ACs, refrigerators, cold chains, and other cooling systems. They replaced ozone-depleting substances, but many have high global warming potential (GWP), trapping far more heat than carbon dioxide (CO</span><span style="font-weight: 400">2</span><span style="font-weight: 400">) and acting as potent greenhouse gases.</span><span style="font-weight: 400"> If released during operation, servicing, or disposal, they can significantly add to warming.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/rising-night-temperatures-india-health-risk-10697890/">Warmer nights during Indian summers may be more dangerous than heatwaves. Here’s why</a></span></div>
+<p><span style="font-weight: 400">Under the Kigali Amendment to the Montreal Protocol, India will freeze HFC consumption in 2028 and reduce it in phases until 2047. Meeting this commitment will require low-GWP refrigerants, skilled technicians, and systems for refrigerant recovery, recycling, and disposal at a time when India’s cooling demand is rising rapidly.</span></p>
+<p><span style="font-weight: 400">So, the same systems that protect people from heat can also contribute to the conditions that make extreme heat more likely — that is India’s cooling paradox. This does not mean cooling should be restricted. Rather, it highlights the need for cooling solutions that are cleaner, more efficient, and accessible to all.</span><span style="font-weight: 400"> </span></p>
+<p><b>India Cooling Action Plan</b></p>
+<p><span style="font-weight: 400">The India Cooling Action Plan (ICAP), launched in 2019, sets out to expand cooling access while reducing cooling demand by 20-25% and refrigerant demand by 25-30% by 2037-38. Its strength lies in treating cooling as an economy-wide issue spanning buildings, cold chains, transport, agriculture, health, and industry.</span></p>
+<p><span style="font-weight: 400">Implementation, however, remains the challenge. Appliance efficiency and refrigerant transition are often addressed separately. What India needs is an integrated approach that connects building design, appliance efficiency, refrigerant choice, grid planning, and access for vulnerable communities.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/expert-summer-intensity-factors-mitigation-data-heat-10697560/">Expert Explains | What makes this summer particularly intense for India, and how better data collection can help</a></span></div>
+<p><span style="font-weight: 400">Efficient ACs, refrigerators and fans can reduce electricity use and lower household bills. Stronger standards and wider adoption of efficient appliances are essential, especially because inefficient cooling equipment can remain in use for many years.</span></p>
+<p><span style="font-weight: 400">But efficiency alone is not enough. If buildings trap heat, streets lack shade, and homes are poorly ventilated, cooling demand will remain high. Sustainable cooling must begin before the appliance is switched on. Better building design, cool roofs, shading, ventilation, reflective materials, and other passive cooling measures can reduce the need for mechanical cooling.</span></p>
+<p><b>Sustainable cooling</b></p>
+<p><span style="font-weight: 400">To make cooling more accessible without increasing emissions, India needs a layered approach:</span></p>
+<p><b>Reduce demand at source</b><span style="font-weight: 400">. Better urban planning and building design — especially in public housing, schools, hospitals, anganwadis, and government buildings — should target thermal comfort, not just structural safety.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><b>Make efficient cooling the default.</b><span style="font-weight: 400"> Standards for ACs, fans, and refrigeration should continue to strengthen, while efficient products become more affordable for lower-income households and small businesses.</span></p>
+<p><b>Accelerate the refrigerant transition.</b><span style="font-weight: 400"> Low-GWP options such as R-290, R-32, ammonia, and CO</span><span style="font-weight: 400">2</span><span style="font-weight: 400"> should be adopted where technically suitable, backed by industry support, technician training, and systems for refrigerant recovery and reuse.</span></p>
+<p><b>Integrate cooling into power-sector planning.</b><span style="font-weight: 400"> Battery storage, demand response, time-of-day pricing, and response-enabled ACs can shift cooling load away from peak hours, easing grid stress, and reducing the need for new fossil-fuel capacity.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">India should treat cooling as a core part of climate, energy, and public health policy. This means implementing the ICAP with measurable targets, strengthening appliance efficiency, accelerating low-GWP refrigerant transition, investing in passive cooling, and preparing the grid for rising cooling demand.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">The goal should not be less cooling. In a hotter India, people will need more protection from heat. The goal should be smarter cooling: cleaner, efficient, affordable, and better integrated with buildings, cities and the electricity system.</span></p>
+<p><span style="font-weight: 400">India’s cooling challenge is also an opportunity. If planned well, the country can protect people from dangerous heat, reduce pressure on the grid, cut HFC emissions, improve air quality and build a cooling economy suited to a hotter future.</span></p>
+<p><b><i>Pranjali Chowdhary</i></b><i><span style="font-weight: 400"> is senior research and policy Associate at Gateway Research Foundation, where she works on sustainable cooling, waste management, and subnational non-CO₂ assessments.</span></i></p>
+<p><b><i>Nimish Singh</i></b><i><span style="font-weight: 400"> is director, science, at Gateway Research Foundation. He works on air quality, emissions inventories, atmospheric modelling, and mitigation of short-lived climate pollutants.</span></i></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10739144"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourteenth, twenty twenty-six, at two minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/india-challenge-sustainable-cooling-extreme-heat-10739144/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-14 14:11 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

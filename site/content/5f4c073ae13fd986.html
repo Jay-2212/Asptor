@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why SC-appointed taskforce framed student suicides as not just a mental health issue | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why SC-appointed taskforce framed student suicides as not just a mental health issue</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-IITDelhi_expl-law.jpg?w=1600" alt="Why SC-appointed taskforce framed student suicides as not just a mental health issue">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="IIT mental health" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-IITDelhi_expl-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">The NTF report drew on a 2025 study by researcher Prabhakar Krishnamurthy, which found that SC/ST students in IIT Delhi and Kharagpur “face dropout rates 318% higher than general category peers”. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The interim report of the Supreme Court-appointed National Task Force (NTF) on student mental health and suicides, released Monday (June 8), argues that <strong><a class="" href="https://indianexpress.com/article/india/student-suicides-higher-education-supreme-court-panel-10732577/">student suicides in India</a></strong> cannot be understood only as a mental health issue.</span></p>
+<p><span style="font-weight: 400">The Supreme Court noted in </span><i><span style="font-weight: 400">Amit Kumar &amp; Ors v. Union of India</span></i><span style="font-weight: 400"> (2026) noted that student suicides in India had doubled over a decade, reaching 13,000 cases in 2022 — more than farmer suicides in the same year — and constituting 7.6% of all deaths by suicide in the country. It then constituted a NTF, chaired by former Supreme Court judge Justice S Ravindra Bhat, to study the causes, review existing laws and institutional mechanisms, and recommend a framework for prevention. Here’s what to know.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><b>What the NTF report says</b></h2>
+<p><span style="font-weight: 400">The NTF’s central argument is that the student suicides have been treated as a mental health problem when they are, in fact, a structural one. Every prior report commissioned on this question approached the problem primarily through counselling infrastructure and individual well-being. </span></p>
+<p><span style="font-weight: 400">The NTF observed that “similar problems related to student well-being have been reported year after year, yet we do not seem to have made much progress in this area”. Its own remit, it said, is “to move beyond reactive measures towards structural, preventive, and sustainable solutions”.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/iit-jee-entrance-exams-student-suicide-mental-health-10658424/">Why are those with the fortitude to clear JEE breaking down?</a></span></div>
+<p><span style="font-weight: 400">The report framed suicidality as a continuum — one that includes ideation, self-harm, withdrawal, and dropout, not only death. For every suicide in India, it noted, there are more than 200 people experiencing suicidality in some form and more than 15 attempts. The “goal is not to just prevent a student from taking their life and keeping them alive but also to look at the reasons that compelled a student to take this step”. </span></p>
+<p><b>What’s missing in law</b></p>
+<p><span style="font-weight: 400">The NTF’s most important finding is legal. Despite years of reports, University Grants Commission (UGC) regulations, and government strategies, India has no direct statutory framework for suicide prevention in higher education. The report stated: “The most glaring gap is the complete absence of any direct statutory, regulatory or institutional framework to address and prevent suicides. Most interventions are generic and reactive.”</span></p>
+<p><span style="font-weight: 400">It describes the National Suicide Prevention Strategy, India’s only dedicated policy instrument on the subject, as “abstract with no clear implementation guidelines”. Countries such as the US, Japan, South Korea, and Canada have enacted legislation that fixes institutional accountability and mandates data collection. India’s response has remained at the level of guidelines.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/how-neet-uncertainty-can-deeply-affect-students-mental-health-18-year-old-beat-exam-stress-once-now-he-has-a-meltdown-10686629/">How NEET uncertainty can deeply affect students’ mental health</a></span></div>
+<p><span style="font-weight: 400">“Statutory framework and regulations framed thereunder have a binding effect on implementation agencies,” the report stated. “Mere guidelines do not have the same impact and hence enforcement of the same throws up challenges.”</span></p>
+<p><span style="font-weight: 400">This finding comes alongside the second Supreme Court judgment in </span><i><span style="font-weight: 400">Sukdeb Saha v. The State of Andhra Pradesh</span></i><span style="font-weight: 400"> (2025), in which the court held that “mental well-being is inseparable from the right to life” under Article 21 and noted “a legislative and regulatory vacuum in the country with respect to a unified, enforceable framework for suicide prevention of students in educational institutions”.</span></p>
+<p><span style="font-weight: 400">It issued binding interim guidelines for all schools, colleges, and coaching institutes, but framed these as a stop-gap until comprehensive legislation is enacted. The NTF said that its final report will work within that framework.</span></p>
+<p><b>How higher education has changed</b></p>
+<p><span style="font-weight: 400">India went from 8.8 million students in higher education in 2001-02 to 43.2 million in 2021-22. Over 60% of universities and more than 75% of colleges are now privately managed.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Public expenditure on higher education as a share of GDP stood at 1.29% in 2021-2022 — well below the 2% recommended by national committees for decades. The consequence, the report said, is a student body that has changed faster than institutions receiving it.</span></p>
+<span class="custom-caption"><img alt="college" class="lazyloading size-medium wp-image-10736758" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=600,282" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=450,211 450w, https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=600,282 600w, https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=768,360 768w, https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=728,342 728w, https://indianexpress.com/wp-content/uploads/2026/06/Students_inside_of_a_classroom_of_a_local_college_in_Howrah_district_of_West_Bengal_India-1.jpg?resize=1536,721 1536w" height="751" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Some 46% of the students who responded to the NTF survey described themselves as first-generation learners in higher education. Photo: Wikimedia Commons</span>
+<p><span style="font-weight: 400">Students from Scheduled Castes (SCs), Scheduled Tribes (STs), and Other Backward Classes (OBCs) now constitute roughly 60% of total enrolment. But in the Indian Institutes of Technology (IITs) and National institutes of Technology (NITs), 67.71% of faculty come from non SC/ST/OBC backgrounds; SC faculty are 7.57% of the total, and ST faculty 1.91%. In private universities, 67% of faculty are from privileged backgrounds, 3.59% from SC, and 1.68% are from ST. “This social mismatch,” the report stated, “is likely to result in low academic integration, which may be directly associated with depression, dropout, and suicidal risk.” </span></p>
+<p><span style="font-weight: 400">Despite the survey being court constituted, the NTF said it found it “shocking” that only 3.5% of over 60,000 higher education institutions responded even after multiple reminders and extended deadlines.</span></p>
+<p><b>What students and faculty told the NTF</b></p>
+<p><span style="font-weight: 400">Some 46% of the students who responded to the NTF survey described themselves as first-generation learners in higher education. The data on who stays and who doesn’t tells its own story.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Between 2018 and 2023, over 13,600 students from SC, ST, and OBC communities dropped out of the Central universities, IITs, and Indian Institutes of Management. When asked in Parliament whether the government had studied the reasons for such dropouts, the then Minister of State for Education stated that these were “mainly on account of withdrawal and migration due to students securing seats in other departments/institutions of their choice or on any personal ground”.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/lonely-foreign-land-indian-students-overseas-silent-mental-health-crisis-10538103/">Lonely in a foreign university: Why Indian students overseas are battling a silent mental health crisis</a></span></div>
+<p><span style="font-weight: 400">The report drew on a 2025 study by researcher Prabhakar Krishnamurthy, which found that SC/ST students in IIT <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> and Kharagpur “face dropout rates 318% higher than general category peers” and that “financial constraints drive 47.6% of reserved category dropouts, as families lack resources for hostel fees and academic materials”. Elite institutions, the study concluded, offer only a “mirage of mobility” as reservations open the door, but the discrimination students face inside pushes them out.</span></p>
+<p><span style="font-weight: 400">Students at a state university “spoke extensively about delays, inconsistencies, and inequities in scholarship disbursement”. Some described a situation where colleges deducted scholarship amounts from tuition fees but, when government reimbursements were delayed, held students accountable for the difference. Students were barred from examinations, removed from hostels, and denied marksheets and degrees over arrears they had not created.</span></p>
+<p><b>What NTF found about counselling services</b></p>
+<p><span style="font-weight: 400">UGC data lists 27,136 “dedicated counsellors” across higher education: approximately 1 per 221 students. When the NTF examined the qualifications of 50 randomly selected individuals, 47 of the 50 were faculty members, placement coordinators, or academic advisors, not trained mental health professionals. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">More than 70% of institutions have no full-time mental health service provider, and fewer than 4% have a suicide risk management protocol. Of 23 IITs, only four had a standard operating procedure for mental health emergencies, and none had a protocol for what happens after a student dies.</span></p>
+<p><span style="font-weight: 400">Some 9% of student survey respondents reported experiencing suicidal thoughts often or very often in the past year. Students across institutions told the NTF they did not trust counselling services because “faculty/supervisors, administrators and parents had been informed in the past”.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">On medical education specifically, students described on-call hours of 36 to 48 hours at a stretch, without sleep or food. Those who asked for leave or rest were called “weak”, “lazy”, and people who “just do not want to work”. One student described medical education as a form of “bonded labour”. At a nursing college in Delhi, the requirement was 100% attendance, with phones required to be deposited daily after a recent suicide, which left students “completely disconnected from family and friends”.</span></p>
+<p><span style="font-weight: 400">The report also documented that when students arrive, peers and faculty ask for JEE and NEET ranks as a way of reading caste through admission category. On campus, access to programmes and placement networks is controlled through informal “vibe checks”, interviews where English fluency and urban grooming determine who gets in. Students from tier-2 cities are referred to by the slur “</span><i><span style="font-weight: 400">chhapri</span></i><span style="font-weight: 400">”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">For students whose families are the source of pressure, or who are LGBTQ+, the institutional policy of informing parents in high-risk situations closes off formal help-seeking entirely. The faculty, on their part, described student mental health as an individual problem: “Our job is to teach and research, but neither the teaching nor the caring is being done fully, because we are stretched too thin.”</span></p>
+<p><b>NTF’s recommendations</b></p>
+<p><span style="font-weight: 400">The interim recommendations are framed as steps that can be taken before the final report. Faculty vacancies, including reserved category posts, must be filled within 3 months. Vice chancellor and registrar posts must not remain vacant beyond a month.</span></p>
+<p><span style="font-weight: 400">All institutions must report student suicides to the regulators and state nodal officers regardless of where the death occurred. Every residential institution must have access to qualified medical help round the clock. And the National Crime Records Bureau must separately count school and higher education student suicides in its annual data. </span></p>
+<p><span style="font-weight: 400">On the question of legislation, the NTF does not yet make a recommendation — that is reserved for the final report. But the interim report stated that the existing policy infrastructure without a statutory force has not worked.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10736658"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twelfth, twenty twenty-six, at three minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/supreme-court-ntf-report-student-suicides-mental-health-10736658/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-14 14:11 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
