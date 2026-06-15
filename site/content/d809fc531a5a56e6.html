@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>US-Iran ceasefire: Nuclear issue postponed, an Expert Explains why next 60 days are crucial | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>US-Iran ceasefire: Nuclear issue postponed, an Expert Explains why next 60 days are crucial</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Iran-war.jpg?w=1600" alt="US-Iran ceasefire: Nuclear issue postponed, an Expert Explains why next 60 days are crucial">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="US Iran ceasefire" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Iran-war.jpg?w=1600" width="650"/><span class="ie-custom-caption">Policemen walk in front of a huge banner showing Iranian flag at the Islamic Revolution square in Tehran, Iran, Sunday, June 14, 2026. (AP Photo/Vahid Salemi)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On June 15 (Monday), the US and Iran agreed on the framework of a peace deal that extends the <span style="font-weight: 400">current ceasefire for 60 days</span><span style="font-weight: 400">.</span></p>
+<p>US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> announced that he was authorising the immediate removal of the US Naval blockade of Iranian ports. Pakistan PM <a class="" href="https://indianexpress.com/about/shehbaz-sharif/" rel="noamphtml">Shehbaz Sharif</a> simultaneously announced that both sides have declared the immediate and permanent termination of all fronts, including Lebanon, and that the official signing ceremony would be held in Switzerland on June 19.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Notably, the US President rescinded an initial announcement of the “toll free opening of the Strait of Hormuz”, stating instead that the Strait would open after the Friday signing. Iran’s Supreme National Security Council subsequently confirmed that a Memorandum of Understanding (MoU) had been reached with Washington.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>While the full text of the Memorandum is to be published after Friday, the draft reportedly includes, among other clauses, the following:</p><div id="taboola-mid-article-personalisation"></div>
+<ul>
+<li>Iran will immediately open the Strait of Hormuz to all commercial vessels while the US Navy will remove its blockade within 30 days of the MoU’s signing.</li>
+<li>The US (and regional allies) will release $24 billion in Iranian frozen assets, not impose new sanctions on Iran until a final agreement, temporarily waive oil sanctions and negotiate a reconstruction and development plan (reportedly worth $300 billion) for Iran within 60 days of the MoU.</li>
+<li>The US will militarily withdraw from areas surrounding Iran.</li>
+<li>And Iran will never acquire nuclear weapons and maintain the status quo on its nuclear programme — that means no further enrichment — pending a final agreement within 60 days of the MoU’s signing.</li>
+</ul>
+<p><strong>What catalysed the MoU?</strong></p>
+<p>In the immediate lead up to President Trump’s announcement, Israeli Defence Forces bombed Beirut, prompting Iran to prepare a retaliatory response while Iranian Speaker MB Ghalibaf warned that the US had to fulfill its commitments.</p>
+<p>Almost immediately after Israel’s strike, Trump stated that the attack “should not have happened”, especially “on a special day when we are so close to a peace deal”, and that there should be no more attacks by Israel anywhere in Lebanon (or by Hezbollah)”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="Strait of Hormuz" class="lazyloading size-medium wp-image-10739835" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/hormuz.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/hormuz.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A small motorboat passes anchored vessels in the Strait of Hormuz off Bandar Abbas, Iran, Thursday, June 11, 2026. AP/PTI(AP06_11_2026_000304B)</span>
+<p>Apart from proving that the Lebanon front’s inextricable relationship with Iran’s commitment to the ceasefire had registered in Washington, the Israeli strike evidently forced the Trump White House to announce an immediate lifting of the US naval blockade, instead of the reported 30-day post-MoU timeline.</p>
+<p>This has been a core Iranian pre-condition for negotiations and one that was consistently denied by US officials across the ceasefire period. In turn, Iran refrained from striking Israel (but did not commit to a full, unqualified opening of the Strait).</p>
+<p>Even as the MoU is yet to be officially released, two aspects are already clear — that the nuclear deal has been deferred, and that the 60-day period following the MoU will be a litmus test for the Iranian position in particular.</p>
+<p><strong>Deferring the nuclear question</strong></p>
+<p>It is now widely acknowledged that the US-Israeli war both failed in its strategic objectives and yielded unprecedented Iranian geopolitical gains which strengthened Iran’s bargaining position vis-à-vis the nuclear question. The MoU, which virtually leaves the nuclear question at the status quo before the war, that is as on February 27, is meant to re-balance the bargaining scales.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Before the war, the US had two principal instruments of leverage (apart from being the overwhelmingly superior conventional and nuclear force).</p>
+<p>The first is the historic advantage of comprehensive and targeted sanctions having effectively forced Iran out of the global economic order. The second, more recently secured advantage, is the severe damage caused to Iran’s new nuclear enrichment and processing facilities in Natanz, Isfahan and Fordow during Operation Midnight Hammer (June 2025), which also dislocated Iran’s stockpile of 60% enriched uranium.</p>
+<p>But Iran has managed to significantly dilute this US advantage through its control over the Strait of Hormuz and its ability to put American allies’ regional military and energy infrastructure at risk with missiles and drones.</p>
+<p>The latter’s credibility has been proven repeatedly since the war began, with Iran having retaliated at nearly double the number of targets which the US-Israel struck in Iran during the ‘ceasefire’ period since April 8. That American military action in this period failed to dislodge both these Iranian leverages, supplemented Iran’s new negotiating position and undermined historic American leverage.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Arguably then, the MoU’s 60-day verification and implementation period is itself a greater litmus test for crisis termination than the now-deferred comprehensive nuclear deal (final agreement).</p>
+<p>This is especially as there is marked precedent for Iran’s acceptance of and adherence to nuclear concessions, in the form of its compliance with the Barack Obama-era Joint Comprehensive Plan of Action (JCPOA) and the UN Security Council’s (legally binding) Resolution 2231 until Trump unilaterally withdrew from the deal in 2018.</p>
+<p>Iran’s acceptance of even greater concessions by committing to zero stockpiling of enriched uranium during the second Trump administration (based on the Omani Foreign Minister’s February 28 comments, hours before war broke out) cements this precedent. There is no precedent, however, for Iran’s geopolitical leverage in the Strait of Hormuz.</p>
+<p><strong>Iran’s 60-day litmus test</strong></p>
+<p>The significance of Iran’s geopolitical non-nuclear gains has caused skepticism towards the MoU among Iranian hardline constituencies. Any concession on the Strait of Hormuz upsets this new balance in bargaining position and reduces the space available for Tehran to behave differently vis-à-vis the nuclear question compared to past concessions.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>These are constituencies that have lived through and acquiesced to Iranian concessions on the nuclear question during Ali Khamenei’s lifetime — a conclusive agreement under Obama and an almost-conclusive agreement under Trump by February 2026.</p>
+<div class="mceTemp"></div>
+<span class="custom-caption"><img alt="Lebanon" class="lazyloading wp-image-10739839 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_26375-20907-1.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Members of the Lebanese Army Intelligence stand guard in front of an apartment that was struck in an Israeli airstrike in Dahiyeh, Beirut’s southern suburbs, Lebanon, Sunday, June 14, 2026. (AP Photo/Bilal Hussein)</span>
+<p>In the post-February 28 period, however, both common Iranians as well as regime hardliners witnessed the dramatic rise of Iranian strategic non-nuclear leverage over Western (including Israel) and Arab powers for the first time, beyond Iran’s traditional regional networks of influence and coercion through the Axis of Resistance.</p>
+<p>This means that unlike the familiarity of accepting nuclear concessions (with Ali Khamenei’s blessings), accepting new concessions on a new form of leverage, under a new Supreme Leader who remains out of public view, is more challenging.</p>
+<p>This does not mean that hardline resistance will disable an MoU backed by Mojtaba Khamenei; the Leader’s decision remains supreme. However, the hardline networks seeking to convince the Leader of more stringent positions (as was also common during the senior Khamenei’s leadership) have more breathing space if Iran is seen as conceding a hard-earned position, earned through Ali Khamenei’s assassination no less.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>In functional terms, this implies that some aspects of the MoU will be subject to greater scrutiny in the Iranian view. A few of these aspects were highlighted on June 13 by the Deputy Chairman of the Iranian Parliament’s National Security Commission, Mahmoud Nabavian.</p>
+<p>Commenting on the draft MoU, Nabavian objected to the possibility of indefinite extension of the 60-day period before a final deal, especially as American regional military withdrawal was married to the conclusion of a final agreement. He questioned the undefined nature of “areas surrounding Iran” which US forces are supposed to vacate. But most of his criticism focused on the draft MoU’s failure to explicitly retain Iran’s right to regulate shipping through the Strait of Hormuz in peacetime.</p>
+<p>Hence, if the sequence of agreements were to be reversed — with the nuclear deal negotiated first and Iran’s control of Hormuz after the 60-day period — the variables of uncertainty would arguably be lesser. With the current sequence, Iran must continue to remain on hair trigger in anticipation of US-Israeli action.</p>
+<p><strong>So why is Iran risking this position?</strong></p>
+<p>Tehran is willing to risk this position for three main reasons, among others:</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><strong>First,</strong> the US-Israeli war has served as a test of the historic, near perpetually imminent, threat of American military action against Iran.</p>
+<p>Past US Presidents refraining from such action also meant that such action’s effectiveness could not be doubted/tested. But Trump has spent this card and failed. This allows Tehran to capitalise on a window of opportunity and redouble efforts towards gaining a long-term nuclear deal. After all, a freshly balanced bargaining equation will be wasted if Tehran does not push for more secure American commitments, by exploiting this equation.</p>
+<p><strong>Second,</strong> preliminary terms for urgently needed economic relief and the removal of the US Navy blockade are unarguably a concession from Washington, as is the unfreezing of Iranian funds (which US Vice President J D Vance had said would not happen until a deal was reached, on June 12). Losing this window of American concessions is seemingly not in Tehran’s interest, especially as Iran has (thus far) succeeded in keeping both its missile programme as well as its support for the Axis, out of the MoU.</p>
+<p><strong>Third,</strong> Iran’s responses to Israeli attacks on Lebanon proves that its geographical advantages and its large missile and drone stockpile allow it to return to pre-MoU conditions whenever it deems American-Israeli actions are breaching terms.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Theoretically, given that the MoU places no limit on Iranian drone capabilities or missilery, Iran’s commitments exist only on paper and are subject to US adherence to MoU terms. At this stage, there are no material external pressures on Iran’s military capabilities. This also allows Tehran to maintain its own conventional deterrent against Israel, whose Prime Minister, <a class="" href="https://indianexpress.com/about/benjamin-netanyahu/" rel="noamphtml">Benjamin Netanyahu</a>, has categorically rejected Lebanon’s connection with the US-Israel ceasefire (as he had also maintained during the April 8 ceasefire).</p>
+<p>The following factors will, therefore, collectively determine the degree to which the post-MoU period can build sufficient bilateral trust for a final agreement — the limits that US can impose on Israel, the pace with which the US Navy removes its blockade, the scale of Iranian funds to be unfrozen by Washington and its Arab allies, and the scope of the broader American withdrawal.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10739766"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fifteenth, twenty twenty-six, at fifty-six minutes past eight in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-iran-mou-nuclear-deal-strait-of-hormuz-60-day-test-10739766/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-15 04:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

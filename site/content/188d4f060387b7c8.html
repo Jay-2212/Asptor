@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>After Op Sindoor strain, how India and Turkey brought their ties back from the brink | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>After Op Sindoor strain, how India and Turkey brought their ties back from the brink</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/04/turkey-india-ties.jpg?w=1600" alt="After Op Sindoor strain, how India and Turkey brought their ties back from the brink">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="PM Modi with the President of Turkey, Recep Tayyip Erdoğan, in New Delhi on September 10, 2023. (Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/04/turkey-india-ties.jpg?w=1600" width="650"/><span class="ie-custom-caption">PM Modi with the President of Turkey, Recep Tayyip Erdoğan, in New Delhi on September 10, 2023. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">India and Turkey’s bilateral ties have often been overshadowed by one external factor: Pakistan. Last year, the relationship hit rock-bottom. </span></p>
+<p><span style="font-weight: 400">Following the Pahalgam terrorist attack, which killed 26 civilians, Turkey backed Pakistan on the Kashmir issue. It was Islamabad’s only ally in West Asia to explicitly condemn Operation Sindoor, India’s military response. Aggravating matters was Ankara’s supply of military hardware to a country India accuses of sponsoring cross-border terrorism. </span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">It was no surprise, then, that the ties — already shaky since the 2019 abrogation of Article 370 in Jammu &amp; Kashmir — effectively went into cold storage for much of 2025. </span></p>
+<p><span style="font-weight: 400">This year, however, both countries are showing signs of a rapprochement.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">In April, foreign office consultations resumed after being kept in abeyance for four years. The same month, the two sides also cooperated on the security front, with New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> extraditing fugitive narcotics trafficker <a href="https://indianexpress.com/article/india/salim-dola-deported-turkey-delhi-10659410/" rel="noopener" target="_blank"><strong>Salim Dola</strong></a> from Turkey. Now, as reported by </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">, both are working on the <a href="https://indianexpress.com/article/india/india-working-on-extradition-of-another-drug-kingpin-criminal-from-turkey-10707740/" rel="noopener" target="_blank"><strong>extradition of two more criminals</strong></a> wanted by India. </span></p>
+<p><span style="font-weight: 400">We look at why the two sides recalibrated their strained relations, and how it was worked out diplomatically at various levels in New Delhi and Ankara.</span></p>
+<p><b>Strategic mistrust </b></p>
+<p><span style="font-weight: 400">After Recep Tayyip Erdogan came to power in 2002, India-Turkey relations saw a breakthrough — frequent high-level visits, exchange of business and cultural delegations, and people-to-people interactions. Bilateral trade grew from $700 million in 2002 to $13.82 billion in 2022.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Bilateral ties began to plummet, however, after Erdogan criticised the revocation of Article 370 at the UN, prompting a sharp rebuke from India.</span></p>
+<p><span style="font-weight: 400">In fact, the period from 2019 (after the abrogation of Article 370 in Kashmir) to late 2025 can be counted as some of the lowest points in India-Turkey relations. These years saw a massive diplomatic rift driven by the Kashmir issue and Ankara’s supply of military hardware to Pakistan, which heightened mistrust in New Delhi.</span></p>
+<p><span style="font-weight: 400">In February 2025, Turkish President Erdogan again extended his support to Pakistan on Kashmir and called for UN dialogue to address the issue during his visit to Islamabad. </span></p>
+<p><span style="font-weight: 400">Hours after the Pahalgam attack, Pakistan Prime Minister Shahbaz Sharif, who was on a visit to Ankara at the time, at a joint press conference with Turkish President Recep Erdogan, thanked Turkey for its “unwavering support” on Kashmir. Pakistani media reported that Erdogan also expressed Turkey’s full support for “Pakistan’s efforts to eliminate terrorism”.</span></p>
+<p><b>Post-Sindoor fallout</b></p>
+<p><span style="font-weight: 400">The friction, however, reached its peak during Operation Sindoor. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Turkey has often raised its voice in support of Pakistan’s stance on Jammu &amp; Kashmir. This time, it labelled Operation Sindoor as “unprovoked aggression” killing “innocent civilians”. </span></p>
+<p><span style="font-weight: 400">Additionally, reports of Pakistan utilising Turkish-supplied drones during the military action prompted a severe diplomatic and economic backlash retaliation in India. </span></p>
+<p><span style="font-weight: 400">Meanwhile, New Delhi moved to deepen its engagement with Cyprus. Both Turkey and Greece claim the Mediterranean island nation, which has been divided since Turkey’s 1974 invasion of the north following a Greece-backed coup. The northern third is administered by Turkish Cypriots while the rest is controlled by Greek Cypriots. Prime Minister Narendra Modi’s first international visit following the Pahalgam attack and Operation Sindoor was to Cyprus capital Nicosia.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/expert-explains-pakistan-factor-india-turkey-relations-trade-10645431/">Expert Explains: What plagues India-Turkey relations, and why a reset may be of common interest</a></span></div>
+<p><span style="font-weight: 400">India also skipped Turkish National Day celebrations in the national capital, indicating the extent of New Delhi’s irritation with Ankara. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">On the economic front, Air India canceled its multi-billion dollar heavy aircraft maintenance contract with a Turkish firm, while major Indian universities suspended MoUs with Turkish institutions. </span></p>
+<p><span style="font-weight: 400">Bilateral merchandise trade shrank, and Indian tourist arrivals in Turkey <a href="https://indianexpress.com/article/business/azerbaijan-and-turkey-backed-pakistan-in-operation-sindoor-see-dip-in-indian-tourists-10315258/" rel="noopener" target="_blank"><strong>dropped by nearly 37%</strong></a>. India also revoked the security clearance of Turkish company Celebi Airport Services India, which handled operations at nine airports, citing national security concerns.</span></p>
+<p><b>The thaw this year</b></p>
+<p><span style="font-weight: 400">Around two months ago, something shifted. In April, India invited Turkey for the 12th round of bilateral consultations. This came four years after the 11th round of foreign office consultations were held in Turkey. Ankara dispatched Turkish Deputy Foreign Minister Berris Ekinci, who co-chaired meetings with Sibi George, the Ministry of External Affairs’ (MEA) Secretary (West).</span></p>
+<p><span style="font-weight: 400">According to the MEA, both sides focused on trade, investment, tourism, technology, innovation, energy and educational cooperation. Discussions also touched upon security matters, including the fight against cross-border terrorism. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Officials said the meetings went well, with both sides expressing an interest in maintaining healthy dialogue. “We believe dialogue is better than not talking and deepening disagreements and misunderstandings. And the conversations have been satisfactory,” Ambassador Muktesh Pardesi told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> over the phone from Ankara. </span></p>
+<p><span style="font-weight: 400">Meanwhile, Ankara has also shown willingness towards cooperation on matters related to law enforcement. Dola, a <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>-based criminal with links to international drug syndicates, was deported to India on April 28 with active assistance from Turkish authorities. In fact, his return has reinforced the security partnership between India and Turkey.</span></p>
+<p><b>What nudged Turkey…</b></p>
+<p><span style="font-weight: 400">Those aware of the conversations on both sides say that after the economic backlash in India, Turkey began to actively insulate its broader economic interests in Asia from its Pakistan alliance. </span></p>
+<p><span style="font-weight: 400">Ankara also assured New  Delhi that it had no inherent bilateral dispute with India. Last week, Turkish foreign minister Hakan Fidan, who had earlier criticised India for Operation Sindoor, urged India to not be “resentful” of Ankara’s ties with Islamabad but rather view ties with the Eurasian nation through a bilateral lens. Turkey, Fidan highlighted, had enough reasons to have a good relationship with India.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Turkey stands to gain substantial economic, geopolitical and infrastructural benefits from its relations with India — a robust bilateral trade exceeding $10 billion annually, potential infrastructure expertise, and a strategic hedge in its foreign policy.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/expert-explains-the-pakistan-turkey-nexus-and-where-india-stands-9993684/">Expert Explains: The Pakistan-Turkey nexus and where India stands</a></span></div>
+<p><span style="font-weight: 400">India is a major market for Turkish exports such as marble, machinery and agricultural products, while Turkey benefits from importing Indian machinery, auto components and chemicals. </span></p>
+<p><span style="font-weight: 400">Collaborations on civil nuclear projects and securing contracts for Turkish firms in India’s booming construction sector presents lucrative economic opportunities. Turkey also benefits from Indian tourism and capital.</span></p>
+<p><span style="font-weight: 400">As Turkey seeks to become more independent in its foreign policy — despite being a NATO member — it aims to engage with rising Asian powers, including India, reducing its reliance on traditional Western partners.</span></p>
+<p><b>…and what’s in it for India </b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">In the wake of regional and global conflicts, India has embarked on a cautious diplomatic reset with Turkey. A senior diplomat told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">: “If we accept that Turkey has brotherly relations with Pakistan and that perhaps can’t be changed, we can still see merit in having our own friendly relations with them.”</span></p>
+<p><span style="font-weight: 400">Consequently, in conversations that happened in New Delhi and Ankara, led by missions and foreign offices, both Turkish and Indian officials invoked history, recalling Indian support for the Turkish War of Independence.</span></p>
+<p><span style="font-weight: 400">For Delhi, a working relationship with Ankara offers crucial geopolitical leverage in the Islamic world, a strategic gateway to European and Central Asian markets, and vital trade and infrastructure partnerships. </span></p>
+<p><span style="font-weight: 400">Trade is another key factor.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/turkey-in-iran-us-israel-war-erdogan-nato-10565562/">Where Turkey stands in the Iran war: Complex ties with Tehran, simmering rivalry with Israel</a></span></div>
+<p><span style="font-weight: 400">Pardesi, who has spent the last 20 months as India’s envoy negotiating these blind curves and sharp turns, says that despite the diplomatic fallout, commercial ties remained relatively strong. This made the two sides sit up and notice the leverage economic factors have in this age. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">Ankara imports $6 billion in goods, mostly raw materials and intermediate products, including textiles, chemicals, as well as automotive and machinery components. </span></p>
+<p><span style="font-weight: 400">Meanwhile, sources say Turkey also cleared the air on military support to Pakistan, maintaining that it did not send any additional assistance, but as part of the long-standing defence ties between the two countries. Routine engagements such as port visits and cargo flights have been misconstrued as additional or new deliveries, it was explained.</span></p>
+<p><b>Going forward</b></p>
+<p><span style="font-weight: 400">As Turkey cleared the air on its ties with Pakistan, India is also learnt to have stated that its ties with Cyprus and Greece are not meant to be a hedge against Ankara. </span></p>
+<p><span style="font-weight: 400">In fact, during Cyprus President Nikos Christodoulides’s May 2026 India visit, even as India emphasised steadfast support for Cyprus’s territorial integrity and reunification, MEA officials clarified that India and Cyprus ties are not aimed against any particular country. </span></p>
+<p><span style="font-weight: 400">Both nations are key members of the G20 and often collaborate on reforms within global institutions, such as advocating for changes to the UN Security Council. Meanwhile, with the West Asia conflict jeopardising both the India-Middle East-Europe Economic Corridor (IMEC), which bypasses Turkey, and the International North-South Transport Corridor (INSTC) through Iran, New Delhi sees value in maintaining ties with Ankara to preserve alternative trade and connectivity routes.</span></p>
+<p><span style="font-weight: 400">Interlocutors on the Indian side argue that if Turkey were to soften its public position on the Kashmir issue and adopt a more nuanced, diplomatic approach, it could further help solidify relations. </span></p>
+<p><span style="font-weight: 400">Meanwhile, the next round of foreign office consultations are to be held in Turkey at a mutually convenient date. Both sides are now evaluating their options for conducting high-level visits in the coming months, and increasing political engagement at various levels, Pardesi says. It remains to be seen if this thaw endures.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10737440"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/divya-a/">
+<figure>
+<img alt="Divya A" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/divya1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/divya-a/"><span></span>Divya A</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952690"></div><div class="follow_author_title" data-id="Divya A"></div><div class="follow_author_slug" data-id="divya-a"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/divs13">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Divya A reports on travel, tourism, culture and social issues - not necessarily in that order - for The Indian Express. She's been a journalist for over a decade now, working with Khaleej Times and The Times of India, before settling down at Express. Besides writing/ editing news reports, she indulges her pen to write short stories. As Sanskriti Prabha Dutt Fellow for Excellence in Journalism, she is researching on the lives of the children of sex workers in India.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/divya-a/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirteenth, twenty twenty-six, at five minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/turkey/" href="https://indianexpress.com/about/turkey/">Turkey</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/india-turkey-relations-after-operation-sindoor-explained-10737440/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-15 04:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
