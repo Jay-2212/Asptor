@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>As Noida International Airport begins operations, what growth prospects look like | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>As Noida International Airport begins operations, what growth prospects look like</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/jewar-noida-airport.jpeg?w=1600" alt="As Noida International Airport begins operations, what growth prospects look like">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Travellers at the Noida International Airport, Jewar in Uttar Pradesh on Monday. The first flight had farmers who gave their land for the airport." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/jewar-noida-airport.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Travellers at the Noida International Airport, Jewar in Uttar Pradesh on Monday. The first flight had farmers who gave their land for the airport. (Express photo by Praveen Khanna)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Monday (June 15) transported the National Capital Region (NCR) into the age of dual airports, as the Noida International Airport (NIA) in Uttar Pradesh’s Jewar started commercial operations.</p>
+<p>India’s largest airline, IndiGo, operated the <a href="https://indianexpress.com/article/cities/delhi/noida-international-airport-opens-first-indigo-flight-lucknow-jewar-10739933/"><strong>inaugural trip</strong></a> with the special flight 6E 2278 from <a class="" href="https://indianexpress.com/section/cities/lucknow/" rel="noamphtml">Lucknow</a>, which touched down on the NIA runway just before 8 am. The same aircraft, VT-IOM, then took off for <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a>, operating the second leg of the special flight and marking the first commercial departure from the NIA.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Designed and built by an arm of Zurich Airport International AG, the airport opened after a nearly two-year delay. Its operationalisation comes as the aviation sector is grappling with headwinds amid the West Asia crisis, forcing airlines to prune schedules and pause network expansion plans. Acknowledging the crisis as a short-term challenge, the NIA management expressed confidence in the long-term growth potential of India’s aviation market.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>NIA Vice Chairman Christoph Schnellmann told <em>The Indian Express</em>, “We won the bid to design and build this airport at the end of 2019. Three months later, the bottom dropped out of the aviation market across the world. No one was flying anymore (due to the <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a> pandemic). I think to our credit, the shareholders and the lenders, everyone stood by and remained committed to this project.”</p><div id="taboola-mid-article-personalisation"></div>
+<p>“The years since have proven them and us right. We saw traffic in India rebound very quickly, faster than in many parts of the world. That’s the approach we take to the current crisis as well. It’s a challenging time for aviation, but if we zoom out and look at where the industry has come from in the past 15-20 years, and what the outlook is, we remain incredibly confident,” he added.</p>
+<p><strong>Over 40 daily domestic flights in July, overseas flights by year-end</strong></p>
+<p>According to the airport’s management, NIA will have 12 daily domestic flights in June, which will grow to over 40 in July. Akasa Air flights will begin on Tuesday (June 16). The Air India group, under strain amid West Asia headwinds and other factors, is not operating here for the time being.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/noida-international-airport-maiden-flight-farmers-land-acquisition-10739893/">Noida Airport operations begin: First flight takes off with 172 farmers</a></span></div>
+<p>The airport operator expects international flight operations to begin by the end of the year, with short-haul international flights initially catering to regions like West Asia and Southeast Asia.</p>
+<p>According to Schnellmann, apart from Indian airlines with international operations, there is interest among foreign carriers to operate to and from the NIA to these regions. “We have very specific interest from foreign carriers also… The West Asia crisis has made some of it a little bit less predictable, but the interest is there from Indian as well as international airlines,” he said.</p>
+<span class="custom-caption"><img alt="Travellers at the Noida International Airport, Jewar in Uttar Pradesh on Monday." class="lazyloading size-medium wp-image-10740567" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Jewar-first-flight.jpeg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Jewar-first-flight.jpeg 720w, https://indianexpress.com/wp-content/uploads/2026/06/Jewar-first-flight.jpeg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/06/Jewar-first-flight.jpeg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/06/Jewar-first-flight.jpeg?resize=608,405 608w" height="480" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> Travellers at the Noida International Airport, Jewar in Uttar Pradesh on Monday. (Express photo by Praveen Khanna)</span>
+<h2>Noida Airport’s initial network development</h2>
+<p>According to industry experts, the NIA is likely to be used initially by airlines to mount additional flights connecting the NCR to major metropolitan cities, particularly during the peak hours when the larger <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> airport is chock-a-block. It is also likely to be used to operate ultra-short-haul flights on regional routes, apart from densifying and expanding the network between the NCR and tier II and III cities.</p>
+<p>Among domestic flights, IndiGo is starting operations with eight daily flights — four each from Monday and Tuesday — connecting the NIA with <a class="" href="https://indianexpress.com/section/cities/hyderabad/" rel="noamphtml">Hyderabad</a>, Amritsar, Bengaluru, and Jammu, and vice versa. Akasa Air will start its NIA operations with four daily flights connecting the airport with Bengaluru and Navi <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>From July, IndiGo will notably increase its presence, taking daily flights to 28 (departures plus arrivals) with another four flights that will operate four times a week, two flights thrice a week, and another two twice-a-week flights. It will include destinations like Lucknow, <a class="" href="https://indianexpress.com/section/cities/chandigarh/" rel="noamphtml">Chandigarh</a>, Dehradun, <a class="" href="https://indianexpress.com/section/cities/bhopal/" rel="noamphtml">Bhopal</a>, Jaipur, Jodhpur, Bareilly, Pantnagar, Kishangarh, and Dharamsala.</p>
+<p>“IndiGo will directly connect the airport to over 16 destinations across India. This also enables seamless, one-stop connectivity between 14 city pairs like Amritsar to Jodhpur; Bareilly to Bhopal, Jaipur, and Jodhpur; Dharamshala to Jodhpur; Chandigarh to Bareilly, Kishangarh, and Pantnagar; Jammu to Jodhpur; Jaipur to Dharamshala and Pantnagar; Kishangarh to Bhopal; Pantnagar to Jaipur and Jodhpur and so on,” IndiGo said Monday.</p>
+<p>Akasa Air has not announced expansion plans so far, but said that the NIA will evolve into a key pillar of its network architecture. It also remains to be seen how the Air India group will build its network from the NIA, if and when it starts operations.</p>
+<h2>Why Noida airport may be a slow-starter<em> vis-à-vis</em> Navi Mumbai</h2>
+<p>With the Navi Mumbai International Airport (NMIA) launching commercial operations last December, India’s financial capital became the first Indian megacity to be served by two major airports, bringing relief amid the capacity constraints at Mumbai airport.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Both NMIA and NIA are secondary airports that will initially operate under the shadow of the much larger primary airports for broader urban regions. Yet, some key differences are bound to shape the manner and scale of operations, at least in the initial few years.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/navi-mumbai-airport-modi-details-inauguration-10293404/">Set to be inaugurated today, how Navi Mumbai International Airport could shape aviation landscape</a></span></div>
+<p>While NMIA is bound to have a strong start with rapid scale-up, NIA may be relatively slow on these counts initially. In the long run, though, it is expected to cement Delhi NCR’s position as India’s primary aviation hub.</p>
+<p>This is because Mumbai’s primary airport — Chhatrapati Shivaji Maharaj International Airport (CSMIA) — is already saturated owing to space constraints. At any given point in time, only one of its two intersecting runways can operate. This essentially means that any additional capacity in the Mumbai Metropolitan Region (MMR) must come from NMIA. This is a boon of sorts for NMIA, as airlines looking to expand their network in and out of the financial capital must do so through the new airport, providing it with almost ready demand and traffic.</p>
+<p>However, Delhi’s Indira Gandhi International Airport (IGIA) — India’s largest airport with three terminals and four runways — still has scope to expand its passenger handling, as well as flight capacity, and is not as terribly congested as CSMIA. It plans to expand its passenger handling capacity from the current 105 million to around 125 million over the next few years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2>Future prospects of Noida International Airport</h2>
+<p>After a few years, when the IGIA is saturated, NIA most certainly will become the driver and beneficiary of aviation growth in the region. Notably, Delhi is the biggest hub for leading Indian carriers, IndiGo and Air India.</p>
+<p>NIA’s ready catchment will include flyers from western Uttar Pradesh and some other parts of the NCR that solely relied on IGIA, but the existing Delhi airport has unmatched size, scale, and destination network that the Jewar airport will take a while to build.</p>
+<p>It is also worth noting that IGIA and NIA, unlike the CSMIA and NMIA, will be run by different operators — IGIA by GMR and NIA by Zurich Airport, which would add to the competitive streak. Both CSMIA and NMIA are operated by Adani Airport Holdings.</p>
+<p>Furthermore, the location of NIA — away from large urban settlements — will be a challenge in the absence of rapid multi-modal connectivity. Despite having expressway connectivity, it is located 80 km from central Delhi and around 60 km from central Noida. Although there are plans to have rapid rail and even high-speed rail connectivity for the NIA, those projects will take a few years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>On the other hand, IGIA has excellent connectivity with two metro lines, including the express line that connects the airport to central Delhi in about 20 minutes.</p>
+<p>In comparison, the NMIA is in the vicinity of large urban settlements of Navi Mumbai, and is less than 40 km from south Mumbai. From areas like Kalyan and Thane, the NMIA is only a few kilometres further away than the CSMIA. The MMR’s existing suburban railway network also supports connectivity to NMIA. This provides a large catchment area for the airport.</p>
+<p>In the long term, though, NIA’s location away from densely populated areas could mean better capacity expansion potential<em> vis-à-vis</em> NMIA. NIA’s location also positions it as a major air cargo and logistics hub in northern India.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10740553"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fifteenth, twenty twenty-six, at forty-seven minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/jewar-interanational-airport/" href="https://indianexpress.com/about/jewar-interanational-airport/">Jewar Interanational Airport</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/navi-mumbai-international-airport/" href="https://indianexpress.com/about/navi-mumbai-international-airport/">Navi Mumbai international airport</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/noida-international-airport-start-flights-details-growth-10740553/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-16 17:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

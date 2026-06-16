@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why food inflation may creep higher in the months ahead | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why food inflation may creep higher in the months ahead</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/orange-1600.jpg?w=1600" alt="Why food inflation may creep higher in the months ahead">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="inflation, food inflation" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/orange-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">India’s last episode of high food inflation was during July 2023 to December 2024, which was courtesy of the “strong” 2023-24 El Niño event. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On June 11, the US National Oceanic and Atmospheric Administration declared El Niño conditions to have developed, forecasting a 62-63% probably of that turning into a “very strong” event during October-January.</p>
+<p>El Niño – an abnormal warming of the central and eastern Pacific Ocean waters off the coasts of Peru and Ecuador – is associated with dry weather across India, Southeast Asia and Australia, while inducing heavy rains and destructive flooding in western Latin America, the US Gulf Coast and parts of the Caribbean.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Sea surface temperatures in the east-central equatorial Pacific are currently 0.7 degrees Celsius above their 30-year-average. Any such deviation between 0.5 and 1 degrees is termed a “weak” El Niño. It is “moderate”, “strong” and “very strong” for deviations of 1-1.5 degrees, 1.5-2 degrees and above 2 degrees respectively.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>No impact on food prices</strong></p>
+<p>2026 is seeing El Niño make a return after 2023-24, when it was a “strong” event that lasted from June 2023 to April 2024.</p><div id="taboola-mid-article-personalisation"></div>
+<p>This year has also witnessed a massive energy supply shock from the US-Israel versus Iran war. The closure of the vital Strait of Hormuz waterway since February 28 has led to global fertiliser prices skyrocketing. In April-May, India contracted urea and di-ammonium phosphate imports at port-landed prices of $935-959 and $930-935 per tonne respectively, as against their corresponding year-ago levels of $410-420 and $700-725.</p>
+<p>But <strong><a class="" href="https://indianexpress.com/article/explained/explained-economics/us-israel-iran-war-food-inflation-10608686/" rel="noopener" target="_blank">neither El Niño nor Iran has really impacted global food</a></strong> prices so far.</p>
+<p>Export prices of wheat from Argentina, at $237 per tonne, are marginally higher than the $233 last year at this time, while flat for Russian ($242) and European Union ($229-231) grain. US and Brazilian corn export prices of $205-208 per tonne, too, are only mildly up over last year’s $200-201. Indian and Pakistani non-basmati rice is now being shipped out at $340-380 per tonne, down from $380-395 a year ago.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>It’s not just cereals. Raw sugar prices in New York, at 14.3 cents per pound, are below the 16.5 cents of a year ago. Prices of butter at New Zealand’s Global Dairy Trade fortnightly auction platform have eased from $7,890 per tonne on June 17, 2025 to $5,516 on June 16, 2026.</p>
+<p>All this is reflected in the UN Food and Agriculture Organization’s (FAO) food price index in May 2026 registering just a 2.9% increase over May 2025. The index – a weighted average of world prices of a basket of food commodities over a base period value (taken at 100 for 2014-16) – hit an all-time-high of 160.2 points in March 2022, immediately after Russia’s invasion of Ukraine. The latest reading of 130.8 points is nowhere near that peak.</p>
+<p>The behaviour of food prices is a contrast to energy and metals, where the effects of the West Asia conflict are clearly visible. The International Monetary Fund’s index for base metals (aluminium, cobalt, copper, iron ore, lead, molybdenum, nickel, tin, uranium and zinc) was 31.9% up in May 2026 over May 2025, while 44.5% for precious metals (gold, silver, palladium and platinum), 62.5% for crude petroleum, 27.9% for natural gas, 34.4% for coal and 24% for fertilisers.</p>
+<p><img alt="food index" class="lazyloading alignnone size-medium wp-image-10739511" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/food-price-index-chart-one.jpg?resize=600,423" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg?resize=450,318 450w, https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg?resize=600,423 600w, https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg?resize=768,542 768w, https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg?resize=574,405 574w, https://indianexpress.com/wp-content/uploads/2026/06/food-price-index-chart-one.jpg?resize=1536,1084 1536w" height="423" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>The only food commodity to have posted notable price surge is vegetable oils. The FAO index for it, at 185 points in May, was 21.5% higher than a year ago, though below the 251.8 points high of March 2022 (Chart 1). Present landed prices of imported crude palm, soyabean and sunflower oil in <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>, at $1,240, $1,270 and $1,440 per tonne, are above their corresponding June 2025 average levels of $1,055, $1,122 and $1,209 respectively.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>A key reason for vegetable oil prices firming up is their alternative use as biofuels. When global crude prices harden like they have, there’s added incentive to divert palm, rapeseed and soyabean oil for the production of fatty acid methyl ester, which can substitute regular petroleum diesel.</p>
+<h2>Why haven’t food prices soared despite Iran and El Niño?</h2>
+<p>Mainly because of bumper crops in 2024-25 and 2025-26, which were both non-El Niño years.</p>
+<p>The US Department of Agriculture has estimated all-time record global output of 844.4 million tonnes (mt) for wheat, rice (544.7 mt), corn/maize (1,326.7 mt), sugar (186.1 mt) and even soyabean (429.2), rapeseed (95.6 mt) and palm oil (81.3 mt) in 2025-26.</p>
+<p>This situation of ample carryover stocks from back-to-back bumper harvests is unlike that in the run-up to the Russia-Ukraine war. From the chart, one can see that the FAO food and vegetable oil indices were already rising from their May 2020 lows, following the demand recovery from the lifting of Covid-time lockdowns. Russia-Ukraine merely added fuel to the fire.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>India itself had a disastrous 2021-22 wheat crop. That, along with the 2023-24 El Niño, led to wheat stocks in government godowns depleting to 7.5 mt by April 1, 2004 – the lowest for that date since 2008. But the successive good crops of 2024-25 and 2025-26 helped rebuild those stocks to 21.8 mt on April 1 and 42.8 mt on May 1, 2026.</p>
+<p>In other words, the pre-war starting point for food has been less bad this time, compared to Russia-Ukraine in 2022.</p>
+<h2>But can there be food inflation down the line?</h2>
+<p>That’s very much possible.</p>
+<p>The signs of it are there in India’s annual consumer food price index inflation edging up to 4.8% in May, from 4.2%, 3.9%, 3.5% and 2.1% in the preceding four months and negative rates over June-December 2025 (Chart 2).</p>
+<p><img alt="inflation" class="lazyloading alignnone size-medium wp-image-10739510" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/inflation-chart-2.jpg?resize=600,369" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg?resize=450,277 450w, https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg?resize=600,369 600w, https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg?resize=768,473 768w, https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg?resize=658,405 658w, https://indianexpress.com/wp-content/uploads/2026/06/inflation-chart-2.jpg?resize=1536,946 1536w" height="369" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>India’s last episode of high food inflation was during July 2023 to December 2024, which was courtesy of the “strong” 2023-24 El Niño event.</p>
+<p>El Niño is known to not only suppress rainfall, but also raise temperatures. If this El Niño turns out to be a “super/very strong” and peak through October-January, it could result in a relatively short and warm winter. The <em>rabi</em> (winter-spring) crops are the ones that would bear the brunt.</p>
+<p>El Niño apart, agricultural production can also take a hit from fertiliser shortages due to the West Asia conflict. An offsetting factor here could be a US-Iran deal to end fighting and reopen the Hormuz maritime chokepoint – through which roughly a third of the globally traded fertiliser products transited before the War. The expectations from that alone have more than halved the import price (cost plus ocean freight) of urea in the most recent tender by India to $444.9-449.3 per tonne.</p>
+<p>On balance, one cannot rule out higher food inflation in the months ahead. A lot depends on the El Niño’s intensity and duration as well as an early and meaningful restoration of global fertiliser flows.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10739499"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/harish-damodaran/">
+<figure>
+<img alt="Harish Damodaran" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/10/harish1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/harish-damodaran/"><span></span>Harish Damodaran</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2195331"></div><div class="follow_author_title" data-id="Harish Damodaran"></div><div class="follow_author_slug" data-id="harish-damodaran"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Harish Damodaran is National Rural Affairs &amp; Agriculture Editor of The Indian Express. A journalist with over 33 years of experience in agri-business and macroeconomic policy reporting and analysis, he has previously worked with the Press Trust of India (1991-94) and The Hindu Business Line (1994-2014).
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/harish-damodaran/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fifteenth, twenty twenty-six, at three minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/why-food-inflation-may-creep-higher-in-the-months-ahead-10739499/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-16 17:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
