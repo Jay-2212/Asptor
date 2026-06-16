@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why hybrid paddy continues to divide Punjab’s agricultural community | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why hybrid paddy continues to divide Punjab’s agricultural community</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-punjab-hybrid-paddy_expl.jpg?w=1600" alt="Why hybrid paddy continues to divide Punjab’s agricultural community">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Hybrid paddy" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-punjab-hybrid-paddy_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">Labourers in a paddy field at a village in Patiala on June 11, 2026. Photo: Harmeet Sodhi</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">For a state that has long been at the centre of India’s food security architecture, few agricultural issues have generated as much debate in recent years as hybrid paddy.</span></p>
+<p><span style="font-weight: 400">Of <strong><a class="" href="https://indianexpress.com/article/explained/punjab-farmers-protest-fertiliser-shortage-war-10735069/">Punjab</a></strong>’s area under paddy cultivation, which is usually over 32 lakh hectares, nearly 10% is estimated to be under hybrid varieties this year. This is despite the state government’s discouragement and attempt to ban the sale of such seeds last year, and the subsequent Punjab and Haryana High Court order striking down the state’s blanket ban on notified hybrid varieties, holding that seeds notified under the Seeds Act, 1966, cannot be barred through state administrative orders.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Yet the legal clarity has done little to settle the larger debate. The Punjab Agricultural University (PAU), the state government, and rice millers remain cautious this year too, while private seed companies strongly advocate these varieties for food security, water saving, and enhancing farmers’ income.</span></p>
+<p><span style="font-weight: 400">As to why this controversy has become particularly intense only in recent years, the answer lies at the intersection of economics, water conservation, procurement policies, seed regulation, and Punjab’s unique agricultural ecosystem.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>Why is hybrid paddy a major issue now?</b></h2>
+<p><span style="font-weight: 400">Hybrid rice is not new. It has been cultivated in several Indian states for decades and occupies significant acreage in states such as Chhattisgarh, Bihar, Uttar Pradesh, and Jharkhand. Globally, countries like China have relied heavily on hybrid rice technology to improve productivity.</span></p>
+<p><span style="font-weight: 400">However, Punjab’s situation is different. For decades, farmers relied largely on public-sector varieties developed by PAU and the Indian Council of Agricultural Research (ICAR). These varieties integrated smoothly into the state’s procurement system, where most paddy is purchased by government agencies for the Food Corporation of India (FCI).</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/punjab-paddy-cultivation-near-record-groundwater-crisis-kharif-10721808/">Why Punjab could see record paddy cultivation despite repeated diversification drives</a></span></div>
+<p><span style="font-weight: 400">The debate intensified only recently because hybrid paddy acreage started increasing in Punjab. Farmers facing rising production costs, shrinking groundwater reserves, and pressure to improve profitability began experimenting with hybrids that promised higher yields and shorter crop durations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">As the acreage, which earlier accounted for only around 3-5% of the state’s paddy area, began expanding, concerns emerged among rice millers, policymakers, and agricultural scientists, triggering a wider policy confrontation.</span></p>
+<p><b>Increasing adoption</b></p>
+<p><span style="font-weight: 400">For many farmers, the argument is straightforward: economics. Farmers cultivating hybrid varieties often report yields that are 5-8 quintals per acre (1 acre = 0.405 hectare) higher than conventional varieties.</span></p>
+<p><span style="font-weight: 400">Notified hybrid varieties mature in 125-130 days, shorter than several traditional paddy varieties. Farmers argue that shorter-duration crops help save irrigation water, reduce electricity consumption and provide more time for stubble management before wheat sowing.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/punjab-expands-maize-push-amid-its-heavy-dependence-on-paddy-10677529/">Punjab expands maize push amid its heavy dependence on paddy</a></span></div>
+<p><span style="font-weight: 400">Several farmers who have been growing hybrids for the last five to six years claim they earn Rs 12,000 to Rs 16,000 more per acre compared to conventional varieties.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">With input costs steadily increasing and farm profitability under pressure, many growers view hybrid seeds as an opportunity to improve returns without expanding landholdings. They argue that higher-yielding and stress-tolerant hybrids could help maintain productivity under changing weather conditions.</span></p>
+<p><b>The concerns</b></p>
+<p><span style="font-weight: 400">The PAU’s reservations stem from a different set of concerns. Scientists at PAU acknowledge that hybrids can deliver higher yields. However, they argue that Punjab’s agricultural priorities extend beyond productivity alone.</span></p>
+<p><span style="font-weight: 400">The university has developed and consistently promoted short-duration public varieties such as PR-126 and other improved strains that consume less water while fitting well into the state’s crop calendar.</span></p>
+<p><span style="font-weight: 400">PAU Vice-Chancellor Satbir Singh Gosal pointed out that hybrid seeds must be purchased every year, which can be costly, unlike conventional varieties where farmers can save seed from their harvest for future cultivation. This increases dependence on seed companies and raises production costs.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Another concern relates to grain quality and market acceptability. Punjab’s procurement system operates on strict quality parameters. Any mismatch between field performance and post-harvest processing can create complications for farmers, millers, and procurement agencies.</span></p>
+<p><span style="font-weight: 400">“Hybrid varieties are also reported to have higher grain breakage during milling in some cases, which remains a concern for stakeholders involved in procurement and processing,” said Gosal.</span></p>
+<span class="custom-caption"><img alt="rice" class="lazyloading size-medium wp-image-10738901" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Ch1996600.jpg?resize=600,403" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg 3950w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=450,303 450w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=600,403 600w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=768,516 768w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=602,405 602w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=1536,1033 1536w, https://indianexpress.com/wp-content/uploads/2026/06/Ch1996600.jpg?resize=2048,1377 2048w" height="2656" sizes="(max-width: 3950px) 100vw, 3950px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="3950"/> Women clean the paddy in Ludhiana on October 25, 2025. Photo: Gurmeet Singh</span>
+<p><span style="font-weight: 400">The state government’s concerns go beyond agronomy. Officials have repeatedly raised questions about seed pricing, quality control, and regulation.</span></p>
+<p><span style="font-weight: 400">Punjab’s authorities have argued that unchecked expansion of hybrid seeds could expose farmers to market risks if quality standards are not consistently maintained. The state government has also cited concerns about the milling outturn ratio (OTR): the quantity of rice obtained after milling paddy.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Rice millers alleged that some hybrid varieties produced lower OTR than the minimum 67% required under FCI norms, potentially resulting in losses during procurement and milling. These concerns partly contributed to the state’s attempt last year to prohibit hybrid paddy cultivation.</span></p>
+<p><span style="font-weight: 400">Critics of the ban, however, argued that regulatory concerns should be addressed through monitoring and certification rather than outright prohibition.</span></p>
+<p><b>Where the seed industry, rice mills stand</b></p>
+<p><span style="font-weight: 400">Private seed companies view the issue very differently.</span></p>
+<p><span style="font-weight: 400">Ajai Rana, chairman of the Federation of Seed Industry of India and CEO &amp; MD of Savannah Seeds, said every hybrid notified by the Centre for cultivation in any state, including Punjab, undergoes extensive multi-location trials conducted by ICAR and other regulatory bodies before approval. Companies argue that modern hybrids offer higher productivity, which is crucial for food security, shorter crop duration, improved water-use efficiency, and better climate resilience.</span></p>
+<p><span style="font-weight: 400">Rana pointed out that hybrid rice adoption remains below 10% in Punjab, while many other rice-growing states have much larger hybrid acreage. He also disputed claims regarding poor milling performance. According to him, factors such as harvesting time, grain moisture levels, drying practices, and milling machinery calibration often have a greater impact on milling recovery than the seed itself.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/punjab-direct-seeded-rice-groundwater-herbicide-soil-health-10691876/">Punjab’s paddy dilemma: Save groundwater or preserve soil health?</a></span></div>
+<p><span style="font-weight: 400">The industry further argues that restricting notified hybrids discourages innovation and creates uncertainty for both farmers and investors.</span></p>
+<p><span style="font-weight: 400">Rice millers occupy a crucial position in the controversy. In 2024, several millers strongly opposed certain hybrid varieties, claiming lower milling recovery and higher grain breakage. This created tension between farmers and millers, with farmers accusing the industry of unfairly targeting high-yielding varieties.</span></p>
+<p><span style="font-weight: 400">During 2025, a season marked by weather-related yield losses, many millers purchased hybrid paddy without significant objection to maintain adequate stocks for their mills. The episode highlighted how economic compulsions can sometimes override earlier objections.</span></p>
+<p><b>Deeper questions</b></p>
+<p><span style="font-weight: 400">A</span><span style="font-weight: 400">n expert from the Punjab Agriculture Department, requesting anonymity, said that this is not entirely </span><span style="font-weight: 400">a debate about seeds</span><span style="font-weight: 400">.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><span style="font-weight: 400">“The hybrid paddy controversy reflects deeper questions about the future of Punjab agriculture. Should the state prioritise higher productivity or maintain its reliance on public-sector varieties? Should farmers have unrestricted choice among notified seeds? How should Punjab balance groundwater conservation, food security, farmer income and procurement requirements? And what role should private companies play in shaping the state’s agricultural future? These questions explain why the debate has persisted despite court rulings, scientific studies and competing claims from different stakeholders,” the expert said.</span></p>
+<p><span style="font-weight: 400">Hybrid paddy is likely to remain one of Punjab’s most contentious agricultural policy issues unless, Rana added, the state moves towards a consistent, science-based and transparent policy framework that balances the interests of farmers, researchers, food security, industry and procurement agencies.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10738883"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June fourteenth, twenty twenty-six, at forty-four minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/agriculture/" href="https://indianexpress.com/about/agriculture/">agriculture</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/punjab/" href="https://indianexpress.com/about/punjab/">Punjab</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/hybrid-paddy-punjab-agriculture-farmers-seeds-rice-10738883/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-16 03:54 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
