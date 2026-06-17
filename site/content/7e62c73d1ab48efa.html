@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What data says about Australia’s social media ban and where the UK can learn from their experience | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What data says about Australia’s social media ban and where the UK can learn from their experience</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-17</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/deee.jpg?w=1600" alt="What data says about Australia’s social media ban and where the UK can learn from their experience">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A 12-year-old boy plays with his personal phone outside school (AP Photo/)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/deee.jpg?w=1600" width="650"/><span class="ie-custom-caption">A 12-year-old boy plays with his personal phone outside school (AP Photo/)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On June 15, 2026, Prime Minister Keir Starmer announced at a Downing Street press conference that children under 16 in the United Kingdom would be banned from using social media platforms, including TikTok, Snapchat, Instagram, Facebook, YouTube, and X. “Social media is making our children unhappy,” Starmer stated. “As a parent, as much as a Prime Minister, I just can’t let that go on anymore.”</p>
+<p>The legislation is expected to be placed before Parliament before <a class="" href="https://indianexpress.com/about/merry-christmas/" rel="noamphtml">Christmas</a>, with protections coming into force by Spring 2027. The UK government has modelled its approach on legislation already passed in Australia- the first country in the world to introduce such a ban. Here is what to know about what both countries have done, and what the data from Australia shows so far.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h3>What the UK ban covers</h3>
+<p>The <a href="https://indianexpress.com/article/world/uk-social-media-ban-kier-starmer-10740365/"><strong>ban</strong></a> applies to six platforms: TikTok, Snapchat, Instagram, Facebook, YouTube and X. Tech companies will be the subject of regulatory and enforcement action and not children. WhatsApp and Signal messaging services are not included in the ban, along with YouTube Kids. Online learning tools and educational platforms are also excluded.</p>
+<p>Platforms that fail to take reasonable steps to exclude children under 16 face significant fines. *one sentence on what significant fine means*.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Starmer has also announced that platform functions –such as livestreaming and cross-user contact on gaming platforms—shall face restrictions. The blocking of these functions is in addition to the age restriction.Authorities are also considering overnight curfews and restrictions on infinite scrolling for under-18s.</p>
+<p>According to data released by the UK government, 89 per cent of surveyed parents and carers were in support of legal minimum age for social media. 96 per cent of these supporters agreed the age limit should be at least 16.</p>
+<p><strong>Australia’s law</strong></p>
+<p>Australia became the first country to ban social media for children under 16 under the Online Safety Amendment (Social Media Minimum Age) Act, which took effect on December 10, 2025.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The law mandated that platforms like Facebook, Instagram, TikTok, Snapchat, X, YouTube, Reddit, Twitch, and Kick must take reasonable steps to stop users under 16 from having accounts. Fines could reach A$49.5 million ($33 million) for repeated violations. Parental consent did not provide an exception.</p>
+<h2><strong>What the data shows</strong></h2>
+<p>A working paper published by the National Bureau of Economic Research (NBER) in April 2026 surveyed 835 Australian teenagers four months after the ban started. The paper was co-authored by economists from the University of Chicago, Harvard Law School, Bocconi University, University of Cologne and the University of Pennsylvania.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-culture/expert-explains-uk-social-media-ban-under16s-10742845/">Expert Explains | Why social media age limits are needed: ‘Shouldn’t expect kids to have self-control online…’</a></span></div>
+<p>The paper highlighted that only about 27 per cent of banned 14–15-year-olds are complying with the law. Most non-compliers said their friends were still on the platforms, and the fear of missing out was the primary reason they had not stopped using them.</p>
+<p>The NBER paper observed that teenagers would stop using social media only if around two-thirds of their friends had already stopped. With only 27 per cent of banned teenagers currently complying, that number is far from being met.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The researchers also noted that if compliance drops below 15 per cent, fewer than 15 in every 100 banned teenagers, the ban loses its effect entirely, because too few peers are following it for others to feel any reason to do the same.</p>
+<p>Furthermore, an interesting observation was that teens perceive those who comply with the ban as less popular than those who do not. The researchers concluded that the ban is unlikely to sustain higher compliance without instruments that act directly on social norms and individual incentives, such as time caps or peer-level incentives.</p>
+<p>Australia’s Online Safety Amendment (Social Media Minimum Age) Act 2025 requires platforms to take only “reasonable steps” to restrict access. This means children can still view social media content in a web browser without an account. Children have moved to gaming and messaging apps or used VPNs to access their existing accounts.</p>
+<p>Many people who were initially locked out could quickly reactivate or create new accounts. Among those who were asked to verify their age with selfies, many found ways to get around the system by wearing masks or having older siblings or parents sit in front of the camera.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The eSafety Commissioner’s compliance report from March 2026 –the first formal review of the ban—found that platforms had taken only some steps to limit underage accounts. The eSafety Commissioner’s survey of parents found that about 7 in 10 children with accounts on several major platforms still had access.</p>
+<p>A separate study by UK suicide prevention charity the Molly Rose Foundation found that 61 per cent of Australian 12–15-year-olds who had accounts before the ban still retain access to at least one platform. In the majority of these cases, platforms had not identified and removed the underage accounts, meaning most children had not used any workarounds.</p>
+<h3><strong>What young Australians say</strong></h3>
+<p>Research published in May 2026 by scholars from Queensland University of Technology and Western Sydney University found that among those whose social media use was greatly disrupted by the ban, 51 per cent said they received less news as a direct result. The study was based on a survey of 1,027 young Australians aged 10 to 17</p>
+<p>The researchers noted that a 2025 government report found that students’ civics knowledge was the lowest it had been since testing began 20 years ago. Additionally, teens who are cut off from social media are receiving lesser news and have fewer opportunities to discuss issues that matter to them.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>A report published in December 2025 by 14 university researchers found that most participants did not want a blanket ban and instead called for platforms to be made safer. The report was based on interviews conducted with 86 young Australians aged 12–15 and undertaken by researchers from the Queensland University of Technology, Western Sydney University, Curtin University, Adelaide University and the University of Southern Queensland</p>
+<p>“It’s not always a negative thing. It can be really positive when people use it right. So I feel like parents should understand that social media isn’t always the worst thing in life,” a 13-year-old girl told the researchers. Teenagers said they used social media to learn skills, stay informed, keep up with news, and maintain friendships and family connections.</p>
+<p>Starmer acknowledged on June 15 that some teenagers will find ways around the ban. The NBER paper recommended pairing the ban with norm-shifting instruments such as time caps and peer-level incentives. The Molly Rose Foundation called on the UK government to strengthen the existing Online Safety Act rather than introduce a new age-based ban. The foundation conducted research concluding that 51 per cent of surveyed Australian children said the ban had made no difference to their online safety.</p>
+<p><em><strong>The author is Abhishek Nair, an intern with the Explained Desk. </strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10744452"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June seventeenth, twenty twenty-six, at ten minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/data-australia-social-media-ban-uk-lessons-10744452/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-17 18:35 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
