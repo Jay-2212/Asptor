@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Advantage Ukraine: Role of tactics, tech and EU backing in Russia war | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Advantage Ukraine: Role of tactics, tech and EU backing in Russia war</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-17</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Russia_Crimea_Fuel_Crisis_24911-79390.jpg?w=1600" alt="Expert Explains | Advantage Ukraine: Role of tactics, tech and EU backing in Russia war">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A Russian military ship transports cars and people from the Russian mainland to the Crimean Peninsula over the Kerch Strait on Monday, July 17, 2023. (AP Photo, File)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Russia_Crimea_Fuel_Crisis_24911-79390.jpg?w=1600" width="650"/><span class="ie-custom-caption">A Russian military ship transports cars and people from the Russian mainland to the Crimean Peninsula over the Kerch Strait on Monday, July 17, 2023. (AP Photo, File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Aman K Pandey</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>With an Iran-US Memorandum of Understanding announced on Sunday (June 14), global attention remains focused on events in West Asia. However, another major conflict, which has now stretched for longer than World War I, continues to rage between Russia and Ukraine, with some shifting of gears.</p>
+<p>The Ukrainians have managed to halt the Russian summer offensive, and Russia in May managed to gain only a fraction of the territory it gained last year. This may not mean the war will be won soon, but Ukrainians are interpreting it as momentum shifting in their favour.</p>
+<p><a href="https://indianexpress.com/article/world/g7-evian-summit-day-1-trump-zelenskyy-ukraine-iran-ceasefire-modi-macron-hormuz-10742214/"><strong>At the core of</strong></a> Ukraine’s resilience are its technological evolution, military prudence, bold strategic decisions, battlefield innovation and a critical but underrated European commitment to Ukraine. The war contains important lessons about how technological evolution can help smaller powers sustain and prevail against major powers in asymmetrical conflicts.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<span class="custom-caption"><img alt="Ukrainian President Volodymyr Zelenskyy, left, and US President Donald Trump speak during a meeting at the G7 summit in Evian-les-Bains, France, Tuesday, June 16, 2026. " class="lazyloading size-medium wp-image-10742621" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/France_G7_Summit_48482-59ba8.jpg?resize=600,414" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/France_G7_Summit_48482-59ba8.jpg 960w, https://indianexpress.com/wp-content/uploads/2026/06/France_G7_Summit_48482-59ba8.jpg?resize=450,311 450w, https://indianexpress.com/wp-content/uploads/2026/06/France_G7_Summit_48482-59ba8.jpg?resize=600,414 600w, https://indianexpress.com/wp-content/uploads/2026/06/France_G7_Summit_48482-59ba8.jpg?resize=768,530 768w, https://indianexpress.com/wp-content/uploads/2026/06/France_G7_Summit_48482-59ba8.jpg?resize=586,405 586w" height="663" sizes="(max-width: 960px) 100vw, 960px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="960"/> Ukrainian President Volodymyr Zelenskyy, left, and US President Donald Trump speak during a meeting at the G7 summit in Evian-les-Bains, France, Tuesday, June 16, 2026. (Press Service Of The President Of Ukraine via AP)</span>
+<p><strong>Russia’s stalled advances, ‘fortress belt’</strong></p>
+<p>Latest data from the Institute for the Study of War, a Washington <a class="" href="https://indianexpress.com/about/delhi-capitals/" rel="noamphtml">DC</a>-based think tank, shows that Russian forces could gain control of or infiltrate 40.64 km² of Ukrainian territory between December 2025 and May 2026. In the same period, it lost 282.1 km² of its previously controlled territories to Ukrainian forces.</p>
+<p>Ukraine has turned the frontline into an effective no-go zone, where any and every Russian movement is constantly watched and attacked. Since the Russians are the ones with offensive goals, their battlefield losses are naturally higher.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/us-iran-peace-agreement-energy-worries-far-from-over-india-keeps-fingers-crossed-10741424/">US-Iran deal: Why India’s energy worries are far from over</a></span></div>
+<p>Part of this success has to do with drones, with Ukraine set to produce over 7 million drones this year. The strategy is underpinned by its “fortress belt”, a nearly 50 km-long belt running north to south and concentrated around four Ukrainian cities of Sloviansk, Kramatorsk, Druzhkivka, and Kostiantynivka in the region of Donetsk.</p>
+<p>Russia has failed to fully occupy this region of eastern Ukraine since 2014. Since then, this defensive line has only evolved to integrate traditional measures with new tactics and technologies to respond to Russia’s continued attempts to push forward.</p>
+<p>These cities serve as important logistics hubs for the frontline and are geographically suited for Ukraine’s needs. While the steeper elevation slope, urban buildup and water features in the region naturally favour the defenders against attackers, Ukraine has also built an extensive network of field fortifications that include fighting positions, trenches and ditches, rows of dragon’s teeth and barbed wires and laid mines to further amplify natural defence.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The importance of the belt can be gauged by the fact that control of it would allow Russian forces to advance at least 80 km deeper into Ukraine, at a time when Russian advances are measured in meters. But with Russia failing to do so, its advance remains stalled.</p>
+<p><strong>Tactics meet technology</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Rapid technological advances on the battlefield revolving around uncrewed systems, electronic warfare, command and control, and surveillance have perhaps kept Ukrainian hopes high and even allowed Kiev to punch above its weight.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/why-the-european_defence-is-splintered-10676066/">As the US signals troop reduction, why is the European Union’s defence so broken? The answer lies within</a></span></div>
+<p>Drones in the sky have been complemented by battery-operated, remote-controlled unmanned vehicles on the ground fitted with cameras to supply food and munitions, evacuate injured and dead soldiers, and even conduct assaults on Russian positions.</p>
+<p>These are part of a state-of-the-art digital kill chain, which is battle-tested and integrates sensors, operators, analysts, drone pilots, targeting cells and strike systems into one architecture. This reduces the time between identification, verification and strikes.</p>
+<p>On the other hand, the Russian assault operation mainly consists of air strikes, artillery, and missile attacks to create gaps in the Ukrainian defensive positions. To counter it, Ukrainian forces operate in small and dispersed groups backed by integrated air defence systems and interceptor drones. Soldiers are also equipped with counter-drone systems, such as jammers, to make the Russian First-Person View (FPV) drones ineffective and reduce casualties.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Another important feature is the integration of AI, where Ukraine is now working on creating a system of remotely operated unmanned defensive positions capable of providing air defence, monitoring Russian movements and providing direct-fire support to soldiers.</p>
+<p><strong>Ukraine’s patience has paid off</strong></p>
+<p>The fact that Zelenskyy continuously resisted US pressure to sign a deal with Russia, even at the expense of losing territories, arguably preserved Ukraine’s sovereignty and gave it greater geopolitical agency.</p>
+<p>Today, when Zelenskyy travels abroad, he often holds a position of strength while negotiating defence deals such as the export of drones and counter-drone technologies. Europe has also emerged as the principal supporter of Ukraine in terms of military and financial support.</p>
+<p>Additionally, the electoral defeat of Hungary’s Viktor Orban and his replacement with a new pro-European government have removed funding obstacles for Ukraine. With the EU’s approval of a landmark 90 billion euro loan facility, Ukraine’s position has further strengthened.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/hungary-election-2026-trump-orban-magyar-10631520/">Hungary election 2026: What Viktor Orbán’s defeat means for Trump</a></span></div>
+<p>Besides, Ukraine’s European partners are directly purchasing US weapons for Kiev while simultaneously investing in Ukraine’s own indigenous defence industry, whose projected production this year is expected to be 55 times higher than in 2022.</p>
+<p>The aforementioned factors have certainly boosted Ukraine’s confidence on the battlefield to such an extent that Moscow has started to feel the heat. The low-profile Victory Day celebration in Moscow this year also hinted at it, although Russia has continued striking, with a historic cathedral hit this week, killing 11 people in Ukraine.</p>
+<p>At the ongoing G7 Summit in France’s Évian-les-Bains, US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> said he had a “very good conversation” with Zelenskyy and Russian President <a class="" href="https://indianexpress.com/about/vladimir-putin/" rel="noamphtml">Vladimir Putin</a> and touched upon bringing an end to the war. Four years after the war began and several attempted peace plans later, Ukraine’s enhanced capabilities showcase Kyiv’s intentions to fight till the end.</p>
+<p><em><strong>The author is a PhD candidate at the Centre for Russian and Central Asian Studies, JNU.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10742564"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June sixteenth, twenty twenty-six, at forty-two minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/ukraine-russia-conflict/" href="https://indianexpress.com/about/ukraine-russia-conflict/">Ukraine Russia conflict</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/expert-explains-advantage-ukraine-russia-war-reasons-10742564/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-17 09:21 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
