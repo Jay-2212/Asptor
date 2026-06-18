@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Is India producing more graduates than what the economy can absorb? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Is India producing more graduates than what the economy can absorb?</h1>
+                <div class="article-meta">
+                    <span>By M. Kalyanaraman</span> • <span>THE HINDU OPINION</span> • <span>2026-06-18</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71119217"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>India is witnessing an unprecedented expansion in higher education. Over the past decade, thousands of new colleges and universities have been established, producing millions of graduates every year. Yet unemployment of the educated remains a growing concern. Nearly one in three graduates are unemployed. Is India producing more graduates than what the economy can absorb? <b>Rajan Wadhera</b> and <b>O.R.S. Rao</b> discuss the question in a conversation moderated by <b>M. Kalyanaraman</b>.</p><p>Edited excerpts:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is India producing more graduates than the economy can absorb?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao:</b> The numbers point to a widening gap between the growth in graduates and the growth in jobs. In engineering alone, the number of graduates has risen sharply over the past few years while job creation has not kept pace. Earlier, the IT services sector was the principal employer of engineering graduates. Today, hiring by IT services firms has slowed considerably, even though sectors such as banking and financial services, manufacturing, defence and space technologies have expanded their recruitment. The challenge is that these new opportunities have not grown fast enough to absorb the increasing number of graduates entering the labour market.
+				</p><p>
+										A second issue is the nature of investment. Much of the recent investment in sectors such as semiconductors, advanced manufacturing and technology has been capital-intensive rather than labour-intensive. As a result, large investments do not necessarily translate into proportionate job creation.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Has AI made the problem worse?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao: </b>We are in the middle of a major technological transition. AI is changing the nature of work much faster than how educational institutions can adapt. Companies now want graduates who can work with AI systems, validate AI-generated outputs, understand responsible and ethical AI use, and solve complex problems using technology. Four years ago, when many of today’s graduates entered college, these skills were not widely discussed. Universities cannot redesign programmes overnight, and students cannot acquire entirely new competencies instantly.
+				</p><p>
+										As a result, many graduates are entering a labour market that demands skills different from those they were trained for.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is employability more important than just job creation?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Rajan Wadhera:</b> There is certainly a growing concern about employability, particularly among engineering graduates. The problem is often a mismatch between what is taught and what the industry requires. Students may graduate with strong academic credentials but have limited exposure to laboratories, manufacturing environments, teamwork and real-world problem-solving. When they enter the industry, employers frequently find that they need substantial additional training in order to contribute effectively. Companies run their own training programmes to bridge this gap. This was far less common a few decades ago.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Has manufacturing failed to create enough opportunities?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Rajan Wadhera:</b> Manufacturing still has considerable potential, but it too is undergoing profound change. People often focus on the impact of AI on software jobs, but manufacturing is also being transformed by automation, robotics, and Industry 4.0 systems. Historically, a large number of engineers were employed in supervisory and operational roles on factory floors. Today, many of those functions are automated. Digital manufacturing systems require fewer people to oversee production processes. As a result, the number of engineering jobs generated by manufacturing is not increasing at the pace many people expected. Even as factories expand output, they often require fewer workers and supervisors than before.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Does that mean the future is one of permanent jobless growth?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Rajan Wadhera:</b> I would not go that far. India’s push towards self-reliance in sectors such as defence, aerospace and advanced manufacturing is creating new opportunities. There is increasing emphasis on domestic design and product development, and that is encouraging. The challenge is that automation and digitalisation are reducing labour requirements even as industries grow. Therefore, employment growth may not automatically match economic growth. This makes it even more important for educational institutions and industry to work together. Curricula needs to be aligned much more closely with industry requirements.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Has India focused too much on manufacturing and too little on innovation?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao:</b> Over many years, India became increasingly proficient at manufacturing products designed elsewhere; manufacturing alone does not create enough opportunities for highly trained engineers. The real value lies in research, development and design. Countries that control intellectual property and technology create far more opportunities for engineers than countries that simply manufacture products. Recent global developments have reinforced this lesson. Increasing restrictions on access to critical technologies such as semiconductors and strategic components have shown that excessive dependence on external technologies carries risks. India therefore needs to invest much more aggressively in indigenous research, innovation and product development.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Has India made progress in indigenous design capabilities?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Rajan Wadhera:</b> It would be incorrect to say that India remains only a manufacturing base. Over the last decade, companies such as Mahindra and Tata Motors have developed significant design and engineering capabilities. Indian engineers today are designing vehicles, platforms, transmissions and other complex systems that would previously have been developed elsewhere. The issue is not whether these capabilities exist. The issue is scale. The number of high-quality engineering graduates being produced is larger than the number of advanced R&amp;D and design roles currently available.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What role should entrepreneurship play?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao: </b>Neither government nor industry can create enough jobs for every graduate. We need more graduates to become creators of enterprises rather than only seekers of employment. One major challenge is access to risk capital. Traditional lenders prefer established businesses and proven revenue streams. Innovation, however, requires investors willing to support ideas at an early stage. India’s startup ecosystem has made significant progress, but much more needs to be done to support deep-technology ventures.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What should India focus on in the AI era?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao:</b> India should focus not only on infrastructure but also on products. There is a significant need for sovereign AI as nations with those systems seek to restrict access. Product companies create intellectual property, innovation and high-value employment. The goal should be to develop products not only for India but for global markets. We should identify strategic areas where India can become a global leader. UPI’s success demonstrates that India is capable of building world-class digital platforms.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What needs to change in higher education?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao:</b> Industry-academia collaboration must become much deeper. Universities cannot design relevant programmes without industry participation, and industry cannot expect job-ready graduates without contributing to curriculum, internships and skill development.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Looking ahead, what are the priorities?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>O.R.S. Rao:</b> Three priorities stand out. First, India must significantly increase investment in research and development. Second, industry and academia must work together much more closely. Third, we need a stronger entrepreneurship ecosystem that encourages innovation and supports risk-taking.
+				</p><p><b>Rajan Wadhera:</b> I would add that India must continue building indigenous capabilities in design, engineering and advanced manufacturing. The opportunities are real, particularly in sectors such as defence and aerospace. The challenge is ensuring that education, industry and policy move in the same direction.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b><a href="https://www.thehindu.com/podcast/in-focus-podcast-is-india-producing-more-graduates-than-what-the-economy-can-absorb/article71118225.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Rajan Wadhera is Former President, Automotive Sector, Mahindra &amp; Mahindra; O.R.S. Rao is Chancellor, ICFAI University, Sikkim</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- June 19, 2026 01:06 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71119217" data-title="Is India producing more graduates than what the economy can absorb?" data-url="https://www.thehindu.com/opinion/op-ed/is-india-producing-more-graduates-than-what-the-economy-can-absorb/article71119217.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" onclick="copytext('https://www.thehindu.com/opinion/op-ed/is-india-producing-more-graduates-than-what-the-economy-can-absorb/article71119217.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" onclick="openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece&amp;t=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F')">
+                Facebook   
+                        
+            </li><li class="twitter" onclick="openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece&amp;text=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F')">
+                Twitter    
+                        
+            </li><li class="telegram" onclick="openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece&amp;text=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F')">
+                Telegram     
+                        
+            </li><li class="in" onclick="openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece&amp;title=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" onclick="openShareLink('https://api.whatsapp.com//send?text=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F%20-%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" onclick="openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-india-producing-more-graduates-than-what-the-economy-can-absorb%2Farticle71119217.ece&amp;title=Is%20India%20producing%20more%20graduates%20than%20what%20the%20economy%20can%20absorb%3F')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71119217" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/is-india-producing-more-graduates-than-what-the-economy-can-absorb/article71119217.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-18 22:27 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
