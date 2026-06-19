@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Want to cross the Strait of Hormuz? Fill out this form first | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Want to cross the Strait of Hormuz? Fill out this form first</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/straitofhormuz.jpg?w=1600" alt="Want to cross the Strait of Hormuz? Fill out this form first">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Hormuz =" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/straitofhormuz.jpg?w=1600" width="650"/><span class="ie-custom-caption">Tankers and cargo vessels are seen in the Gulf of Oman, along shipping routes linking the Strait of Hormuz and the Arabian Sea. AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>With the signing of the <a href="https://indianexpress.com/article/explained/explained-global/us-iran-mou-expert-points-details-hormuz-nuclear-10746602/" rel="noopener" target="_blank"><strong>memorandum of understanding (MoU) between the US and Iran</strong></a>, the Islamic Republic’s newly-constituted Persian Gulf Strait Authority (PGSA) — which Tehran says will regulate maritime traffic through the the Strait of Hormuz — has announced new clearance procedures for vessels to cross the maritime chokepoint that connects the Persian Gulf with the Gulf of Oman and the Arabian Sea. And the procedure essentially involves an online form hosted on the PGSA’s website.</p>
+<p>“With reference to the signing of the Islamabad MOU and the issuance of directives by the authorities, all applicants intending to passage through the Strait of Hormuz are hereby informed that during the period specified in the MOU, vessels that submit their passing requests to the PGSA in compliance with the following points will be cleared for passage promptly. Official Website for submitting passage requests: PGSA.ir. Email for follow-up inquiries: info@PGSA.ir,” the PGSA said in a notice posted on social media platform X.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Vessel movements through the narrow maritime corridor ground to an effective halt since early March after the West Asia war broke out following US-Israeli strikes on Iran on February 28. The disruption created one of the worst energy supply crises the world has ever seen, leading to a surge in oil and gas prices globally.</p>
+<p>The Strait of Hormuz usually accounts for a fifth of global oil and liquefied natural gas (LNG) flows. With the Pakistan-mediated initial pact between the US and Iran in place, there are expectations that maritime traffic through the strait will pick up and normalise over the coming weeks and months. Shipping firms, however, are still adopting a cautious approach, with the situation on the ground — and on the water — still being perceived as fragile.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>PGSA’s notice on Hormuz transit permission</strong></h2>
+<p>In its notice issued on Friday, the PGSA said that the only official channels for processing passing requests are its website and the email address mentioned. It also announced that the request to transit the Strait of Hormuz is submitted by a vessel at least 48 hours before it arrives in the area. The PGSA also said that during the initial 60-day window of the MoU, no tariffs or service fee will be collected from the ships, and will be borne by the Iranian government.</p>
+<span class="custom-caption"><img alt="Hormuz" class="lazyloading wp-image-10748318 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/PGSA-FORM-SCREENSHOT-1.jpg?resize=600,435" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/PGSA-FORM-SCREENSHOT-1.jpg 1257w, https://indianexpress.com/wp-content/uploads/2026/06/PGSA-FORM-SCREENSHOT-1.jpg?resize=450,326 450w, https://indianexpress.com/wp-content/uploads/2026/06/PGSA-FORM-SCREENSHOT-1.jpg?resize=600,435 600w, https://indianexpress.com/wp-content/uploads/2026/06/PGSA-FORM-SCREENSHOT-1.jpg?resize=768,557 768w, https://indianexpress.com/wp-content/uploads/2026/06/PGSA-FORM-SCREENSHOT-1.jpg?resize=558,405 558w" height="912" sizes="(max-width: 1257px) 100vw, 1257px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1257"/> A screenshot of the online PGSA form.</span>
+<p>Crossing the Strait of Hormuz was completely free before the war and did not require any permission, but Tehran now wants to charge fees for services like maritime security, navigation assistance, environmental protection, and insurance. The 14-point US-Iran MoU states that crossing the strait will be free only for 60 days, and Iran will hold talks with Oman and other Gulf littoral states “to define the future administration and maritime services in the Strait of Hormuz” in line with “international law and the sovereign rights of coastal states of the Strait of Hormuz”.</p>
+<p>“To avoid delays at the entrance or exit of the Strait of Hormuz, it is essential that passing requests, complete with all required information, are submitted at least 48 hours prior to arriving at the strait area. During the 60-day period, tariffs for security, safety, and environmental services, as well as related Iranian insurances, will not be collected from shipowners and will be borne by the government of the Islamic Republic of Iran,” the PGSA said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/us-iran-peace-agreement-energy-worries-far-from-over-india-keeps-fingers-crossed-10741424/">US-Iran deal: Why India’s energy worries are far from over</a></span></div>
+<p>“Due to the presence of mine-affected areas and the necessity of ensuring safe passage and preventing collisions, coordination of the designated route and scheduled passage time for each vessel Prior to moving toward the strait is mandatory; failure to comply shall be the responsibility of the vessel owner,” it added.</p>
+<h2><strong>Iran’s Hormuz transit form: Key terms and conditions</strong></h2>
+<p>The PGSA website has nothing but a form for vessels to apply for permission to cross the Strait of Hormuz. The form seeks extensive information from vessels, including regular details like name, flag, IMO number, type, dead weight capacity, draft, cargo type, registered owner, ship management firm, and contact details.</p>
+<p>It also requires the cargo quantity, value, declaration of dangerous goods on board, origin and destination countries and ports, number of crew members and their nationalities, protection and indemnity (P&amp;I) club and other insurance details, intended route of travel, intended date of crossing the strait, etc.</p>
+<p>The form also has a link to general and specific terms and conditions for vessel passage through the Strait of Hormuz. The document states that the standard review and response time from the PGSA will  be 48 hours, and the authority will either approve the application, mark it incomplete and put it up for further review, or explicitly deny it.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>If approved, the permit issued for the passage will be valid for one single transit through the strait, and will be valid for a maximum of five calendar days. If the permission expires, the permit will become null and void and a fresh application will have to be submitted.</p>
+<p>Mandatory passage conditions include a designated route for vessel transits—close to Iran’s Larak island—which is specified in a map issued by the PGSA. “Any deviation from or use of alternative routes is strictly prohibited and will be treated as a violation…The owner and master assume full responsibility for any damages, fines, or accidents arising from such violations,” the document states.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/iran-us-mou-options-for-israel-netanyahu-10746498/">Iran-US MoU a setback, what are the options now for Israel, and for Netanyahu</a></span></div>
+<p>“The master will receive final coordination and precise route details via VHF/online call within 24 hours prior to the scheduled departure…All vessels must hold a valid insurance policy approved by the PGSA. The full terms and details is provided in Insurance Policy document (attached with the online form),” the terms and conditions document says, adding that the insurance is provided free of charge at present to the vessel owner, with all expenses covered by Iran.</p>
+<p>The PGSA reserves the right to introduce insurance fees in the future, which will be determined by the relevant insurer. Owners will then be required to purchase and renew coverage accordingly.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The online form also includes a declaration by the applicant, waiving the right to challenge the PGSA’s decisions on the transit permit and other related matters.</p>
+<p>“…I formally acknowledge that my application and the subsequent issuance of the passage permit are strictly conditional upon my full acceptance of the attached documents. I irrevocably waive any right to object, dispute, or challenge PGSA’s decisions regarding this permit, the enforcement of the passage rules, or the application of the insurance policy at any time now or in the future. This consent is final and binding,” the declaration reads.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10748292"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June nineteenth, twenty twenty-six, at fifteen minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/strait-of-hormuz-transit-rules-iran-permit-system-10748292/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-19 18:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
