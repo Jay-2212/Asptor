@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>NSE files for IPO: Could the exchange’s public offering become the largest in India’s history? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>NSE files for IPO: Could the exchange’s public offering become the largest in India’s history?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/NSE.jpg?w=1600" alt="NSE files for IPO: Could the exchange’s public offering become the largest in India’s history?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="NSE IPO" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/NSE.jpg?w=1600" width="650"/><span class="ie-custom-caption">The NSE has filed draft papers to sell a 6% stake. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>After nearly a decade of delays caused by regulatory hurdles, the National Stock Exchange (NSE), India’s largest stock exchange, finally submitted its IPO (<a href="https://indianexpress.com/article/explained/everyday-explainers/everyday-economics-ipo-initial-public-offering-7775437/" rel="noopener" target="_blank"><strong>initial public offering</strong></a>) documents late on Wednesday.</p>
+<p>Market estimates suggest the offering could raise around Rs 20,000 crore through an offer for sale (OFS), although some participants believe the issue could be significantly larger at Rs 25,000 crore-Rs 30,000 crore.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>An OFS is a type of <a class="" href="https://www.financialexpress.com/market/ipo/" rel="noopener" target="_blank">IPO</a> where a company’s promoters or early investors sell their existing shares on the primary market, rather than issuing new shares to raise fresh capital. For instance, India’s largest IPO, by Hyundai Motor, was a pure OFS issue.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>If the NSE offering is priced at the upper end of these projections, it could become the largest public offering in India’s history, surpassing Hyundai Motor India’s Rs 27,870 crore IPO launched in 2024. NSE shares are trading at around Rs 2,035 in the unofficial private market, implying a potential IPO size of around Rs 30,000 crore. But there is no certainty that the issue will be priced at those levels.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>India’s biggest IPOs</strong></h2>
+<p>Hyundai Motor India, which raised Rs 27,870 crore through the IPO, debuted with a valuation of around Rs 1.59 lakh crore during its IPO. <a class="" href="https://www.financialexpress.com/market/life-insurance-corporation-of-india-share-price/" rel="noopener" target="_blank">LIC</a>, currently India’s second-largest IPO, raised Rs 21,008 crore in 2022 through the sale of a 3.5% stake, valuing the insurer at Rs 6 lakh crore.</p>
+<p><img alt="India's biggest IPOs" class="lazyloading alignnone size-medium wp-image-10746177" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=450,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg 1080w, https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=338,450 338w, https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=450,600 450w, https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=768,1024 768w, https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=304,405 304w, https://indianexpress.com/wp-content/uploads/2026/06/Indias-biggest-IPOs-ever-gfx.jpg?resize=900,1200 900w" height="600" sizes="(max-width: 450px) 100vw, 450px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="450"/></p>
+<p>Paytm, Tata Capital and Coal India complete the list of the five largest IPOs in India, having raised between Rs 15,000 crore and Rs 18,000 crore each. The remaining spots in the top 10 are occupied by HDB Financial Services, LG Electronics India, <a class="" href="https://www.financialexpress.com/market/swiggy-ltd-share-price/" rel="noopener" target="_blank">Swiggy</a>, General Insurance Corporation and NTPC Green Energy, all of which raised between Rs 10,000 crore and Rs 12,500 crore through their public offerings.</p>
+<p>NSE’s rival, BSE, raised Rs 1,243.43 crore through its 2017 IPO at a valuation of roughly Rs 4,400 crore. Today, BSE commands a market capitalization of more than Rs 1.65 lakh crore.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>NSE’s valuation could exceed Rs 5 lakh crore</strong></h2>
+<p>The NSE has filed draft papers to sell up to 14.89 crore shares, representing nearly a 6% stake in the company. If the IPO for the 6% stake raises around Rs 30,000 crore, it would imply a valuation of more that Rs 5 lakh crore for the entire company.</p>
+<p>“At roughly 40x FY26 projected PAT [profit after tax], a Rs 5 lakh crore valuation may appear expensive at first glance. However, it is broadly in line with several global exchange peers. In fact, there could still be upside left on the table, and I believe the stock has the potential to double within 2-3 years of listing,” said the head of research at a domestic brokerage firm.</p>
+<p>“This view is based on NSE’s ability to sustain its current profitability levels and maintain its dominant position across both cash and derivatives markets. Additionally, the steady expansion of India’s retail investor base, reflected in strong growth in demat accounts, provides a powerful structural tailwind. Taken together, these factors could make NSE an attractive long-term investment opportunity,” he said.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/record-year-india-primary-markets-ipo-investors-10449632/">As primary market booms, exits by promoters and investors are accelerating. This may be good for markets — not for companies</a></span></div>
+<p>Such a valuation would place the NSE among the 10 most valuable listed companies in India, surpassing <a class="" href="https://www.financialexpress.com/market/infosys-ltd-share-price/" rel="noopener" target="_blank">Infosys</a>, whose current market capitalisation stands at around Rs 4.6 lakh crore. At present, Reliance Industries is India’s most valuable listed company with a market capitalisation of approximately Rs 18 lakh crore, followed by <a class="" href="https://www.financialexpress.com/market/hdfc-bank-ltd-share-price/" rel="noopener" target="_blank">HDFC Bank</a> at about Rs 12.26 lakh crore and <a class="" href="https://www.financialexpress.com/market/bharti-airtel-ltd-share-price/" rel="noopener" target="_blank">Bharti Airtel</a> at more than Rs 11.41 lakh crore.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Other members of the top tier include SBI, ICICI Bank, <a class="" href="https://www.financialexpress.com/market/tata-consultancy-services-ltd-share-price/" rel="noopener" target="_blank">TCS</a>, <a class="" href="https://www.financialexpress.com/market/bajaj-finance-ltd-share-price/" rel="noopener" target="_blank">Bajaj Finance</a>, LIC, L&amp;T and Hindustan Unilever, each with market capitalisations ranging between Rs 5 lakh crore and Rs 10 lakh crore.</p>
+<h2><strong>Why is NSE valuation so high?</strong></h2>
+<p>NSE commands a substantially higher valuation than its peers, driven by its significantly larger revenue base and dominant position across both cash and derivatives trading segments. In FY26, NSE reported consolidated revenue of Rs 16,601 crore, compared with approximately Rs 4,834 crore reported by BSE.</p>
+<p>This revenue advantage stems from NSE’s leadership across multiple market segments.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/openai-anthropic-spacex-ipo-ai-india-how-to-invest-10731833/">AI giants, SpaceX gear up for IPOs: Are these companies overvalued, and can Indians invest in them</a></span></div>
+<p>According to IDBI Capital, as of FY26, NSE held a 92.99% market share in cash equities (based on total turnover), 99.79% in equity futures, 74.71% in equity options (based on premium turnover), 99.48% in exchange-traded currency futures, and 100% in exchange-traded currency options (based on total industry premium turnover). Furthermore, NSE has ranked as the world’s largest exchange for equity derivatives contracts traded for seven consecutive years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>NSE’s revenue from operations was Rs 16,601 crore during FY26 as against Rs 14,780 crore during FY24. Its net profit was Rs 10,302 crore during FY26 as against Rs 8,305 crore during FY24, NSE said.</p>
+<p>As per World Federation of Exchanges, NSE retained its position as the largest equity derivatives exchange globally with over 36.99 billion (including NSE International Exchange) contracts traded in Fiscal 2026.  The exchange’s strong market dominance, diversified revenue streams, and global leadership in derivatives trading underpin its premium valuation relative to peers.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10745929"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June eighteenth, twenty twenty-six, at five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/nse-files-for-ipo-could-the-exchanges-public-offering-become-the-largest-in-indias-history-10745929/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-19 15:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
