@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How undersea cables helped Britain rule its global empire | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How undersea cables helped Britain rule its global empire</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-20</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/submarine-cables-1.jpg?w=1600" alt="How undersea cables helped Britain rule its global empire">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="submarine cables" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/submarine-cables-1.jpg?w=1600" width="650"/><span class="ie-custom-caption">Modern fibre-optic cables handle more than 95% of all international data traffic. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">On this day 186 years ago, Samuel Morse received US Patent No. 1647A for his “American Electro-Magnetic Telegraph”. Morse’s groundbreaking invention paved the way for rapid long-distance communication across the oceans.</span></p>
+<p><span style="font-weight: 400">Today, modern fibre-optic cables handle more than 95% of all international data traffic. Though the history of how the ocean floor was wired is vast and storied, the British Empire’s use of this emerging technology in the late 19th and early 20th centuries to further its expansionist ambitions marked a defining chapter.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">This is how Britain built the world’s first communications empire, turning undersea cables into invisible instruments of imperial control and geopolitical leverage.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>Communications and the ‘All-red Line’</b></p>
+<p><span style="font-weight: 400">In the early 19th century, the British Empire found it nearly impossible to implement a unified governance model across the vast expanse of its colonial holdings.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">The speed of information was bound to a ship traversing the vast oceans. Historian Daqing Yang said in a 2009 paper: “Geographical limits of empires were determined by the possibility for effective communication.” </span></p>
+<p><span style="font-weight: 400">Though the telegraph began to shrink this vastness, it was initially confined only to overland communications.</span></p>
+<p><span style="font-weight: 400">The year 1851 saw a giant leap. The Submarine Telegraph Company, a British firm, laid the world’s first ever successful undersea cable, across the English Channel. A French fisherman, however, severed it shortly after its first transmission.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">It was not until 1866 that a lasting transatlantic cable was laid down across the ocean by American businessman Cyrus W Field, the founder of the Atlantic Telegraph Company. </span></p>
+<p><span style="font-weight: 400">Quick to identify the advantages of rapid communications, the British initiated an aggressive campaign to wire the globe, handing over the task of building and developing these wires to domestic companies.</span></p>
+<p><span style="font-weight: 400">This resulted in the eventual formation of the “All-Red Line” — the nervous system of the British Empire, named so owing to the red ink used to indicate colonial territory on maps at the time.</span></p>
+<span class="custom-caption"><img alt="undersea cable map" class="lazyloading size-medium wp-image-10749615" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/all-red-line-map.jpg?resize=600,340" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/all-red-line-map.jpg 1280w, https://indianexpress.com/wp-content/uploads/2026/06/all-red-line-map.jpg?resize=450,255 450w, https://indianexpress.com/wp-content/uploads/2026/06/all-red-line-map.jpg?resize=600,340 600w, https://indianexpress.com/wp-content/uploads/2026/06/all-red-line-map.jpg?resize=768,436 768w, https://indianexpress.com/wp-content/uploads/2026/06/all-red-line-map.jpg?resize=714,405 714w" height="726" sizes="(max-width: 1280px) 100vw, 1280px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1280"/> World cable map from 1901. Source: William Clauson-Thue, The ABC Universal Commercial Electric Telegraphic Code, 5th ed. (London: Eden Fisher and Co., 1901)</span>
+<p><span style="font-weight: 400">By 1892, the British controlled 66% of the world’s cable networks spanning almost 164,000 km, according to a 2025 paper, </span><i><span style="font-weight: 400">Undersea cables and the extension of Empire</span></i><span style="font-weight: 400">.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Soon enough, other powers such as the US, Japan and the Dutch also began laying their own undersea cables, says the paper, authored by Motohiro Tsuchiya (Graduate School of Media and Governance) and Kristi Govella (Oxford School of Global and Area Studies).</span></p>
+<p><span style="font-weight: 400">By 1908, the British share of undersea networks was at 56.2% (2,65,971 km). The country with the second largest share in that year was the US, with a 92,434 km network, according to the paper.</span></p>
+<p>The network was often routed through British-controlled territories and cable stations rather than along the shortest geographical paths, reducing dependence on foreign powers and enhancing the security of imperial communications.</p>
+<p><span style="font-weight: 400">Cables were drawn from the Strait of Gibraltar into the Mediterranean, routed through Malta and the Suez Canal, into the Red Sea, across the Indian Ocean to Bombay, and stretched as far as Hong Kong, says the paper.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">London effectively monopolized global information flows forcing rival nations to navigate a communications system strictly governed by the British Crown.</span></p>
+<p><b>Communications and tactical dominance</b></p>
+<p><span style="font-weight: 400">The All-Red Line empowered the British in multiple ways. Information flowed in and out of London at an unprecedented rate. </span></p>
+<p><span style="font-weight: 400">Financial institutions heavily leveraged this system to instantly exchange information on weather patterns, shipping routes and fluctuating prices of cargo at various ports, according to </span><i><span style="font-weight: 400">Undersea cables and the extension of Empire</span></i><span style="font-weight: 400">.</span></p>
+<span class="custom-caption"><img alt="undersea cables" class="lazyloading size-medium wp-image-10749621" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/global-undersea-cables.jpg?resize=600,472" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/global-undersea-cables.jpg 1023w, https://indianexpress.com/wp-content/uploads/2026/06/global-undersea-cables.jpg?resize=450,354 450w, https://indianexpress.com/wp-content/uploads/2026/06/global-undersea-cables.jpg?resize=600,472 600w, https://indianexpress.com/wp-content/uploads/2026/06/global-undersea-cables.jpg?resize=768,604 768w, https://indianexpress.com/wp-content/uploads/2026/06/global-undersea-cables.jpg?resize=515,405 515w" height="804" sizes="(max-width: 1023px) 100vw, 1023px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1023"/> A map of undersea internet cables today. TeleGeography</span>
+<p><span style="font-weight: 400">Militarily, the system allowed the rapid deployment of the British forces. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">It was not until 1914, however, that the true tactical value of this infrastructure was displayed. One of the very first acts by the British after the eruption of World War I was to deploy a cable ship to dredge up and sever Germany’s transatlantic telegraphic cables. </span></p>
+<p><span style="font-weight: 400">Though Germany responded similarly, the strength and size of the British telegraph network was maintained during both World Wars.</span></p>
+<p><b>Undersea cables in modern times</b></p>
+<p><span style="font-weight: 400">Today, the geopolitical logic of the All Red-Line has carried forth. Undersea cables remain the vital yet invisible backbone of critical infrastructure like the Internet.</span></p>
+<p><span style="font-weight: 400">Modern geopolitical tensions are evident in the competition between the US and China, with both powers closely scrutinising and competing over undersea cable projects in the Indo-Pacific. More than a century after they first emerged as tools of empire, these networks continue to shape regional alignments and strategic partnerships.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">A key differentiator between the 19th-20th century networks and today is the arrival of private tech monoliths. US-based hyperscalers like Meta and Amazon have emerged as chief players in the construction, leasing and operation of most submarine cables. States continue to co-operate with such companies to ensure national strategic interests are protected.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10749614"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twentieth, twenty twenty-six, at thirteen minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/how-undersea-cables-helped-britain-rule-its-global-empire-10749614/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-20 17:47 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
