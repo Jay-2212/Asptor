@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From Ukraine to Lebanon, how ‘invisible’ drones are redefining the rules of asymmetric warfare | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From Ukraine to Lebanon, how ‘invisible’ drones are redefining the rules of asymmetric warfare</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-20</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/fiber-optic-drone-A.jpg?w=1600" alt="From Ukraine to Lebanon, how ‘invisible’ drones are redefining the rules of asymmetric warfare">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Drones" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/fiber-optic-drone-A.jpg?w=1600" width="650"/><span class="ie-custom-caption">A Ukrainian first-person view drone with a fiber optic communication channel. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">Following waves of attacks and counterattacks across southern Lebanon over the past couple of months, the Israel Defense Forces (IDF) and the Iran-backed militia Hezbollah finally announced a ceasefire Friday (June 19). This took place even as representatives of the US and Iran are <a href="https://indianexpress.com/article/explained/explained-global/swiss-neutrality-explained-us-iran-talks-10748978/" rel="noopener" target="_blank"><strong>slated to convene in Switzerland</strong></a> this weekend for talks to secure a permanent truce in the West Asia conflict.</p>
+<p dir="ltr">Although the future of the ceasefire <a href="https://indianexpress.com/article/world/israel-hezbollah-ceasefire-lebanon-attacks-10748621/" rel="noopener" target="_blank"><strong>remains uncertain</strong></a>, the fighting in southern Lebanon has put the focus on a low-cost weapon that Hezbollah has deployed to lethal effect against Israel’s advanced electronic warfare systems: fibre optic drones.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">What are these drones and why are tackling them proving to be a task for the Israeli military? We explain.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr"><strong>‘Invisible’ drones</strong></p>
+<p dir="ltr">Fibre-optic drones, as the name suggests, are connected to their operators through fibre-optic cables — these are high-speed, high-strength, and lightweight network cables that transmit data as pulses of light through tiny strands of glass or plastic. This thin cable is first wound onto a spool and covered with a protective shell before being attached to a drone.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">“So it’s a big spool of very thin wire, almost hair-like, connected to both the drone and the operator. The entire communication is through this cable, and this thin wire provides security to the drone because no radio emissions can be picked up,” Group Captain Rajiv Kumar Narang (retired), a drone systems expert and senior fellow at the Manohar Parrikar Institute for Defence Studies and Analyses, told <em>The Indian Express</em>.</p>
+<span class="custom-caption"><img alt="drones" class="lazyloading size-medium wp-image-10749353" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/fiber-optic-drone-B.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/fiber-optic-drone-B.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> FPV drones have a spool of very thin wire that transmits data. Wikimedia Commons</span>
+<p dir="ltr">When the drone takes off, the cable begins to unwind and can reach reasonable speeds without encountering too much drag. According to Narang, the drone’s information and control is managed through this thin wire, which initially allowed operation over shorter distances of about 5 km and later went up to — as per some claims — distances of even 20 to 30 km. Since these cables can transmit operational data during flight, they enable a drone operator to see their target and the surrounding environment in real time.</p>
+<p dir="ltr">The ongoing Russia-Ukraine war has been viewed as the testing ground for innovation in drone warfare. Narang said that given traditional drones emit radio signals and create their signatures owing to their use of GPS or radio control, they are susceptible to jamming, detection, and fixing of position — to overcome this problem, fibre optic drones emerged as a solution.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">“Basically, you have created an invisible drone where a small wire provides safety. It has significantly reduced their vulnerability against RF detection, jamming and spoofing,” Narang said.</p>
+<p dir="ltr"><strong>Tackling the threat</strong></p>
+<p dir="ltr">These drones have now found a new battlefield in southern Lebanon, where Hezbollah has been fighting the IDF. Reports indicate that Israel, despite its sophisticated jamming systems, has found it tough to neutralise this threat and has already suffered setbacks since April this year, be it in the form of wounded soldiers or destroyed armoured vehicles.</p>
+<p dir="ltr">Effective neutralisation is preceded by detection and tracking. According to Narang, detection requires proactive systems. “We need to develop better radars and, of course, electro-optic systems and infrared systems. They should be able to provide real-time detection, identification, and tracking of small, slow and low flying drones,” he said.</p>
+<p dir="ltr">Narang added that the only source for detection of a of a fibre optic drone is its radar cross-section — a metric that determines how visible it is to radar. This requires highly capable radar systems and is extremely difficult with current technological levels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">In terms of neutralisation, the drone’s small size and lack of RF signals posed an additional challenge besides the lack of time available for detection. Drone neutralisation systems, being multi-sensor and multi-shooter systems, are becoming expensive to achieve assured neutralisation of hostile drones, according to Narang.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/iran-drone-shahed-us-israel-gulf-future-warfare-10603928/">What Iran’s drone blitz says about the future of warfare</a></span></div></p>
+<p dir="ltr">A report in <em>The Jerusalem Post</em> pointed to efforts by top Israeli defence companies to present a range of solutions to the IDF. Among them were energy-based systems, including one that utilises electromagnetic force to capture and immobilise the drone. Another proposed solution are kinetic interception systems — also called “hit-to-kill” — which destroy targets such as ballistic missiles and hostile drones using kinetic energy, that is, extreme physical force of a direct, high-velocity collision.</p>
+<p dir="ltr">For now, Israeli soldiers have taken a cue of Ukraine’s playbook by using rather rudimentary techniques such as protective nets and even metal enclosures on military equipment to block these drones.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Besides, these drones also have their shortcomings. For instance, they are susceptible to bad weather such as gusty winds and heavy rain owing to their light body frames. They can also stop functioning if the thin cable snaps by flying into a physical hurdle, say a tree.</p>
+<p dir="ltr"><strong>The Indian context</strong></p>
+<p dir="ltr">India’s four-day conflict with Pakistan last May in the aftermath of the Pahalgam terror attack also saw extensive use of drone swarms and loitering munitions. Since then, India has reportedly sought to learn lessons from its own experience as well as other battlegrounds. Even outgoing Indian Army chief General Upendra Dwivedi had earlier told <em>The Indian Express</em> that the Army was also introducing better command-and-control arrangements for a drone-dense battlefield.</p>
+<p dir="ltr">Narang believed swarms would be a “major challenge”. He said: “From an Indian point of view, I think we need to think of developing better ‘hard-kill’ counter-drone systems.” “Hard kill” refers to physically destroying the drone, whether by firing a gun, using a suicide drone, or launching a small missile.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains </span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/expert-explains-advantage-ukraine-russia-war-reasons-10742564/">Advantage Ukraine: Role of tactics, tech and EU backing in Russia war</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Since jamming may not be an option against fibre optic drones, Narang said that India could also develop the Light Combat Helicopters (LCH) and the Light Combat Aircraft (LCA), among others, as airborne counter-drone platforms. “They have the speed and manoeuvrability to close in and neutralise drones, and they can remain airborne for reasonable durations. In a hot-war scenario, that capability will be very important, especially in critical areas that need to be defended,” he added.</p>
+<p dir="ltr">Narang also suggested greater use of AI and upgradation of munitions in detection and neutralisation alongside hybrid and mobile air defence systems to enhance accuracy and effectiveness both by day and night. “India could develop a combination of guns and short-range surface-to-air missiles of about 8 to 10 km range for terminal defence. In fact, we need smarter guns. If I have eight guns and a swarm of drones is coming, each gun should have enough intelligence to engage different drones, and once it destroys one target, it should automatically move to the next,” he said.</p>
+<p dir="ltr">But until effective solutions to tackle them are found, these drones are only the latest addition to the evolving playbook of asymmetric warfare worldwide.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10749348"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/abhinav-chakraborty/">
+<figure>
+<img alt="Abhinav Chakraborty" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2026/02/Untitled-design-2-1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/abhinav-chakraborty/"><span></span>Abhinav Chakraborty</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10517613"></div><div class="follow_author_title" data-id="Abhinav Chakraborty"></div><div class="follow_author_slug" data-id="abhinav-chakraborty"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Abhinav Chakraborty is a journalist with a keen interest in politics, world affairs, features, and long form. He is a former HR professional with experience across People Operations.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/abhinav-chakraborty/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twentieth, twenty twenty-six, at ten minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/israel-hezbollah-lebanon-drones-fibre-optic-10749348/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-20 14:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
