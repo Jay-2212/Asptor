@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-starmer_expl-glob.jpg?w=1600" alt="Expert Explains | Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Keir Starmer" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-starmer_expl-glob.jpg?w=1600" width="650"/><span class="ie-custom-caption">Britain's Prime Minister Keir Starmer announces his resignation outside 10 Downing Street in London on June 22, 2026. Photo: AP/Kin Cheung</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Two years after routing the Conservatives, in an election that saw Labour win 412 seats, British Prime Minister Keir Starmer <strong><a class="" href="https://indianexpress.com/article/world/uk-prime-minister-keir-starmer-resigns-britain-seventh-pm-decade-political-crisis-10751693/">has resigned</a></strong> both as PM and leader of the Labour Party.</span></p>
+<p><span style="font-weight: 400">His election in 2024 had brought Labour back to power after 14 years. This kind of resounding electoral majority was last seen in 1997 when Labour had defeated John Major, the Conservative Prime Minister since 1990, by winning 328 seats under the leadership of Tony Blair. </span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Although Starmer campaigned on the promise of “Change” to create a “fairer, healthier, and a more secure Britain”, he struggled to deliver on his electoral promises and fell to the same post-Brexit malady that has troubled British politics and economy for a decade now. </span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><b>A rocky start: The first 100 days</b></p>
+<p><span style="font-weight: 400">Trouble began to brew in the very first 100 days, often considered the honeymoon period for new leaders, of his government when he and his other Cabinet Ministers were accused of accepting gifts and free tickets for football and concerts worth thousands of pounds. </span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Dubbed as the “freebies gate”, Starmer had to face huge public backlash for his accepting of gifts resulting in his dwindling approval rating. Although he reimbursed the costs for the gifts and tickets and put in place strict donation rules, the damage was already done. Within two months of taking office, 43% of the electorate had started seeing him a bad PM. By </span><span style="font-weight: 400">June 15, 2026, that number had gone up to 73%. </span></p>
+<p><span style="font-weight: 400">His attempts to strengthen the National Health Service at the cost of cutting subsidies for winter fuel to roughly 10 million pensioners, his decision to release 1,700 prisoners before the completion of their sentence, the controversy surrounding extravagant payments to Sue Gray for her service as the Chief of Staff, and promised spending cuts to the tune of approximately $8 billion for the next financial year were not received well among the public as well as party members.</span></p>
+<p><span style="font-weight: 400">Another issue that brought him into conflict with his own party MPs was his decision to continue with the “two-child benefit cap”, a policy introduced by the Conservatives in 2017 and fiercely opposed by the Labour Party since then.  The controversial policy, meant to limit child support for parents in the form of Universal Credit or Child Tax Credit only for the first two children, was hugely unpopular in Britain and was abolished by Starmer only in April this year.</span></p>
+<p><b>The Brexit conundrum</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Starmer’s resignation has come a day earlier when Britain will be observing ten years of its decision to exit the European Union (EU). A decade later, the mood in Britain about Brexit has significantly changed.</span></p>
+<p><span style="font-weight: 400">Brexit supporters had mainly voted to exit the EU on issues of sovereignty, immigration and economic prosperity. Ten years down the line, Britain is still struggling. An estimated range from 2 to 8% contraction in the British gross domestic product, decreased revenue, high borrowing and tax hikes, a spectacular failure on non-EU immigration, struggling businesses, customs complications, and rampant inflation has made at least 57 % of Britons think that the UK was wrong to leave the EU.</span></p>
+<p><span style="font-weight: 400">Although Labour opposed the Brexit referendum and supported the UK’s membership of the EU, Starmer’s position has been a UK-EU Reset without joining the bloc and thus, there was not much political space to manoeuvre especially at a time when the <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">COVID-19</a> pandemic and the wars in Ukraine and Iran further impacted the already struggling British economy.   </span></p>
+<p><span style="font-weight: 400">A decade after Brexit, complex questions including trade, agriculture exports, youth mobility, border control, non-tariff barriers on British goods entering the EU, energy and other issues have continued to complicate the EU-UK Reset. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Although the date for the 2</span><span style="font-weight: 400">nd</span><span style="font-weight: 400"> EU-UK Summit has been announced, it would be interesting to see how the EU negotiates with an outgoing PM. Any major concessions on the British side, besides an expected one billion pounds per year payment to EU in return for access to EU’s single market, however, would only weaken Labour position and further strengthen the far-right. </span></p>
+<p><b>A weakened duopoly</b></p>
+<p><span style="font-weight: 400">Although Brexit has been a mixed bag of emotions for the British public, the one man who has gained most out of it is Nigel Farage and his Reform UK party. Farage, one of the leaders of Brexit, has gained considerable strength in recent years, mostly on his anti-immigration rhetoric, and has managed to challenge the traditional duopoly in the British politics with his prospects of winning the 2029 parliamentary election becoming stronger day by day.</span></p>
+<p><span style="font-weight: 400">The collapse of Starmer’s Labour, including in its traditional strongholds, and the subsequent surge of Reform UK in the recently held local elections further weakened Starmer’s position, prompting many in his own party to question his ability to govern. </span></p>
+<p><span style="font-weight: 400">Although Farage has gained in popularity, many Labour supporters have also flocked to the Green Party, which is also rising in popularity especially in the cities, with its support for Palestinian rights and programmes to tax the rich. Since taking over the Greens in September, the 43-year-old Zack Polanski has significantly improved its ratings by capitalising on the frustration of the left-liberal voters with Starmer’s government, further contributing to the PM’s plummeting support among his voters. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">A weakened Labour at home has also made the EU cautious of Starmer’s attempt to reset ties in recent days. Many analysts now argue that Brussels may wait and watch until 2029 before signing any promising deal with the Labour government, only to be abolished by a far-right government which is polling high in many opinion polls.</span></p>
+<h2><b>Deals abroad, troubles at home</b></h2>
+<p><span style="font-weight: 400">His failures on the domestic front were too stark to be compensated for his successes on the foreign policy front that saw him build a cordial relationship with US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> (at least until the Iran War began in February 2026) and secure a much favourable tariffs deal compared with his European counterparts, sign a major trade deal with India, and launch a promising reset with the EU. </span></p>
+<p><span style="font-weight: 400">Although he started from an already fragile base, his promise to “Change” never materialised where his tenure was marked by frequent resignations, delivery deficits, policy U-turns, intra-party conflicts and leadership contestations. He struggled to implement a solid policy agenda that could control rising non-EU immigration, improve Britain’s crumbling health sector and check the rise of far-right.  </span></p>
+<p><span style="font-weight: 400">With the disastrous Labour performance in the recently concluded local elections, where the party lost 1,100 council seats and control of more than 30 councils, the writing was on the wall. Besides, the victory of Andy Burnham, the former mayor of Greater Manchester, in a parliamentary byelection after defeating the far-right candidate of Reform UK, was the last nail in Starmer’s coffin, pushing him to finally leave.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><i><span style="font-weight: 400">The author researches post-Cold War European politics and security at the Indian Council of World Affairs, New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</span></i></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10751727"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at fifty-two minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/keir-starmer-resignation-brexit-labour-uk-politics-expert-explains-10751727/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-22 10:09 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
