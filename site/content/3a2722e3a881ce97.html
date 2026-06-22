@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How Pune’s 1897 plague led the Chapekar brothers to assassinate a British officer | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How Pune’s 1897 plague led the Chapekar brothers to assassinate a British officer</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Untitled-design-53.jpg?w=1600" alt="How Pune’s 1897 plague led the Chapekar brothers to assassinate a British officer">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Damodar Hari Chapekar, 28, Balkrishna Hari Chapekar, 24, and Vasudeo Hari Chapekar." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Untitled-design-53.jpg?w=1600" width="650"/><span class="ie-custom-caption">Damodar Hari Chapekar, 28, Balkrishna Hari Chapekar, 24, and Vasudeo Hari Chapekar. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On the night of June 22, 1897, a grand celebration to mark Queen Victoria’s Diamond Jubilee was wrapping up at Governor’s House in Ganeshkhind, at what is today Pune University. Guests were beginning to leave on horse-drawn coaches. On a dark street, a cry rang out: “<em>Gondya ala re</em> (Gondya is coming)”.</p>
+<p>Moments later, two coaches were attacked, and two men were killed. One of them was Walter Charles Rand, an Oxford University alumnus and an Indian Civil Service officer, who had been appointed that year as the Assistant Collector and Chairman of the Poona Plague Committee.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><a href="https://indianexpress.com/article/research/how-oppressive-containment-measures-during-poona-plague-led-to-assassination-of-british-officer-6450775/"><strong>The assassins were three</strong></a> brothers, Damodar Hari Chapekar, 28, Balkrishna Hari Chapekar, 24, and Vasudeo Hari Chapekar, 18. The revolutionaries of the Indian freedom movement were arrested and imprisoned.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>In his autobiography, Musings from the Gallows, Damodar wrote, “Now, the question arises, why should such a murderous and terrible deed be undertaken?… Just as Prahlad worshipped the Almighty with boundless devotion, so my love for my country is unwavering… undying. I shall relinquish all happiness and sacrifice my life for my country”. Damodar was hanged on April 18, 1898, Vasudeo on May 8, and Balkrishna on May 12.</p><div id="taboola-mid-article-personalisation"></div>
+<p>“This is, perhaps, the only instance anywhere in the world of three brothers being hanged in the service of their country’s independence. What is significant is that the Chapekars had written a letter to Rand, informing him that he would be killed on the night of June 22. They were not going to kill him like cowards, without a warning,” says <a class="" href="https://indianexpress.com/section/cities/pune/" rel="noamphtml">Pune</a> historian Mohan Shete, and the playwright-director of a play on the brothers, titled Swatantryacha Krantiyadna.</p>
+<p><strong>Rooted in religion</strong></p>
+<p>The Chapekar community comes from the Konkan region, but Haripant Chapekar, the father of the brothers, had moved to Chinchwad, which was little more than a village at the time.</p>
+<p>Haripant was a well-known kirtankar, who was invited to places as far away as <a class="" href="https://indianexpress.com/section/cities/bhopal/" rel="noamphtml">Bhopal</a>, Indore and Nagpur to perform songs of the scriptures. He moved his family to a rented accommodation in Sadashiv Peth of Pune to be closer to the devotees in whose homes he would perform.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/renaming-bengal-road-bjp-confusion-10751914/">The Two Suhrawardys: How the BJP’s renaming optics confuses one with the other</a></span></div>
+<p>Shete says that according to Damodar’s writings, the stories of Ram and Krishna would inspire him to wonder why his generation could not take on the Ravan and Kansa of their times — the British oppressors.</p>
+<p>Growing up, the Chapekars were encouraged by the patriotic stories of Vasudev Balwant Phadke, who had led armed struggles against British interests and was shipped off to Aden in Yemen to be incarcerated. The brothers were ardent followers of Lokmanya Tilak, whose paper <em>Kesari</em> was raising its voice for independence and sociopolitical causes.</p>
+<p>By 1896, however, another enemy was rearing its head over Poona in the form of the bubonic plague, which had travelled from Yunnan in China through Hong Kong and Bombay.</p>
+<p><strong>Oppression during the plague</strong></p>
+<p>On October 2, 1896, Poona recorded its first cases of plague. In four months, 271 people died of the disease, and 308 were infected. Tens of thousands of people were fleeing Poona to return to their villages. The Indians and the British began to demand a strong leader to clean up the city before things spiralled out of control.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Shete says that Rand, 34, who was posted in Satara, was found to be a fit candidate for the job. Bombay Presidency Governor William Mansfield Sandhurst appointed him. In a report written before his death, Rand describes that “stringent measures” were needed in Poona to control the plague.</p>
+<p>According to Shete, these measures were extreme and insensitive. Soldiers would enter houses to check for plague-infected patients, angering the local people. For a people who did not wear shoes into the house, let alone leather shoes, the sanctity of spaces such as kitchens and small temples was seen as being violated.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained history</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/why-subhas-bose-broke-with-congress-for-forward-bloc-10752163/">Why Subhas Chandra Bose broke with the Congress to found Forward Bloc</a></span></div>
+<p>“People were so frightened that they began to hide family members. Even dead bodies were hidden in the garden and cupboards. People were afraid that, if detected as a plague-infected family, they would be turned out of their homes, city and village,” says Shete.</p>
+<p>He adds that it was particularly horrifying when men and women were made to stand in public and bare parts of their bodies for soldiers to check for symptoms of plague infection. In a confession that Damodar later retracted, he said that these search operations and other measures triggered him to plot Rand’s assassination.</p>
+<p><strong>The wrong target</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The assassination was meant to challenge the British Crown, too. The brothers had carried out recces of the route and studied Rand’s movements minutely. The code of <em>Gondya ala re</em> was finalised.</p>
+<p>“Govind Londe was the maternal uncle of the brothers. An employee of the British government, he used to discourage the brothers’ revolutionary ideas. Every time their uncle was nearby, the brothers used the sentence <em>Gondya ala re</em> as a signal to change the topic of discussion,” says Shete.</p>
+<p>On June 22, 1897, the site of the assassination was carefully chosen. After a bridge over the Mutha river, the road turned, and carriages needed to slow down, allowing the assassins to jump on top of it. At the critical moment, however, the younger brother, Vasudev, made a mistake. His battle cry made Balkrisha attack a coach carrying Lieutenant Charles Ayerst and his wife, not Rand. Ayerst died immediately.</p>
+<p>The signal shout went up again. Damodar realised their mistake and attacked the second carriage, which was carrying Rand. Following the attacks, the victims were taken to Sassoon Hospital. Rand died on July 3.</p>
+<p><strong>The aftermath</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The police were led to the brothers by two other brothers, Ganesh Shankar Dravid and Ramchandra Shankar Dravid. Tilak, too, was tried for inciting people through his writings in <em>Kesari</em>. He was sent to 18 months of imprisonment.</p>
+<p>“In later years of the freedom struggle, the revolutionaries who killed British officers would become well-known heroes. But, the Chapekars came long before this. The fire they lit, however, would inspire many. Veer Damodar Savarkar was a young boy in Nasik when the Chapekars were killed. He would take an oath before the family devi, the eight-armed Durga, to complete their unfinished work,” says Shete.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10752318"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/dipanita-nath/">
+<figure>
+<img alt="Dipanita Nath" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/dipanita.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/dipanita-nath/"><span></span>Dipanita Nath</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951694"></div><div class="follow_author_title" data-id="Dipanita Nath"></div><div class="follow_author_slug" data-id="dipanita-nath"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Dipanita Nath is a Senior Assistant Editor at The Indian Express, based in Pune. She is a versatile journalist with a deep interest in the intersection of culture, sustainability, and urban life.
+
+Professional Background
+
+Experience: Before joining The Indian Express, she worked with other major news organizations including Hindustan Times, The Times of India, and Mint.
+
+Core Specializations: She is widely recognized for her coverage of the climate crisis, theatre and performing arts, heritage conservation, and the startup ecosystem (often through her "Pune Inc" series).
+
+Storytelling Focus: Her work often unearths "hidden stories" of Pune—focusing on historical institutes, local traditions, and the personal journeys of social innovators.
+
+Recent Notable Articles (December 2025)
+
+Her recent reporting highlights Pune’s cultural pulse and the environmental challenges facing the city during the winter season:
+
+1. Climate &amp; Environment
+
+"Pune shivers on coldest morning of the season; minimum temperature plunges to 6.9°C" (Dec 20, 2025): Reporting on the record-breaking cold wave in Pune and the IMD's forecast for the week.
+
+"How a heritage tree-mapping event at Ganeshkhind Garden highlights rising interest in Pune’s green legacy" (Dec 20, 2025): Covering a citizen-led initiative where Gen Z and millennials gathered to document and protect ancient trees at a Biodiversity Heritage Site.
+
+"Right to breathe: Landmark NGT order directs PMC to frame norms for pollution from construction sites" (Dec 8, 2025): Reporting on a significant legal victory for residents fighting dust and air pollution in urban neighborhoods like Baner.
+
+2. "Hidden Stories" &amp; Heritage
+
+"Inside Pune library that’s nourished minds of entrepreneurs for 17 years" (Dec 21, 2025): A feature on the Venture Center Library, detailing how a collection of 3,500 specialized books helps tech startups navigate the product life cycle.
+
+"Before he died, Ram Sutar gave Pune a lasting gift" (Dec 18, 2025): A tribute to the legendary sculptor Ram Sutar (creator of the Statue of Unity), focusing on his local works like the Chhatrapati Shivaji statue at Pune airport.
+
+"The Pune institute where MA Jinnah was once chief guest" (Dec 6, 2025): An archival exploration of the College of Agriculture, established in 1907, and its historical role in India's freedom struggle.
+
+3. Arts, Theatre &amp; "Pune Inc"
+
+"Satyajit Ray, Ritwik Ghatak were not rivals but close friends, says veteran filmmaker" (Dec 17, 2025): A deep-dive interview ahead of the Pune International Film Festival (PIFF) exploring the camaraderie between legends of Indian cinema.
+
+"Meet the Pune entrepreneur helping women build and scale businesses" (Dec 16, 2025): Part of her "Pune Inc" series, profiling Nikita Vora’s efforts to empower female-led startups.
+
+"How women drone pilots in rural Maharashtra are cultivating a green habit" (Dec 12, 2025): Exploring how technology is being used by women in agriculture to reduce chemical use and labor.
+
+Signature Style
+
+Dipanita Nath is known for intellectual curiosity and a narrative-driven approach. Whether she is writing about a 110-year-old eatery or the intricacies of the climate crisis, she focuses on the human element and the historical context. Her columns are often a blend of reportage and cultural commentary, making them a staple for readers interested in the "soul" of Pune.
+
+X (Twitter): @dipanitanath                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/dipanita-nath/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at fifty-five minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/indian-independence-movement/" href="https://indianexpress.com/about/indian-independence-movement/">Indian Independence movement</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/pune-2/" href="https://indianexpress.com/about/pune-2/">pune</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/chapekar-brothers-story-assassination-pune-plague-10752318/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-22 17:13 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

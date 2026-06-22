@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What makes replacing the UK Prime Minister so simple? The constitutional process, for one | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What makes replacing the UK Prime Minister so simple? The constitutional process, for one</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/starmer-del.jpg?w=1600" alt="What makes replacing the UK Prime Minister so simple? The constitutional process, for one">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="PM Keir Starmer at 10 Downing Street announcing his resignation (AP Photo/Kin Cheung)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/starmer-del.jpg?w=1600" width="650"/><span class="ie-custom-caption">PM Keir Starmer at 10 Downing Street announcing his resignation (AP Photo/Kin Cheung)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>UK Prime Minister Keir Starmer formally announced his resignation on Monday (June 22) after weeks of speculation, with the resignation extending to the leadership of the Labour Party as well.</p>
+<p>Starmer had previously declared his intention to fight to protect his leadership less than a week ago. “If there is a challenge, I intend to fight in any challenge to my leadership”, he said during the G7 meeting. It was preceded by former Health Minister Wes Streeting’s statement that he was prepared to trigger a Labour leadership <a href="https://indianexpress.com/article/opinion/editorials/keir-starmer-resigns-uk-successor-andy-burnham-epstein-mandelson-10752001/"><strong>contest and throw his hat into the ring.</strong></a></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>But this followed another change of position, with Streeting urging Starmer to reconsider over the weekend. A few hours after Starmer’s resignation, Streeting threw his support behind Andy Burnham, the newly elected Member of Parliament (MP) for the Makerfield constituency.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Starmer’s resignation and impending replacement mean that the UK will officially have had seven Prime Ministers over the course of a decade. Despite a Prime Minister’s fixed term of service being five years, not a single UK PM has come close to completing their term since 2016. Boris Johnson came the closest, having served as the PM from 2019 to 2022.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>How the UK chooses its PM</strong></h2>
+<p>The UK Parliament consists of two Houses, the House of Lords and the House of Commons. The political party which holds the majority of the 650 seats in the House of Commons chooses the Prime Minister, who is usually the leader of the ruling party.</p>
+<p>A common misconception is that the PM is elected to serve a fixed term of five years. In reality, the limit applies to the parliamentary term for the party in power and not the individual that becomes the PM. Thus, even though the government and the party may enjoy popular support, the top leadership can continue to witness upheaval.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/keir-starmer-resignation-brexit-labour-uk-politics-expert-explains-10751727/">Expert Explains | Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party</a></span></div>
+<p>The selection of the PM begins with the general elections, where citizens vote to choose their MP. This elected MP represents the local constituency in the House of Commons. The leader of the political party that secures the majority of the seats in the House of Commons is then invited by the Monarch (currently, the King) to form the new government.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Importantly, the PM’s constitutional power stems from his/her ability to command the confidence of their party’s elected MPs.</p>
+<p>The loss of this internal confidence can trigger a leadership election within the party, which, if successful, leads to the replacement of the sitting PM. This provision is based on the fact that the British system treats the PM as the first among equals or the <em>primus inter pares</em>.</p>
+<p>In Starmer’s case, the former Labour Party leader had been the subject of intense scrutiny owing to poor results in the May local elections and the controversy over the appointment of Peter Mandelsor as the Ambassador to the US, despite his connection to the convicted child sex offendor Jeffrey Epstein.</p>
+<h2><strong>Replacing a PM: Labour Party Rules</strong></h2>
+<p>The mechanism to replace a party leader depends on the internal procedures followed by a party. Starmer’s replacement will be chosen based on Labour’s specific internal machinery. The process generally involves the following:</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="color: #ff0000"><strong>1. Triggering vacancy</strong></span> The leadership contest begins once the current head either resigns, or if a formal challenger is backed by 20% of the MPs within the Labour Party. Prior to Starmer’s resignation, Wes Streeting had publicly declared that he had the support of the required 20% of MPs (81 members).</p>
+<p><span style="color: #ff0000"><strong>2. Timetable</strong></span> In the face of a leadership vacuum, the National Executive Committee (NEC) immediately convenes to agree on a timetable for the election. This includes the timelines for leader nominations from the existing pool of MPs and the timeframe for the internal voting process.</p>
+<p><span style="color: #ff0000"><strong>3. Candidate nomination</strong></span> Prospective candidates must fulfil two conditions of being a House of Commons MP and having the requisite support among members.</p>
+<p>Makerfield’s previous MP, Josh Simons, had stepped down earlier to allow Andy Burnham to contest in the by-elections. Burnham is currently touted to be the strongest candidate, with Streeting also eventually backing him.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="color: #ff0000"><strong>4. Affiliate support</strong></span> Candidates must also secure nominations from 5% of Constituency Labour Parties (CLP) or three affiliated organisations, like trade unions. Once the final ballot is set, voting takes place.</p>
+<p>All party members and affiliates vote via a preferential ballot, ranking the candidates in order of preference. The winning candidate must receive over 50% of the votes, but if noone does so in the first round, the least popular candidates are eliminated in each round of counting and their votes are transferred.</p>
+<p><strong>Final step</strong></p>
+<p>The winner of the Labour vote does not automatically assume power and must await a formal constitutional handover.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/questions-about-burnham-and-starmer-10748129/">Why a UK parliamentary bypoll is raising questions about Keir Starmer’s future as PM</a></span></div>
+<p>Starmer must travel to Buckingham Palace to tender his formal resignation to King Charles III. After this, the newly elected Labour leader is summoned to an audience with the King, where the opportunity to form a new government is extended. Upon accepting, the new leader officially becomes the Prime Minister of the UK.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Essentially, as long as the governing party retains its overall majority in the House of Commons, it holds the power to change the country’s leader in the event of faltering confidence.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10752292"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at fifteen minutes past nine at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/united-kingdom/" href="https://indianexpress.com/about/united-kingdom/">united kingdom</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/why-keir-starmer-uk-pm-replaced-easily-process-10752292/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-22 17:13 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
