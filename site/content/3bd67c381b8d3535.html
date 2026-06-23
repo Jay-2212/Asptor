@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | ‘Investment is casualty when industry concentration rises’ | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | ‘Investment is casualty when industry concentration rises’</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/indian-economy-and-investment.jpeg?w=1600" alt="Expert Explains | ‘Investment is casualty when industry concentration rises’">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Workers at a shoe export factory in Sikandra near Agra, UP." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/indian-economy-and-investment.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Workers at a shoe export factory in Sikandra near Agra, UP. (Express photo by Tashi Tobgyal)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><strong>Jahangir Aziz</strong>, Co-Head of Macroeconomic Research at J.P. Morgan, spoke to <strong>Siddharth Upasani</strong>, Deputy Associate Editor at <em>The Indian Express</em>, about how the West Asia conflict has reshaped global trade, capital flows, and economic stability at an <a href="https://www.youtube.com/playlist?list=PLrDg7LoYgk9zrqg5_mXLmz7im_zukHtXR" rel="nofollow"><strong>Explained Live event</strong></a> in early June. Edited excerpts:</p>
+<h2>At a time of great geopolitical uncertainty, are there some natural winners and losers in global capital?</h2>
+<p>The easy answer is that during times of higher uncertainty, you could have turned to the US economy as a safe haven. If you look at what has happened to the US economy asset prices since, the conclusion you’d reach is that this is exactly what was expected, with a massive increase in equities.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The problem comes when you look at where the money went into the <a class="" href="https://indianexpress.com/about/stock-market-today/" rel="noamphtml">stock market</a>. Most of it has gone into AI-related stocks, which have been broadening. It hasn’t gone into the mainstream economy. Apart from people moving to US equity markets, they also move to gold, which is one asset class that has performed horribly despite a rise in geopolitical uncertainty.</p>
+<p>Basically, if you scratch the surface, the war is not the defining issue because this geopolitical conflict has come in the face of several other factors driving the global economy. Not accounting for this makes it difficult to isolate the impact of the war.</p><div id="taboola-mid-article-personalisation"></div>
+<p>First, there was a massive increase in trade uncertainty, where the existing trade order has been seriously questioned <em>vis-a-vis</em> the US’s actions. Second, there’s been this new secular driver of capex, definitely in the US and North Asia, due to the AI-driven increase in spending. The war,<em> per se</em>, should have had gold prices and equities going up. Neither US equities nor gold prices have gone up because of these two factors looming in investors’ minds.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p><strong>Has the impact of these different shocks on how money flows around the world been different?</strong></p>
+<p>Yes and no. All of them have a common theme: it raises uncertainty around investment, employment and your own future.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/keir-starmer-resignation-brexit-labour-uk-politics-expert-explains-10751727/">Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party</a></span></div>
+<p>The best example is Europe vs the US. When uncertainty goes up, you first start increasing your precautionary savings. Household savings in Europe since <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a> have gone up every passing quarter. Europe is behaving as if there is a massive increase in uncertainty that is dampening down both consumption and investment.</p>
+<p>In the US, the saving rate did go up, and then, since 2022-23, the saving rates have come down, and today, many people would say that one of the concerns in an otherwise extremely strong US economy is the fact that the household saving rate keeps going down. Six years later, private consumption in Asia is still many percentage points below what its pre-pandemic trend would have implied.</p>
+<p>Essentially, regarding the impact being different, there is a common element attached, but that element has different stories to tell.</p>
+<p><strong>Is the indicator of domestic demand just not strong enough for Indian companies, considering the systemic lack of private corporate investment for some years now?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>We have used every possible ad-hoc excuse over the last 15 years to explain why Indian corporations haven’t moved beyond this 10-11% of GDP of investment.</p>
+<p>First was the banking sector problem, the non-performing loans. Then, there was the GST implementation, which was sort of fixed. Then came Covid, and it is now six years after Covid. Then there was geopolitical uncertainty, which affects the entire world. I think at some point we need to run out of these ad-hoc explanations. If you look at the top 5 leaders in any sector over the last 15 years, when India’s GDP has doubled, those five people have moved.</p>
+<p>In communications, there is a new name, but that’s a conglomerate entering the field and not a small firm growing big. In most sectors, names have dwindled; aviation has just about three names now.</p>
+<p>The bigger question is, how can an economy more than double without any churn from the leadership of any sector? There has been no challenge to the old sectors (like IT or pharma) that became leaders. In countries where this sort of data is available, when you see this rise in concentration of industry, one of the casualties is investment.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/gdp-is-growing-rapidly-why-isnt-private-capex-10432218/">GDP is growing rapidly. Why is private investment still limited?</a></span></div>
+<p>If there is no hungry, $5 billion market cap company in India that is investing in order to become a $100 billion company in the next five years, where will investment come from? My argument is that we need to stop using such arguments, that if there’s no demand, what can we do about it, and instead start looking at the structure of industry in India. We need to figure out why we have flatlined since our initial growth. What is most problematic is that I haven’t seen any academic or think tank address why private investment has flatlined.</p>
+<p><strong>You were head of the China division of the IMF from 2004-7. We often keep hearing that India is 20 years behind China. So, is India now what China was back then?</strong></p>
+<p>In some parts, yes. Some sectors might even be ahead. Even 20 years back, however, the policy-making framework in China was very different to India’s today. Infrastructure development was also higher there, despite our recent achievements. The thing is, we just really enjoy shiny things. But India’s connectivity is very poor, and that makes it difficult for the domestic economy in India to be a part of the mainstream economy.</p>
+<p>Just as we tend to obsess about skilling at a very high level, there is an important need to focus on internal connectivity. Can we go from Kanpur, perhaps the most important industrial centre in north India, to Coimbatore, its southern counterpart, by train, car or plane? There is no direct connectivity. In China, 20 years ago, the domestic connectivity infrastructure was very good.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2>How can Indian education and skill development be aligned with the world’s changing demands?</h2>
+<p>We grappled with this question even when I was in the government 20 years ago. No answer has been provided. But, say, when we compare, in China, if you go somewhere and blindly throw a stone, you will get 10 machinists there. In India, finding a machinist is very hard. The reason is that we haven’t paid any attention to vocational schools or turned them into centres of high skill.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/neet-re-exam-how-china-holds-biggest-college-entrance-exam-10750036/">With NEET re-exam, here’s how China holds its biggest college entrance exam</a></span></div>
+<p>And what about skilling at the other levels, across the value chain? Where is the investment? There is no private university that ever says I’m going to teach people the art of lathe machines. That’s only the government that does it. And the point I’m trying to make is that when you compare India to China, the skill gap exists across the entire spectrum.</p>
+<h2><strong>Where might the rupee go?</strong></h2>
+<p>There are so many factors playing into the rupee. Obviously, if you’re going to have oil prices going up, that means pressure on current accounts and the rupee for natural flows. The government has provided some buffer to household consumption, but that wasn’t the major fear. It was that since most of the oil in India comes from the Middle East, massive fuel supply shortages would arise.</p>
+<p>The growth answer will come when the Q2 numbers come out. It could be bad, not because of slow growth but because the methodology being used has been giving us a good growth run, which now reverses, and, that too, very sharply. Over the last two years, we’ve been unable to fund the smallest of current account deficits. The current account is today at 2 or 2.5% and the fiscal deficit is headed to 4.3%. It is marginal compared to 2013 and 1991-92. Not long ago, this might have been described as a goldilocks period for India.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>I will argue that the problem is that we really need granular data for us to understand what is happening. It is easy to say foreigners are divesting and Indian corporates are injecting money elsewhere. There has to be an actual understanding of why private investment remains at 10.3% and has been flatlining for the last 16 years. That is why the firm-level data comes into play for holistic evaluation.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10751900"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/siddharth-upasani/">
+<figure>
+<img alt="Siddharth Upasani" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2025/06/Siddharth-Upasani-.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/siddharth-upasani/"><span></span>Siddharth Upasani</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10062279"></div><div class="follow_author_title" data-id="Siddharth Upasani"></div><div class="follow_author_slug" data-id="siddharth-upasani"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/SiddharthUbiWan">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Siddharth Upasani is a Deputy Associate Editor with The Indian Express. He reports primarily on data and the economy, looking for trends and changes in the former which paint a picture of the latter. Before The Indian Express, he worked at Moneycontrol and financial newswire Informist (previously called Cogencis). Outside of work, sports, fantasy football, and graphic novels keep him busy.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/siddharth-upasani/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at fifty-eight minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/expert-explains-investment-india-war-capital-impact-10751900/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-23 15:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What CRED-Meta deal means for India's fintech sector | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What CRED-Meta deal means for India's fintech sector</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-kunalshah_expl-econ.jpg?w=1600" alt="What CRED-Meta deal means for India's fintech sector">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Kunal Shah" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-kunalshah_expl-econ.jpg?w=1600" width="650"/><span class="ie-custom-caption">Kunal Shah, the new WhatsApp CEO, is among India’s most prominent fintech entrepreneurs, widely recognised for building successful consumer internet businesses. (Photo: X/@kunalb11; enhanced using AI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">From dropping out of Mumbai’s Narsee Monjee Institute of Management Studies (NMIMS) to becoming the new chief executive officer (CEO) of WhatsApp, the world’s leading messaging platform owned by Meta Platforms, <strong><a class="" href="https://indianexpress.com/article/india/who-is-kunal-shah-cred-founder-whatsapp-global-chief-10752348/">Kunal Shah</a></strong> has had quite a journey in the startup ecosystem.</span></p>
+<p><span style="font-weight: 400">Shah, 43, the founder of CRED — a members-only fintech platform that rewards users for paying their credit card bills on time — has the distinction of being one of India’s notable startup leaders. While moving to Menlo Park, California, the head office of WhatsApp, he also secured a $900 million (around Rs 8,500 crore) investment for CRED from Meta, underscoring the Meta’s confidence in his vision and leadership. India is WhatsApp’s largest market with more than 500 million active users.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400"> “As for me, I’ll be joining Meta to lead WhatsApp globally. Meta comes in as a minority investor in CRED. No access to member data,” Shah said.</span></p>
+<p><span style="font-weight: 400">“While it’s come very far, the delta between WhatsApp today and its full potential is massive. I look forward to working with Mark (Zuckerberg, Meta CEO), Chris (Cox, Meta’s chief product officer) and the leadership across Meta for the next step in WhatsApp’s journey. Will Cathcart (Shah’s predecessor at WhatsApp), thank you for scaling something the world relies on quietly, and for making this transition smooth,” Shah said on his role in WhatsApp.</span></p>
+<p><b>Unconventional path</b></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Shah, who was born in <a class="" href="https://indianexpress.com/section/cities/ahmedabad/" rel="noamphtml">Ahmedabad</a> and raised in <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>, earned a Bachelor of Arts degree in Philosophy from Wilson College. He later enrolled in the Master of Business Administration programme at NMIMS but chose to leave before completing it, opting instead to pursue entrepreneurship. His unconventional academic path is often cited as proof that curiosity, self-learning, and practical experience can sometimes be more valuable than traditional credentials.</span></p>
+<p><span style="font-weight: 400">“I was not afraid of protecting a reputation. I was willing to make mistakes and learn… What surprises me is that a lot of young people in India want to protect their reputations when they have none,” Shah said during a recent podcast.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/kunal-shah-whatsapp-global-head-meta-cred-funding-investment-10752184/">CRED Kunal Shah to lead WhatsApp in surprise move</a></span></div>
+<p><span style="font-weight: 400">The new WhatsApp CEO is among India’s most prominent fintech entrepreneurs, widely recognised for building successful consumer internet businesses and for his understanding of consumer behaviour, technology, and startups. As the founder of CRED, he has influenced how affluent Indians engage with credit cards, rewards, and financial services, and shaped customer experience.</span></p>
+<p><b>Entrepreneurial journey</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Shah’s entrepreneurial journey began long before CRED. In 2010, he cofounded FreeCharge⁠, a digital payments and mobile recharge platform that quickly became one of India’s most successful startups. The company was acquired by Snapdeal⁠ in 2015 for about $400-450 million, one of the largest startup exits in India at the time. After exiting FreeCharge, Shah spent time investing in and mentoring startups across India and Southeast Asia.</span></p>
+<p><span style="font-weight: 400">According to his LinkedIn profile, he has been an investor in companies such as Razorpay⁠, Unacademy⁠, Spinny⁠, and several other high-growth ventures. He also served in advisory roles with organisations including AngelList⁠ and investment firms such as Y Combinator⁠ and Sequoia Capital⁠. His profile describes him simply as “Founder: CRED, curious”, reflecting the intellectual curiosity that has become part of his public persona.</span></p>
+<p><span style="font-weight: 400">In 2018, Shah founded CRED, and the company targeted India’s most creditworthy consumers and built a premium brand around trust, rewards, and financial discipline. Over the years, CRED expanded into lending, payments, e-commerce, and wealth-related offerings, emerging as one of India’s most closely watched fintech startups.</span></p>
+<p><span style="font-weight: 400">“Our vision is to improve the money relationship for the top 25-30 million Indians. Many are first in their families to use credit cards or mutual funds,” he said in an interview recently.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">After the Meta announcement, he told CRED staff: “Team CRED, I’ll still expect you to be a 10x version of yourselves. I’m stepping away from the operating role and will continue as a shareholder. My commitment doesn’t change. Just the role.”</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Announcing Shah’s appointment, Zuckerberg on Monday said, “Kunal built CRED into one of India’s most important technology companies, and he brings the kind of builder mentality and global perspective that will serve him well in running the world’s biggest messaging app.”</span></p>
+<p><span style="font-weight: 400"> “I look forward to working with Kunal to continue to make WhatsApp the best service for billions of people and millions of businesses,” Zuckerberg said.</span></p>
+<p><span style="font-weight: 400">Beyond entrepreneurship, Shah is also widely followed on social media platforms such as X and LinkedIn for his observations on business and technology.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><b>Concerns over CRED-Meta deal</b></h2>
+<p><span style="font-weight: 400">New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>-based economic think-tank Global Trade Research Initiative (GTRI) has raised concerns over Kunal Shah’s appointment as WhatsApp head and Meta’s $900 million investment in CRED. “First, American technology companies are gaining increasing control over India’s fintech sector and the vast financial data generated by Indian consumers. Second, many Indian fintech startups appear more interested in building companies for eventual sale to foreign buyers than in creating long-term Indian-owned digital champions,” GTRI said.</span></p>
+<p><span style="font-weight: 400">The Meta-CRED transaction comes at a time when India’s digital-payments ecosystem is increasingly dominated by platforms linked to US firms. Walmart controls about 72% of PhonePe, Google owns Google Pay and Meta owns WhatsApp Pay, GTRI said. “The proposed CRED investment would further strengthen the control of foreign technology giants in a sector built largely on Indian public digital infrastructure such as Aadhaar, UPI and India Stack,” Ajay Srivastava, founder of GTRI, said.</span></p>
+<p><span style="font-weight: 400">CRED’s 17 million users and control of over 40% of India’s credit-card bill payments make it a uniquely valuable financial-data platform. “CRED may not provide access to customer data to Meta today, but GTRI expects soon all of this data will be directly or indirectly be made accessible for METAs use which can further use/sell it for training AI models,” GTRI said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10753737"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-third, twenty twenty-six, at thirty-eight minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/kunal-shah-whatsapp-ceo-meta-investment-cred-fintech-10753737/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-23 15:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
