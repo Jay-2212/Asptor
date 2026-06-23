@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>With NEET re-exam, here’s how China holds its biggest college entrance exam | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>With NEET re-exam, here’s how China holds its biggest college entrance exam</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/gaokao.jpg?w=1600" alt="With NEET re-exam, here’s how China holds its biggest college entrance exam">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Students gather outside examination centres as India prepares for the NEET re-test and China conducts the Gaokao, its highly regulated national college entrance examination." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/gaokao.jpg?w=1600" width="650"/><span class="ie-custom-caption">Students gather outside examination centres as India prepares for the NEET re-test and China conducts the Gaokao, its highly regulated national college entrance examination.</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The re-test for the National Eligibility cum Entrance Test (NEET) was held on Sunday (June 21), a few weeks after allegations of<strong><a class="" href="https://indianexpress.com/article/education/neet-retest-today-nta-ready-with-more-security-and-quick-processing-10749751/"> paper leak led to the original exam’s cancellation.</a></strong></p>
+<p>Earlier this month, China also conducted its biggest national exam for college admissions, the Gaokao (literally, “the highest exam”), with over 1.3 crore students. A spokesperson of the Chinese Embassy in India shared a post on X, stating that “The #<a class="" href="https://indianexpress.com/article/explained/explained-global/china-this-week-gaokao-exam-football-fifa-cup-10739337/">Gaokao</a> is one of the most important exams for millions of Chinese students — and what makes it remarkable is its fairness… Students know their hard work truly pays off, because the process is strictly regulated and the road to academic success is not rigged.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Involving everything from <strong><a class="" href="https://indianexpress.com/article/education/factories-shut-roads-silent-chinese-envoy-praises-smooth-conduct-of-gaokao-exam-fuels-debate-on-indias-jee-neet-cuet-nta-10731673/">a pause in construction activities</a>,</strong> sports venues and Opera houses to heavy police deployment, the Gaokao is serious business. In the past, the likes of Stephen Hawking and David Beckham have posted messages on social media, wishing Chinese students success in the exam.</p>
+<p>For students, the highly competitive exam offers an opportunity to secure admission into the country’s top colleges and holds the promise of upward social mobility. For the state, its planning — and the weightage given to certain subjects — indicate the government’s broader priorities.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>Teachers under supervision, forbidden internet access</h2>
+<p>Gaokao has been conducted in China since 1952. During the Mao Zedong-led Cultural Revolution (1966-76), which saw sweeping changes introduced by the state to further align Chinese society with Communist ideals, the exam was put on hold.</p>
+<p>Today, the exam includes three compulsory subjects: English, Mandarin and Mathematics, with optional science and social science subjects. Chinese state media reports note that the full exam lasts between three and four days, and the duration varies by region.</p>
+<p>Reports show strict protocols for the conduct of the exam, including but not limited to question papers “drafted under strict security and printed in designated prisons,” according to the <em>South China Morning Post</em>. It also cited Chinese state media, which said that about three months before the test, some senior teachers are selected to design the question papers. “They are sent to remote and isolated parts of Beijing, such as military facilities or prisons, to be trained in secrecy-maintenance before coming up with exam questions,” the report said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>During this period, they can only contact their families via landline telephones under “strict supervision” and cannot connect to the internet, the 2024 report added. They can only leave the secluded locations after the exam has been held.</p>
+<p>Paper printing locations are heavily guarded, and test papers are transported “under armed guard, often to a security level higher than that of banks and the armoured vehicles which carry their cash.” In 2022, more than 3 million police officers were dispatched nationwide for security.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/neet-retest-today-nta-ready-with-more-security-and-quick-processing-10749751/">NEET retest today, NTA ready with more security and quick processing</a></span></div>
+<p>And it’s not just the state that goes all out. “Among other heart-warming measures, some companies offer free taxi rides to candidates going to their exam centers, while some restaurants provide free lunches, and some hotels free beds, on gaokao days,” a Chinese state media report said.</p>
+<h2>Not a foolproof system</h2>
+<p>Chinese state media reports also point to several attempts to curb unfair practices during exams. A 2025 report said about the province of Liaoning, that “Students are required to pass through two intelligent security gates capable of detecting small metal objects, <strong><a class="" href="https://indianexpress.com/article/cities/delhi/cooling-zones-free-travel-aspirants-delhi-rekha-gupta-neet-retest-10749897/">including mobile phones, smartwatches,</a></strong> smart glasses, hidden earpieces and other high-tech devices that could be used to cheat. If an alarm is triggered, teachers follow up with handheld metal detectors.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>It quoted a high school principal as saying, “Cheating technologies are evolving every year, so this year’s entry screening process is stricter than ever.”</p>
+<p>Biometric verification is conducted at entry to detect student impersonation. Cases of impersonation have previously been reported years after the exam, and punishments have been handed out for violations. In 2016, six teachers were handed a jail sentence from one year to 26 months after being convicted of “illegally obtaining state secrets”.</p>
+<p>The Ministry of Education has also asked people “not to be fooled by frauds”. These include supposed offers to obtain “illegally obtained” exam papers, cheating during the exams or hacking the system to change results.</p>
+<p>In 2025, state media <em>China Daily</em> reported that the city of Benxi, with a population of around 1.3 million, had every gaokao exam room monitored by a “real-time intelligent surveillance system that automatically flags irregular behavior — from whispers and frequent glances between students to inattentive proctors”. Other recent reports have also touted “AI-powered” systems.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The exam involves both objective and subjective questions. Experienced teachers from key senior high schools and universities in a region are selected to grade the papers. “Personnel involved in grading have to present their identity documents, leave electronic devices in a small basket in a separate area, and undergo security checks before work starts,” an official media report said.</p>
+<p>Grading computers are connected to an exclusive network to prevent hacking and intrusion of viruses and the rooms are equipped with surveillance cameras, with police officers on duty 24/7, it added.</p>
+<h2>STEM focus</h2>
+<p>In their book, <em>The Highest Exam: How the Gaokao Shapes China</em> (2025), authors Hongbin Li, Ruixue Jia and Claire Cousineau wrote, “If China’s education system is a symphony orchestra, the central government is the conductor.” It directs everyone, but relies on musicians (in this example, the local governments) to achieve what is desired. Local authorities own and fund non-elite colleges and institutions, as well as schools, but they operate based on policies made by the Central government.</p>
+<p>The book credits Deng Xiaoping, the leader under whom the Chinese economy modernised in 1978, for raising the scale and scope of the education system. Not only would it be accessible to the masses, but it would “equip students with the skills necessary to succeed on the labour market and propel China’s economy forward.” Among 18 to 24-year-olds, the share of people enrolled in college increased from 1% in 1976 to 57% in 2021.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The exam has come under criticism for furthering existing inequalities, particularly on regional and class lines. Colleges can set local quotas and most premier institutions are based in major cities. Combined with China’s household registration system that designates citizens as hailing from rural or urban areas, it means that those in cities have a disproportionately high chance of making it to top colleges. They are also more equipped to spend a considerable amount on additional classes and other resources.</p>
+<p>A type of affirmative action system further awards some advantages to ethnic minorities, including those from the regions such as Tibet.</p>
+<p>Over the years, there has been an increasing focus on pushing Science, Technology, Engineering and Mathematics (STEM) subjects in Chinese universities. State media and cash incentives for publishing high-quality research are some of the various means deployed for it, apart from the prospects of a more lucrative career.</p>
+<p>Not only is it in line with the government’s plans to push for “New Quality Productive Forces”, meaning high-tech and more efficient economic development, but it has also meant a lower uptake for social sciences. That again suits the government, in that even with the country’s curriculum having little room for criticism of the Communist Party, it would make it more unlikely for students to question the state or prevailing systems.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10750036"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-first, twenty twenty-six, at fifty-eight minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/entrance-exam/" href="https://indianexpress.com/about/entrance-exam/">entrance exam</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/neet/" href="https://indianexpress.com/about/neet/">NEET</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/neet-re-exam-how-china-holds-biggest-college-entrance-exam-10750036/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-23 03:13 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
