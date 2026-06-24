@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Omega Block: What is driving the heatwave Europe isn’t prepared for | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Omega Block: What is driving the heatwave Europe isn’t prepared for</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/France-heat.jpg?w=1600" alt="Omega Block: What is driving the heatwave Europe isn’t prepared for">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Europe" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/France-heat.jpg?w=1600" width="650"/><span class="ie-custom-caption">A woman shields herself from the sun near the Eiffel Tower in Paris, Wednesday, June 24. (AP Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Around 50 people dead. Schools shut, public transport interrupted, air-conditioned cinema halls and museums asked to shelter the young and the elderly for free, farmers harvesting their crop at night. <strong><a class="" href="https://indianexpress.com/article/explained/explained-climate/europe-heatwave-2026-why-strong-el-nino-could-worsen-global-heat-10713007/" rel="noopener" target="_blank">Western Europe is reeling under a severe heatwave again</a></strong>, with countries from Netherlands to UK to Italy to France affected.</p>
+<p>In France, 40 people have drowned over the past week because they went swimming in unsupervised waters. The country recorded its hottest day since record-keeping began in 1947 on Tuesday (maximum temperature hitting 44.3 degree Celsius), and thousands of homes are now sweltering in a power outage unlikely to be resolved before Wednesday night. Italy and the UK have also issued extreme heat alerts.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>Why is Europe so hot at present?</h2>
+<p>According to the UK Met office, “The developing heatwave is being driven by a strong area of high pressure building over continental Europe. This high pressure is promoting widespread sinking air, which suppresses cloud formation, allows for prolonged sunshine and leads to increasing temperatures through compressional heating.”</p>
+<p>This phenomenon is also called the Omega Block or the heat dome effect.</p><div id="taboola-mid-article-personalisation"></div>
+<p>An Omega Block, so named because it is shaped like the Greek letter Ω, is basically an area of high pressure between two zones of lower pressure. The heat dome also refers to an area of high pressure high above a landmass. Because of this high pressure zone, warm air rising from the ground is not able to escape into the atmosphere and is trapped close to the surface, further heating up the surroundings.</p>
+<span class="custom-caption"><img alt="omega block" class="lazyloading size-medium wp-image-10755711" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/omega-block-heat.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg?resize=607,405 607w, https://indianexpress.com/wp-content/uploads/2026/06/omega-block-heat.jpg?resize=1536,1024 1536w" height="1067" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Graphic generated with the help of AI</span>
+<p>Generally, winds known as jet streams blow from the west to east over Europe, moving weather systems. In the present scenario, this steady flow has become disrupted, leading to the omega-shape of air flow.</p>
+<p>This specific weather pattern aside, Europe has in general been warming up very fast, thanks to the effects of climate change.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The 2025 edition of the European State of the Climate (ESOTC), an annual report published by the Copernicus Climate Change Service and the World Meteorological Organization (WMO), says, “Since the 1980s, Europe has been warming twice as fast as the global average, making it the fastest-warming continent. Heatwaves are becoming more frequent and severe, while extreme rainfall is leading to catastrophic floods. Glaciers continue to melt. Climate change is also affecting biodiversity, which is vital for a sustainable future.”</p>
+<span class="custom-caption"><img alt="Europe heat" class="lazyloading size-medium wp-image-10755705" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Britain-heat.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg?resize=607,405 607w, https://indianexpress.com/wp-content/uploads/2026/06/Britain-heat.jpg?resize=1536,1024 1536w" height="1067" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A man shelters from the sun as he crosses Westminster Bridge as a heat wave is predicted in London, Tuesday, June 23, 2026. (AP Photo)</span>
+<p>Apart from a high rate of industrialisation, urban heat islands (where highly concretised urban areas heat up faster), fracking for oil and gas, and other human activities, Europe is also suffering from something called the albedo effect, which refers to how surfaces reflect sunlight back. The only area in the world heating up faster than Europe is the Arctic, where glaciers are melting rapidly. Whereas the bright, white ice would have reflected heat back, the darker water of the Arctic Ocean is absorbing it, thereby heating up neighbouring Europe further.</p>
+<h2>But why is Europe suffering so badly from the heat?</h2>
+<p>Many parts of the world routinely see temperatures crossing 40 degree C and continue functioning normally. Why have the same temperatures proved so debilitating for Europe?</p>
+<p>“Europe’s struggle with increasingly intense heatwaves reflects a deeper mismatch between rapidly evolving climate realities and systems designed for a different era. Much of Europe’s infrastructure, urban planning, and public health architecture developed under historically temperate climatic conditions, where resilience was built primarily around colder weather patterns.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>However, climate change is fundamentally altering this baseline. Heatwaves are becoming more frequent, longer, and more severe, exposing structural vulnerabilities that existing adaptation measures have not fully addressed. Urban heat retention, ageing populations, and uneven preparedness capacities across states further amplify these risks,” Zerin Osho, director of the India Program of the think tank Institute for Governance &amp; Sustainable Development, told <em>The Indian Express</em>.</p>
+<p>In much of western Europe, air conditioners are far from the norm. Homes are built to keep heat in, using insulated materials with high thermal mass like thick stone, brick, and concrete. In winter, they absorb heat from radiators and slowly release it back into the room. During a heatwave, the walls become warm and start radiating heat indoors.</p>
+<p>Then there is the fact that western Europe gets more hours of sunlight than say a place like India. Daylight lasts for much longer, giving homes very little time to cool down at night, specially when nights are not much cooler than the day. “While Europe has strengthened heat action plans and early-warning mechanisms over recent years, current events suggest that adaptation continues to lag behind the pace at which climate risks are unfolding,” Osho said.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10755689"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/yashee/">
+<figure>
+<img alt="Yashee" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2019/08/yashee-resized.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/yashee/"><span></span>Yashee</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="5895939"></div><div class="follow_author_title" data-id="Yashee"></div><div class="follow_author_slug" data-id="yashee"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Yashee is a Senior Assistant Editor at The Indian Express, and she heads the Explained Desk. With over 12 years of experience in mainstream journalism, she specializes in translating intricate geopolitical shifts, legal frameworks, and historical narratives into accessible insight.
+
+Having started her career with Hindustan Times and later contributing to India Today (DailyO), Yashee brings a veteran’s perspective to contemporary analysis. She holds a Bachelor’s degree in English Literature from the historic Presidency College, Kolkata, and a postgraduate diploma from the Asian College of Journalism (ACJ), Chennai. Her work provides readers with the deep context needed to navigate a complex world.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/yashee/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-fourth, twenty twenty-six, at thirty-eight minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/omega-block-heatwave-europe-isnt-prepared-10755689/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-24 14:48 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
