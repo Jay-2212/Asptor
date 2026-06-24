@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Experts Explain | US-Iran talks: Why the deal remains weak despite progress in negotiations | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Experts Explain | US-Iran talks: Why the deal remains weak despite progress in negotiations</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-us-iran_expl-geop.jpg?w=1600" alt="Experts Explain | US-Iran talks: Why the deal remains weak despite progress in negotiations">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="US Iran talks" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-us-iran_expl-geop.jpg?w=1600" width="650"/><span class="ie-custom-caption">US Vice President J D Vance speaks after the US and Iran held high-level talks at the Bürgenstock Resort in Obbuergen, near Lucerne, in Switzerland on June 22, 2026. Photo: Nathan Howard/Pool via AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><b>Written by Alvite Ningthoujam &amp; Bhoomi Shah</b></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The first round of talks in Switzerland on Sunday (June 21) between Iran and the United States, popularly described as the</span> <a href="https://indianexpress.com/article/world/us-iran-switzerland-talks-qatar-pakistan-statement-lucerne-10751074/"><span style="font-weight: 400"><strong>Lake Lucerne Summit</strong>,</span></a><span style="font-weight: 400"> have produced few key outcomes. The two sides, which remained “arch rivals” until recent days, have agreed on a 60-day road map for a final agreement, established a Lebanon</span> <span style="font-weight: 400">“de-confliction”</span><span style="font-weight: 400"> mechanism, set up a direct communication line for the Strait of Hormuz, and approved trade, oil, and asset relief measures.</span></p>
+<p><span style="font-weight: 400">Technical talks between the officials are expected to continue this week, with many expecting that further breakthroughs will be made. These steps indicate that both governments, with the help of mediators such as Pakistan and Qatar, are actively working to reduce tensions in the region and come to a long-lasting solution.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The fundamental reasons behind this diplomatic movement are not difficult to understand and they are rooted in significant predicaments on both sides. The <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>-led US administration’s drive towards dialogue and negotiation is fuelled by mounting domestic political pressures to avoid further military engagement and the economic volatility that accompanies prolonged regional conflict.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">There is a growing realisation within the administration that a “victory” in the form of a diplomatic de-escalation is necessary to satisfy a domestic constituency wary of</span> <strong><a class="" href="https://indianexpress.com/article/live-news/top-news-today-briefing-iran-israel-trump-10073258/">“forever wars”</a></strong><span style="font-weight: 400"> and rising energy costs, which is a sensitive issue for the Americans.</span></p>
+<p><span style="font-weight: 400">Iran, on the other hand, continues to deal with the effects of long-standing sanctions and domestic economic difficulties that have reached a critical point, with inflation crossing a whopping 70 percent. Both the warring parties, therefore, have strong incentives to prevent further escalation.</span></p>
+<p><span style="font-weight: 400">The establishment of practical mechanisms, such as the Lebanon de-confliction cell — a secure communication mechanism established between potentially hostile forces to prevent accidental escalation and miscalculation — and the Strait of Hormuz communication line, reflects a shared interest in managing immediate risks and avoiding unintended confrontations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><b>Fundamental shortcomings</b></h2>
+<p><span style="font-weight: 400">While these developments represent diplomatic progress, they do not address the deeper structural weaknesses of the emerging agreement. The framework continues to suffer from several fundamental limitations that could undermine its long-term effectiveness.</span></p>
+<p><span style="font-weight: 400">One of the most significant shortcomings is the bilateral nature of the process. Unlike the 2015</span> <a href="https://indianexpress.com/article/explained/explained-global/jcpoa-the-concessions-it-secured-10741168/"><span style="font-weight: 400"><strong>Joint Comprehensive Plan of Action (JCPOA)</strong>,</span></a><span style="font-weight: 400"> which involved major powers and included a detailed verification system administered by the International Atomic Energy Agency (IAEA), the current agreement rests largely on political commitments between Washington and Tehran. The 60-day roadmap for a final deal is ambitious, but there is still little clarity on how compliance will be monitored or what procedures will be followed if either side fails to meet its obligations. Without a robust institutional structure, the agreement risks remaining dependent on the political will of the two parties rather than on enforceable rules.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-iran-mou-expert-points-details-hormuz-nuclear-10746602/">Expert Explains | A point-by-point breakdown of US-Iran MoU, from nuclear issue to Strait of Hormuz</a></span></div>
+<p><span style="font-weight: 400">The decision to provide trade, oil, and asset relief at this early stage is another area of concern. While such measures may help maintain diplomatic momentum, they also mean that Iran could receive substantial economic benefits before longer-term issues are resolved. This sequencing could reduce Washington’s leverage in future negotiations.</span></p>
+<p><span style="font-weight: 400">It also raises the possibility that economic relief will be granted without corresponding verified steps from Tehran. In the past, similar approaches have allowed Iran to consolidate economic gains while maintaining its strategic posture. The current framework appears to follow a comparable pattern.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The agreement’s regional dimension presents an even more serious challenge. Although a Lebanon de-confliction mechanism has been established, major regional actors remain outside the negotiating process.</span></p>
+<p><b>Role of Israel</b></p>
+<p><span style="font-weight: 400">Israel, in particular, views the</span> <a href="https://indianexpress.com/article/opinion/columns/versailles-trump-iran-mou-macron-npt-tehran-israel-lebanon-10745641/"><span style="font-weight: 400"><strong>Memorandum of Understanding (MoU)</strong></span></a><span style="font-weight: 400"> with considerable caution and</span> <a href="https://indianexpress.com/article/world/netanyahu-defies-trump-us-iran-truce-lebanon-israel-election-10742737/"><span style="font-weight: 400"><strong>opposes it</strong></span></a><span style="font-weight: 400">. Unlike Saudi Arabia or the United Arab Emirates, Israel cannot easily absorb the economic and strategic costs that would result from another round of escalation and conflict. Any renewed confrontation would carry direct consequences for Israel’s national security and broader economic stability. As a result, Israeli policymakers, particularly the far-right ministers, remain deeply wary of this agreement that does not adequately address their core security concerns.</span></p>
+<p><span style="font-weight: 400">This exclusion is significant because durable regional arrangements generally require the participation or at least the acquiescence of key stakeholders. When key actors feel that their security interests are not sufficiently protected, they retain strong incentives to pursue independent policies. The recent Israeli</span> <strong><a class="" href="https://indianexpress.com/article/world/iran-closes-strait-hormuz-israel-lebanon-strikes-us-10749517/">military strikes against Hezbollah militias</a></strong><span style="font-weight: 400"> in southern Lebanon, following the MoU’s announcement, already demonstrated that developments on the ground can move faster than diplomatic processes.</span></p>
+<p><span style="font-weight: 400">If Israel does not see the agreement as consistent with its interests in the coming days, it may continue to act according to its own security calculations, regardless of the understandings reached between the US and Iran. It now remains to be seen whether Washington and Tehran can develop sufficient security assurances and de-confliction measures to reduce the risk of renewed hostilities between Israel and Hezbollah. Any significant escalation between the two could quickly undermine the diplomatic momentum generated in Switzerland and test the durability of the emerging US-Iran understanding.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<span class="custom-caption"><img alt="Lebanon" class="lazyloading size-medium wp-image-10752066" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/Lebanon_Israel_Iran_War_689_5-c75a0.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A destroyed neighbourhood in the village of Maifadoun, southern Lebanon, on June 22, 2026. Photo: AP/Mohammed Zaatari</span>
+<p><span style="font-weight: 400">Creating a direct communication line for the Strait of Hormuz is a positive step for managing immediate risks in a critical waterway. It does not, however, resolve the broader question of how the agreement will be enforced across multiple theatres.</span></p>
+<p><span style="font-weight: 400">The current framework lacks clear procedures for monitoring compliance and addressing violations. Without such mechanisms, it becomes difficult to determine when commitments have been breached and what consequences should follow. This absence of enforcement tools increases the likelihood that the agreement will function as a temporary arrangement rather than a durable settlement.</span></p>
+<p><b>No guarantee of strong outcome</b></p>
+<p><span style="font-weight: 400">The fact that technical talks are scheduled to continue this week suggests that both sides remain engaged in the process — a welcoming sign of progress. Yet such engagement alone does not guarantee a strong or sustainable outcome. The history of US-Iran diplomacy shows that agreements can advance in the short term while still failing to address the underlying sources of instability. Progress in negotiations does not automatically translate into lasting stability if the institutional foundations of the agreement remain weak.</span></p>
+<p><span style="font-weight: 400">Moreover, the progress achieved so far remains highly sensitive to political decision-making in both Washington and Tehran. In the absence of stronger institutional safeguards, even a limited deterioration in trust or a renewed escalation involving actors could disrupt the current trajectory of negotiations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The fundamental issue with the ongoing process is that it emphasises on crisis management over the creation of a more durable regional order. While de-confliction mechanisms and communication channels between the warring parties are useful for preventing immediate escalation, they cannot substitute for credible verification arrangements, balanced obligations, and the participation of regional powers. The security concerns of states directly affected by the agreement will ultimately determine whether any framework can hold over time.</span></p>
+<p><span style="font-weight: 400">The recent outcomes show that diplomacy between the US and Iran is moving forward. Both sides appear motivated by domestic considerations to seek a reduction in tensions. The more important question, however, is whether the emerging framework can overcome its structural limitations before the 60-day period expires.</span></p>
+<p><span style="font-weight: 400">Without stronger verification mechanisms, clearer enforcement procedures, and broader regional inclusion, the agreement risks remaining a temporary pause rather than a lasting solution. Ultimately, the sustainability of this diplomatic effort may be judged less by what is agreed in Switzerland than by the respective actions of Israel and Hezbollah in Lebanon.</span></p>
+<p><b><i>Alvite Ningthoujam is deputy director and assistant professor at Symbiosis School of International Studies, <a class="" href="https://indianexpress.com/section/cities/pune/" rel="noamphtml">Pune</a>.</i></b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><b><i>Bhoomi Shah is a geopolitical intelligence analyst at MitKat Advisory.</i></b></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10752014"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at zero minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-iran-talks-switzerland-summit-expert-explains-10752014/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-24 08:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
