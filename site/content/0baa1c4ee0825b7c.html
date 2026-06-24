@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The Two Suhrawardys: How the BJP’s renaming optics confuses one with the other | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The Two Suhrawardys: How the BJP’s renaming optics confuses one with the other</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/The-Two-Suhrawardys.jpg?w=1600" alt="The Two Suhrawardys: How the BJP’s renaming optics confuses one with the other">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Seven point crossing at Suhrawardy Avenue- Park Circus in Kolkata, West Bengal (Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/The-Two-Suhrawardys.jpg?w=1600" width="650"/><span class="ie-custom-caption">Huseyn Suhrawardy (L) and his uncle Hassan Suhrawardy (R). (Image generated with AI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The newly elected BJP government in West Bengal has <a href="https://indianexpress.com/article/cities/kolkata/kolkatas-suhrawardy-avenue-renamed-but-has-bjp-govt-confused-hassan-with-huseyn-suhrawardy-10751002/"><strong>renamed Kolkata’s Suhrawardy Avenue</strong></a>, a prominent arterial road in the city’s heart, as Gopal Mukherjee Road, after “Gopal Patha”, who is remembered for having organised the Hindu retaliation during the Calcutta riots of 1946.</p>
+<p>Gopal was called Patha (goat) because of his family business of slaughtering goats. Just five-feet-four-inches tall, he was a local strongman and told journalist Andrew Whitehead in a 1997 interview that he had instructed his men to kill 10 Muslims if one Hindu was killed. He also refused to surrender his weapons before Mahatma Gandhi, when Gandhi called upon people to surrender arms – something many indeed did.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Welcoming the announcement of the <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a> Municipal Corporation, Chief Minister Suvendu Adhikari said, “For decades, a major artery of our City bore the name of someone who wilfully misused state power as a weapon, orchestrating the massacre of innocent citizens for sheer political gain.</p>
+<span class="custom-caption"><img alt="Seven-point crossing at Suhrawardy Avenue- Park Circus in Kolkata, West Bengal (Wikimedia Commons)" class="lazyloading wp-image-10751955 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/DEll.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/DEll.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Seven point crossing at Suhrawardy Avenue- Park Circus in Kolkata, West Bengal (Wikimedia Commons)</span>
+<p>By renaming it after Shri Gopal Mukherjee, the fearless soul who stepped up as a protector-in-chief to defend and save thousands of innocent lives, finally restoration of historical justice will be achieved by honouring a true guardian and savior. It’s time, West Bengal remembers, corrects and honours the real Heroes.”</p><div id="taboola-mid-article-personalisation"></div>
+<p>The CM’s post made it clear that he associated the name of the street with Huseyn Shaheed Suhrawardy, the Prime Minister of Bengal in 1946-47, when riots broke out in Calcutta after Jinnah gave a call for Direct Action, and the Noakhali <a href="https://indianexpress.com/article/explained/explained-politics/west-bengal-political-violence-roots-history-expert-explains-10679776/"><strong>massacre</strong> </a>of Hindus also happened.</p>
+<h3><strong>Hassan Suhrawardy</strong></h3>
+<p>However, as brought out in the book <em>The History of Calcutta’s Streets</em> by P Thankappan Nair, the street was named after Huseyn Suhrawardy’s uncle Hassan Suhrawardy, a surgeon in the British Indian army who went on to become the first Muslim Vice Chancellor of the University of Calcutta. He served in that position from 1930 to 1934.</p>
+<p>“The Corporation at its meeting held on Wednesday, March 8, 1933, christened the new (100 f.) road constructed by the C.I.T. from Park Circus to the junction of Kassipara Lane (and lying to the north of the Park) on which stands the house of Sir Hassan Suhrawardy, Vice-Chancellor of the Calcutta University, as Suhrawardy Avenue,” Nair’s book says.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Born in 1884, Hassan Suhrawardy was a renowned surgeon with many ‘firsts’ to his credit – he was the first elected Deputy President of the Bengal Legislative Council , the first Indian consulting surgeon to the Medical College Hospitals, the first Indian Civil Surgeon of Howrah and the first Indian Chief Medical Officer of a State Railway in India and Burma.</p>
+<p>Nair quotes Jnanendra Nath Kumar’s <em>The Genealogical History of India, Vol 4</em>, “It was during the days of his Vice-Chancellorship that Sir Stanley Jackson, the Chancellor of the Calcutta University and the Governor of Bengal, was attacked by a girl student during the convocation and it was Dr Hassan Suhrawardy’s courageous and timely action that saved the governor’s life. His knighthood was a reward for this and was granted by a special communique by the King and not during the usual New Year and Birth Day Honours’ Lists.”</p>
+<p>Hassan Suhrawardy also wrote a book<em> Calcutta and Environments</em> “to serve as a guide for visitors to Calcutta during the 8th session of the Indian Science Congress in 1921”, says Nair. Hassan Suhrawardy died at 62 on September 18, 1946.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/in-west-bengal-justice-shouldnt-mean-vendetta-10746791/">In West Bengal, justice shouldn’t mean vendetta</a></span></div>
+<h2><strong>Huseyn Shaheed Suhrawardy</strong></h2>
+<p>Hassan Suhrawardy’s nephew Huseyn Suhrawardy is the one who is called the ‘Butcher of Bengal’ because of the 1946 riots, but Suhrawardy Avenue was not named after him.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The Calcutta riots had a background. On May 16, 1946, the British Cabinet Mission plan proposed an interim government comprising representatives from the Congress, the League, and other forces, giving the Congress one more seat than the League. On July 29, 1946, Jinnah’s Muslim League rejected the May 16 plan and called on Muslims to observe a “Direct Action Day” in protest on August 16.</p>
+<p>“The Calcutta Riots of 1946, also known as the ‘Great Calcutta Killing’, were four days of massive Hindu-Muslim riots in the capital of Bengal, India, resulting in 5,000 to 10,000 dead, and some 15,000 wounded, between August 16 and 19,1946,” historian Claude Markovits says in his paper <em>The Calcutta Riots of 1946</em>.</p>
+<p>“The leader of the Muslim League in Bengal and Chief Minister of the province Hussain Suhrawardy, a rival of Jinnah for the leadership of the League, was a controversial, albeit colorful personality who became very unpopular amongst large sections of the Hindu population for his alleged responsibility in the great Bengal famine of 1943, which had resulted in the death of two to three million people. However, he was idolized by many Muslims in Bengal, particularly by the Urdu-speaking Muslims from Northern India, who formed the majority of Calcutta’s Muslim population (Bengali Muslims, who accounted for the bulk of the Muslim population in the province, were mostly concentrated in the countryside).”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/bjp-win-bengal-elections-tmc-mamata-hindu-muslim-modi-sir-10673832/">BJP’s sweep in Bengal cannot be reduced to one factor. Here are five</a></span></div>
+<p>He offers details of the charges against Suhrawardy in pro-Congress accounts of the time: Suhrawardy positioned himself with his cronies in the Police Control Room, and thus prevented the Police Commissioner, a British national who was technically in charge of law and order, from attending to the trouble with a free mind.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Markovits recalls another charge, “At the meeting held in the Maidan, a vast open space in central Calcutta, Suhrawardy told the Muslim League crowd (estimated to have been at least 100,000 strong) that he had taken measures to “ restrain” the police, which was interpreted by many in the crowd as a license to loot and kill.”</p>
+<p>While the optics of the move of the Kolkata Municipal Corporation is to replace the name of someone “responsible” for the 1946 Calcutta riots with that of someone remembered as the defender of Hindus, it is obvious that the message is based on a wrong identification of one Suhrawardy with another, though they belonged to the larger Suhrawardy family.</p>
+<p>Historian Joya Chatterji discusses the Suhrawardy family in her book <em>Bengal Divided</em> while discussing the nephew: “Suhrawardy belonged to the leading ashraf family of Bengal, which claimed an ancestry going back to the first Caliph. In the twentieth century, the Suhrawardy family did exceptionally well out of the new opportunities that British rule in Bengal offered adept Muslims. Huseyn’s uncle, Hasan Suhrawardy rose to become the first Muslim Vice-Chancellor of Calcutta University,” she says.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10751914"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/vikas-pathak/">
+<figure>
+<img alt="Vikas Pathak" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/09/Vikas-Pathak-1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/vikas-pathak/"><span></span>Vikas Pathak</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8958164"></div><div class="follow_author_title" data-id="Vikas Pathak"></div><div class="follow_author_slug" data-id="vikas-pathak"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/vikas.pathak.520562">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://twitter.com/vikaspathak76/">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Vikas Pathak is deputy associate editor with The Indian Express and writes on national politics. He has over 17 years of experience, and has worked earlier with The Hindustan Times and The Hindu, among other publications. He has covered the national BJP, some key central ministries and Parliament for years, and has covered the 2009 and 2019 Lok Sabha polls and many state assembly polls. He has interviewed many Union ministers and Chief Ministers.
+
+Vikas has taught as a full-time faculty member at Asian College of Journalism, Chennai; Symbiosis International University, Pune; Jio Institute, Navi Mumbai; and as a guest professor at Indian Institute of Mass Communication, New Delhi.
+
+Vikas has authored a book, Contesting Nationalisms: Hinduism, Secularism and Untouchability in Colonial Punjab (Primus, 2018), which has been widely reviewed by top academic journals and leading newspapers.
+
+He did his PhD, M Phil and MA from JNU, New Delhi, was Student of the Year (2005-06) at ACJ and gold medalist from University Rajasthan College in Jaipur in graduation. He has been invited to top academic institutions like JNU, St Stephen’s College, Delhi, and IIT Delhi as a guest speaker/panellist.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/vikas-pathak/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-second, twenty twenty-six, at five minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/renaming-bengal-road-bjp-confusion-10751914/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-24 03:14 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
