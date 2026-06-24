@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Experts Explain | For ageing India, why climate change poses a public health threat | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Experts Explain | For ageing India, why climate change poses a public health threat</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/elederlyIndia.jpg?w=1600" alt="Experts Explain | For ageing India, why climate change poses a public health threat">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="climate change elderly" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/elederlyIndia.jpg?w=1600" width="650"/><span class="ie-custom-caption">Elderly people in face climate risks such as floods, heatwaves and drought. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr"><em><strong>Written by Nehal Sharma &amp; Bhhavya Kapoor</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">India is at the beginning of a large demographic shift. As <a href="https://indianexpress.com/article/explained/explained-culture/falling-population-india-tfr-global-fertility-10728338/" rel="noopener" target="_blank"><strong>fertility rates fall</strong></a> and the population ages, a new worry is now emerging — the effect of climate change on the elderly. This means that policies to adapt to extreme weather must now take into account the requirements of the ageing population.</p>
+<p dir="ltr">Here’s a look at why elderly people are particularly at risk from climate change, how India’s current frameworks fall short of managing this risk, and what the country needs to do.</p>
+<p dir="ltr"><strong>Why are older people at greater climate-related risk?</strong></p>
+<p dir="ltr">The elderly already make up roughly a tenth of India’s population. By 2050, that share is projected to rise sharply to one-fifth of the population. <a href="https://indianexpress.com/article/explained/andhra-pradesh-population-policy-tfr-decline-expert-explains-10595178/" rel="noopener" target="_blank"><strong>Southern</strong> </a>and western states are already moving faster through this transition.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">The human body becomes less able to regulate heat as it grows old. Prolonged exposure to high temperatures can overwhelm this weakened defence. It can trigger heat stress and worsen chronic illness. For a person above 75, especially one with heart disease, diabetes, kidney disease or limited mobility, a heatwave can become a medical crisis.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/kerala-elderly-department-senior-citizen-welfare-ageing-population-10705438/">Why Kerala has announced a new department for welfare of senior citizens</a></span></div></p>
+<p dir="ltr">A 2026 report by HelpAge India, Climate Resilient Ageing, presents a snapshot of the scale of the climate risk. The report surveyed 2,224 older persons across ten states. Seventy-eight per cent said they had faced at least one climate-related hazard in the previous three years. Heatwaves affected 45%. Floods and droughts followed. Many had faced repeated events. Each shock made recovery harder.</p>
+<p><strong>What barriers prevent adaptation?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">Adaptation often requires money. Sixty-nine per cent of the HelpAge study’s respondents identified financial constraint as their largest barrier to resilience. The burden fell heaviest on those living alone, those with poor health and those in fragile housing.</p>
+<p dir="ltr">Heat is not the only risk. Air pollution worsens respiratory and cardiovascular illness, and older people often have less capacity to withstand these stresses. Floods can cut off medicines, benefits, transport and health services. Drought can reduce household income and deepen dependence on family members.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-culture/falling-population-india-tfr-global-fertility-10728338/">Why are people having fewer children?</a></span></div></p>
+<p dir="ltr">There are several tools to adapt to such extreme climate: heat action plans, cooling spaces, early warning systems, safer housing, climate-linked insurance and access to healthcare. But many older people remain outside these systems. Some may not be able to read or receive warnings while others may not be able to act on them without help. Some live in rooms that trap heat while others cannot travel easily to a health centre or relief camp.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr"><strong>What are the state’s current measures, and where do they fall short?</strong></p>
+<p dir="ltr">Older people ask for basic security: financial assistance, medical access, and better housing. India has several welfare and healthcare measures for them. Ayushman Bharat PM-JAY provides health coverage of up to Rs 5 lakh annually for citizens aged 70 and above. The National Programme for Health Care of the Elderly provides geriatric services through the public health system.</p>
+<p dir="ltr">The government also funds care homes, caregiver training, mobile health services and community-based care under the Atal Vayo Abhyuday Yojana. Elderline offers a national helpline for senior citizens. The SACRED portal seeks to connect older persons with employment opportunities. The SAGE programme supports innovation in elderly care.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/ground-level-ozone-heatwave-health-risks-india-10741707/">Heatwaves raise ground-level ozone, worsening health risks: Study</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">These schemes matter. But most of them were built for welfare, healthcare, employment support or social inclusion. They are not yet fully connected to disaster preparedness or climate adaptation. A health card does not take an immobile person to hospital during a heatwave. A helpline cannot help if an older person does not know it exists, cannot access a phone, or has no one nearby to act. A care home policy does not make a poorly ventilated room safer during extreme heat.</p>
+<p dir="ltr">The state often sees older persons as pensioners, patients or welfare recipients. Climate change requires them also to be seen as a population exposed to extreme weather.</p>
+<p dir="ltr"><strong>How are older societies managing this risk?</strong></p>
+<p dir="ltr">Japan offers one useful example. It is an ageing society that has also had to live with disasters. It has therefore begun to link elderly care with disaster response.</p>
+<p dir="ltr">Local authorities use heat warning systems. Disaster plans identify vulnerable residents before a crisis while peer-to-peer support networks supplement formal relief. Japan’s long-term care system also works with municipal authorities to identify and assist older people at risk.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">India cannot copy this model whole because of differences in scale, poverty, housing conditions and family structures. But the lesson is clear that warning systems are not enough. Older people need to be identified before a disaster, reached during it and supported after it.</p>
+<p dir="ltr">Older Indians are already living through heatwaves, floods and droughts. Many are doing so with small incomes, poor housing, weak health and uncertain care. As India ages, this will go from a marginal welfare concern to a central test of public health, disaster planning and dignity.</p>
+<p dir="ltr"><em>Nehal Sharma is Subnational Program Lead and Bhhavya Kapoor is Senior Research and Policy Associate at Gateway Research.</em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10755352"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-fourth, twenty twenty-six, at six minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/climate-change-elderly-india-risks-explained-10755352/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-24 18:18 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
