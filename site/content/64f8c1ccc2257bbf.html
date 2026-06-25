@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Ten years after referendum, how Brexit has reshaped UK's economy and politics | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Ten years after referendum, how Brexit has reshaped UK's economy and politics</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Brexit.jpg?w=1600" alt="Expert Explains | Ten years after referendum, how Brexit has reshaped UK's economy and politics">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Brexit" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Brexit.jpg?w=1600" width="650"/><span class="ie-custom-caption">Boris Johnson, the then UK Prime Minister, in Manchester in 2019. AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr"><em><strong>By Aman K Pandey</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>A decade ago on this day, 51.9% of Britons, close to 17 million people, voted in a referendum <a href="https://indianexpress.com/article/opinion/columns/keir-starmer-quits-is-post-brexit-britain-too-difficult-to-govern-10753232/" rel="noopener" target="_blank"><strong>to leave the European Union</strong></a> (EU), the world’s largest single market.</p>
+<p dir="ltr">The divorce was finalised in 2020 with the signing of the Trade and Cooperation Agreement to govern the post-Brexit trade and security relationship between the UK and the EU.</p>
+<p dir="ltr">Brexit supporters claimed that leaving the EU would help the UK regain its sovereignty, control immigration, bring economic prosperity and improve welfare services. A decade later, the UK is defined by political instability, sluggish economic growth and rising inflation. Immigration, national identity and the rise of the far-right dominate its discourse. Here’s a look at how the UK’s economic and political landscape have seen a fundamental transformation since its departure from the EU.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>A transformed political landscape</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">The period before the Brexit referendum was marked by political stability and orderly power transfers, despite challenges such as the 2008 financial crisis. What followed was an era of turbulence that saw six prime ministers leaving their office without completing their full term.</p>
+<p dir="ltr">The latest casualty is Keir Starmer, who, despite winning a thumping majority in the 2024 parliamentary election, resigned on the eve of Brexit’s 10th anniversary amid rising unpopularity and party pressure.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/keir-starmer-resignation-brexit-labour-uk-politics-expert-explains-10751727/">Why Keir Starmer resigned as British Prime Minister and leader of the Labour Party</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">Although popular dissatisfaction had been rising in British politics since the turn of the 21st century — the 2003 Iraq war, the 2008 financial crisis and the 2009 MP expenses scandal — many celebrated Brexit as a rare opportunity for the deprived to vent their frustration without causing any significant rupture in the British political system. They were wrong.</p>
+<p dir="ltr">Today, support for the two traditional parties of Britain is at an all-time low. Populist parties on opposing ends of the spectrum — the anti-immigrant Reform UK and the eco-populist Greens — have gained significant ground, visible in the recently concluded local elections. These parties are now competing to effectively consolidate the Leave or Remain bloc in their favour.</p>
+<p dir="ltr">Brexit also weakened British nationalism because of the fact that majorities in Scotland and Northern Ireland who had voted “stay” were forced to go along with the “leave” vote.  Today, sentiments in favour of an independent Scotland, which comprehensively voted against Brexit, remains at an all-time high.</p>
+<p dir="ltr"><strong>Economy, trade, travel and immigration</strong></p>
+<p dir="ltr">Since leaving the EU single market and the customs union, trade has been negatively impacted largely because of the non-tariff barriers — complicated paperwork, customs bureaucracy — which has affected small UK businesses. According to the Office of <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">Budget</a> Responsibility (OBR), an autonomous forecaster of the British government, the long-term impact of Brexit on trade is expected to be a 15% decline in exports and imports of goods and services. OBR also forecast a 4 % decline in national income over the next 15 years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/keir-starmer-resigns-uk-successor-andy-burnham-epstein-mandelson-10752001/">A tough inheritance awaits Keir Starmer’s successor</a></span></div></p>
+<p dir="ltr">According to Bank of England data, published just before the 10th anniversary of Brexit, the British economy has taken a 6% hit after the UK left the union in 2021. This is a cumulative result of the post-Brexit shock and the rising trade barriers even after the UK negotiated a free-trade agreement with the EU. Business exchanges with the EU countries are now time consuming and expensive.</p>
+<p dir="ltr">The British economy is weaker today. A research paper by the US National Bureau of Economic Research estimates a 6-8% reduction in economic output for the last ten years.</p>
+<p dir="ltr">The Covid pandemic and the wars in Ukraine and Iran have only contributed to this decline. The incoming PM must grapple with the fact that an average Briton is older, sicker and less productive in a system where half of the government budget now directly services the National Health Service, welfare demands and repayment of debts.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">Thanks to its membership of the EU and its predecessors, British businesses relied on Europe (especially eastern European countries) as a cheap source of labour. With the end of the free movement, this source of labour dried up. Britain, in recent years, has seen a sharp rise in the recruitment of non-EU workers while migrants continue to cross the English Channel in small boats, putting pressure on struggling public services. The same Britain which left the EU to control immigration and reclaim sovereignty is now granting a record number of visas to non-EU workers while continuing with more than 4,000 EU laws.</p>
+<p dir="ltr"></p>
+<p dir="ltr">Thanks to the post-Brexit end of the freedom of movement, new border controls and implementation of the new Entry-Exit System by the EU, which requires individuals from non-EU countries to register through fingerprints and photographs at the entry points of Schengen Area, travel delays for the UK citizens has increased.</p>
+<p><strong>The Brexit divide will stay</strong></p>
+<p dir="ltr">The political divide between the supporters and opponents of Brexit was not just about voting in a referendum. Even after five years of the UK formally leaving the EU, the division between the “leave” and “remain” groups has cemented into solid group identities and transformed into broader political discourses on national identity, sovereignty and British role in the world.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">A decade after leaving the EU, the UK finds itself in a world which is more complicated and less forgiving. With the transatlantic alliance in turmoil, the need for a strong and united Europe has never been so demanding. Starmer’s resignation has also put off his much-talked-about EU-UK reset. The progress on the reset was, anyway, slow.</p>
+<p dir="ltr">It is, thus, not surprising that ten years after leaving the EU most Britons (57% as per the recent survey) now consider the decision a mistake. Sadly, for them the EU which is grappling with its own problems, does not consider the UK as its top priority.</p>
+<div class="text-base my-auto mx-auto [--thread-content-margin:var(--thread-content-margin-xs,calc(var(--spacing)*4))] @w-sm/main:[--thread-content-margin:var(--thread-content-margin-sm,calc(var(--spacing)*6))] @w-lg/main:[--thread-content-margin:var(--thread-content-margin-lg,calc(var(--spacing)*16))] px-(--thread-content-margin)">
+<div class="[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn" data-conversation-screenshot-content="">
+<div class="flex max-w-full flex-col gap-4 grow">
+<div class="min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal outline-none keyboard-focused:focus-ring [.text-message+&amp;]:mt-1" data-message-author-role="assistant" data-message-id="e243483f-3a52-487c-81c1-9cac736bbab3" data-message-model-slug="gpt-5-5" dir="auto">
+<div class="flex w-full flex-col gap-1 empty:hidden">
+<div class="markdown prose dark:prose-invert wrap-break-word w-full dark markdown-new-styling">
+<p data-end="98" data-is-last-node="" data-is-only-node="" data-start="30"><em><strong>The author is Research Associate, Indian Council of World Affairs, New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a></strong></em></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10753368"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-third, twenty twenty-six, at forty-four minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/expert-explains-ten-years-after-referendum-how-brexit-has-reshaped-uks-economy-and-politics-10753368/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-25 08:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
