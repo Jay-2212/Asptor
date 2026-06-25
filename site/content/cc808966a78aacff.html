@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Iran oil returns, but Indian refiners likely to hold back. Here’s why | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Iran oil returns, but Indian refiners likely to hold back. Here’s why</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Kish-Port-1600.jpg?w=1600" alt="Iran oil returns, but Indian refiners likely to hold back. Here’s why">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Iran" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Kish-Port-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Kish port in Iran, which serves the Kish Oil and Gas Field. (Photo: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>US Department of the Treasury on Monday (June 22) issued a waiver allowing production, delivery, and sale of Iranian oil, petroleum products, and petrochemicals till August 21. The US has also committed to removing its naval blockade of Iranian ports. Both measures are being counted upon by Tehran to move its oil—which has for years been predominantly exported to China—to the wider international market.</p>
+<p>The sanctions waiver does present an opportunity for India, once a major buyer of Iranian crude. As <em>The Indian Express</em> recently reported, the <strong><a class="" href="https://indianexpress.com/article/business/us-oil-sanctions-waiver-tehran-traders-sales-10752718/#:~:text=The%20National%20Iranian%20Oil%20Company,exports%2C%20according%20to%20trade%20sources.">National Iranian Oil Company (NIOC) has started reaching out to international oil companies</a></strong>, including Indian refiners, and trading houses seeking meetings and calls to resume commercial and trade relationships.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Sources in India’s refining sector said that the companies are in touch with the Iranian side and deliberations are on regarding the techno-commercial feasibility of lifting Iranian oil under the waiver. A ‘techno-commercial feasibility study’ is a comprehensive evaluation to ascertain if the crude oil under consideration is technically compatible with the refineries and is commercially and logistically practical to purchase.</p>
+<p>Although some barrels of Tehran’s oil are bound to make their way to India over the next two months as refiners look at lifting discounted opportunistic cargoes, industry experts and insiders don’t expect large-scale buying by India, at least for the time being.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>Uncertainty beyond 60-day waiver on Iran oil</h2>
+<p>Indian refiners are expected to tread cautiously amid a fragile peace agreement and lack of long-term clarity on the future of Iranian oil. Moreover, it remains to be seen if the logistical and payment-related challenges usually associated with Iranian oil trade will ease alongside Washington’s waiver.</p>
+<p>“Refiners considering Iranian crude will focus on three key factors: the durability of sanctions relief, pricing and discounts, and the availability of payment, insurance, shipping, and logistics mechanisms. Of these, payment remains the biggest hurdle,” said Sumit Ritolia, manager, modelling &amp; refining at commodity market analytics firm Kpler.</p>
+<span class="custom-caption"><img alt="Iran oil" class="lazyloading size-medium wp-image-10754789" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=456,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=342,450 342w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=456,600 456w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=768,1010 768w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=308,405 308w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=1168,1536 1168w, https://indianexpress.com/wp-content/uploads/2026/06/Iran-Oil_and_Gas_Fields.jpg?resize=1557,2048 1557w" height="2105" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Iran’s oil and gas fields. Before the Hormuz crisis, China was buying almost all of Iran’s oil exports. (Wikimedia Commons)</span>
+<p>Apart from Iran’s petroleum sector, its financial sector is also under US sanctions, creating payment-related and other logistical constraints in its oil trade. Refinery executives said that calls on Iranian oil imports will be taken once there is clarity on all these aspects. Indian refiners steer clear of oil and gas under US sanctions to avoid the risk of attracting secondary sanctions from Washington.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>While the US waiver pertains specifically to Iran’s oil, petroleum product, and petrochemical exports, and not to the financial sector sanctions on Tehran, the waiver notification does mention that payments for such purchases will be allowed in dollar-denominated funds. This could help ease some, if not all, payment-related pain points, but how it would actually play out remains to be seen.</p>
+<p>According to Abu Dhabi-based energy analyst Natalia Katona, any decision to restart oil trade with Iran would most likely be made first in the refiners’ compliance departments, and not their trading desks.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-iran-talks-switzerland-summit-expert-explains-10752014/">Experts Explain | US-Iran talks: Why the deal remains weak despite progress in negotiations</a></span></div>
+<p>“Even if crude trade is temporarily permitted, the banking side remains complicated. Iranian banks are still heavily sanctioned, so buyers would need to resolve the formalities of payment, documentation and settlement before any regular trade can resume. Now that the waiver has actually been issued, Indian companies may start buying Iranian crude. But I think the number of buyers will still be quite limited,” Katona told <em>The Indian Express.</em></p>
+<p>“So far, Chinese refiners that bought sanctioned Iranian crude have mostly dealt directly with Tehran and paid in yuan. That is not a model Indian refiners appear comfortable replicating…,” she added.</p>
+<p><strong>What the previous waiver indicates</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Experts say that India’s buying behaviour during the month-long sanctions waiver on Iranian oil issued by the US during the West Asia war also supports the argument that they are unlikely to quickly ramp up crude imports from Iran.</p>
+<p>After a gap of nearly seven years, Indian refiners again bought Iranian crude in April. But the imports from Iran stood at just 530,000 tonnes, or just about 3% of India’s overall oil imports for the month, as per data from the Directorate General of Commercial Intelligence and Statistics (DGCIS). Ritolia said that the previous waiver generated very limited participation from non-Chinese buyers because of payment restrictions and other issues.</p>
+<p>Furthermore, oil scarcity was a major motivation for India during the previous waiver as they scrambled to make up for the lost supplies from other West Asian countries. But if crude from Saudi Arabia, the UAE and others starts flowing normally again, India has little reason to take on the compliance risk attached to Iranian barrels, said Katona.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/strait-of-hormuz-transit-rules-iran-permit-system-10748292/">Want to cross the Strait of Hormuz? Fill out this form first</a></span></div>
+<p>“It is worth looking at the previous waiver, which was issued on March 20. India bought only two Iranian cargoes under it, and they arrived in mid-April…Based on that earlier pattern, I would expect the biggest increase in Indian buying interest for the second half of July. That is probably when companies will start trying to secure as much oil as possible, while still leaving enough time to complete the payments and deliveries before the waiver expires,” she said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>According to her, payments made to Iranian entities after August 21 would carry a serious compliance risk, so Indian refiners will not want to get too close to the deadline. After that, whether or not they touch Iranian barrels will largely depend on the fate of the waiver.</p>
+<p>“Even if discussions between buyers and sellers become more constructive, refiners are unlikely to commit significant volumes while US sanctions policy remains subject to rapid changes. The key issue is not just access to Iranian crude today, but confidence that the trade can continue tomorrow,” Ritolia said.</p>
+<p><strong>The China factor, price concerns</strong></p>
+<p>China is likely to return as the dominant buyer of Iranian crude once oil flows through the Strait of Hormuz normalise. Before the crisis, China was buying almost all of Iran’s oil exports. Well-oiled logistical arrangements and payment mechanisms are already in place between the Chinese buyers and the Iranian sellers. So for Indian refiners to lift Iranian oil cargoes, they would most likely have to compete with their Chinese counterparts, and perhaps even other interested buyers.</p>
+<p>To add to that, the discounts on Iranian oil could narrow, taking away significant price advantage from a buyer’s perspective. Iran was forced to sell its oil at a discount as the US sanctions kept most potential buyers at bay, but with the waiver in place, discounts may shrink considerably and so would the scope for refiners to bargain.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>“There are also around 5 million barrels of Iranian crude already loaded on vessels in the Gulf, so Indian buyers will probably focus on cargoes that are already afloat. That would be much faster and easier operationally, the crude could reach India in about a week. At the same time, these barrels will probably be in very high demand. China will still be interested, and even US buyers may want to purchase it (under the waiver). So we could even see a situation where Indian refiners have to compete for Iranian cargoes, even though they are geographically the closest major buyers,” said Katona.</p>
+<p>It is also worth noting that India has significantly diversified its oil import basket beyond the Gulf over the past few years, and that helped the country ensure adequate supplies even during the peak of the West Asia crisis. Simply put, there is no real pressure on Indian refiners to lift Iranian oil cargoes even during a global supply squeeze.</p>
+<p>A lot now depends on the terms Tehran offers to willing buyers.</p>
+<h2>Brief history of India’s Iranian oil imports</h2>
+<p>India had not imported any oil from Iran since May 2019, after the expiration of the sanctions waiver that the US had provided to major buyers of Iranian oil. Prior to that, India had been a regular buyer of Iranian oil, even during previous sanctions periods of the pre-Trump era.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>In 2009-10, India imported 22.1 million tonnes of crude oil from Iran and it accounted for 14.4% of New <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>’s overall oil imports, as per DGCIS data. But as international sanctions on Iran intensified, the volumes declined subsequently—to 16.1 million tonnes in 2010-11, 14.9 million tonnes in 2011-12, 13.2 million tonnes in 2012-13, 11.3 million tonnes in 2013-14, and 11.2 million tonnes in 2014-15.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>With the sanctions effectively withdrawn under the Iran nuclear deal, Indian refiners started ramping up Iranian oil imports. India imported 13.6 million tonnes of Iranian oil in 2015-16, and the volumes shot up to 27.1 million tonnes in 2016-17, making Tehran the third-largest source of New Delhi’s oil imports. Iran also did its bit to boost oil trade with India by offering discounted shipping and extended credit periods to Indian refiners. In 2016-17, Iranian oil made up 12.6% of India’s total crude oil imports.</p>
+<p>In 2017-18, the Iranian oil volumes declined to 22.6 million tonnes due to a few reasons—tensions between New Delhi and Tehran over the development rights of a gas field in Iran, India’s move to step up diversification of its sources of oil, and the election of <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> as US president.</p>
+<p>The last factor emerged as the defining one over the next two years, as Trump walked away from the nuclear deal, and re-imposed sanctions on Tehran. A waiver was given by Washington to major buyers of Iranian oil, which expired in 2019.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>In 2017-18, India’s Iranian oil imports were at 23.9 million tonnes, and crashed to just 2 million tonnes in 2019-20 as no Iranian oil came to India after May 2019.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10754745"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-fourth, twenty twenty-six, at thirty-eight minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/iran-oil-returns-indian-refiners-hold-back-why-10754745/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-25 14:49 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
