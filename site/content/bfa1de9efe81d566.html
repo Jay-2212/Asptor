@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Does China have a caste system? What recent online debates capture and miss | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Does China have a caste system? What recent online debates capture and miss</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/shanghaichina.jpg?w=1600" alt="Does China have a caste system? What recent online debates capture and miss">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="China caste" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/shanghaichina.jpg?w=1600" width="650"/><span class="ie-custom-caption">A busy street in Shanghai. The mandatory household registration system, hukou, favours people living in bigger cities. Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The past few days have seen accounts on X amass hundreds of likes and reposts, all for sharing information that purports to show the “reality” of China. </span></p>
+<p><span style="font-weight: 400">They feature scenes of squalor, cramped living spaces for working-class citizens and poverty to argue that Chinese society has hierarchical caste-like systems that keep one group of people at the bottom. and that popular videos of China’s cities and infrastructure growth hide widespread inequality. </span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Two systems are the focus of these claims — a hierarchical order of “Shi-Nong-Gong-Shang”, meaning “scholars, farmers, artisans, merchants”, and the <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-eu-trade-hukou-lop-nur-10717258/" rel="noopener" target="_blank"><strong>“hukou” system</strong></a> of household registration that identifies citizens as of rural or urban origin. What is the history of these systems, and do they actually affect life in modern China?</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2><b>Shi-Nong-Gong-Shang: Scholars, the others, and the marginalised</b></h2>
+<p><span style="font-weight: 400">A June 18 </span><i><span style="font-weight: 400">Global </span></i><span style="font-weight: 400">Times report on the online posts appeared critical of the comparison of the four occupations with the Indian caste system. It quoted Zhang Yiwu, a professor at the Department of Chinese Language and Literature at Peking University, as saying: “The ancient concept of Shi, Nong, Gong and Shang was simply an occupational order, not a hereditary caste system.” He called it “entirely different” from the Indian system. </span></p><div id="taboola-mid-article-personalisation"></div>
+<p><i><span style="font-weight: 400">Global Times</span></i><span style="font-weight: 400"> is the English mouthpiece of the Chinese Communist Party (CCP) and often provides insight into official perspectives and the messaging the government wants to send out to the world. </span></p>
+<p><span style="font-weight: 400">In an article for the journal </span><i><span style="font-weight: 400">Chinese Historical Review</span></i><span style="font-weight: 400">, Professor Victor Cunrui Xiong located the earliest confirmable date of this fourfold “Simin” class system to 685 BC, but wrote that it may have been a century or two older. He noted how several ancient Chinese texts made some differences in the categorisation, at times even changing the order of the groups.</span></p>
+<p><span style="font-weight: 400">Farmers were held up as valuable producers and generally kept above merchants, who were often seen as profit-seeking, but scholar-officials (the “shi”) consistently remained at the highest level.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="China caste system" class="lazyloading size-medium wp-image-10753748" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/06/Zhou_Wenjus_A_Literary_Garden.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> This 10th-century painting by artist Zhou Wenju — ‘A Literary Garden’ — depicts a literary gathering. Wikimedia Commons</span>
+<p><span style="font-weight: 400">He wrote: “While the shi were linked with the ideal moral, being </span><i><span style="font-weight: 400">junzi</span></i><span style="font-weight: 400">, translated as the gentleman or the superior man, the non-shi sectors of the population, particularly farmers, were perceived as belonging to an inferior group, that of xiaoren or ‘small persons.’” </span></p>
+<p><span style="font-weight: 400">The article cited </span><i><span style="font-weight: 400">Zuo Zhuan</span></i><span style="font-weight: 400">, a book of historical commentary, which said: “The </span><i><span style="font-weight: 400">junzi</span></i><span style="font-weight: 400"> respects talent and ability, and is willing to yield his place to his abler inferiors. The </span><i><span style="font-weight: 400">xiaoren</span></i><span style="font-weight: 400"> works the land to serve his superiors. This way propriety prevails between ruler and ruled. Flattery and backbiting are kept at a distance thanks to lack of contention for power. This is known as perfect virtue.” Such a conception is in line with Confucian philosophy, which regards hierarchical social relationships highly.</span></p>
+<p><span style="font-weight: 400">Conversely, it compared changes in this system to disorder: “In times of chaos, the gentleman brags about his merits to lord it over the small person, the small person boasts of his techniques to look down on the gentleman. Propriety no longer exists between rule and ruled, tumult and violence occur simultaneously thanks to contention for self-improvement.”</span></p>
+<p><span style="font-weight: 400"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/neet-re-exam-how-china-holds-biggest-college-entrance-exam-10750036/">How China holds its biggest college entrance exam</a></span></div></span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Another passage described the relationship thusly: “The gentleman works his brains, the small person works his brawn.” </span></p>
+<p><span style="font-weight: 400">Gradually, Professor Xiong wrote: “As occupational specialization developed, there occurred an increased realization of the importance of merit over hereditary rights.” Further, total exclusivity was not a feature of this classification, with people periodically changing their occupations. </span></p>
+<p><span style="font-weight: 400">The classification, he wrote, also left unaccounted for a “sizable minority of people… who were constantly at the very bottom of society, referred to as the “base people or jianmin”. “Because of their low legal positions, and almost zero chance for inter-group and upward mobility, these people constituted the lowest class comparable to the ‘untouchables’ in India,” he added. </span></p>
+<p><span style="font-weight: 400">This category included a range of occupations, from so-called menial work to those in entertainment and prostitution. Over centuries, however, the whole system underwent modifications and faded away, replaced by other classifications driven by socio-political shifts. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">It is not an exact parallel to the caste system, which also derives legitimacy from religion and its associated morality and philosophy. And while many global social systems of stratification have been compared to caste, the latter has evolved over centuries but has endured to significantly affect modern India in a way few social structures have.</span></p>
+<h2><b>Hukou: Solidification of regional differences </b></h2>
+<p><span style="font-weight: 400">One relatively newer system that has endured and continues to affect the lives of Chinese people is the mandatory household registration system, known as </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400">. </span></p>
+<p><span style="font-weight: 400">In their book, </span><i><span style="font-weight: 400">The Highest Exam: How the Gaokao Shapes China</span></i><span style="font-weight: 400"> (2025), authors Hongbin Li, Ruixue Jia and Claire Cousineau wrote: “The </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400"> serves as a household registration system assigned at birth; it is often likened to a caste system. The system assigns social benefits based on one’s place of birth.” </span></p>
+<p><span style="font-weight: 400">Being born in a rural or urban region dictates the entitlements and opportunities a child can access over the course of their life, with an individual having little control over the cards they have been dealt.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">For example, the <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-gaokao-exam-football-fifa-cup-10739337/" rel="noopener" target="_blank"><strong>university entrance exam</strong></a>, the gaokao, must be taken by a student within the hometown province as written on their </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400">. Each region’s educational institutions can set a quota for local students, advantaging people who hail from cities such as Beijing and Shanghai, having a high concentration of premier colleges.</span></p>
+<span class="custom-caption"><img alt="Gaokao " class="lazyloading size-medium wp-image-10753743" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Gaokao_Site.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg 1024w, https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/06/Gaokao_Site.jpg?resize=150,83 150w" height="576" sizes="(max-width: 1024px) 100vw, 1024px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1024"/> A Gaokao site in China, 2022. Wikimedia Commons</span>
+<p><span style="font-weight: 400">This also poses problems for migrant workers’ children, who must go to their </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400"> hometowns to give the exam. Until October last year, cross-region migrant couples also had to return to their hometowns to register their marriages.</span></p>
+<p><span style="font-weight: 400">The origins of the </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400"> can be traced back to the 1950s, the first decade of the modern communist state. “The designs of the </span><i><span style="font-weight: 400">hukou</span></i><span style="font-weight: 400"> system and its meaning of social and geographical control are meant to stimulate the country’s then planned economy by facilitating city-based citizens to support heavy industrial development and by using peasants to maintain the surplus of agricultural goods,” wrote Chinese sociology scholar Jason Hung in a 2022 article for the journal </span><i><span style="font-weight: 400">Social Sciences</span></i><span style="font-weight: 400">.</span></p>
+<p><span style="font-weight: 400">With economic liberalisation in 1978, cheap migrant labour became a necessity for powering industrial growth and some relaxations were allowed. Between 1990 and 2020, China’s rate of urbanisation jumped from around 26% in 1990 to 66%.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">However, Hung wrote, for non-local and rural hukou citizens who come to the cities, their status “has remained an entrenched barrier to upward social mobility for non-local citizens… they are excluded from enjoying the majority of social, economic, cultural and other welfares that are designated for urban natives, compounding their socioeconomic vulnerability.” </span></p>
+<p><i><span style="font-weight: 400">Global Times</span></i><span style="font-weight: 400">’ own previous report said, “nearly 300 million long-term urban workers and residents have yet to achieve ‘full urbanization’”.</span></p>
+<p><span style="font-weight: 400">Since 2014, the state has attempted to liberalise the system, and more recently, it has been seen as crucial for reviving domestic consumption and insulating China from global trade headwinds. In May this year, the state announced guidelines on providing basic public services based on where people actually live, rather than their hukou registration.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10753694"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-third, twenty twenty-six, at thirty-two minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/china-hukou-system-social-inequality-explained-10753694/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-25 11:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
