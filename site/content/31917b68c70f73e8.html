@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | As modern warfare transforms, the lessons now for Indian defence | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | As modern warfare transforms, the lessons now for Indian defence</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-27</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Sudarshan-Chakra-corps.jpg?w=1600" alt="Expert Explains | As modern warfare transforms, the lessons now for Indian defence">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="india defence" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Sudarshan-Chakra-corps.jpg?w=1600" width="650"/><span class="ie-custom-caption">A key component of India's modernisation effort is the “Sudarshan Chakra,” a multi-layered, AI-enabled air defence system designed to provide comprehensive protection to critical military installations and civilian infrastructure. (PIB)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Major General Badri Narain Raizada</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>For centuries, empires jostled for control of territory to grow their power. But today, war has ceased to respect borders in a meaningful sense and encompasses aspects such as strategic resources, technological sovereignty, and systemic influence.</p>
+<p>The recent West Asia conflict reshaped shipping lanes in the Red Sea, affecting trade flows from <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a> to Birmingham. Modern conflicts can escalate rapidly into multinational confrontations, drawing in proxy actors and external powers that use both contestants to advance their own strategic ends.</p>
+<p>With these shifts, even geographically distant conflicts can hold lessons for countries like India.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>End of unipolarity</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>To understand modern defence, we must first accept that the unipolar world is drawing to a close.</p>
+<p>Since 1945, the United States has notched three victories of limited strategic consequence; in Panama, the Gulf War, and Kosovo, suffered one unambiguous defeat in Vietnam, and presided over four costly stalemates in Korea, Iraq, Afghanistan, and Libya.</p>
+<p>The record points to a superpower that excels at winning battles but repeatedly struggles to establish peace. Recent decades have also seen the rise of China and the consolidation of middle powers on the world stage, bolstered by the growing weight of BRICS (Brazil, Russia, India, China and South Africa).</p>
+<p><strong>Inversion of the battlefield</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In the old world, land forces were the protagonists, supported by the “extras” of air and sea power. The 21st century, however, has so far been marked by the primacy of aerial, electronic, and cyber warfare, integrated within a comprehensive framework of multi-domain operations based on autonomous weapons systems.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/energy-weapons-satellites-radar-network-key-to-sudarshan-chakra-10289885/">Over-the-horizon radars, energy weapons, satellites to be integrated into ‘Sudarshan Chakra’ air defence shield</a></span></div>
+<p>Drone swarms, loitering munitions, AI-enabled targeting systems, and autonomous platforms are reshaping doctrine, strategy, and international law in real time. This is no longer a theoretical possibility, but a multi-hundred-billion-dollar industrial reality. The global defence electronics market is projected to hit $254 billion by 2032.</p>
+<p>While armed forces officially remain silent on tactics of hybrid warfare (such as cyberattacks) because they are technically outlawed, it serves as a highly profitable, ambiguous grey zone tactic during peacetime. It combines conventional military force with cyber operations, disinformation, and economic coercion. Semiconductors, satellite communications, battlefield AI, and encrypted data pipelines are now as strategically vital as tanks and artillery.</p>
+<p>If the previous century’s wars were won by steel and supply lines, this century’s will be won by those who see first, decide fastest, and strike with precision — the domain of intelligence.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Israel’s military doctrine has long operationalised this truth. Its forces have a heightened ability to conduct precision strikes across contested airspace, neutralise threats, and maintain battlefield awareness across multiple simultaneous fronts, which rests entirely on a layered intelligence architecture.</p>
+<p><strong>The David and Goliath reversal</strong></p>
+<p>Perhaps the most striking evolution in modern conflict is the concept of asymmetrical attrition. In this era, being a Goliath is often a liability. Afghanistan is the most instructive classroom teaching this lesson.</p>
+<p>The Soviet Red Army entered in 1979 and withdrew a decade later. The Americans also left in 2021 in circumstances equally humbling. For both superpowers, separated by a generation, their threshold for absorbing damage — political, economic, and human — was finite. Their adversary’s was not. This was also seen in West Asia, where multi-million-dollar interceptor missiles were deployed to shoot down drones costing a fraction of the price. In a war of attrition, it is clear which side will wear down faster.</p>
+<p>As a middle power, the lesson is not to match a superpower dollar-for-dollar, but to establish a credible deterrent that makes the cost of engagement unpalatable.</p>
+<p><strong>India’s strategic pivot: The 2047 vision</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>For a developing power like India, the challenge is twofold: protecting expansive territorial boundaries while navigating a neighbourhood rife with proxy threats and civil unrest. While the traditional siloed approach — where the Army, Navy, and Air Force operated independently — was once the standard, modern defence demands integration.</p>
+<p>The priority now is to earnestly implement the government’s new structural re-orientation plans to meet modern challenges. India’s Defence Forces Vision 2047 document doubles down on integrating the three forces.</p>
+<p>To prevail in future conflict, India must pursue a two-pronged military posture. First, an impregnable shield capable of neutralising hybrid threats ranging from cyber intrusion to missiles; and second, a decisive sword — the offensive capability to deliver a targeted, proportionate blow that raises the cost of aggression high enough to compel restraint or negotiation.</p>
+<p>India has been building systematically toward this integrated model. A key component of this modernisation is the “<a href="https://indianexpress.com/article/explained/cds-mission-sudarshan-chakra-how-defend-india-10212896/"><strong>Sudarshan Kavach</strong></a>,” a multi-layered, AI-enabled air defence system currently under development, designed to provide comprehensive protection to critical military installations and civilian infrastructure. Furthermore, to achieve genuine integration between the forces, there must be a strong focus on building joint training institutions, as most current establishments remain strictly single-service.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>One of the most critical levers in the 2047 document is the development of dedicated Missile and Drone Forces supported by advanced Intelligence, Surveillance, and Reconnaissance (ISR) capabilities. A robust Drone Force enhances India’s ability to see deeper and strike further with precision and cost-effectiveness, strengthening deterrence.</p>
+<p>Central to this modernisation is the Defence Research and Development Organisation (DRDO), which is driving innovation across missile technology, unmanned systems, and next-generation warfare capabilities. However, defence can no longer be the sole burden of the state. Take the case of the DRDO, which developed key systems like the BrahMos missile, Tejas LCA, and Akash, and conducted the country’s first long-range hypersonic missile test in 2024.</p>
+<p>Its heavy in-house structure stands in contrast to the US Defence Advanced Research Projects Agency (DARPA), which operates with a lean team of project managers and outsources nearly all development. The cost of this model shows up in programs like the Arjun tank (a 1974 concept that limped into service in 2004 with 69% foreign components), or the Kaveri engine (still unfinished after four decades of development).</p>
+<p>There are promising signs of reform. The iDEX programme, Defence Innovation Organisation, and DRDO 2.0’s commitment to directing 80-90% of conventional production to private industry by 2025 reflects a broader perspective, while refocusing internally on directed energy, quantum systems, and AI.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>To reach the scale that this century demands, India needs a military-industrial complex that is a thriving ecosystem of research, private financing, and high-tech manufacturing. A resilient war economy, with diversified supply chains and industrial surge capacity, is the foundation upon which every other military capability rests.</p>
+<p><strong>Role of broader society</strong></p>
+<p>Finally, we must address the most neglected component of defence: the citizen. The era of total and multi-domain war demands a society that is resilient to the grey zone tactics that adversaries deploy below the threshold of open conflict.</p>
+<p>Civil defence measures, long underinvested, need urgent strengthening. Meeting this challenge requires something no procurement <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> alone can buy: strong political will, backed by a united and resolute nation, and sustained by the solidarity of friendly countries who share a vision of a stable international order.</p>
+<p>For India, the defining feature of future wars will be the ability to harness low-cost, indigenously developed technologies to transform legacy military hardware into automated and autonomous systems. National security has more than ever become a collective responsibility. Acting in unison will form the bulwark against all threats, both internal and external, to national security and strategic autonomy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><em><strong>The author served as a defence and military adviser at the High Commission of India, Pakistan.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10760282"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-seventh, twenty twenty-six, at twenty-four minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/india-defence-vision-2047-future-warfare-10760282/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-27 13:50 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
