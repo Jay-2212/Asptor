@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Explained: Why the postponement of Maha TET has left 6 lakh candidates in limbo | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Explained: Why the postponement of Maha TET has left 6 lakh candidates in limbo</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-27</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Maharashtra-TET.jpg?w=1600" alt="Explained: Why the postponement of Maha TET has left 6 lakh candidates in limbo">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Maharashtra TET" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Maharashtra-TET.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Teacher Eligibility Test (TET) scheduled for June 28, 2026, was postponed after police received information about a possible question paper leak.  (Special Arrangement/Deepak Joshi)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Maharashtra Teachers Eligibility Test (Maha TET), scheduled for June 28, was postponed barely a day before the examination after authorities detected a suspected paper leak. The last-minute decision has left more than six lakh registered candidates, including thousands of in-service teachers, in uncertainty.</p>
+<p>The postponement assumes greater significance because this year’s examination was the first after the Supreme Court made the Teachers Eligibility Test mandatory for a large section of teachers already in service. The ruling triggered record registrations, with many teachers viewing the examination as crucial to securing their jobs.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The incident has also revived questions over the credibility of Maha TET, an examination that has repeatedly courted controversy over the past decade.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>What is Maha TET?</strong></p>
+<p>The Teachers Eligibility Test is the minimum qualification required for appointment as a teacher for Classes I to VIII.</p><div id="taboola-mid-article-personalisation"></div>
+<p>While the Central Teacher Eligibility Test (CTET), introduced by the National Council for Teacher Education in 2011, is conducted at the national level, Maharashtra introduced its own state-level examination, Maha TET, in 2013.</p>
+<p>The examination comprises two papers. Candidates aspiring to teach Classes I to V must qualify Paper I, while those seeking appointments in upper primary schools (Classes VI to VIII) must clear both papers.</p>
+<p>Over the years, Maha TET has also earned a reputation for being one of the country’s toughest teacher eligibility examinations, with the pass percentage rarely crossing 5-7 per cent. To give candidates more opportunities—particularly in-service teachers facing statutory deadlines—the state recently began conducting the examination twice a year.</p>
+<p><strong>Why has the examination been postponed?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The Maharashtra State Examination Council (MSEC), which conducts Maha TET, announced the postponement after Bhiwandi police unearthed a <a href="https://indianexpress.com/article/education/maharashtra-tet-2026-postponed-after-paper-leak-10760105/"><strong>suspected paper leak</strong></a> on Saturday morning.</p>
+<p>According to the council, police raided a location after receiving confidential information and recovered question papers allegedly in the possession of a group of individuals. A preliminary verification by MSEC officials found that some of the seized questions matched those in the June 2026 examination paper.</p>
+<p>An FIR has since been registered. The council said the examination has been postponed—not cancelled—to ensure that it is conducted in a fair and transparent manner.</p>
+<p><strong>Why is this examination particularly important?</strong></p>
+<p>The June examination had drawn the highest-ever registrations, with more than six lakh candidates expected to appear.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>A large number of them are in-service teachers affected by the Supreme Court’s September 2025 judgment, which retrospectively extended the TET requirement to teachers already working in schools.</p>
+<p>The court ruled that teachers with more than five years of service remaining must clear TET by September 2027 to continue in service, failing which they would face compulsory retirement. Those with less than five years of service left were exempted from passing the examination but would not be eligible for promotions.</p>
+<p>Following review petitions filed by teachers’ organisations, the Supreme Court, on May 29 this year, retained its decision but extended the deadline to August 2028.</p>
+<p>According to Maharashtra government data, over 4.4 lakh of the state’s nearly 4.95 lakh serving teachers do not possess TET qualifications, making the examination critical for a large section of the teaching workforce.</p>
+<p><strong>What does the postponement mean for candidates?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Although the council has clarified that the examination will be rescheduled, candidates say the uncertainty has only increased.</p>
+<p>Many had travelled to examination centres across districts and made work and travel arrangements for the weekend. For in-service teachers working against the Supreme Court’s deadline, the postponement also delays another opportunity to secure the mandatory qualification.</p>
+<p>Teachers have also demanded that the rescheduled examination be conducted with stronger safeguards to restore confidence in the system.</p>
+<p><strong>Has Maha TET faced controversies before?</strong></p>
+<p>Yes. But until now, the controversies have largely centred on the <a href="https://indianexpress.com/article/explained/maharashtra-tet-scam-malpractices-recruitment-exams-7748482/"><strong>manipulation of results</strong></a> rather than the question paper leaks.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/maharashtra-teachers-eligibility-test-scam-abdul-sattar-daughters-8083725/">What is Maharashtra’s TET scam, and why is it back in the news?</a></span></div>
+<p>The biggest scandal surfaced in 2021 when investigations into irregularities in other recruitment examinations uncovered widespread manipulation in Maha TET results.</p>
+<p>The probe revealed that candidates had allegedly secured TET qualification by tampering with marks, obtaining forged certificates and exploiting irregularities in the evaluation process.</p>
+<p>Police identified 7,880 suspicious candidates and handed the list to the Maharashtra State Examination Council for verification.</p>
+<p>The council’s scrutiny found that nearly 7,500 candidates had fraudulently increased their marks to qualify, while 293 had obtained fake TET certificates without altering marks. Another 81 candidates were also found to have secured certificates through illegal means.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>While the 2021 scandal exposed systemic manipulation after the examination process, the present controversy marks the first major instance in which Maha TET has been postponed over a suspected question paper leak.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10760507"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/pallavi-smart/">
+<figure>
+<img alt="Pallavi Smart" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/pallavi-smart/"><span></span>Pallavi Smart</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7763616"></div><div class="follow_author_title" data-id="Pallavi Smart"></div><div class="follow_author_slug" data-id="pallavi-smart"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Pallavi Smart is a Principal Correspondent with The Indian Express, Mumbai Bureau. Her reporting is singularly focused on the education sector, demonstrating exceptional Expertise and Authority across the entire spectrum of learning, from foundational schooling to advanced higher education. She is a highly Trustworthy source for policy, institutional developments, and systemic issues affecting students, teachers, and parents in Maharashtra.
+Expertise
+
+ 	
+Senior Role: As a Principal Correspondent at The Indian Express, her designation reflects her seniority, specialized knowledge, and the editorial rigor applied to her reporting.
+
+ 	
+Core Authority &amp; Specialization: Pallavi Smart is the definitive voice for Education news in the region. Her coverage scope is comprehensive:
+
+
+ 	
+Policy and Regulatory Changes: Reports on major shifts in educational policy, including the restructuring of entrance exams (e.g., MHT-CET adopting the JEE Main model), the draft regulatory framework for coaching classes, and revised teacher recruitment processes.
+
+ 	
+Higher Education Institutions (HEIs): Provides in-depth reporting on prestigious institutes like IIT Bombay and TISS (Tata Institute of Social Sciences), covering institutional initiatives, administrative debates (e.g., renaming IIT Bombay), and student welfare programs (e.g., mandatory mental health courses).
+
+ 	
+Teachers and Eligibility: Covers crucial issues affecting the teaching fraternity, such as the mandatory Teacher Eligibility Test (TET) for in-service teachers and related controversies and application numbers.
+
+ 	
+Student Welfare &amp; Rights: Focuses on issues concerning students, including the rollout of government scholarships, the financial strain on schools due to midday meal reimbursement delays, and instances of child rights violations (e.g., the Powai studio hostage crisis).
+
+ 	
+Admissions and Vacancy: Tracks the outcome of centralized admission processes (e.g., MBBS, BPharm) and analyzes vacancy concerns, providing essential data-driven insights for parents and students.
+
+
+
+
+Credentials &amp; Trustworthiness
+
+ 	
+Dedicated Beat: Her consistent focus on the "KG to PG" education beat allows her to develop unparalleled subject matter knowledge, ensuring her reports are accurate, detailed, and contextualized.
+
+ 	
+Proactive Reporting: Her articles frequently break news on policy and institutional planning, providing the public with timely, essential information about a sector that directly impacts millions of families.
+
+
+She tweets @Pallavi_Smart                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/pallavi-smart/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-seventh, twenty twenty-six, at twenty-five minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/mumbai/" href="https://indianexpress.com/about/mumbai/">Mumbai</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/maha-tet-2026-postponed-paper-leak-10760507/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-27 17:37 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

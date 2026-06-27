@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Why govt banned 16 combination drugs, from antibiotics to aloe vera creams | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Why govt banned 16 combination drugs, from antibiotics to aloe vera creams</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-27</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/pills_3c7ae3.jpg?w=1600" alt="Expert Explains | Why govt banned 16 combination drugs, from antibiotics to aloe vera creams">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="fixed-dose combination" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/pills_3c7ae3.jpg?w=1600" width="650"/><span class="ie-custom-caption">A fixed-dose combination is considered 'irrational' when the ingredients do not have a scientifically established rationale for being combined in a single product. Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p style="font-weight: 400">The government has <a href="https://indianexpress.com/article/india/fixed-dose-combination-drugs-ban-safety-10749074/" rel="noopener" target="_blank"><strong>banned 16 fixed-dose combination (FDC) drugs</strong></a>, including certain antibiotic combinations and a range of dermatological products containing aloe vera and other herbal ingredients, because their amplified benefits lack scientific justification.</p>
+<p style="font-weight: 400">Fixed-dose combinations contain two or more active ingredients in a single formulation and are commonly prescribed for conditions ranging from infections to pain and skin ailments. While some combinations are evidence-based and improve patient outcomes, others are considered “irrational” because there is little or no scientific evidence that the ingredients work better together than when used separately.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p style="font-weight: 400">“Public health experts have long warned that irrational combinations can expose patients to unnecessary drugs, increase costs and, in the case of antibiotics, contribute to antimicrobial resistance. The last is a growing public health problem because bacteria, viruses, fungi, and parasites no longer respond to the medicines designed to kill them,” says <em><strong>Dr</strong> <strong>Kamini Walia</strong></em>, senior scientist at the Indian Council of Medical Research (ICMR). She spoke to <em><strong>Rinku Ghosh</strong></em>.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2 style="font-weight: 400"><strong>What is an ‘irrational’ fixed-dose combination?</strong></h2>
+<p style="font-weight: 400">A fixed-dose combination is considered irrational when the ingredients do not have a scientifically established rationale for being combined in a single product. For a combination to be considered rational, each component should contribute meaningfully to the intended therapeutic effect, have compatible pharmacological properties and demonstrate additional clinical benefit compared to using the individual medicines separately.</p><div id="taboola-mid-article-personalisation"></div>
+<p style="font-weight: 400">In many cases, there is little or no evidence from robust clinical trials to support the combination.</p>
+<p style="font-weight: 400"><strong>One of the banned products combines amoxicillin and serratiopeptidase. Why have experts objected to this combination?</strong></p>
+<p style="font-weight: 400">Serratiopeptidase is a proteolytic enzyme, which breaks down proteins. The evidence supporting its use alongside antibiotics is extremely limited. The enzyme is acid-labile, meaning it can be degraded in the stomach before reaching the bloodstream. There is no evidence that shows adequate therapeutic concentrations reach infected tissues. No peer-reviewed randomised controlled trial has shown that adding serratiopeptidase improves bacterial clearance, increases cure rates or reduces the amount of antibiotic required.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">The threat of antimicrobial resistance</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-health/expert-public-health-crisis-antibiotics-antimicrobial-resistance-10491193/">‘The antibiotic pipeline is running dangerously dry’</a></span></div>
+<p style="font-weight: 400">Some proponents argue that it may help antibiotics penetrate biofilms or inflamed tissues more effectively. However, this hypothesis is largely based on laboratory studies and has not been convincingly demonstrated in human clinical studies. No major treatment guideline currently recommends serratiopeptidase as an adjunct to antibiotics for managing infections.</p>
+<p style="font-weight: 400"><strong>What about popular combination drugs in use?</strong></p>
+<p style="font-weight: 400">Take the case of the antibiotic Norfolk TZ (a combination of norfloxacin and tinidazole). If you have purely bacterial diarrhoea, taking tinidazole is pointless. Conversely, if you have amoebic dysentery, norfloxacin provides zero benefit. Patients rarely suffer from bacterial and protozoal infections simultaneously. But exposure unnecessarily promotes bacterial resistance.</p>
+<p style="font-weight: 400">Doctors often caution against the misuse of Augmentin 625 (a combination of amoxicillin and clavulanic acid). The clavulanic acid acts as a barrier to block enzymes that certain resilient bacteria produce to destroy amoxicillin. But if the specific bacteria causing your infection are not resistant, the clavulanic acid is useless.</p>
+<p style="font-weight: 400"><strong>Could such antibiotic combinations contribute to antimicrobial resistance?</strong></p>
+<p style="font-weight: 400">When combinations are marketed as being more effective without sufficient evidence, they may encourage unnecessary or prolonged antibiotic use. This increases antibiotic exposure in the community and creates selective pressure on bacteria, allowing resistant organisms to survive and multiply. From a public health perspective, antibiotic use should be as targeted and evidence-based as possible.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p style="font-weight: 400"><strong>Several aloe vera-based dermatological combinations have also been banned. Why were these products considered irrational despite being sold for years?</strong></p>
+<p style="font-weight: 400">Longevity in the market does not automatically establish scientific validity. Many of the banned dermatological combinations contain multiple ingredients such as aloe vera extracts, Vitamin E, jojoba oil, olive oil, tea tree oil and other moisturising or herbal components.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-health/daraxonrasib-pancreatic-cancer-survival-trial-results-10721700/">A new pill can double survival time for deadliest cancer: Why this is a gamechanger</a></span></div>
+<p style="font-weight: 400">The key question is whether combining these ingredients provides a measurable clinical benefit compared with using them individually. In many cases, robust scientific evidence demonstrating superior efficacy is lacking.</p>
+<p style="font-weight: 400">Take the case of combination creams containing both a steroid and an antifungal. While they provide temporary relief from itching and redness, steroids suppress the skin’s local immune response, which can cause the underlying fungal infection to worsen, spread, or become resistant to treatment.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p style="font-weight: 400">Regulatory decisions are based on scientific evidence and risk-benefit assessments, not on how long a product has been available commercially.</p>
+<p style="font-weight: 400"><strong>What risks do patients face when using irrational fixed-dose combinations?</strong></p>
+<p style="font-weight: 400">Patients may be exposed to unnecessary drugs, increasing the possibility of adverse effects, drug interactions and allergic reactions. Fixed combinations can also make it difficult for doctors to adjust the dose of individual ingredients according to a patient’s needs. If a doctor wants to increase the dose of one medication, they cannot do so without overdosing on the other. Besides, such drugs may mask an underlying complication, reducing precision treatment.</p>
+<p style="font-weight: 400"><strong>What should patients, doctors and pharmacists do now that these products have been banned?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p style="font-weight: 400">Patients should understand that a medicine containing multiple ingredients is not necessarily more effective than a targeted treatment. In fact, a simpler medicine supported by strong evidence is often the safer and more effective option.Patients currently using any of the banned products should consult their doctor about appropriate alternatives. Stopping an irrational fixed-dose combination does not mean stopping treatment; safer and evidence-based alternatives are available.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">An AIIMS doctor explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-health/why-the-renaming-of-pcos-to-pmos-marks-a-landmark-shift-an-aiims-doctor-explains-10689093/">What is PCOS, and why does its renaming to PMOS matter?</a></span></div>
+<p style="font-weight: 400">For doctors, the focus should be on de-escalating patients to rational therapies and prescribing medicines supported by clinical evidence. Pharmacists should remain aware of the drug regulator’s list of banned fixed-dose combinations, flag irrational prescriptions where appropriate and educate patients about available alternatives.</p>
+<p style="font-weight: 400"><strong>Should we team up vitamins and probiotics with antibiotics?</strong></p>
+<p style="font-weight: 400">Again, there is no definitive evidence of them being indispensable. While probiotics may be advised by doctors on a case-specific basis, vitamins may not be needed, except by those in a vulnerable group. The antibiotics have a limited dosage; you may not need vitamins for a short spell. Consult your doctor.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10758665"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/columnist/rinku-ghosh/">
+<figure>
+<img alt="Rinku Ghosh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2021/11/rinku.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/columnist/rinku-ghosh/"><span></span>Rinku Ghosh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7625937"></div><div class="follow_author_title" data-id="Rinku Ghosh"></div><div class="follow_author_slug" data-id="rinku-ghosh"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rinku Ghosh is the Health Section Lead at The Indian Express, where she oversees the publication’s comprehensive health, wellness, and medical science vertical. With years of experience in high-impact journalism, Rinku specializes in translating complex medical research into actionable insights for the public. Her reporting spans a wide spectrum—from deep-dives into childhood obesity and the effects of urban pollution to the frontiers of medical technology, such as the use of AI and nanobots in cancer treatment.
+Authoritativeness: As a veteran editor at one of India’s most trusted news organizations, Rinku has interviewed world-renowned experts, including cardiologists from the Mayo Clinic, oncologists from AIIMS, and researchers from the Indian Institute of Science (IISc). Her column often serves as a primary source for "Explained" features, where she breaks down global health trends, vaccine safety, and public health policy. Her work is recognized for bridging the gap between clinical data and the lived experiences of patients.
+Trustworthiness: Rinku’s editorial approach is rooted in the "Journalism of Courage" philosophy, prioritizing evidence-based science over healthcare myths. In an era of medical misinformation, she ensures that every piece of advice—whether regarding chronic disease management or nutritional supplements—is backed by peer-reviewed studies and verified by leading medical practitioners.                        <a class="more-abt-author" href="https://indianexpress.com/profile/columnist/rinku-ghosh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-sixth, twenty twenty-six, at forty-six minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-health/banned-fixed-dose-combination-drugs-explained-10758665/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-27 17:37 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
