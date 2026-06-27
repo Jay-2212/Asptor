@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Who gets child’s custody? Pune court order puts focus on parental conduct | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Who gets child’s custody? Pune court order puts focus on parental conduct</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-27</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/del_eeaeb6.jpg?w=1600" alt="Who gets child’s custody? Pune court order puts focus on parental conduct">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Pune Family Court (Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/del_eeaeb6.jpg?w=1600" width="650"/><span class="ie-custom-caption">Pune Family Court (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>A Pune Family Court order restoring interim custody of a 10-year-old boy to his father based on the mother’s conduct prompts one to look into whether a parent’s conduct as a spouse or daughter-in-law can be relied upon while deciding who should raise a child.</p>
+<p>On one hand, the court recognises what it calls the “settled legal proposition” that a ““bad character” or moral failing do not automatically disqualify them from gaining child custody because Court always prioritize the child’s best interests i.e. emotional, educational, and physical welfare over a parent’s private conduct.”</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On the other hand, while granting custody to the father, the court also observed that the mother had failed to fulfil the “pious duties of a wife towards her husband”, adding that “nurturing the home, maintaining the respect, providing emotional support…appears to be foreign terms to her.” It said that “in the company of such a women, the future of the Child is not <a href="https://indianexpress.com/article/legal-news/calcutta-hc-child-can-decide-stay-with-grandparents-custody-case-10757062/"><strong>safe</strong></a>.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>What was the case about?</strong></p>
+<p>The dispute arose after the mother returned to <a class="" href="https://indianexpress.com/section/cities/pune/" rel="noamphtml">Pune</a> from Singapore, while the father was travelling for work, days after she had accused him of being involved with the family’s domestic help. The father sought restoration of custody, relying on an earlier order of the Singapore Family Justice Courts directing that the child be returned to him.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The Family Court ultimately granted interim custody to the father. Its reasons were several – the unchallenged Singapore order; the court found that the child had spent nearly three formative years in Singapore and said that the mother had attempted to alienate the child from his father.</p>
+<h3><strong>What does the law require courts to examine?</strong></h3>
+<p>Under the Hindu Minority and Guardianship Act, Section 13, the welfare of the child is the paramount consideration. It states, “No person shall be entitled to the guardianship by virtue of the provisions of this Act or of any law relating to guardianship in marriage among Hindus, if the court is of opinion that his or her guardianship will not be for the welfare of the minor.”</p>
+<p>Guardianship and Wards Act under Section 17 stipulates how the welfare should be assessed, stating that “the Court shall have regard to the age, sex and religion of the minor, the character and capacity of the proposed guardian and his nearness of kin to the minor, the wishes, if any, of a deceased parent, and any existing or previous relations of the proposed guardian with the minor or his property.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/mother-custody-battle-asked-deposit-rs-75-lakh-taking-son-uk-court-10756664/">Mother in custody battle asked to deposit Rs 75 lakh for taking son to UK, court cancels it</a></span></div>
+<p>The two statutes are read together, with the Guardians and Wards Act providing a procedural framework for the grant of custody.</p>
+<p>In <em>Rosy Jacob v Jacob A. Chakramakkal</em> (1973), the court said that “children are not mere chattels; nor are they mere playthings for their parents. Absolute right of parents over the destinies and the lives of their children, has, in the modern changed social conditions, yielded to the considerations of their welfare as human beings.”</p>
+<p>Neither the HM&amp;G nor the GWA lays down grounds for custody based on the performance of marital obligations as an independent factor in determining custody. The Supreme Court, through its judgments, instead focuses upon whether it bears upon welfare of the child.</p>
+<p>The SC in <em>Mausami Moitra Ganguli v Jayant Ganguli</em> (2008) held that a father’s statutory status as natural guardian, or either parent’s love for the child, “cannot be the sole determining factor for the custody of the child.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>What the welfare interest of the child actually asks for looks less like a character assessment and more like an audit of the child’s daily life: continuity of school and routine, emotional stability, evidence of day-to-day involvement and the child’s own wishes, weighed, but never treated as final.</p>
+<p><strong>When do parents conduct become relevant?</strong></p>
+<p>Taken together, the SC judgements suggest that custody jurisprudence is broadly categorised in three ways – the first pertains to the child itself because neglect, instability, etc., have a direct bearing on the welfare of the child. The Pune court addresses this aspect of alienation, saying that the child is being exposed to “poisonous words” against his father, which directly connects to the child’s emotional welfare.</p>
+<p>The second is conduct that affects the parent’s capacity to care for the child, such as violence or circumstances that impair caregiving, etc. Here, too, the relevance is not on the parent’s character but in assessing the likely impact on the child’s welfare. The SC in <em>Lahari Sakhamuri vs Sobhan Kodali</em> (2019) included the proposed guardian’s “moral character” among the relevant considerations along with the parent’s “relationship with the child as opposed to characteristics of parent as an individual.”</p>
+<p>The third concern is conduct within the marriage that does not by itself relate to the child, like allegations of cruelty, infidelity or failure to perform marital responsibilities. In <em>Rosy Jacob</em>, the court held that allegations regarding a wife’s alleged immorality “had to be completely ignored in considering the question of custody,” emphasising that the inquiry must remain centred on the child’s welfare.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The Pune order draws this line correctly when the allegations run against the father. On the wife’s claims regarding the domestic help, the court said that “Big No” on the premise that even if the wife’s claims are true, a husband “of loose character” would not make him “a bad father.” It set the allegation aside for trial rather than deciding it at the custody stage.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>It did not extend the mother the same treatment. Her perceived failure towards “pious duties” was not set aside for trial but used as directly bearing on the finding that “the future of the Child is not safe.”</p>
+<p><strong>What is the “tender years doctrine”</strong></p>
+<p>The tender years doctrine is the older presumption that very young children are better off with their mother on account that mothers are the more natural source of day-to-day care. For a long time, it operated as a quiet thumb on the scale in any dispute involving a small child.</p>
+<p>Earlier this year, the <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a> HC in<em> Suman Sankar Bhunia v Debarati Bhunia Chakraborty</em> (2026), while granting custody to the father, held that the tender years doctrine “is founded on a highly stereotypical premise” and that “the doctrine appears to have evolved at a time when societal norms rigidly ascribed the role of breadwinner to the father and that of homemaker and primary caregiver to the mother, with attendant responsibility for the day-to-day upbringing of children…it would be more prudent for the courts to anchor the adjudication of custody disputes firmly in the overarching principle of the best interest of the children, rather than in presumptive doctrines.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Pune order, albeit differently, arrives at a similar place, framing the case as one where courts need to “break unwritten assumption that a mother is the only “natural” caregiver, while the father is merely the “provider”.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10757444"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-sixth, twenty twenty-six, at thirty minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/pune-court-order-parent-vs-custody-10757444/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-27 03:11 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
