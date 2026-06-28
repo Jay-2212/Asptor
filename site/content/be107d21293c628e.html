@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>China This Week | Bangladesh-China ties upgraded, more military removals, and Anthropic accuses Alibaba | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>China This Week | Bangladesh-China ties upgraded, more military removals, and Anthropic accuses Alibaba</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/china.jpg?w=1600" alt="China This Week | Bangladesh-China ties upgraded, more military removals, and Anthropic accuses Alibaba">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Chinese President Xi Jinping met Bangladeshi Prime Minister Tarique Rahman in Beijing." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/china.jpg?w=1600" width="650"/><span class="ie-custom-caption">Chinese President Xi Jinping met Bangladeshi Prime Minister Tarique Rahman in Beijing. </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>This week saw another set of removals of senior Chinese military leaders, as part of what has been officially framed as a larger, years-long anti-corruption campaign. Six senior officers of the People’s Liberation Army (PLA) were removed from the National People’s Congress (NPC), the national legislature, according to an announcement on Friday (June 26).</p>
+<p>Chinese President Xi Jinping also met Bangladeshi Prime Minister Tarique Rahman on Friday in Beijing, as part of Rahman’s maiden official foreign trip to Malaysia and China after being elected this year.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The leaders announced the decision “to build a China-Bangladesh community with a shared future in the new era, elevating bilateral relations to a higher level,” the Chinese Foreign Affairs Ministry stated. That Rahman chose to visit China, but not as the first foreign stop on his tour, is being read as part of a larger strategy aimed at managing ties with both India and China.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Finally, we look at the US AI company Anthropic, which has alleged that the Chinese e-commerce giant Alibaba used its chatbot Claude to train its own AI model through a method called “distillation attack.”</p>
+<p><em>Here is a closer look at these developments:</em></p>
+<p><span style="color: #800000"><strong>1. PLA removals continue</strong></span></p><div id="taboola-mid-article-personalisation"></div>
+<p>State media agency <em>Xinhua</em> reported several removals from the NPC, which is often described in the West as China’s “rubber stamp” Parliament. With over 3,000 members, the full strength of the NPC convenes annually to rule on legislative matters.</p>
+<p>Much of the political and policy agenda of this body is generally pre-determined by the Communist Party’s Central Committee, a powerful political body of around 300 to 400 leaders. Still, NPC membership is considered an important political position.</p>
+<p><span style="color: #008000"><strong>UPSHOT:</strong></span> According to the<em> South China Morning Post</em>, 13 NPC members have been removed in total.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The large number of military officers within this includes General Xu Xueqiang of the Central Military Commission’s (CMC) Equipment Development Department. The CMC is the top military decision-making body involved in procurement, testing and other key functions, and has seen nearly all of its members come under corruption-related investigations in recent years.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/china-hukou-system-social-inequality-explained-10753694/">Does China have a caste system? What recent online debates capture and miss</a></span></div>
+<p>While the motives for such widespread removals of key figures have been debated for some time, what’s also unclear is how these actions will affect China’s military at large. They also assume significance in light of China’s assertions regarding Taiwan, which have grown stronger in recent years.</p>
+<h2><span style="color: #800000">2. China-Bangladesh relations</span></h2>
+<p>The Chinese Foreign Affairs Minister said Xi spoke of support for the new government of Bangladesh and expressed readiness to work together on the Belt and Road Initiative (BRI), China’s flagship infrastructure development project in the Global South.</p>
+<p>He also spoke of potential for cooperation in green and low-carbon development and artificial intelligence. Rahman, meanwhile, described China as a “valued and trusted partner”. Several MoUs were signed during the four-day visit, and the two countries agreed to strengthen cooperation on the management of rivers, including the Teesta.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="color: #008000"><strong>UPSHOT:</strong></span> The Teesta originates in north Sikkim and flows through Bangladesh before draining into the Bay of Bengal. For years, water-sharing has been a source of disagreement between India and Bangladesh, with no formal mechanism for the Teesta. In 2011, an agreement seemed close to fruition, but then <a href="https://indianexpress.com/article/opinion/columns/west-bengal-elections-federal-mamata-banerjee-10646540/"><strong>West Bengal Chief Minister Mamata Banerjee</strong></a> withdrew support, citing the state’s own requirements.</p>
+<p>China’s involvement could thus raise concerns for India, especially as India and Bangladesh have attempted to repair bilateral ties under the new Rahman government.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Last edition</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/china-this-week-gaokao-exam-football-fifa-cup-10739337/">China holds its ‘highest exam’, and its indirect presence at the FIFA World Cup</a></span></div>
+<p>The elevation of China-Bangladesh ties is also noteworthy, as it brings Bangladesh into a group of countries that are part of Beijing’s “Community with a Shared Future for Mankind”. Manoj Kewalramani, Chairperson of the Geostrategy Programme at the think tank Takshashila Institution in <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a>, wrote that the concept was first articulated by Xi in 2013 and is “China’s signature foreign policy concept.”</p>
+<p>It has been framed as “a vision of a world where nations’ interests, security, and development are interwoven. It is framed as an alternative to what Beijing sees as a zero-sum, bloc-based liberal order.” It is in line with China’s broader outreach towards Global South nations, and includes over 40 countries and regional organisations that have partnered with China in establishing related mechanisms, Kewalramani wrote.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><span style="color: #800000">3. Anthropic vs Alibaba amid the larger AI race</span></h2>
+<p><em>Reuters</em> reported that <a href="https://indianexpress.com/article/technology/tech-news-technology/anthropic-accuses-alibaba-of-biggest-claude-cloning-attempt-seeks-tougher-us-action-10758451/"><strong>Anthropic wrote</strong></a> to two US senators about a “distillation” effort, which it said involves training a less capable model on the outputs of a stronger one. It contended that Alibaba trained its own AI models on Claude’s responses with a campaign between April 22 and June 5 this year, where it “generated more than 28.8 million exchanges with Claude through almost 25,000 fraudulent accounts.”</p>
+<p>Anthropic also made a broader national security argument, saying such campaigns turned American funding in AI into an advantage for geopolitical rivals.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/on-ai-the-us-and-china-have-an-outdated-arms-race-mindset-10750886/">On AI, the US and China have an outdated arms race mindset</a></span></div>
+<p><span style="color: #008000"><strong>UPSHOT:</strong></span> The letter comes at a time when the rise of Chinese tech and AI companies has resulted in several policy responses in the US. Interestingly, a recent <em>Wall Street Journal</em> report cited security researchers as stating that “Chinese artificial-intelligence systems have matched the performance of Anthropic’s powerful model Mythos in some cybersecurity scenarios, a development poised to reset the global tech race and pressure the White House in its overhaul of U.S. AI policy.”</p>
+<p>A few weeks ago, the Pentagon listed Alibaba and other major Chinese companies <a href="https://indianexpress.com/article/explained/explained-global/us-chinese-military-companies-list-alibaba-byd-baidu-explained-10737548/"><strong>as Chinese military firms</strong></a> by linking them with their government ministries, while the companies themselves denied such claims. The Anthropic letter also resurrects a familiar complaint when it comes to China — the theft of intellectual property for advancing its own industries.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10761636"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rishika-singh/">
+<figure>
+<img alt="Rishika Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/08/rishika-singh.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rishika-singh/"><span></span>Rishika Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="6571542"></div><div class="follow_author_title" data-id="Rishika Singh"></div><div class="follow_author_slug" data-id="rishika-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/rishikas_">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rishika Singh is a deputy copyeditor at the Explained Desk of The Indian Express. She enjoys writing on issues related to international relations, and in particular, likes to track and analyse news from China. Additionally, she writes on developments related to politics and culture. She can be reached out at rishika.singh@expressindia.com.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/rishika-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-eighth, twenty twenty-six, at forty-six minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/bangladesh/" href="https://indianexpress.com/about/bangladesh/">Bangladesh</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-bangladesh-purge-alibaba-ai-anthropic-10761636/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-28 13:57 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
