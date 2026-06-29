@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Mid-day meal row: A doctor explains why the humble egg is the gold standard for protein | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Mid-day meal row: A doctor explains why the humble egg is the gold standard for protein</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/eggs-mid-day-meal.jpg?w=1600" alt="Mid-day meal row: A doctor explains why the humble egg is the gold standard for protein">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="All nutritional guidelines suggest that 10-35% of our daily calories should come from protein-rich foods, like eggs." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/eggs-mid-day-meal.jpg?w=1600" width="650"/><span class="ie-custom-caption">All nutritional guidelines suggest that 10-35% of our daily calories should come from protein-rich foods. (Magnific)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>At a time when several states continue to debate whether eggs should be part of school mid-day meals, the discussion often centres on culture, ideology or personal food choices. Lost in that debate is a far more fundamental question: what does science say?</p>
+<p>For millions of Indian children, especially those from low-income households, the mid-day meal may be the most nutritious meal of the day. Decisions about what goes on that plate must, therefore, be guided by evidence, not perception. And the evidence on eggs — as a source of complete, affordable and highly bioavailable protein (which is well-utilised by the body upon consumption) — is difficult to ignore.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><a href="https://indianexpress.com/article/health-wellness/protein-deficiency-natural-food-supplements-energy-diet-9964488/"><strong>All nutritional guidelines suggest</strong></a> that 10-35% of our daily calories should come from protein-rich foods. Protein is also necessary for building lean mass, burning fat, increasing metabolism, slowing blood sugar release, and helping the body repair itself. However, “The issue is not just of protein from animal or plant sources. The most important one is, how much of that protein can the body actually use?” says<strong> Dr Seema Gulati</strong> of the National Diabetes, Obesity and Cholesterol Foundation (NDOC) Centre for Nutrition Research, <a class="" href="https://indianexpress.com/section/cities/delhi/" rel="noamphtml">Delhi</a>.</p>
+<p>The answer begins not with grams of protein, but with amino acids, the tiny building blocks of life from which every muscle fibre, hormone, enzyme and immune cell is made. The human body requires 20 amino acids, of which 11 can be manufactured internally. The remaining nine must come entirely from food.</p><div id="taboola-mid-article-personalisation"></div>
+<p>“A food that supplies all nine in adequate proportions is called a complete protein. Eggs are among the very few natural foods that do precisely that, hence they have been a part of midday meal schemes. Those who cannot have eggs need a mix of plant proteins for equivalence,” Gulati adds. Here, she explains why eggs are often seen as the gold standard for protein intake, and what it takes to match their nutritional profile for people who don’t consume them.</p>
+<p><strong>Proteins: The quantity vs quality row</strong></p>
+<p>Consider the numbers (<em>see chart</em>). A hundred grams in terms of real meals means two boiled eggs, two-thirds cup of cooked soybean and more than a cup of paneer chunks. In this scenario, soybeans contain 13.23 g of protein, almost identical to the 13.43 g found in a boiled egg. Paneer provides 18.9 g, while whole milk contributes 3.3–3.7 g.</p>
+<span class="custom-caption"><img alt="Eggs and other foods" class="lazyloading wp-image-10762666 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Eggs-and-other-foods.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg 1240w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=250,450 250w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=334,600 334w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=768,1381 768w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=225,405 225w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=854,1536 854w, https://indianexpress.com/wp-content/uploads/2026/06/Eggs-and-other-foods.jpg?resize=1139,2048 1139w" height="2230" sizes="(max-width: 1240px) 100vw, 1240px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1240"/> Eggs and other foods.</span>
+<p>Judged solely by protein content, eggs and cooked soybeans appear virtually indistinguishable. But proteins are not all created equal.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Egg protein naturally contains all nine essential amino acids in proportions remarkably close to human requirements. It is also highly digestible, allowing the body to absorb and utilise it more efficiently compared to other foods. This bioavailability is why eggs have long served as the international reference protein against which the quality of other proteins is assessed.</p>
+<p>Plant proteins tell a more complex story. Soybean is undoubtedly among the highest-quality plant proteins available and comes closer than most plant foods to providing a balanced amino acid profile. Yet, like other plant proteins, it is best viewed as part of a dietary mix rather than a standalone solution.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/tamil-nadu-midday-meal-scheme-eggs-west-bengal-row-10760101/">Midday meal row: As Bengal drops eggs, recalling Tamil Nadu’s century-long efforts to nourish schoolkids</a></span></div>
+<p>Nutritionists, therefore, recommend combining legumes with cereals — dal with rice, rajma with rice, khichdi, roti with chana, or millets with pulses — so that one food compensates for the amino acids another supplies in smaller amounts. For vegetarians, this principle of protein complementation is fundamental with legumes, dairy, and nuts. An egg, by contrast, has that balance already built in.</p>
+<p>Plant proteins may seem inadequate individually. But they achieve their full nutritional potential through intelligent combinations. Cereals and pulses complement one another. Dairy and soy enrich the overall amino acid profile. Apart from combinations, there are always fortified foods.</p>
+<p><strong>The ‘brain nutrient’ factor</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Choline is a nutrient that receives far less public attention than protein, despite being indispensable for brain development, memory, nerve signalling and liver health.</p>
+<p>Whole milk provides around 14–16 mg of choline per 100 g. Paneer contains roughly 15–20 mg, while cooked soybean offers about 44–45 mg. Eggs provide 290–300 mg of choline. In simple terms, eggs contain almost seven times more choline than cooked soybeans and nearly 20 times more than milk or paneer.</p>
+<p><strong>Every food has its own strength</strong></p>
+<p>Each food brings something valuable to the table. Cooked soybeans are an excellent source of dietary fibre (7.92 g), iron (2.88 mg), magnesium (66.1 mg) and potassium (571.9 mg). It also contributes useful amounts of thiamine, niacin and folate, making it one of the strongest plant-based protein foods available.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/express-sunday-eye/why-fibre-is-protein-best-friend-10288035/">Why fibre is protein’s best friend</a></span></div>
+<p>Paneer stands out for its 18.9 g of protein and its exceptionally high calcium content (476 mg per 100 g), making it an important food for bone health. It also contributes phosphorus, zinc and biotin in meaningful amounts.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Milk remains one of the most accessible sources of calcium, riboflavin and high-quality dairy nutrition.</p>
+<p>A boiled egg provides high-quality complete protein, meaningful amounts of riboflavin, pantothenic acid, biotin, phosphorus, iron and zinc, together with one of the richest natural sources of choline, all within a single, compact food.</p>
+<p><strong>What of carbohydrates and fats?</strong></p>
+<p>The accompanying fats and carbohydrates also determine how a food fits into a balanced diet. Per 100 g, a boiled egg contains 10.54 g of fat and virtually no carbohydrates, making it naturally suited to diets that prioritise high-quality protein. Cooked soybeans provide 6.79 g of fat, 3.57 g of carbohydrates, and an additional 7.92 g of dietary fibre, offering a combination of plant protein, complex carbohydrates and fibre that supports sustained energy release.</p>
+<p>Paneer contains the highest fat content (14.8 g) among the foods compared, together with 12.4 g of carbohydrates, reflecting its energy-dense nature. Milk, meanwhile, remains the lightest option, contributing 4.5–6.6 g of fat and 4.9–8.3 g of carbohydrates, depending on whether it is cow’s or buffalo’s milk.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>These differences illustrate that while eggs stand out for their complete protein and micronutrient density, soybeans contribute valuable fibre and plant nutrients, paneer offers concentrated dairy nutrition, and milk provides a balanced everyday source of energy and nutrients. Each food serves a distinct nutritional purpose rather than competing on a single parameter. But from the lens of nutrition science, the humble egg continues to hold its place as one of the most complete and easy-to-prepare foods.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10762640"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/columnist/rinku-ghosh/">
+<figure>
+<img alt="Rinku Ghosh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2021/11/rinku.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/columnist/rinku-ghosh/"><span></span>Rinku Ghosh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7625937"></div><div class="follow_author_title" data-id="Rinku Ghosh"></div><div class="follow_author_slug" data-id="rinku-ghosh"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rinku Ghosh is the Health Section Lead at The Indian Express, where she oversees the publication’s comprehensive health, wellness, and medical science vertical. With years of experience in high-impact journalism, Rinku specializes in translating complex medical research into actionable insights for the public. Her reporting spans a wide spectrum—from deep-dives into childhood obesity and the effects of urban pollution to the frontiers of medical technology, such as the use of AI and nanobots in cancer treatment.
+Authoritativeness: As a veteran editor at one of India’s most trusted news organizations, Rinku has interviewed world-renowned experts, including cardiologists from the Mayo Clinic, oncologists from AIIMS, and researchers from the Indian Institute of Science (IISc). Her column often serves as a primary source for "Explained" features, where she breaks down global health trends, vaccine safety, and public health policy. Her work is recognized for bridging the gap between clinical data and the lived experiences of patients.
+Trustworthiness: Rinku’s editorial approach is rooted in the "Journalism of Courage" philosophy, prioritizing evidence-based science over healthcare myths. In an era of medical misinformation, she ensures that every piece of advice—whether regarding chronic disease management or nutritional supplements—is backed by peer-reviewed studies and verified by leading medical practitioners.                        <a class="more-abt-author" href="https://indianexpress.com/profile/columnist/rinku-ghosh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-ninth, twenty twenty-six, at fifty-six minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/eggs/" href="https://indianexpress.com/about/eggs/">eggs</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/mid-day-meal/" href="https://indianexpress.com/about/mid-day-meal/">mid day meal</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/protein/" href="https://indianexpress.com/about/protein/">protein</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-health/mid-day-meal-row-eggs-nutrition-protein-breakdown-doctor-10762640/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-29 09:26 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
