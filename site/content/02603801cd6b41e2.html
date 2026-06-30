@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From the Balkans to the World Cup: How a country that no longer exists shaped football | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From the Balkans to the World Cup: How a country that no longer exists shaped football</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/ex-sasa-austria_expl-sport.jpg?w=1600" alt="From the Balkans to the World Cup: How a country that no longer exists shaped football">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="World Cup" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/ex-sasa-austria_expl-sport.jpg?w=1600" width="650"/><span class="ie-custom-caption">Austria's Sasa Kalajdzic celebrates his team's third goal during the World Cup Group J match between Algeria and Austria in Kansas City on June 27, 2026. Photo: AP/Reed Hoffmann</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Kartikeya Bhattacharyya</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">When Austria met Algeria at the <strong><a class="" href="https://indianexpress.com/article/sports/football/carlos-queiroz-slams-expanded-48-team-fifa-world-cup-vulgar-and-ordinary-10761338/">2026 FIFA World Cup</a></strong>, a tense finish took centre stage. Austria needed at least a draw to qualify for the round of 32, but up until the 96th minute it appeared Algeria had pulled off the victory. Instead, Austria turned the match into a dramatic 3-3 draw and secured qualification with a stoppage-time winner from substitute striker Saša Kalajdžić.</span></p>
+<p><span style="font-weight: 400">Kalajdžić’s story, however, stretches far beyond a decisive goal. Born in Austria to Bosnian Serb parents who fled Bosnia and Herzegovina during the Yugoslav wars of the 1990s, he is one of dozens of players at this World Cup whose lives have been shaped by the breakup of a country that no longer exists.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2><b>Breakup of Yugoslavia</b></h2>
+<p><span style="font-weight: 400">At the start of the 1990s, Yugoslavia was a federation of six republics: Bosnia and Herzegovina, Croatia, Macedonia, Montenegro, Serbia and Slovenia. </span><span style="font-weight: 400">In addition to the six republics, the two separate regions of Kosovo and Vojvodina held the status of autonomous provinces within Serbia.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">As communism collapsed across Eastern Europe, nationalist movements surged, especially after the death of President Josip Broz Tito. Slovenia and Croatia declared independence in 1991, triggering a chain of wars across the Balkans, including conflicts in Bosnia and Herzegovina, Kosovo, and later Macedonia. The violence redrew borders and created a major refugee crisis.</span></p>
+<p><span style="font-weight: 400">The Bosnian War alone killed more than 100,000 people and forced around two million people to flee their homes between 1992 and 1995, according to the United Nations.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/sports/football/austria-algeria-fifa-world-cup-finish-iran-knock-out-10761139/">How 3 minutes of madness in Austria-Algeria game ended Iran’s World Cup</a></span></div>
+<p><span style="font-weight: 400">Beyond displacement, the collapse of Yugoslavia reshaped football itself. The national team was suspended and barred from UEFA Euro 1992 due to UN sanctions. In their place, Denmark — late call-ups after finishing runners-up in qualifying — went on to win the tournament in one of international football’s most unlikely triumphs.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Domestically, the Yugoslav First League dissolved into separate national competitions, permanently reshaping the footballing map of the Balkans. Diaspora communities formed across Germany, Austria, Switzerland, Sweden, Australia, New Zealand, and North America. Three decades later, those movements continue to shape international football.</span></p>
+<p><b>Diaspora and nationhood</b></p>
+<p><span style="font-weight: 400">No squad better reflects that history than Bosnia and Herzegovina’s. Seventeen players in Bosnia’s World Cup squad were born outside the country they represent.</span></p>
+<p><span style="font-weight: 400">For Bosnia, the diaspora is not just a talent pool — it is central to its football identity. Nowhere is this more evident than in Esmir Bajraktarević, whose decisive penalty against Italy secured Bosnia’s qualification for the 2026 World Cup. Born in the United States to a Bosniak Muslim family connected to Srebrenica, he represents a generation shaped by the legacy of the July 1995 genocide, in which more than 8,000 Bosniak men and boys were killed.</span></p>
+<span class="custom-caption"><img alt="Srebenica" class="lazyloading size-medium wp-image-10762959" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=600,450" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=450,338 450w, https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=600,450 600w, https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=768,576 768w, https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=540,405 540w, https://indianexpress.com/wp-content/uploads/2026/06/Memorijalni_centar_Srebrenica-Potocari6.jpg?resize=1536,1152 1536w" height="1200" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Memorial stone at the Srebrenica-Potočari Memorial Centre. More than 8,000 Bosniak men and boys were killed in the July 1995 genocide. Photo: Wikimedia Commons</span>
+<p><span style="font-weight: 400">Few countries intertwine football and national identity as closely as Croatia. </span><span style="font-weight: 400">Months before war officially began, Dinamo Zagreb captain Zvonimir Boban kicked a police officer during riots involving Red Star Belgrade fans at Maksimir Stadium in May 1990. Many Croatians still view the moment as symbolic of the country’s path to independence.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Croatia’s first president, Franjo Tuđman, once said: “Football victories shape a nation’s identity as much as wars do.” </span><span style="font-weight: 400">The war’s impact continues to be felt within the squad today.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/fifa-patrice-lumumba-at-world-cup-10757521/">The man standing still: Why Patrice Lumumba became DR Congo’s symbol at the FIFA World Cup</a></span></div>
+<p><span style="font-weight: 400">Luka Modrić’s grandfather was killed near their home village, forcing the family to flee to Zadar. They spent years living in a hotel for refugees, where Modrić learned football in corridors while air-raid sirens sounded outside.</span></p>
+<p><span style="font-weight: 400">Midfielder Mateo Kovačić was born in Austria after his parents fled Bosnia, while defender Marin Pongračić was born in Germany to a Croatian family displaced by war.</span></p>
+<p><b>History’s fault lines</b></p>
+<p><span style="font-weight: 400">The Yugoslav wars did not only reshape nations — they created political fault lines that still influence international football fixtures. This was most visible during Switzerland’s match against Serbia at the 2018 World Cup.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Switzerland’s Granit Xhaka and Xherdan Shaqiri, both ethnic Albanians with roots in Kosovo, celebrated their goals by forming the double-headed eagle gesture from Albania’s flag. Serbia condemned the act as political, and FIFA later fined both players.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The symbolism traced back to the Kosovo War. In 1998, the Kosovo Liberation Army launched an armed rebellion against Serbian rule. Serbian forces responded with a conflict that escalated across the region, ending after NATO’s 78-day bombing campaign in 1999.</span></p>
+<p><span style="font-weight: 400">Matches involving Serbia, Albania, and Kosovo remain classified as high-risk fixtures. Kosovo and Serbia have never met in a senior competitive international match, and UEFA and FIFA ensure the two teams are kept apart in tournament draws for security reasons.</span></p>
+<p><b>Reminders of a country lost</b></p>
+<p><span style="font-weight: 400">The consequences of the Yugoslav wars extend far beyond Europe, with players carrying fragments of that history across continents.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Australia defender Miloš Degenek was born in Knin, Croatia, to a Serbian family. At 18 months old, he fled to Belgrade. During NATO’s bombing of Serbia in 1999, he grew up with air-raid sirens and nights in shelters before his family eventually emigrated to Australia. “But as a six-year-old,” he recalled during an interview, “I thought that was normal.”</span></p>
+<p><span style="font-weight: 400">The story stretches further still. New Zealand midfielder Marko Stamenić was born in Wellington to a Serbian father who fled Novi Sad during the Yugoslav wars. While he never experienced the conflict directly, his family’s journey reflects how the wars reshaped communities across continents.</span></p>
+<p><span style="font-weight: 400">The World Cup is often framed as a celebration of nations. But scattered across squads on multiple continents are reminders of a country that no longer exists. What remains is not just memory, but structure: new national teams, fractured leagues, and a diaspora that continues to define football talent across Europe and beyond.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10762912"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June twenty-ninth, twenty twenty-six, at thirty-four minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sport/" href="https://indianexpress.com/about/explained-sport/">Explained Sport</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sports/yugoslavia-balkans-fifa-world-cup-2026-football-legacy-10762912/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-30 14:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
