@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Explained: The Akal Takht’s 11 objections to Punjab’s anti-sacrilege law | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Explained: The Akal Takht’s 11 objections to Punjab’s anti-sacrilege law</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-06-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/akal-takht-2.jpg?w=1600" alt="Explained: The Akal Takht’s 11 objections to Punjab’s anti-sacrilege law">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Punjab Finance Minister and AAP leader Harpal Singh Cheema and others offer prayers at the Golden Temple after appearing before the Akal Takht Sahib in connection with the Jagat Jyot Sri Guru Granth Sahib Satkar (Amendment) Act, 2026 in Amritsar." decoding="async" height="366" src="https://images.indianexpress.com/2026/06/akal-takht-2.jpg?w=1600" width="650"/><span class="ie-custom-caption">Punjab Finance Minister and AAP leader Harpal Singh Cheema and others offer prayers at the Golden Temple after appearing before the Akal Takht Sahib in connection with the Jagat Jyot Sri Guru Granth Sahib Satkar (Amendment) Act, 2026 in Amritsar. (PTI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Sri Akal Takht Sahib has raised several objections to the Jaagat Jot Sri Guru Granth Sahib Satkar (Amendment) Act, 2026, Punjab’s anti-sacrilege law, arguing that it interferes with matters that fall solely under Sikh religious authority.</p>
+<p>The Akal Takht recently issued a summons to all Sikh legislators and cabinet ministers of Punjab to explain their support for the law without properly consulting with it, the Shiromani Gurdwara Parbandhak Committee (SGPC) or other ‘panthic’ bodies. The Takht is the highest temporal (worldly/political) seat of the Sikhs.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><a href="https://indianexpress.com/article/chandigarh/akal-takht-hearing-punjab-mla-law-guru-sahib-satkar-act-bhagwant-mann-10762803/"><strong>Passed in April</strong></a>, the law has been criticised for expanding the definition of sacrilege to include “hurt sentiments”. In relation to the Bill, the Akal Takht declared Chief Minister <a class="" href="https://indianexpress.com/about/bhagwant-mann/" rel="noamphtml">Bhagwant Mann</a> “panth virodhi” (opposed to the panth), and issued an edict calling for his boycott over an objectionable video.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The events have also prompted the Punjab BJP and the SAD to criticise the AAP government. Here’s a point-wise breakdown of the objections.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>1. Replacement of “Bir/Birs” with “Saroop/Saroops”</strong></h2>
+<p>The Akal Takht objected to removing the traditional term “Bir,” used in Sikh Rehat Maryada for centuries to refer to a physical copy of the Guru Granth Sahib, which is also regarded as a living Guru by the faithful.</p>
+<p>It argued that terminology related to Sri Guru Granth Sahib must be decided by the Khalsa Panth, not the government. It demands that “Bir/Birs” be retained, with “Saroop/Saroops” (another term for the Guru Granth Sahib) alongside, if needed, not as a replacement.</p>
+<h2><strong>2. Definition of “Custodian”</strong></h2>
+<p>The new clause under the law, defining custodians (devotees, committees, Granthis, Sewadars), is seen as a move to fix sacrilege-related responsibility on ordinary Sikh caretakers, creating some apprehensions within the community.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The Takht argued that no human can be “custodian” of the Guru, and decisions about who holds a Saroop are purely internal Sikh matters already overseen by Sri Akal Takht Sahib. However, AAP leaders and CM Mann have publicly spoken of custodians in the context of close relatives of mentally unfit sacrilege accused, stating the new law will ensure they are punished under the law.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/akal-takht-history-powers-punjab-summons-10760576/">Akal Takht summons Punjab’s Sikh ministers, MLAs: Why the institution wields such influence</a></span></div>
+<h2><strong>3. Central Register with Unique Identification Numbers (UIN)</strong></h2>
+<p>The Akal Takht rejected the provision for assigning unique numbers to each copy of the holy book for creating a central register, describing it as tampering with their sanctity. The Takht insisted only the Shiromani Jatha/Guru Panth’s representative body, not the Punjab Assembly or government, can decide such matters, and that the SGPC’s existing administrative system is sufficient.</p>
+<h2><strong>4. Public online disclosure of records</strong></h2>
+<p>The Takht raised strong objections to the provision on uploading custodian/location records on the SGPC website, citing privacy risks and potential misuse. It even references the 1984 anti-Sikh riots, when voter lists were used to target Sikhs, warning that digitised records could enable similar targeting globally, since Saroops are distributed worldwide, not just in Punjab.</p>
+<h2><strong>5. Duties of custodians</strong></h2>
+<p>Under the law, duties including safe custody of the holy book and ensuring its protection from damage have been specified for custodians.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/10-years-3-anti-scarilege-bills-punjab-history-sacrilege-10637765/">3 attempts in 10 years: What’s new in Punjab’s latest anti-sacrilege Bill?</a></span></div>
+<p>This has been termed as government overreach into internal Sikh religious administration, and the Takht has demanded its complete removal.</p>
+<h2><strong>6. Punishment clause</strong></h2>
+<p>The proposed five-year imprisonment and Rs 10 lakh fine for the offence of sacrilege has been opposed over concerns about it unfairly targeting Sewadars, Granthis, and Gurdwara committees.</p>
+<p>The Takht has said that this provision could be misused for personal vendettas and false cases, causing discord within the community.</p>
+<h2><strong>7. Rule-making power</strong></h2>
+<p>A broader objection is that the government retains unilateral rule-making authority without consulting SGPC or Akal Takht Sahib. In response, the Takht has demanded mandatory consultation before any rules are finalised.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><strong>8. Terminology concerns</strong></h2>
+<p>Words like “store,” “storage,” and “supply” are seen as disrespectful in reference to the holy book. The Takht wants terms like “Sewa Sambhal,” “Prakash,” “Sukhasan,” and “Sachkhand” used instead, with Punjabi terms retained where no ‘respectful’ English equivalent exists.</p>
+<h2><strong>9. Handling of sacrilege cases</strong></h2>
+<p>The Takht has demanded that damaged Saroops not be taken to police stations or courts, but instead cremated respectfully at Gurdwara Sri Baoli Sahib following proper Sikh procedure.</p>
+<h2><strong>10. Final assertion of authority</strong></h2>
+<p>The Akal Takht reasserts that only it has authority to determine maryada (the panthic code of conduct) concerning Sri Guru Granth Sahib and the Sikh Sangat, rejecting any state legislative role in religious regulation.</p>
+<h2><strong>11. Booking the dera or sect head</strong></h2>
+<p>The Jathedar or head of the Akal Takht has asked both the government and Opposition to include a clause in the anti-sacrilege law. He said that if a follower of an ‘anti-Sikh dera’ (sect) commits sacrilege intentionally or as part of a conspiracy, a case would also be registered against the head of that dera.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10764571"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/">
+<figure>
+<img alt="Kamaldeep Singh Brar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/"><span></span>Kamaldeep Singh Brar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2673821"></div><div class="follow_author_title" data-id="Kamaldeep Singh Brar"></div><div class="follow_author_slug" data-id="kamaldeep-singh-brar"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Kamaldeep Singh Brar is a Principal Correspondent at The Indian Express, primarily covering Amritsar and the Majha region of Punjab. He is one of the publication's key reporters for stories involving the Akal Takht, the Shiromani Gurdwara Parbandhak Committee (SGPC), and the sensitive socio-political issues of the border districts.
+
+Core Beats &amp; Specializations
+
+Religious &amp; Panthic Affairs: He has deep expertise in the internal workings of the Akal Takht and SGPC, frequently reporting on religious sentences (Tankhah), Panthic politics, and the influence of Sikh institutions.
+
+National Security &amp; Crime: His reporting covers cross-border drug smuggling, drone activities from Pakistan, and the activities of radical groups.
+
+Regional Politics: He is the primary correspondent for the Majha belt, covering elections and political shifts in Amritsar, Tarn Taran, and Gurdaspur.
+
+Recent Notable Articles (Late 2025)
+
+His work in late 2025 has been centered on judicial developments, local body elections, and religious controversies:
+
+1. Religious Politics &amp; Akal Takht
+
+"Akal Takht pronounces religious sentences against former Jathedar Giani Gurbachan Singh" (Dec 8, 2025): Covering the historic decision to hold the former Jathedar guilty for granting a pardon to Dera Sacha Sauda chief Gurmeet Ram Rahim in 2015.
+
+"YouTube suspends SGPC’s channel for a week over video on 1984 Army action" (Nov 20, 2025): Reporting on the digital friction between global tech platforms and Sikh religious bodies.
+
+"As AAP govt grants Amritsar holy tag, a look at its fraught demand" (Nov 28, 2025): An analytical piece on the long-standing demand for declaring Amritsar a "holy city" and its political implications.
+
+2. Crime &amp; National Security
+
+"Mostly Khalistanis on Amritpal’s hit list: Punjab govt to High Court" (Dec 16, 2025): Reporting on the state government's claims regarding jailed MP Amritpal Singh orchestrating activity from prison.
+
+"Punjab man with links to Pakistan’s ISI handlers killed in encounter" (Nov 20, 2025): Detailing a police operation in Amritsar involving "newly refurbished" firearms likely sent from across the border.
+
+"15 schools in Amritsar get bomb threat emails; police launch probe" (Dec 12, 2025): Covering the panic and police response to mass threats against educational institutions.
+
+3. Political Analysis &amp; Elections
+
+"AAP wins 12 of 15 zones in SAD stronghold Majitha" (Dec 19, 2025): Highlighting a significant shift in the 2025 rural elections where the Akali Dal lost its grip on a traditional fortress.
+
+"Tarn Taran bypoll: woman faces threats after complaining to CM Mann about drug menace" (Nov 9, 2025): A ground report on the personal risks faced by citizens speaking out against the illegal drug trade in border villages.
+
+"AAP wins Tarn Taran bypoll, but SAD finds silver lining" (Nov 14, 2025): Analyzing the 2025 assembly by-election results and the surprising performance of Independents backed by radical factions.
+
+4. Human Interest
+
+"Two couples and a baby: Punjab drug addiction tragedy has new victims" (Nov 20, 2025): A tragic investigative piece about parents selling an infant to fund their addiction.
+
+"Kashmiri women artisans debut at Amritsar’s PITEX" (Dec 8, 2025): A feature on financial independence initiatives for rural women at the Punjab International Trade Expo.
+
+Signature Beat
+
+Kamaldeep is known for his nuanced understanding of border dynamics. His reporting often highlights the "drug crisis in the underprivileged localities" (like Muradpur in Tarn Taran, Nov 9, 2025), providing a voice to marginalized communities affected by addiction and administrative neglect.
+
+X (Twitter): @kamalsbrar                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirtieth, twenty twenty-six, at thirty-two minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/akal-takht/" href="https://indianexpress.com/about/akal-takht/">Akal Takht</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/akal-takht-punjab-anti-sacrilege-law-10764571/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-06-30 11:27 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
