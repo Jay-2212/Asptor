@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Ram Temple donation row: Who manages India’s temples, and what is the state’s role? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Ram Temple donation row: Who manages India’s temples, and what is the state’s role?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-01</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ram-temple-row.jpg?w=1600" alt="Ram Temple donation row: Who manages India’s temples, and what is the state’s role?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Ex-Telangana CM K Chandrasekhar Rao at the Balaji Temple in Tirumala" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ram-temple-row.jpg?w=1600" width="650"/><span class="ie-custom-caption">Ex-Telangana CM K Chandrasekhar Rao at the Balaji Temple in Tirumala. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Recent allegations of embezzlement of offerings and donations at the Ram Janmabhoomi Temple in Ayodhya have brought its management into focus.</p>
+<p>The Shri Ram Janmabhoomi Teerth Kshetra Trust was formed on February 5, 2020, when the Union Cabinet cleared the way for its establishment after the Supreme Court verdict in the Ayodhya dispute. It has since received an estimated <a href="https://indianexpress.com/article/india/6-years-before-sit-probe-audit-firm-flagged-lack-of-systemic-record-of-ram-temple-donations-10754341/"><strong>Rs 3,500 crore in cash donations alone.</strong></a></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>With reports of irregularities, Ram Temple Construction Committee Chairman Nripendra Mishra has advocated for appointing a Chief Executive Officer to manage trust affairs. On the other hand, the Vishwa Hindu Parishad (VHP), the main driving force behind the Ram Temple movement, has called to ‘liberate’ temples across the country from government control, in line with its long-running demand.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>Temples and their assets</strong></p>
+<p>There are no official figures for Hindu temples in India, but rough estimates put the number at around 10 lakh. Most of these are small village shrines or modest structures maintained by local communities, families, or hereditary priests who take the offerings and donations.</p><div id="taboola-mid-article-personalisation"></div>
+<p>A significant number of large temples own substantial movable and immovable properties (land, buildings, jewellery, etc.) and receive large donations and offerings from devotees. These are spread across the country, with their concentration especially high in cities such as Ayodhya, Varanasi (Kashi), Haridwar, and in southern states.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/ayodhya-donation-theft-row-vhp-free-hindu-temples-campaign-rss-concerns-10764564/">Ram Mandir ‘Theft’ row: Will VHP’s campaign to ‘free’ temples be hit?</a></span></div>
+<p>Charitable trusts often manage temples. Donations to registered trusts at times qualify for income-tax deductions under Section 80G of the Income Tax Act, 1961, but significant donations in the form of cash offerings and goods in kind are mostly unaccounted for.</p>
+<h2>Three main traditions of temple management</h2>
+<p>Temples are managed through diverse systems, primarily under three traditional models, with varying degrees of government involvement:</p>
+<p><span style="color: #800000"><strong>1. Family management (Pandas and priest families)</strong></span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The majority of temples are managed by specific families or hereditary priest lineages known as pandas or pujaris. Here, offerings, donations, and ritual responsibilities traditionally belong to the managing family or families.</p>
+<p>When multiple families are involved, control often rotates based on a fixed schedule — sometimes daily or hourly in busy temples, or over longer periods in others.</p>
+<p>A notable example of management in rotation is the Udupi Sri Krishna Mutt in Karnataka. It is administered by the Ashta Mathas or eight monasteries founded by the 13th-century saint Madhvacharya. Each of the mathas manages the temple’s administration and daily rituals for two years; thus, the next cycle for a matha comes only after 16 years.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p><span style="color: #800000"><strong>2. Mahant system</strong></span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Here, a single spiritual head (Mahant, Mathadhish or Pithadheeshwar) holds prime authority. The mahant exercises control over temple assets, properties, offerings, and administration and typically appoints or nominates his successor.</p>
+<p>A prominent contemporary example is the Gorakhnath Math in Gorakhpur, Uttar Pradesh, currently headed by Chief Minister <a class="" href="https://indianexpress.com/about/yogi-adityanath/" rel="noamphtml">Yogi Adityanath</a>, who was appointed as successor by the late Mahant Avaidyanath. Similar successor-based systems operate in the historic Shankaracharya Mathas, established by Adi Shankaracharya.</p>
+<p><span style="color: #800000"><strong>3. Akhada (Panchayati) system</strong></span></p>
+<p>Akhadas are autonomous organisations of sadhus and saints. These are often in the limelight during the Mahakumbh, where they are prioritised for the holy dip according to their relative status. These akhadas function as collective or panchayati bodies, often with elected or consensus-based heads and also called “Panchayati Akhada”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Express research</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/research/where-rituals-and-reverence-converge-the-sadhu-akharas-of-kumbh-mela-9809170/">Where rituals and reverence converge: The sadhu akharas of Kumbh Mela</a></span></div>
+<p>The 13 major akhadas today are broadly divided into three categories: seven Shaiva (Dashanami), three Vaishnava (Bairagi), and three Udaseen akhadas (not aligned with Shaivism or Vaishnavism). These bodies manage many temples and religious institutions. They appoint priests, oversee rituals according to their sect’s traditions and control donations and assets.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2>Government’s role in managing Hindu temples</h2>
+<p><a href="https://indianexpress.com/article/explained/explained-law/how-indias-temples-are-run-9598770/"><strong>Historically, the British introduced</strong></a> the Religious Endowments Act in 1863, which handed over control of temples to committees set up under the Act. However, the government retained considerable influence through other legal provisions.</p>
+<p>In 1925, the Madras Hindu Religious Endowments Act empowered provincial governments to legislate on endowments. Its powers gradually expanded to include oversight, even allowing takeover of the temple management. After Independence, the 1925 Act became the blueprint for various states to enact laws to administer temples. States have specific departments and ministers for that purpose.</p>
+<p>Article 25(2) of the Indian Constitution empowers the state as a whole to regulate or restrict “any economic, financial, political or other secular activity which maybe associated with religious practice” and to enact laws for social welfare and reform. This provision is the constitutional basis for state legislation governing temple endowments. Muslims and Christians manage their places of worship and religious institutions through community-run boards or trusts.</p>
+<p>Apart from government-appointed bodies playing a role in temple management, they also pay salaries to priests and ensure that offerings and donations are deposited into dedicated accounts. States also use part of the income from offerings and donations at large temples for the administration and upkeep of those and smaller temples, and for non-temple welfare activities.</p>
+<p>Some major regional examples of state management include:</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="color: #800000"><strong>Tamil Nadu:</strong></span> The Hindu Religious and Charitable Endowments Department, established under the Tamil Nadu Hindu Religious and Charitable Endowments Act, 1959, administers over 40,000 temples.</p>
+<p><span style="color: #800000"><strong>Andhra Pradesh:</strong></span> The Tirumala Tirupati Devasthanams (TTD) is an independent trust that manages the Sri Venkateswara Temple and several allied temples. The government appoints its Board of Trustees and Chief Executive Officer.</p>
+<p><span style="color: #800000"><strong>Kerala:</strong></span> The Travancore Devaswom Board, constituted in 1950, manages over a thousand temples, including the Sabarimala Temple.</p>
+<p><span style="color: #800000"><strong>Uttar Pradesh:</strong></span> Following a major temple theft, including the removal of a gold argha or vessel in January 1983, the UP Sri Kashi Vishwanath Temple Act was enacted by the then Sripati Mishra-led Congress government. A Board of Trustees was entrusted with its management, with a government-appointed Chief Executive Officer.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="color: #800000"><strong>Jammu and Kashmir:</strong> </span>A state government-appointed body manages the Vaishno Devi temple.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10765396"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shyamlal-yadav/">
+<figure>
+<img alt="Shyamlal Yadav" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2020/09/shyamlal-yadav-profile.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shyamlal-yadav/"><span></span>Shyamlal Yadav</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951867"></div><div class="follow_author_title" data-id="Shyamlal Yadav"></div><div class="follow_author_slug" data-id="shyamlal-yadav"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/journalismofcourage">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://twitter.com/RTIExpress">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shyamlal Yadav is one of the pioneers of the effective use of RTI for investigative reporting. He is a member of the Investigative Team. His reporting on polluted rivers, foreign travel of public servants, MPs appointing relatives as assistants, fake journals, LIC’s lapsed policies, Honorary doctorates conferred to politicians and officials, Bank officials putting their own money into Jan Dhan accounts and more has made a huge impact. He is member of the International Consortium of Investigative Journalists (ICIJ). He has been part of global investigations like Paradise Papers, Fincen Files, Pandora Papers, Uber Files and Hidden Treasures. After his investigation in March 2023 the Metropolitan Museum of Art, New York returned 16 antiquities to India. Besides investigative work, he keeps writing on social and political issues.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shyamlal-yadav/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July first, twenty twenty-six, at ten minutes past twelve in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/ayodhya-ram-temple/" href="https://indianexpress.com/about/ayodhya-ram-temple/">Ayodhya Ram temple</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/hindu-temple/" href="https://indianexpress.com/about/hindu-temple/">Hindu temple</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/temple-management/" href="https://indianexpress.com/about/temple-management/">temple management</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ram-temple-donation-row-hindu-temple-management-india-10765396/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-01 08:43 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
