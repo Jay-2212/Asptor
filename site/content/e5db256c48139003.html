@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Former editor deleted from electoral rolls, says passport renewal stalled: Can SIR lead to denial of services? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Former editor deleted from electoral rolls, says passport renewal stalled: Can SIR lead to denial of services?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-01</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/Untitled-design-55.jpg?w=1600" alt="Former editor deleted from electoral rolls, says passport renewal stalled: Can SIR lead to denial of services?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="R.Rajagopal (left) was allegedly unable to renew his passport this week following his deletion from the SIR in West Bengal" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/Untitled-design-55.jpg?w=1600" width="650"/><span class="ie-custom-caption">R.Rajagopal (left) was allegedly unable to renew his passport this week following his deletion from the SIR in West Bengal </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Kerala Chief Minister V D Satheesan and the Editors Guild of India highlighted the case of R Rajagopal, former editor of The Telegraph, allegedly not being able to renew his passport this week. This came after his name was deleted from the West Bengal electoral rolls during the Special Intensive Revision (SIR) earlier this year.</p>
+<p>The new BJP government in Bengal had announced in May that the people deleted from the rolls during the SIR would not be able to avail welfare schemes. These developments may signal consequences for the lakhs of electors whose names were deleted in the SIR, even as their appeals are pending before Supreme Court-appointed tribunals.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><strong>What is Rajagopal’s case?</strong></h2>
+<p>The former editor, originally from Kerala and a resident of <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a> for 30 years, says he applied for passport renewal in February. <a href="https://indianexpress.com/article/india/passport-row-the-telegraph-former-editor-rajagopal-sir-10761974/"><strong>Meanwhile</strong></a>, he was among the 27 lakh Bengal electors whose names were deleted following an unprecedented adjudication process ordered by the Supreme Court after the Election Commission flagged him for having a “logical discrepancy” in his documents.</p>
+<p>He found his name deleted in a supplementary list published on March 27, leaving him unable to cast his vote in the Bengal Assembly election in April.</p><div id="taboola-mid-article-personalisation"></div>
+<p>With the police verification for his passport renewal pending, he says he was called by the police to the Security Control Organisation office on May 20, where he was told that police clearance could only be given when his name was restored on the electoral roll. Rajagopal told <em>The Indian Express</em> Tuesday that he had not received any information on the status of his appeal pending before the tribunal, however, he was asked by the passport authorities on Tuesday to seek another police verification.</p>
+<h3><strong>What does the law say?</strong></h3>
+<p>Defending the SIR in the Supreme Court last year, the EC had said the exercise was a revision of the electoral rolls, not a determination of citizenship.</p>
+<p>In its judgment upholding the EC’s right to conduct the SIR in May, the Supreme Court said that while the EC had the right to determine citizenship of electors, it was limited in nature. “The consequence of such a determination is correspondingly limited. It affects the individual’s entitlement to be included in the electoral roll, and thereby their right to participate in the electoral process. It does not, however, operate to divest the individual of claims of citizenship, nor does it foreclose a determination of that question by the Competent Authority under the Citizenship Act,” the judgment says.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/sir-is-a-test-case-for-electoral-democracy-sc-order-on-bengal-can-affect-its-course-10624680/">SIR is a test case for electoral democracy. SC order on Bengal can affect its course</a></span></div>
+<p>The EC’s own instructions accompanying its June 24, 2025 SIR order makes it clear that the Electoral Registration Officers are to refer the cases of suspected foreign nationals to the competent authority. It is for the Ministry of Home Affairs to make a determination.</p>
+<h2><strong>Why then are deleted electors facing denial of basic services?</strong></h2>
+<p>Even as their appeals remain pending before the tribunals, deleted electors in Bengal will not be given rations and access to other government welfare schemes under instructions of the Suvendu Adhikari government. While there is no direct link between the electoral roll and government schemes and services, the EC-issued voter card is one of the most widely-used forms of ID submitted as proof.</p>
+<p>The Bengal Food and Supplies Department in June ordered a verification of Public Distribution System beneficiaries to remove those “ineligible” based on the SIR deletions.</p>
+<p>For passport renewal, it is not mandatory to have a Voter ID, but it can be provided as a proof during the verification. During the police verification, the applicant can provide the Aadhaar, PAN card or Voter ID as an identity proof.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The Editors Guild of India said: “The police verification appears to have been denied on the basis that Mr. Rajagopal’s name no longer figured on the electoral rolls! Mr. Rajagopal’s plight highlights the misery that millions of Indians are being put through due to the Special Intensive Revision of electoral rolls being carried out by the Election Commission of India. If it could happen to someone like Mr. Rajagopal, a known public figure, the fate of others who have similarly been disenfranchised by a bureaucratic stroke of the pen, and lacking the voice to seek redressal can only be imagined.”</p>
+<p>Writing to Bengal Chief Minister Suvendu Adhikari on Monday, the Kerala Chief Minister sought his intervention in Rajagopal’s case. “I understand that the adverse report is based on the deletion of his (Rajagopal’s) name from the electoral roll under the SIR. While the electoral issue is being dealt with through an appropriate appeal process, I am informed that the police report has had the effect of delaying the renewal process of his passport. I would like to request your good self to kindly look into the matter with urgency.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10764409"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/damini-nath/">
+<figure>
+<img alt="Damini Nath" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2022/11/Damini-Nath-The-Indian-Express.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/damini-nath/"><span></span>Damini Nath</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8269483"></div><div class="follow_author_title" data-id="Damini Nath"></div><div class="follow_author_slug" data-id="damini-nath"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/DaminiNath">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Damini Nath is an Assistant Editor with the national bureau of The Indian Express. She covers the housing and urban affairs and Election Commission beats. She has 11 years of experience as a reporter and sub-editor. Before joining The Indian Express in 2022, she was a reporter with The Hindu’s national bureau covering culture, social justice, housing and urban affairs and the Election Commission.
+Expertise
+
+ 	
+Key Coverage Areas: Damini Nath currently specializes in reporting on two crucial beats:
+
+
+ 	
+Housing and Urban Affairs: Providing in-depth analysis and reporting on India's urban development, policy, and housing issues.
+
+ 	
+Election Commission (EC): Offering authoritative coverage of electoral processes, policies, and the functioning of India's constitutional body responsible for conducting elections.
+
+
+
+
+
+ 	
+Professional Background: Her extensive experience includes roles as a reporter and sub-editor, demonstrating a comprehensive understanding of the journalistic process from fieldwork to final production.
+
+ 	
+Previous Role: Before joining The Indian Express in 2022, she served as a dedicated reporter with The Hindu’s national bureau, where her reporting portfolio included:
+
+
+ 	
+Culture
+
+ 	
+Social Justice
+
+ 	
+Housing and Urban Affairs
+
+ 	
+The Election Commission beat (a consistent area of focus).
+
+
+
+
+Trustworthiness
+Damini Nath's decade-plus career at two of India's most respected and authoritative news institutions, The Indian Express and The Hindu, underscores her commitment to factual, impartial, and high-quality reporting, establishing her as a trusted and credible source for news on urban governance and electoral matters.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/damini-nath/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirtieth, twenty twenty-six, at thirty minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/passport/" href="https://indianexpress.com/about/passport/">passport</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/special-intensive-revision/" href="https://indianexpress.com/about/special-intensive-revision/">Special Intensive Revision</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/rajagopal-passport-stalled-sir-deletion-10764409/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-01 15:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

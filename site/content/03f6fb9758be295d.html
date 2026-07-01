@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The UP template: Inside Bengal’s 2 new controversial laws to counter ‘TMC Jungle Raj’ | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The UP template: Inside Bengal’s 2 new controversial laws to counter ‘TMC Jungle Raj’</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-01</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/suvendu-1600.jpg?w=1600" alt="The UP template: Inside Bengal’s 2 new controversial laws to counter ‘TMC Jungle Raj’">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Bengal" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/suvendu-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">West Bengal Chief Minister Suvendu Adhikari addresses a gathering in Kolkata. (Express photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The West Bengal Assembly on June 29 <strong><a class="" href="https://indianexpress.com/article/cities/kolkata/west-bengal-anti-goonda-bill-district-ban-detention-without-trial-10762364/" rel="noopener" target="_blank">passed two laws that mark the first major legislative move</a></strong> by the state’s new BJP government: the West Bengal Public Safety and Control of Anti-social Activities Bill, 2026, and the West Bengal Maintenance of Public Order (Amendment) Bill, 2026.</p>
+<p>Both cleared the House after a stormy debate, with the Public Safety Bill passing by 176 votes to 41. Chief Minister Suvendu Adhikari, the state’s first BJP Chief Minister who also holds the Home portfolio, defended them as a solution to what he called the “goonda-neeti” and “jungle raj” of 15 years of Trinamool rule.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The two laws follow a familiar template, which began in Uttar Pradesh and is now common in several BJP-ruled states: stringent laws and unusual state powers to recover damage to public property.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2><strong>What is West Bengal’s new recovery law?</strong></h2>
+<p>The West Bengal Maintenance of Public Order (Amendment) Bill, 2026 establishes a legal framework for claiming compensation for damage caused to public and private property during incidents like riots or anti-social activities. The proposed law seeks to amend the West Bengal Maintenance of Public Order Act, 1972 to create a money recovery mechanism for property destroyed during riots, arson, vandalism and protests.</p>
+<p><strong>How does the law operate?</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>The Bill follows the Uttar Pradesh format, where a 2020 order by district magistrates issued notices to individuals to recover the entire cost of damage to public property as assessed by the state government.</p>
+<p>West Bengal’s proposed law sets up a “Claims Commission” headed by a bureaucrat, an officer of at least Additional District Magistrate rank and armed with the powers of a civil court. After damage occurs, the District Magistrate or Police Commissioner must file a claim petition for losses to public property, while owners of damaged private property may file their own.</p>
+<p>The Commission applies strict liability once a link between the incident and the damage is shown, can fix liability not only on those who caused the damage but on those who instigated, financed or harboured them, and may award “exemplary damages” of up to twice the compensation.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Compensation cannot fall below the property’s market value, and unpaid amounts are recovered as arrears of land revenue, meaning property can be attached and auctioned. Crucially, every award is final, with no appeal to any court, and civil courts are barred from the subject matter.</p>
+<p>After a Supreme Court rap, the UP government withdrew the Uttar Pradesh Recovery of Damages to Public and Private Property Act, 2020. In 2022, it enacted a new law, bringing in some independent former judges in the Claims Commission. Under the current law in UP, the tribunal is headed by a retired district judge. The new law is also under challenge before the SC.</p>
+<p>The UP law grew directly out of the anti-CAA protests of December 2019.</p>
+<p>The Adityanath government put up roadside hoardings naming and shaming those it accused of vandalism; the Allahabad High Court ordered the posters removed, and the Supreme Court observed that there was then no law to support the action. UP responded by promulgating an ordinance, later passed as an Act, setting up claims tribunals whose decisions could not be challenged in court.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>In February 2022, the Supreme Court forced UP to withdraw 274 recovery notices and refund the money, holding that the State had acted as “complainant, adjudicator and prosecutor” in attaching the accused’s properties, though it left the government free to start afresh through the statutory tribunal.</p>
+<p><strong>What is West Bengal’s new preventive-detention law?</strong></p>
+<p>The Public Safety Bill is a standalone preventive detention statute aimed at “goondas” and “anti-social activities.” Both terms are defined expansively: a goonda is defined as a person who is “generally reputed to be desperate and dangerous to the community” or is a “Habitual Offender.”</p>
+<p>An “anti-social activity” covers conduct that directly or indirectly causes “alarm or insecurity among the public, danger to life or property, disturbance of public order, unlawful dispossession, or illegal mining, quarrying, sand or forest activity that drains the public exchequer.”</p>
+<p>West Bengal already has a preventive detention law dating back to 1970s. The present one is wider in its ambit.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Goonda laws exist in several states, most notably in Gujarat, as the Prevention of Anti-Social Activities Act, 1985. The Bharatiya Nyaya Sanhita also has provisions to deal with organised crime. Preventive detention is permitted under Article 22 of the Constitution with certain safeguards. Such issues are legislated under “public order,” which is a state subject.</p>
+<h2>How does the Bengal preventive detention law operate?</h2>
+<p>The state government, or a district magistrate or police commissioner, once notified, may order a person detained to prevent such anti-social activity. Ordinarily, the person must have a conviction in the preceding seven years, or at least three separate charge-sheets.</p>
+<p>Apart from a detention that cannot exceed 12 months, the proposed law allows externment, which entails removing a person from an area for up to a year. It also allows for search and seizure, punishes the harbouring of a detained or externed person, grants officials good-faith immunity, and makes offences cognizable and non-bailable.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10766705"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/apurva-vishwanath/">
+<figure>
+<img alt="Apurva Vishwanath" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2019/07/apurva-vishwanath.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/apurva-vishwanath/"><span></span>Apurva Vishwanath</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="5865713"></div><div class="follow_author_title" data-id="Apurva Vishwanath"></div><div class="follow_author_slug" data-id="apurva-vishwanath"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/apurva_hv">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Apurva Vishwanath is the National Legal Editor at The Indian Express, where she leads the organization’s coverage of the Indian judiciary, constitutional law, and public policy. A law graduate with a B.A., LL.B (Hons) from Dr. Ram Manohar Lohiya National Law University, Apurva brings over a decade of specialized experience to her reporting. She is an authority on judicial appointments and the Supreme Court Collegium, providing critical analysis of the country’s legal landscape.
+
+Before joining The Indian Express in 2019, she honed her expertise at The Print and Mint.
+
+Follow her insights on the intersection of law and governance on Twitter                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/apurva-vishwanath/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July first, twenty twenty-six, at forty-one minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/bengal-laws-public-property-damage-preventive-detention-10766705/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-01 15:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

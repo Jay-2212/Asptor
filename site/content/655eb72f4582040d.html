@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How India’s biggest temples safeguard devotees’ offerings — and where Ayodhya's Ram Temple differs | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How India’s biggest temples safeguard devotees’ offerings — and where Ayodhya's Ram Temple differs</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-01</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-Ayodhya-Ram-Mandir_expl.jpg?w=1600" alt="How India’s biggest temples safeguard devotees’ offerings — and where Ayodhya's Ram Temple differs">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Ram Temple" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-Ayodhya-Ram-Mandir_expl.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Ram temple in Ayodhya is far from the country's only temple handling massive offerings. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Every day, thousands of devotees quietly fold currency notes into temple hundis believing the offering has reached the deity. What follows is a carefully choreographed chain involving authorised personnel, counting halls, bank officials, auditors, and surveillance cameras — a system that remains largely invisible to pilgrims.</span></p>
+<p><span style="font-weight: 400">The recent allegations of <strong><a class="" href="https://indianexpress.com/article/cities/lucknow/ram-mandir-theft-police-question-rai-mishra-arrest-jail-10765160/">theft of donations</a></strong> at the Ram Temple in Ayodhya have brought that hidden world into public view. But Ayodhya is far from the country’s only temple handling massive offerings. Shrines such as Tirupati, Jagannath, Vaishno Devi, Siddhivinayak, and Kashi Vishwanath receive hundreds of crores in donations every year, besides tonnes of gold, silver, and jewellery.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">So, how do these temples handle devotees’ offerings? What safeguards exist? Who is responsible for counting the money? And how does the Ram Temple compare? </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> examined the donation systems, oversight mechanisms, and governance frameworks at five of India’s biggest temples and compared them with those at the Ram Temple.</span></p>
+<p><b>From hundi to bank</b></p>
+<p><span style="font-weight: 400">Across India’s biggest temples, the broad donation chain is remarkably similar. Offerings placed in hundis are removed by authorised personnel, shifted to counting centres, segregated into cash, coins and valuables, counted and recorded before being deposited into designated bank accounts. The entire process is under CCTV surveillance.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/ayodhya-donation-theft-calls-for-accountability-10761938/">Ayodhya donation theft calls for accountability</a></span></div>
+<p><span style="font-weight: 400">Where temples differ is not in the journey of the donation but in the institutions governing it — who supervises each stage, who appoints the people handling donations, and what legal and administrative safeguards exist to ensure accountability.</span></p>
+<p><b>Ayodhya: A trust-led system</b></p>
+<p><span style="font-weight: 400">At the Ram Temple in Ayodhya, donations from about 35 hundis are opened by authorised personnel, including trust officials and a State Bank of India (SBI) representative, and taken to a counting hall inside the Pilgrim Facilitation Centre.</span></p>
+<span class="custom-caption"><img alt="Ram Temple" class="lazyloading size-medium wp-image-10766159" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Ch2058777.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg 2126w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=2048,1152 2048w, https://indianexpress.com/wp-content/uploads/2026/07/Ch2058777.jpg?resize=150,83 150w" height="1196" sizes="(max-width: 2126px) 100vw, 2126px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="2126"/> The building in Ayodhya that houses the counting centre for the Ram Mandir (Temple) donation fund. Photo: Shyamlal Yadav</span>
+<p><span style="font-weight: 400">There, counting staff outsourced by SBI and trust employees count cash and jewellery under the supervision of retired banker Subhash Srivastava, while overall responsibility for the donation process rests with trust member Anil Mishra. Once verified, the collections are deposited into the trust’s SBI account.</span></p>
+<p><b>Tirupati: Scale backed by institutional depth</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Few religious institutions in the world process donations on the scale of Tirumala, and its famed </span><i><span style="font-weight: 400">Parakamani</span></i><span style="font-weight: 400"> system has evolved accordingly. Permanent Tirumala Tirupati Devasthanams (TTD) finance personnel, representatives of nationalised banks, and carefully vetted volunteers — mostly serving or retired government and bank employees — work together to process donations under an extensive CCTV network monitored by the temple’s vigilance wing.</span></p>
+<p><span style="font-weight: 400">Personnel, wearing pocketless clothes, undergo frisking before entering and leaving the counting hall. Cash movement is secured through armoured transport under escort, while access to different stages of the process is segregated among finance officials, vigilance staff, bank representatives and volunteers.</span></p>
+<p><b>Jagannath: Procedure written into law</b></p>
+<p><span style="font-weight: 400">At Puri, the emphasis is on codified procedure. Hundis are opened under the supervision of the Temple Administrator or an authorised gazetted officer, while a member of the Managing Committee serves as an independent witness.</span></p>
+<p><span style="font-weight: 400">Each hundi is sealed before and after opening, entries are made in prescribed statutory forms, and CCTV monitors the handling of donations. Designated accounts staff maintain statutory registers for cash and valuables before deposits are made into bank accounts. The temple has also expanded official donation channels through payment gateways and Odisha’s digital hundi initiative.</span></p>
+<p><b>Vaishno Devi: A corporate-style administrative model</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">At the Vaishno Devi Shrine, donation handling mirrors the shrine’s corporate-style management. Donation boxes are opened by committees comprising accounts officers, area managers, and security personnel rather than individual trustees or religious functionaries. Finance, security, and operations are handled by specialised administrative departments functioning under the Shrine Board.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/ayodhya-bar-association-funds-case-accused-10763043/">Ayodhya Bar Association refuses to represent the accused in Ram Temple funds case. Is this legal?</a></span></div>
+<p><span style="font-weight: 400">Given the shrine’s mountainous terrain, the Board uses dedicated transport systems, including battery-operated vehicles and, where required, helicopter services, to move valuables securely.</span></p>
+<p><b>Siddhivinayak: Oversight at the counting table</b></p>
+<p><span style="font-weight: 400">At <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>’s Siddhivinayak Temple, independent oversight begins at the counting table itself. According to treasurer Pawan Tripathi, the main hundi is opened every Thursday in the presence of an executive officer, a trustee, a bank representative, and an auditor under CCTV surveillance, ensuring multiple independent stakeholders witness every stage of the counting process.</span></p>
+<p><span style="font-weight: 400">The cash is counted, entered into ledgers and transported for deposit into designated bank accounts, while devotees also have access to official banking and digital donation channels.</span></p>
+<p><b>Kashi Vishwanath: Government inside the process</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">At Kashi Vishwanath, the district administration forms part of the accountability chain. The temple’s 56 donation boxes are opened under the supervision of a Sub-Divisional Magistrate, while counting takes place in the presence of bank officials and a retired gazetted officer.</span></p>
+<p><span style="font-weight: 400">Deposit receipts are generated for every transaction to create an audit trail, while jewellery is valued by government-approved appraisers before being taken into secure custody.</span></p>
+<h2><b>Where the Ram Temple stands apart</b></h2>
+<p><span style="font-weight: 400">Most of India’s older major temples are administered under dedicated legislation enacted by state governments. </span><span style="font-weight: 400">TTD functions under the Andhra Pradesh Charitable and Hindu Religious Institutions and Endowments Act, the Jagannath Temple under the Shri Jagannath Temple Act, the Shri Mata Vaishno Devi Shrine under the Jammu and Kashmir Shri Mata Vaishno Devi Shrine Act, the Siddhivinayak Temple under a Maharashtra law governing its trust, while the Kashi Vishwanath Temple is administered under the Uttar Pradesh Shri Kashi Vishwanath Temple Act.</span></p>
+<p><span style="font-weight: 400">These laws create the governing bodies, define the powers of administrators, prescribe financial procedures, provide for government oversight and statutory audits, and in some cases lay down detailed rules for handling donations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">The Ram Temple follows a different model. The Shri Ram Janmabhoomi Teerth Kshetra functions through a trust deed rather than a dedicated statute governing the administration of the temple. Day-to-day management, including appointments and financial administration, rests with the trust.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/ayodhya-donation-theft-row-vhp-free-hindu-temples-campaign-rss-concerns-10764564/">Ram Mandir ‘Theft’ row: Will VHP’s campaign to ‘free’ temples be hit?</a></span></div>
+<p><span style="font-weight: 400">Another point of departure is the composition of the management itself. In several of the older temples, key financial processes involve executive officers, statutory administrators, government nominees, magistrates, auditors, or other public officials whose responsibilities are defined under law.</span></p>
+<p><span style="font-weight: 400">At the Ram Temple, many of the key office-bearers associated with donation management — including General Secretary Champat Rai, trust member Anil Mishra, administrator Gopal Rao, and donation supervisor Subhash Srivastava — have long associations with the RSS or its affiliates. Responsibility for administration is therefore concentrated within the trust structure rather than distributed across a broader statutory administrative framework.</span></p>
+<p><span style="font-weight: 400">The distinction assumes significance because a private internal audit commissioned by the trust within months of its formation identified weaknesses in the administrative framework. The November 2020 report described the management structure as “highly unprofessional”, found no systematic record for financial reporting and recommended standard operating procedures for transactions, staffing and data management, a clearly defined organisational hierarchy, stronger maker-checker controls, formal HR processes, inventory registers for jewellery, and tighter oversight of accounting and IT systems.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Unlike many temple boards, the Ram Temple trust is not subject to mandatory financial audits by the state or central governments. Questions relating to public audit and oversight of the trust’s finances have also reached the courts. The trust has not publicly disclosed whether the recommendations contained in the 2020 audit were fully implemented.</span></p>
+<p><b>When systems are tested</b></p>
+<p><span style="font-weight: 400">No major temple has remained untouched by controversy. Tirupati has over the years tightened access controls, vigilance, and surveillance after instances of theft involving employees and volunteers. At Jagannath, the Ratna Bhandar dispute centred on the custody and inventory of temple valuables, eventually leading to court-directed scrutiny and fresh inventories.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">At Kashi Vishwanath, efforts have increasingly focused on routing donations through official channels rather than direct offerings to priests, while Siddhivinayak has periodically faced scrutiny over governance and financial management.</span></p>
+<p><span style="font-weight: 400">The allegations at the Ram Temple are still under investigation and no conclusions have been reached. But the experience of India’s older temples suggests that institutional safeguards are rarely built overnight. Many of the systems that today appear routine — multiple layers of oversight, codified procedures, independent verification, and statutory accountability — were strengthened after earlier controversies exposed weaknesses. Whether the present investigation at Ayodhya leads to a similar process of institutional reform may ultimately become one of its most enduring consequences.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10766126"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July first, twenty twenty-six, at fifty minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ram-temple-donation-system-ayodhya-vs-tirupati-jagannath-10766126/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-01 15:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
