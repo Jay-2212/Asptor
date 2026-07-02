@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why the Trump-Kazakhstan tungsten deal has sparked conflict of interest concerns | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why the Trump-Kazakhstan tungsten deal has sparked conflict of interest concerns</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/tungsten-deal.jpg?w=1600" alt="Why the Trump-Kazakhstan tungsten deal has sparked conflict of interest concerns">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="US Kazakhstan tungsten deal" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/tungsten-deal.jpg?w=1600" width="650"/><span class="ie-custom-caption">President Kassym-Jomart Tokayev of Kazakhstan with US President Donald Trump at the White House in November 2025. (White House)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The US-Kazakhstan deal to jointly explore and mine Kazakhstan’s untapped tungsten deposits came under the scanner last week after an investigation by <em>The New York Times</em> found that the deal was set to benefit the families and businesses associated with US President Donald Trump and Commerce Secretary Howard Lutnick. Signed in November 2025, the deal did not publicly disclose both families’ personal interests, the <em>NYT</em> report said.</p>
+<p><strong>What was the deal?</strong></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>As trade tensions escalated in early 2025, China expanded export controls on several critical minerals, including tungsten, resulting in shortages. This is significant for the US, especially of metals such as tungsten, known as the war metal for its high density, high melting point and hardness, with its shortage exacerbated by the closure of the last American tungsten mining facility a decade ago.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The tungsten deal is part of an MoU between Kazakhstan and the US on Cooperation in the Field of Critical Minerals, officially signed in November 2025 during Kazakh President Kassym-Jomart Tokayev’s visit to Washington. The visit culminated in the signing of at least 30 deals with US companies worth $ 17.2 billion, including a tungsten project expected to require around $1.1 billion in investment.</p>
+<p>Under the agreement, American company Cove Kaz Capital Group holds a 70% stake in a joint venture with the Kazakh state mining firm to develop the untapped tungsten deposits in Kazakhstan.</p><div id="taboola-mid-article-personalisation"></div>
+<p>If successful, the mining arrangement could provide the US with an estimated 12,000 metric tonnes of tungsten per year, roughly equal to the US’ total annual tungsten imports. Thus, the deal could substantially reduce US dependence on imported tungsten.</p>
+<h2><strong>Why is the Trump administration under scrutiny?</strong></h2>
+<p>The deal, while economically beneficial for the US and a key part of Trump’s drive to secure critical mineral access bypassing China, has drawn scrutiny for the conflict of interest involving the White House.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/dealmakers-dealmaker-steve-witkoff-trump-10294721/">The dealmaker’s dealmaker: Who is Steve Witkoff, Trump’s troubleshooting special envoy?</a></span></div>
+<p>In the months leading up to the signing of the deal, companies and investment firms linked with Trump’s and Lutnick’s families reportedly positioned themselves to benefit from the signing of the deal, the <em>NYT</em> report said. While the tungsten deal was signed in November 2025, the details were finalised two months prior at a meeting between Lutnick and Tokayev at the St Regis Hotel, with Trump joining by phone to persuade the Kazakh president to greenlight the project, according to the <em>NYT</em>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Notably, mere days before the deal, Skyline Builders announced its merger with Cove Kaz Capital Group, under which the combined company would operate as Kaz Resources Inc.</p>
+<p>Cove Kaz Capital Group LLC holds a 70% controlling stake in Severniy Katpar LLP, the joint venture that owns the Northern Katpar and Upper Kairakty tungsten deposits, while Kazakhstan’s state-owned Tau-Ken Samruk retained the remaining 30%.</p>
+<p>The <em>NYT</em> reported that Trump’s sons, Donald Jr. and Eric, participated in the investment through Dominari Securities and a Special Purpose Vehicle that took a stake in Skyline Builders, which in turn acquired a 20% stake in Cove Kaz Capital shortly before the tungsten deal was signed.</p>
+<p>Similarly, Cantor Fitzgerald, controlled by Lutnick’s family and overseen by his sons Brandon and Kyle, helped one of the lead investors raise $210 million for a related entity and reportedly earned millions of dollars in fees, the <em>NYT</em> said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Ahead of Kaz Resources’ public listing this year, it came to light that the Trump administration had already issued preliminary commitments worth up to $1.6 billion for it to operate the tungsten deal.</p>
+<p>However, Kaz Resources is merely the latest example of deals that have featured conflict-of-interest concerns involving the Trump family.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/pakistan-stablecoin-world-liberty-trump-10473807/">Pakistan inks stablecoin deal with Trump-linked firm: All about the controversial World Liberty Financial</a></span></div>
+<p>At least 14 companies are actively seeking close to $9 billion in federal funding on critical mineral deals, with some involvement of both families, the <em>NYT</em> reported.</p>
+<p>As part of the Trump administration’s push to secure critical minerals through federal funding to mining firms, it has approved roughly $19 billion in federal funding to around 60 critical minerals projects worldwide, according to the <em>NYT</em>. Roughly half of this funding has gone to companies linked to the Trump and Lutnick families, <em>NYT</em> said.</p>
+<p><strong>What does Kazakhstan stand to gain?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>With the rise in militarisation worldwide, Kazakhstan is increasingly positioning itself as a supplier of critical minerals by capitalising on countries seeking to diversify away from China.</p>
+<p>Tungsten is a critical mineral used in the manufacturing of sophisticated weapons systems, such as missile warheads, armour-piercing ammunition, and fighter jets, making it vital for defence industries. American investment could strengthen Kazakhstan’s economic and strategic clout in the region with its projected capacity to produce and process at least 25 of the 60 commodities on the US critical minerals list, making it an important player in the global rare earth and critical minerals market.</p>
+<p>In recent years, Kazakhstan has been working with the European Union (EU) and other European countries, such as Switzerland, as well as Turkey, South Korea and other West Asian countries as part of its multi-vector foreign policy to diversify away from Russia and China.</p>
+<p>That President Trump has dispensed with the traditional human rights and democracy narrative in pursuit of a more transactional foreign policy has further helped Kazakhstan, which struggled to build good ties with past American administrations. Accordingly, Astana has sought to deepen ties with the Trump administration by announcing major business deals, <a href="https://indianexpress.com/article/world/trump-announces-kazakhstan-joining-abraham-accords-10350761/"><strong>joining the Abraham Accords</strong></a>, becoming a founding member of the Board of Peace, and leading a high-level Central Asian delegation to Washington.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>At the same time, Kazakhstan continues to pursue its long-standing “multi-vector” foreign policy, balancing relations with the United States, Russia, China and other partners.</p>
+<p><em><strong>The author is a PhD candidate at the Centre for Russian and Central Asian Studies, JNU.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10764632"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirtieth, twenty twenty-six, at twenty-five minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-kazakhstan-tungsten-deal-trump-conflict-interest-10764632/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-02 03:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
