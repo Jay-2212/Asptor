@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why the US Supreme Court struck down Trump’s birthright citizenship order | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why the US Supreme Court struck down Trump’s birthright citizenship order</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/birthright-euling-2.jpg?w=1600" alt="Why the US Supreme Court struck down Trump’s birthright citizenship order">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Donald Trump on Tuesday, June 30, 2026, called the Supreme Court ruling upholding birthright citizenship “too bad for our country,” and falsely asserted that Congress could reverse the decision through legislation. (NYT)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/birthright-euling-2.jpg?w=1600" width="650"/><span class="ie-custom-caption">Donald Trump on Tuesday, June 30, 2026, called the Supreme Court ruling upholding birthright citizenship “too bad for our country,” and falsely asserted that Congress could reverse the decision through legislation. (NYT)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The US Supreme Court on Tuesday (June 30) ruled that the Trump administration’s executive order outlawing birthright citizenship was unconstitutional. It reaffirmed that children born in the US are American citizens under the Fourteenth Amendment, regardless of whether their parents are in the country unlawfully or only temporarily.</p>
+<p>In a 6-3 decision, the court rejected the administration’s argument that such children are not “subject to the jurisdiction” of the US, holding that the executive order inconsistent with the Constitution’s Citizenship Clause and longstanding Supreme Court precedent.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The ruling marks one of the <a href="https://indianexpress.com/article/world/us-supreme-court-rules-against-trump-birthright-citizenship-10765079/"><strong>biggest judicial setbacks</strong></a> to the US President’s second-term immigration agenda, and reaffirms a constitutional guarantee that has stood for over 150 years. Here is what to know.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>What is birthright citizenship?</h2>
+<p>The 14th Amendment to the Constitution says, “All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside.”</p><div id="taboola-mid-article-personalisation"></div>
+<p>The amendment, ratified in 1868 after the American Civil War, was intended to ensure that formerly enslaved people would be recognised as US citizens.</p>
+<p>Courts have long interpreted the provision to confer citizenship on nearly everyone born on American soil, with two longstanding exceptions:</p>
+<ul>
+<li>The children of diplomats who have allegiance to another government.</li>
+<li>Enemies present in the US during hostile occupation.</li>
+</ul>
+<p><strong>How did the Supreme Court rule?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The government argued that the parents of persons born in the US are not truly “subject to the jurisdiction” of the US because they do not have a “domicile” in the country. Instead, the government claimed, they owe their primary allegiance to their home countries; therefore, their children do not qualify for automatic American citizenship under the US Constitution.</p>
+<p>A five-judge majority of the court, led by Chief Justice John Roberts, rejected this defence. The court held that the phrase “subject to the jurisdiction” simply refers to the government’s power to enforce its laws over anyone physically present in its territory, regardless of their immigration status.</p>
+<span class="custom-caption"><img alt="Birthright citizenship supporters gather in front of the Supreme Court after a decision on birthright citizenship in Washington, on Tuesday, June 30, 2026. The Supreme Court on Tuesday struck down President Trump’s executive order limiting birthright citizenship, reaffirming the long-held principle that the Constitution guarantees that nearly all children born on U.S. soil are citizens. (Allison Robbert/The New York Times)" class="lazyloading size-medium wp-image-10765849" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=600,429" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg 3600w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=450,322 450w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=600,429 600w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=768,549 768w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=567,405 567w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=1536,1097 1536w, https://indianexpress.com/wp-content/uploads/2026/07/SCOTUS-BIRTHRIGHT-CITIZENSHIP-8.jpg?resize=2048,1463 2048w" height="2572" sizes="(max-width: 3600px) 100vw, 3600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="3600"/> Birthright citizenship supporters gather in front of the Supreme Court after the decision on birthright citizenship in Washington, on Tuesday, June 30, 2026. (The New York Times)</span>
+<p>To arrive at this decision, the majority traced the concept back to the English common law principle of jus soli or “right of the soil”, under which anyone born within a sovereign’s territory owed them allegiance in exchange for protection, making them a natural-born subject.</p>
+<p>The ruling prompted multiple separate opinions, exposing deep disagreements within the court over the Constitution’s original meaning and the history of citizenship.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Justice Clarence Thomas, joined by Justice Neil Gorsuch, dissented, arguing that the majority relied on a “medieval” English rule that America’s founders had rejected. Thomas maintained that citizenship requires domicile and complete allegiance to the US, which temporary visitors and undocumented immigrants lack because they remain subject to foreign powers. He argued that the Fourteenth Amendment was intended primarily to secure citizenship for formerly enslaved people rather than to create a universal rule based solely on birthplace.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/world/smita-ghosh-birthright-citizenship-us-supreme-court-10615784/">Who is Smita Ghosh? Meet the Indian-American lawyer taking on Trump’s move to end US birthright citizenship</a></span></div>
+<p>Justice Samuel Alito also dissented, reiterating the domicile argument and warning that the majority’s interpretation would preserve incentives for illegal immigration and so-called “birth tourism”, where people travel to the US to give birth so their child acquires American citizenship.</p>
+<p>Justice Neil Gorsuch wrote a separate dissent focused on procedure. He argued that because the plaintiffs had brought a facial challenge, they had to show the executive order was unconstitutional in every possible application. Since he believed the order could constitutionally apply to children of temporary visitors, he said the challenge should fail.</p>
+<p>Justice Brett Kavanaugh concurred with the outcome but argued the court could have resolved the dispute under the Immigration and Nationality Act rather than the Constitution, noting that Congress has repeatedly left the existing citizenship framework unchanged. Justice Ketanji Brown Jackson, in a concurring opinion, rejected the dissenters’ historical account, writing that the Fourteenth Amendment established an “anticaste, antisubordination reset for the Nation” after the Civil War by creating a universal rule of citizenship irrespective of ancestry.</p>
+<p><strong>Why does Trump want to end birthright citizenship?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Hours after beginning his second term, Trump signed an executive order denying citizenship to children born in the US to parents who were in the country illegally or temporarily. The order argued that such children are not “subject to the jurisdiction” of the United States and are therefore not entitled to citizenship under the 14th Amendment.</p>
+<p>In his first post-election interview in December 2024, Trump said, “We have to end it. We’re the only country that has it.”</p>
+<p>That claim is inaccurate. At least 37 other countries grant citizenship to anyone born on their soil, mostly in South America and the Caribbean. India does not practice unconditional birthright citizenship, nor do several European countries.</p>
+<p><span style="font-weight: 400">Following the ruling, Trump <a href="https://indianexpress.com/article/world/us-supreme-court-rules-against-trump-birthright-citizenship-10765079/"><strong>called the decision</strong></a> “too bad for our country” and said his administration would continue pursuing efforts to restrict birthright citizenship. He also falsely claimed Congress could reverse the decision through legislation.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><strong>Is birthright citizenship practised in India?</strong></h2>
+<p>The issue of birthright citizenship was one of the main challenges before the framers of the Indian Constitution, to decide whether citizenship should be based on birth or descent. Some members of the Constituent Assembly, such as P S Deshmukh (Indian National Congress Member from Maharashtra), argued against birthright citizenship, stating that it would make “Indian citizenship the cheapest on earth.”</p>
+<p>However, other members, such as BR Ambedkar and Sardar Vallabhai Patel, favoured birthright citizenship, and it was ultimately recognised in the Constitution. Article 5 of the Constitution states that every person who was born in the territory before the commencement of the Constitution shall be a citizen of India.</p>
+<p>Parliament subsequently enacted the Citizenship Act, 1955, which provided birthright citizenship under Section 3 to every person born in India on or after January 26, 1950. There was an exception only for children born to “an envoy of a foreign sovereign power” who is not a citizen, and children of an “enemy alien” when the birth takes place in an area under enemy occupation.</p>
+<p>However, in 1986, Parliament amended the Act to address the entry of migrants from “Bangladesh, Sri Lanka and some African Countries”. Children born after the Amendment came into force would only become citizens if either of their parents was an Indian citizen, marking the end of birthright citizenship in India.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>In 2003, the Act was amended again to effectively state that a child would not become a citizen at birth if one of her parents was an illegal immigrant when she was born.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10765824"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July first, twenty twenty-six, at twenty-nine minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-supreme-court-birthright-citizenship-ruling-trump-10765824/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-02 14:24 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
