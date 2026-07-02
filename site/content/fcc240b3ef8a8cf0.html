@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From panel to pitch: How manga helped the rise of football in Japan | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From panel to pitch: How manga helped the rise of football in Japan</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/WhatsApp-Image-2026-06-30-at-19.47.03.jpeg?w=1600" alt="From panel to pitch: How manga helped the rise of football in Japan">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Japan's Kaishu Sano (24) celebrates after scoring the opening goal of his team during the World Cup match against Brazil. (AP)" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/WhatsApp-Image-2026-06-30-at-19.47.03.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Japan's Kaishu Sano (24) celebrates after scoring the opening goal of his team during the World Cup match against Brazil. (AP)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Japan lost to Brazil in the FIFA World Cup on Monday night (June 29), marking its exit from the tournament. Initially maintaining a lead against the five-time champions, Japan conceded two goals in the second half. However, Japan’s overall quality performance at the World Cup has remained largely <a href="https://indianexpress.com/article/trending/trending-globally/japan-coach-players-bow-to-fans-after-fifa-world-cup-elimination-10763890/"><strong>consistent</strong> </a>through the 21st century.</p>
+<p>Debuting at the event in 1998, five years after the inception of the domestic J-League, Japan has progressed to the round of 16 stage four times since 2002. One of only three Asian nations to have reached this stage (the other being North and South Korea), the “Samurai Blues” were also the first to qualify for WC26 after the host nations.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>For an island nation that historically placed greater stock in baseball and the local sport of sumo, how did Japan turn into a nation obsessed with association football? While the answer comprises myriad reasons, the role of manga or Japanese comics has been widely documented as a leading factor, even receiving acknowledgement from top players.</p>
+<h3><strong>Strong beginnings, then a slump</strong></h3>
+<p>Football was first imported to Japan in 1873. Archibald L Douglas, an officer of the British Navy, taught his students how to play at the Japanese Navy Academy in Tsukiji, Tokyo. Six years later, football was included in the curriculum of the National Institute for Gymnastics.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The Japanese Football Association (JFA) was founded in 1921, drawing inspiration from the English FA Cup, and the first Emperor’s Cup was held later that year. The rise of fascism and subsequent advent of the Second World War, as well as the non-payment of certain dues, led to Japan’s ouster from FIFA.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/sports/football/fifa-world-cup-gabriel-martinelli-japan-late-goal-brazil-10763548/">Gabriel Martinelli is Brazil’s saviour as last-gasp goal breaks Japanese hearts</a></span></div>
+<p>Japan officially rejoined in 1950 and ranked in the final eight by the time it hosted the 1964 Tokyo Olympics. This performance led to the establishment of the Japanese Soccer League in 1965, which also included amateurs. The players worked jobs during the day, trained at night and played their games on the weekends.</p>
+<p>In 1968, Japan won a bronze medal in the Mexico City Olympics, but this marked the beginning of a slump in Japanese football. Throughout the ’70s, football was eclipsed in popularity, viewership and participation by professional baseball, which enjoyed better youth networks and professional infrastructure.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>Manga as a catalyst</strong></h2>
+<p>The 1981 release of the manga <em>Captain Tsubasa</em> altered football’s trajectory in Japan.</p>
+<p>Twenty-year-old cartoonist Yoichi Takahashi introduced readers to the character of Tsubasa Oozora, an 11-year-old footballing prodigy, in the pages of the <em>Weekly Shonen Jump</em>. In 1982, the magazine’s circulation was roughly 2.55 million, peaking at 6.53 million in 1995. It would later publish some of the most well-known manga series of all time, such as <em>One Piece</em> and <em>Naruto</em>.</p>
+<p><em>Captain Tsubasa</em> centred on the protagonist’s dreams of winning the FIFA World Cup for Japan. At the time of its release, Japan lacked a professional football league, but its effect was fairly immediate. In 1981, the JFA reported roughly 110,000 registered players — a number that more than doubled to nearly 250,000 by the end of the ’80s.</p>
+<span class="custom-caption"><img alt="A figurine of Tsubasa Oozaru and Taro Misaki taking a twin shot (Wikimedia Commons)" class="lazyloading size-medium wp-image-10765048" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Captain_Tsubasa_Tsubasa_Ozora_and_Taro_Misaki_figurine_twin_shot.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Captain_Tsubasa_Tsubasa_Ozora_and_Taro_Misaki_figurine_twin_shot.jpg 700w, https://indianexpress.com/wp-content/uploads/2026/06/Captain_Tsubasa_Tsubasa_Ozora_and_Taro_Misaki_figurine_twin_shot.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/06/Captain_Tsubasa_Tsubasa_Ozora_and_Taro_Misaki_figurine_twin_shot.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/06/Captain_Tsubasa_Tsubasa_Ozora_and_Taro_Misaki_figurine_twin_shot.jpg?resize=150,83 150w" height="394" sizes="(max-width: 700px) 100vw, 700px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="700"/> A figurine of Tsubasa Oozaru and Taro Misaki taking a twin shot <em>(Wikimedia Commons)</em></span>
+<p>The space that <em>Captain Tsubasa</em> occupied was still nascent. Football in Japan lacked grassroots-level infrastructure, but Takahashi’s comic strip provided children across the country with the vocabulary, tactical framing and cultural permission to explore the sport through the eyes of a character their age. Japan’s economic bubble in the late ’80s also incentivised corporate capital to flow towards company-owned sports teams.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>In 1993, the JFA introduced the J1 ‘first division’ League. A generation of children who had flipped through the pages of <em>Captain Tsubasa</em> became the treatment group benefiting from the newly christened league and the grassroots network that came with it.</p>
+<p>The biggest shift came when Japan qualified for the 1998 World Cup in France. Despite losing all three group stage games, this cohort included legends like Hidetoshi Nakata, the first-ever player from the Asian Football Confederation to be nominated for a Ballon d’Or. Hidetoshi famously claimed he “doesn’t like to watch any sport”, but that he nevertheless “tried several of the skills from the <em>Tsubasa manga</em>” growing up.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/sports/football/japans-genius-reducing-chaos-fifa-world-cup-10755824/">Japan’s genius lies in reducing chaos. The World Cup is finding that out</a></span></div>
+<p>Shinji Kagawa, arguably the most famous Japanese player of the 2010s, also said he was “heavily inspired” by <em>Captain Tsubasa</em>, especially the character’s decision to leave Japan and play for Barcelona. “It made me realise that playing abroad at the highest level was a path that a Japanese player could actually take,” he said.</p>
+<h3>Manga’s active role in football today</h3>
+<p>The widespread popularity that manga and anime have come to enjoy globally adds to the success of football manga. <em>Captain Tsubasa’s</em> rise spawned other football-based manga like <em>Offside</em> and <em>Whistle!</em> The original story even bled across borders, with legends of the sport, like Spanish player Andres Iniesta, acknowledging its impact on their childhood.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The titular character in <em>Captain Tsubasa</em> played in the space between the attacking front line and the controlling midfield, which historically lay much deeper than modern high-lines. It comes as no surprise then, perhaps, that Japan’s greatest players have occupied positions in the middle of the pitch.</p>
+<p>The progress made by the Japanese football team was apparent by 2002, when they defeated Russia and Tunisia before elimination at Turkey’s hands in a World Cup co-hosted with South Korea.</p>
+<p>In the 21st century, however, football manga aligns more with the technical realities of the sport rather than focusing on comic-friendly acrobatics.</p>
+<span class="custom-caption"><img alt="The Japan national team at the AFC Cup semi-finals against Iran in 2019 (Wikimedia Commons)" class="lazyloading size-medium wp-image-10765041" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/IRN-JPN_20190128_02.jpg?resize=600,369" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/IRN-JPN_20190128_02.jpg 700w, https://indianexpress.com/wp-content/uploads/2026/06/IRN-JPN_20190128_02.jpg?resize=450,277 450w, https://indianexpress.com/wp-content/uploads/2026/06/IRN-JPN_20190128_02.jpg?resize=600,369 600w, https://indianexpress.com/wp-content/uploads/2026/06/IRN-JPN_20190128_02.jpg?resize=658,405 658w" height="431" sizes="(max-width: 700px) 100vw, 700px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="700"/> <strong>The Japan national team at the AFC Cup semi-finals against Iran in 2019</strong><em> (Wikimedia Commons)</em></span>
+<p>Of late, the most recent manga football phenomenon in Japan, <em>Blue Lock</em>, seems to have drawn clear inspiration from the Samurai Blues. The series focuses on grooming an aggressive, selfish striker. It mirrors the JFA’s ambitions to re-engineer their national football identity and their struggle to find a clinical player more focussed on finding the back of the net than creating spaces for a teammate to exploit.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>This also begs the question as to whether the relationship between Japanese football and manga has become symbiotic. Today, the JFA collaborates with manga authors for national team jersey reveals and promotions, recognising the medium as an unmatched tool for youth engagement. <em>Blue Lock</em> writer Muneyuki Kaneshiro earlier invited “pure egoists who want to win the World Cup” to participate in a boot camp.</p>
+<p>Japan’s match against Brazil was also a proverbial full circle, in a way. Brazil was the very country where Tsubasa Oozora travelled to complete his professional training. For the Samurai Blues, it reflects how they are no longer simply playing a game imported onto their shores by an English officer; instead, their foundations for football have sketched their way forward in ink, panel by panel, over the four decades.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10765015"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on June thirtieth, twenty twenty-six, at fifty-four minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-culture/" href="https://indianexpress.com/about/explained-culture/">Explained Culture</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-culture/panel-to-pitch-football-in-japan-10765015/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-02 08:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

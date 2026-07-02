@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>When Indira met Bhutto: How Simla Agreement shaped, and limited, India-Pakistan ties | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>When Indira met Bhutto: How Simla Agreement shaped, and limited, India-Pakistan ties</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-02</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Indira-Bhutto.jpg?w=1600" alt="When Indira met Bhutto: How Simla Agreement shaped, and limited, India-Pakistan ties">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Simla Agreement" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Indira-Bhutto.jpg?w=1600" width="650"/><span class="ie-custom-caption">Prime Minister Indira Gandhi with Zulfikar Ali Bhutto, President of Pakistan, and their delegations in Simla in June 1972. (Express archive photo, enhanced using AI) </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In June 1972, Indira Gandhi reached Simla one day ahead of a planned meeting. She was carrying decorations and furniture from Rashtrapati Bhavan in New Delhi to ensure that the rooms for the meeting were in perfect order.</p>
+<p>The meeting was with Pakistan’s President Zulfikar Ali Bhutto and his daughter, Benazir. The meeting would result in the Simla Agreement, signed on July 2, 1972.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>More than 50 years later, the agreement has failed to deliver on its promise. Nevertheless, its signing remains a pivotal moment in the trajectory of India-Pakistan ties.  Last year, when India put the Indus Waters Treaty of 1960 “in abeyance” in retaliation to the Pahalgam terror attack, <strong><a class="" href="https://indianexpress.com/article/explained/explained-law/indus-waters-treaty-simla-agreement-in-abeyance-what-this-means-9966366/" rel="noopener" target="_blank">Pakistan said it “shall exercise the right to hold</a></strong> all bilateral agreements with India, including but not limited to the Simla Agreement, in abeyance.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>The road to Simla Agreement came through Bangladesh</h2>
+<p>The Simla Agreement emerged directly from the aftermath of the 1971 Indo-Pakistani War, a conflict that led to the creation of Bangladesh from East Pakistan. India’s military intervention proved decisive, reshaping the geopolitical landscape of South Asia.</p><div id="taboola-mid-article-personalisation"></div>
+<p>After the war, both Prime Minister Gandhi and President Bhutto publicly expressed a desire to usher in a new era of peace. On June 28, 1972, the two leaders met at the hill station of Simla.</p>
+<p>Despite the shared goal of reconciliation, their objectives were at odds.</p>
+<p>Having emerged victorious in the 1971 war, Gandhi sought to use India’s military advantage to secure a lasting settlement of the Kashmir dispute on terms favourable to India.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Bhutto, by contrast, was primarily concerned with securing the unconditional release of around 93,000 Pakistani prisoners of war and the return of nearly 5,000 square miles of territory occupied by India during the conflict. Author Faisal Khosa notes in <em>The Making of Martyrs in India, Pakistan &amp; Bangladesh</em> (2020), “Moreover, Pakistan’s behaviour towards India during the Sino-Indian conflict, the growing collusion between Pakistan and China (of which Bhutto was the primary architect under Ayub), and the Indo-Pak War of 1965 made India view Pakistani policy toward India with reservation.”</p>
+<span class="custom-caption"><img alt="Zulfikar Ali Bhutto house" class="lazyloading size-medium wp-image-10767677" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/simla-bhutto-house-1600.jpg?resize=600,396" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg?resize=450,297 450w, https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg?resize=600,396 600w, https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg?resize=768,507 768w, https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg?resize=613,405 613w, https://indianexpress.com/wp-content/uploads/2026/07/simla-bhutto-house-1600.jpg?resize=1536,1015 1536w" height="1057" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> The Himachal Bhawan building in Shimla where Zulfikar Ali Bhutto was to stay in 1971. (Express Archive Photo)</span>
+<p>The summit opened with Gandhi personally receiving Bhutto at the Simla airport as he stepped out of a Russian M-8 helicopter. Despite years of hostility, the two leaders shook hands and signalled a willingness to negotiate.</p>
+<p>However, discussions between the Indian and Pakistani delegations proved futile. Gandhi insisted that future negotiations be conducted bilaterally, without third-party mediation by the United Nations, and proposed converting the existing ceasefire line in Jammu and Kashmir into a permanent international border. In return, she was reportedly prepared to restore almost all territory captured by India during the war, while retaining the Kashmir territory.</p>
+<p>Bhutto, under domestic political pressure, rejected these proposals, particularly those relating to Kashmir. As Khosa observes, “The closest Bhutto got towards making a conclusive decision over Kashmir was when he stated, ‘Let there be a line of peace, let people come and go, let us not fight over it.’”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>The July 2 agreement</h2>
+<p>After a period of deadlock, Bhutto proposed a one-on-one meeting with Indira Gandhi. She agreed. Leaving their respective teams behind, the two leaders withdrew to a small sitting room to negotiate privately. Their aides waited in separate rooms as Gandhi and Bhutto met, broke away for consultations with their delegations, and reconvened. On 2 July 1972, a decisive meeting was scheduled which ended with the signing of the Simla Agreement.</p>
+<p>Its central provision declared that “the two countries are resolved to settle their differences by peaceful means through bilateral negotiations or by any other peaceful means mutually agreed upon between them. Pending the final settlement of any of the problems between the two countries, neither side shall unilaterally alter the situation and both shall prevent the organisation, assistance or encouragement of any acts detrimental to the maintenance of peaceful and harmonious relations;”</p>
+<p>The agreement, Khosa notes, also established that within 30 days of ratification by both nations, Indian troops were to be withdrawn from the 5,000 square miles of Pakistani desert land occupied by India. “The Indian solution to the Kashmir problem was to transform the ceasefire line in Jammu and Kashmir (in place since 17 December 1971) into a formal ‘line of control’ that would be respected by both parties, without prejudice of either side’s position”.</p>
+<p><strong>What critics say</strong></p>
+<p>Khosa writes, “In the Simla Agreement, there was no mention of a Kashmir plebiscite or of the 93,000 Pakistani POWs. This was because Indira had refused to discuss them without Bangladesh at the conference table.” Bhutto instead promised that these issues would be taken up in future negotiations involving Indira Gandhi and Bangladesh’s leader, Sheikh Mujibur Rahman.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>For Bhutto, however, the agreement was not without gains. India agreed to withdraw from the portions of Sindh and Punjab it had occupied during the war, while Bhutto assured Pakistanis that, ‘Insha-Allah [we] will succeed in finding a solution’ to the prisoners of war issue. He declared, ‘We will remain friendly and peaceful towards those who do not commit aggression against us, do not occupy our territory and do not hold our POWs.’ Yet. Khosa notes, “Their incarceration remained a bitter, constantly mentioned failure of Bhutto’s policies”</p>
+<p>The agreement also made no reference to Pakistan’s recognition of the newly independent state of Bangladesh. This omission fuelled suspicions within Pakistan, where Bhutto’s opponents claimed that he must have secretly conceded Pakistan’s position on Kashmir and agreed to recognise the independence of Bangladesh.</p>
+<p>In India, Khosa writes, “Indira’s critics argue that the Simla Agreement was a major error in judgment on her part. It is speculated that the agreement was signed based on Bhutto’s last-minute decision to convert the ceasefire line in Kashmir into a ‘line of control’. It is contended that he repeatedly assured Indira that Pakistan would honour its promise regarding Kashmir and that she should sincerely ‘trust him’”. Scholars blame Gandhi for placing excessive faith in Bhutto’s assurances.</p>
+<p>Historian Srinath Raghavan argues in <em>1971: A Global History of the Creation of Bangladesh</em> (2013), she deliberately chose to treat a defeated Pakistan “on a footing of equality and respect.” The agreement not only established bilateralism as the framework for resolving disputes but also created the possibility that the Line of Control might gradually acquire “the characteristics” of an international border, paving the way for a lasting settlement of Kashmir.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>However, it never materialised. Raghavan notes, “But it did not work out like that. Bhutto quickly retreated from their understanding and reverted to the traditional anti-India stance. By mid-1974, neither Bhutto nor Indira Gandhi had the political will or capital to forge a lasting settlement.”</p>
+<p><strong>The legacy</strong></p>
+<p>Five decades on, the agreement’s promise of lasting peace has repeatedly been tested by conflict, including the Kargil War in 1999, the 2008 <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> attacks, and recurring clashes along the Line of Control. Subsequent diplomatic initiatives including the Tashkent Declaration (1966), Lahore Declaration (1999), and the Agra Summit (2001) failed to bring peace.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10767652"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between colonial history and contemporary issues, especially in gender, culture, and sport.
+
+For suggestions, feedback, or an insider’s guide to exploring Calcutta, feel free to reach out to her at nikita.mohta@indianexpress.com.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July second, twenty twenty-six, at fifty-one minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/indira-bhutto-simla-agreement-terms-failure-10767652/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-02 08:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
