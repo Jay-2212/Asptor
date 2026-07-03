@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Ahead of 8th Pay Commission, experts explain why India’s public sector compensation is higher than reported | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Ahead of 8th Pay Commission, experts explain why India’s public sector compensation is higher than reported</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-03</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/CPC.jpg?w=1600" alt="Ahead of 8th Pay Commission, experts explain why India’s public sector compensation is higher than reported">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="compensation" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/CPC.jpg?w=1600" width="650"/><span class="ie-custom-caption">India's official statistics leave out or fragment large categories of workers, making it harder to assess the true fiscal cost of government employment. (File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Anoop Singh and Shruti Gupta</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>India is preparing for the <a href="https://indianexpress.com/article/opinion/columns/pay-reform-a-system-to-measure-performance-10652243/"><strong>Eighth Central Pay Commission</strong></a>, whose recommendations will shape public finances for years to come. Yet before debating how much governments should spend on public employees, a more fundamental question deserves attention: how much do governments actually spend on compensation today?</p>
+<h2><strong>What does India officially report?</strong></h2>
+<p>The central government reports pay and pension expenditure averaging about 2.4% of GDP between 2015-16 and 2020-21. For states, the 2022-23 figure is 2.5% of GDP. Around a quarter of the Union’s revenue receipts go toward compensation; for states, nearly a third.</p>
+<p>Officially, however, that picture is incomplete. India’s public sector workforce is measured largely through the lens of permanent employees. It does not, however, account for the large number of workers engaged outside the standard payroll through contractual arrangements, government schemes and autonomous institutions.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>In the central government, contract workers have grown to 76% of the permanent workforce in 2020-21, up from roughly one contract worker for every two permanent employees a decade earlier, even as permanent headcount has remained broadly flat.</p>
+<p>Compensation is one of the stickiest items on the expenditure side. The IMF’s Government Finance Statistics (GFS) Manual — the international benchmark for public finance accounting — defines it as any recurring payment made in an employer-employee relationship, irrespective of how it is labelled or budgeted.</p>
+<p>Our reporting deviates primarily in three ways.</p>
+<p><strong>First: Who falls outside the headline numbers?</strong></p>
+<p><span style="color: #800000;"><strong>Contract workers:</strong></span> They are engaged in government functions that are perennial in nature — maintenance, data entry, security across ministries. In many cases, they substitute for regular staff. They are completely omitted from headline compensation figures. The data from the Ministry of Labour and Employment, available only for six non-continuous years, ranges between 13.6 lakh and 24.3 lakh in the central sphere. No centralised, ministry-wise database of contract workers is maintained. Even if wages are estimated at minimum wage levels, at least Rs 14,000 crore is spent annually on contract worker pay at the central level, none of which is reflected under the salary head.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="color: #800000;"><strong>Scheme workers:</strong></span> Nearly 10 lakh ASHA workers and an estimated 37 lakh cook-cum-helpers under PM-POSHAN are classified as volunteers receiving honoraria, rather than employees receiving salaries. Several lakhs more Anganwadi workers and auxiliary nurses are engaged in delivering similar services. These workers are central to frontline health, nutrition, and care delivery. Under the GFS framework, such programme-based payments fall within the definition of government compensation, regardless of whether these are termed as salary or honorarium.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/eighth-pay-commission-impact-salaries-pensions-govt-employees-10335820/">Eighth Pay Commission terms of reference approved: What this means, likely impact on salaries, pensions of govt employees</a></span></div>
+<p>As governments have increasingly shifted toward contractual and scheme-based employment, conventional compensation statistics have become progressively less representative of the actual workforce.</p>
+<p><strong>Second: Reporting is fragmented</strong></p>
+<p>Grants-in-aid salaries cover autonomous institutions that governments establish to carry out services on their behalf. More than 350 institutions — AIIMS, IITs, IIMs, regulatory and research agencies — were transferred about Rs 60,000 crore as salary grants in 2024-25. At the state level, municipal corporation employees — accounting for over Rs 50,000 crore in pay and pension across 232 corporations — largely fall outside state salary accounts.</p>
+<p>This is different from outright omission; the spending is recorded but fragmented across separate <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> statements rather than consolidated with the rest of the compensation bill. But since they carry out functions that would otherwise fall on government departments, their exclusion reflects a classification choice rather than an economic distinction.</p>
+<p><strong>Third: Definitions are inconsistent</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Similar expenditures are often classified differently across governments and institutions. Payments may be reported as salaries, honoraria, grants, contractual services or scheme expenditures, even when they support workers performing similar public functions.</p>
+<p>These differences complicate comparisons across states and with international data. They also make it difficult to assess the long-term fiscal implications of policies such as pay commissions and pension reforms.</p>
+<p><strong>What do the adjusted figures show?</strong></p>
+<p>Once contract worker pay, scheme worker honoraria, autonomous institution salaries, and separately reported Railway and Post pensions are added, the central government’s compensation bill rises from 2.4% to 3.8% of GDP. Including the compensation for public sector enterprise employees takes it to 4.6%.</p>
+<p>For states, adjusted figures rise from 2.5% to 4.1% of GDP — with Maharashtra’s adjusted pay nearly triple its reported figure, Karnataka’s 2.5 times, and Uttar Pradesh’s double. These estimates are possible only for the few states where reasonably complete contract-pay data are available.</p>
+<p><strong>Beyond statistics</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>When the true cost of the wage bill is understated, fiscal deficit targets and medium-term expenditure projections are built on an incomplete picture. After accounting for adjusted pension and interest payments, the Union’s committed expenditure reaches approximately 82% of revenue receipts. This leaves very little room for discretionary spending, including growth-inducing infrastructure investment, without borrowing.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>When entire categories of workers fall outside official compensation statistics, governments overstate fiscal space while understating the long-term cost of sustaining the public workforce.</p>
+<p><strong>A more accurate accounting framework</strong></p>
+<p>Closing this gap would require several specific reforms.</p>
+<p>All categories of workers need to be counted within a single compensation framework aligned with international standards. This would require a common definition of what constitutes compensation, applied consistently across the Union and all states, so that data becomes comparable across jurisdictions. Ministry- and state-wise data on contract and scheme worker numbers and pay should be published annually and consistently, replacing the sparse information currently available.</p>
+<p>The 8th Central Pay Commission (CPC) presents an opportunity to strengthen the measurement, classification, and transparency of public sector compensation</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The issue is not whether governments spend too much or too little on public employees. The issue is whether governments know how much they actually spend. It is a prerequisite for fiscal transparency, sound policymaking and an accurate assessment of fiscal sustainability.</p>
+<p><em><strong>Anoop Singh is Distinguished Fellow, and Shruti Gupta is Research Associate at the Centre for Social and Economic Progress. Their views are personal.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10766757"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July second, twenty twenty-six, at forty-eight minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/8th-pay-commission-government-workforce-compensation-10766757/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-03 11:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
