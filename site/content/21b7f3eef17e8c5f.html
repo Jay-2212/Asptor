@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Siya-Ketan case: As police seek polygraph nod, how ‘lie-detector’ tests work — and don’t | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Siya-Ketan case: As police seek polygraph nod, how ‘lie-detector’ tests work — and don’t</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/siya.jpg?w=1600" alt="Siya-Ketan case: As police seek polygraph nod, how ‘lie-detector’ tests work — and don’t">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Pune police bring Siya Goyal to a local court in connection with the murder of businessman Ketan Agarwal. Pavan Khengre" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/siya.jpg?w=1600" width="650"/><span class="ie-custom-caption">Pune police bring Siya Goyal to a local court in connection with the murder of businessman Ketan Agarwal. Pavan Khengre</span></span>
+
+<div class="story_details" id="pcl-full-content"><div dir="ltr">
+<p>The Pune police this week sought permission from a court <a href="https://indianexpress.com/article/cities/pune/lohagad-fort-murder-pune-police-polygraph-test-siya-chetan-10768566/" rel="noopener" target="_blank"><strong>to conduct a polygraph test</strong></a>, also referred to as a lie-detection test, on Siya Goyal, who has been booked for the murder of her fiancé, Pune-based realtor Ketan Agarwal. Police have also sought to conduct the test on Goyal’s co-accused, Chetan Chaudhary.</p>
+<p dir="ltr">The polygraph test, however, is largely seen by the scientific community as an unreliable tool to detect deception. Their use in legal proceedings has long been restricted in many American states.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">In India, such a test can only be done with the consent of the person on whom it is to be conducted. Refusal to undergo the tests also cannot be held as an adverse inference against the accused.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2 dir="ltr"><strong>What are polygraph and narcoanalysis tests?</strong></h2>
+<p dir="ltr">A polygraph test is based on the assumption that physiological responses that are triggered when a person is lying are different from what they would be otherwise. Instruments such as cardio-cuffs or sensitive electrodes are attached to the person, and variables such as blood pressure, pulse, respiration, change in sweat gland activity, blood flow, etc., are measured as questions are put to them. A numerical value is assigned to each response to conclude whether the person is telling the truth, is deceiving, or is uncertain.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">A test such as this is said to have been first done in the 19th century by the Italian criminologist Cesare Lombroso, who used a machine to measure changes in the blood pressure of criminal suspects during interrogation. Similar devices were subsequently created by the American psychologist William Marstron in 1914, and by the California police officer John Larson in 1921.</p>
+<p dir="ltr">Narcoanalysis, in contrast, involves the injection of a drug, sodium pentothal, which induces a hypnotic or sedated state in which the subject’s imagination is neutralised, and they are expected to divulge true information. The drug, referred to as “truth serum” in this context, was used in larger doses as anaesthesia during surgery, and is said to have been used during World War II for intelligence operations.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/lifestyle/health/how-polygraph-test-work-neurologists-explain-rg-kar-rape-accused-kolkata-cbi-investigation-9533998/">Is it possible to mislead or fool a polygraph test?</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">More recently, investigating agencies have sought to employ these tests in investigation, and are sometimes seen as being a “softer alternative” to torture to extract the truth from suspects.</p>
+<p dir="ltr">Neither method, however, has been proven scientifically to have a 100% success rate. They remain contentious in the medical field.</p>
+<p dir="ltr">The National Research Council of the United States of America (USA) conducted a comprehensive review in 2003 and concluded that polygraph accuracy for screening purposes was “little better than could be achieved by the flip of a coin”.</p>
+<p dir="ltr">Experts say that it is possible to mislead or fool a polygraph test. Individuals can employ various countermeasures to alter physiological responses and potentially produce false negative results.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">Factors affecting accuracy of the test include the skill of the examiner, the test format used, and individual differences in physiological responses. Due to concerns about reliability, polygraph evidence is generally not admissible in US courts, and many scientists argue that the technique lacks solid scientific validity.</p>
+<p dir="ltr"><strong>Are Indian investigators allowed to put accused through these tests?</strong></p>
+<p dir="ltr">In <em>Selvi &amp; Ors vs State of Karnataka &amp; Anr</em> (2010), a Supreme Court Bench comprising Chief Justice of India K G Balakrishnan and Justices R V Raveendran and J M Panchal ruled that no lie detector tests should be administered “except on the basis of consent of the accused”.</p>
+<p dir="ltr">Those who volunteer must have access to a lawyer, and have the physical, emotional, and legal implications of the test explained to them by police and the lawyer, the Bench said. It said that the ‘Guidelines for the Administration of Polygraph Test on an Accused’ published by the National Human Rights Commission in 2000, must be strictly followed.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">The subject’s consent should be recorded before a judicial magistrate, the court said. The results of the tests cannot be considered to be “confessions”, because those in a drugged-induced state cannot exercise a choice in answering questions that are put to them.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/pune/siya-goyal-ketan-agarwal-chetan-choudhary-lohagad-fort-pune-murder-case-10767900/">Practice pushes, hacks to fool cops: How Siya-Chetan prepped for murder</a></span></div></p>
+<p dir="ltr">However, any information or material subsequently discovered with the help of such a voluntarily-taken test can be admitted as evidence, the court said. Thus, if an accused reveals the location of a murder weapon in the course of the test, and police later find the weapon at that location, the statement of the accused will not be evidence, but the weapon will be.</p>
+<p dir="ltr">The Bench took into consideration international norms on human rights, the right to a fair trial, and the right against self-incrimination under Article 20(3) of the Constitution.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">“We must recognise that a forcible intrusion into a person’s mental processes is also an affront to human dignity and liberty, often with grave and long-lasting consequences,” the court said, observing that the state’s plea that the use of such scientific techniques would reduce ‘third degree’ methods “is a circular line of reasoning since one form of improper behaviour is sought to be replaced by another”.</p>
+<p dir="ltr"><strong>Are investigators allowed to put witnesses, victims, or their families through these tests?</strong></p>
+<p dir="ltr">The Supreme Court had said in its order that “no individual should be forcibly subjected to any of the techniques in question, whether in the context of investigation in criminal cases or otherwise”, expanding the same rule to others who can be made to undergo the test only if they consent to it.</p>
+<p dir="ltr"><div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div></p>
+<p dir="ltr">It said that forcing an individual to undergo these tests amounts to an “unwarranted intrusion into personal liberty” but left scope for “voluntary administration” of these techniques if the individuals give consent.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">The court examined the scope of Article 20(3), the right against self-incrimination-which states that no accused can be compelled to be a witness against himself. It said that while this requires a person to be formally named as an accused, other provisions of the Criminal Procedure Code extend this protection to witnesses as well. With reference to victims, especially of sexual offences, the bench said that irrespective of the need to expedite the probe in such cases, a victim of an offence cannot be forced to undergo these tests as it would be “an unjustified intrusion into mental privacy and could lead to further stigma for the victim”.</p>
+<p dir="ltr"><strong>In which criminal cases in recent years have these tests been used?</strong></p>
+<p dir="ltr">In most cases, investigating agencies seek permission for such tests to be done on accused or suspects, rarely on victims or witnesses. Legal experts say that investigating agencies can submit to a court that the tests are being sought to help in their probe but consent or refusal to undergo the tests by an individual do not reflect innocence or guilt. Here’s a look at some cases where such tests have been used:</p>
+<ul>
+<li dir="ltr">
+<p dir="ltr" role="presentation">In June, the CBI told a <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> court that it wants to conduct polygraph tests on three persons, in connection with the murder of former Shiv Sena UBT BMC corporator Abhishek Ghosalkar, which occurred during a Facebook live session in 2024. While two of the three persons gave their consent, following which the court gave a nod for the tests, one accused refused to undergo the test. The court explained the physical, emotional and legal implications to the two persons willing to undergo the test, and after their consent, granted CBI the permission. “The test shall be carried out with strict adherence to the National Human Rights Commission’s guidelines for the administration of polygraph (lie detector)…,” the court said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+</li>
+<li dir="ltr">
+<p dir="ltr" role="presentation">In August 2024, Sanjay Roy, who was later convicted in the R G Kar Medical College rape case, underwent a polygraph test. Sandip Ghosh, the former principal of the college, also underwent the test.</p>
+</li>
+<li dir="ltr">
+<p dir="ltr" role="presentation">In 2020, four of the accused booked for the gangrape and murder of a 19-year-old girl in Hathras, Uttar Pradesh, had also given their consent for the tests, following a plea by the CBI, and in the same year, the CBI was granted permission to conduct the tests on the driver and helper of the truck that hit Unnao rape victim in Uttar Pradesh.</p>
+</li>
+<li dir="ltr">
+<p dir="ltr" role="presentation">In 2019, the CBI had sought to conduct the tests on one accused in the Punjab National Bank alleged fraud case but the court rejected the plea after the accused did not give consent. The 63-year-old retired deputy manager of the bank had refused consent stating among other reasons, that it could have an adverse effect on his health.</p>
+</li>
+</ul>
+<ul>
+<li dir="ltr">
+<p dir="ltr" role="presentation">In May 2017, founder of INX Media, Indrani Mukerjea, who is facing trial for the alleged murder of her daughter Sheena Bora in 2012, had offered to undergo the lie detector test, which was refused by the CBI, stating that they had sufficient evidence against her.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+</li>
+</ul>
+<ul>
+<li dir="ltr">
+<p dir="ltr" role="presentation">The polygraph test was also conducted on Dr Rajesh Talwar and Nupur Talwar, who were accused of killing their daughter Aayushi and domestic help Hemraj in Noida. The video of the narco analysis test on their compounder, Krishna, had been leaked with the media as well. The Supreme Court in its judgment had also warned against such leaks calling it a ‘worrisome practice’.</p>
+</li>
+</ul>
+</div>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10769503"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sadaf-modak/">
+<figure>
+<img alt="Sadaf Modak" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2016/02/sadaf.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sadaf-modak/"><span></span>Sadaf Modak</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2657634"></div><div class="follow_author_title" data-id="Sadaf Modak"></div><div class="follow_author_slug" data-id="sadaf-modak"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sadaf Modak is a distinguished Legal Correspondent based in Mumbai whose work demonstrates exceptional Expertise and Authority in covering the intricacies of the judicial and correctional systems. Reporting for The Indian Express, she is a highly Trustworthy source for in-depth coverage of courtroom proceedings and human rights issues.
+Expertise 
+
+ 	
+Specialized Role: As a dedicated Legal Correspondent, Sadaf Modak possesses deep, specialized knowledge of legal procedures, statutes, and judicial operations, lending immense Authority to her reports.
+
+ 	
+Core Authority &amp; Focus: Her work primarily centers on:
+
+
+ 	
+Trial Court Proceedings: She mainly covers the trial courts of Mumbai, providing crucial, on-the-ground reporting on the day-to-day legal processes that affect citizens. She maintains a keen eye on both major criminal cases and the "ordinary and not so ordinary events" that reveal the human element within the justice system.
+
+ 	
+Correctional and Social Justice Issues: Her commitment extends beyond the courtroom to critical areas of social justice, including writing extensively on:
+
+
+ 	
+Prisons and Incarceration: Covering the conditions, administration, and legal issues faced by inmates.
+
+ 	
+Juvenile Justice: Reporting on the complexities of the juvenile justice system and the legal rights of children.
+
+ 	
+Human Rights: Focusing on fundamental human rights within the context of law enforcement and state institutions.
+
+
+
+
+
+
+Experience
+
+ 	
+Institutional Affiliation: Reporting for The Indian Express—a leading national newspaper—ensures her coverage is subject to high editorial standards of accuracy, impartiality, and legal rigor.
+
+ 	
+Impactful Detail: Her focus on trial courts provides readers with direct, detailed insights into the workings of the justice system, making complex legal narratives accessible and establishing her as a reliable and trusted chronicler of the legal landscape.
+
+
+Sadaf Modak's blend of judicial focus and commitment to human rights issues establishes her as a vital and authoritative voice in Indian legal journalism.
+She tweets @sadafmodak                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sadaf-modak/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July third, twenty twenty-six, at twenty-three minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/siya-ketan-case-as-police-seek-polygraph-nod-how-lie-detector-tests-work-and-dont-10769503/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-04 10:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
