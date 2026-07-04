@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The 11-year Gordian knot of Punjab’s anti-sacrilege law, explained | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The 11-year Gordian knot of Punjab’s anti-sacrilege law, explained</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/sacrilege-law.jpg?w=1600" alt="The 11-year Gordian knot of Punjab’s anti-sacrilege law, explained">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="SGPC president Harjinder Singh Dhami addressing the Panthic gathering organized at its headquarters Teja Singh Samundri Hall to deliberate the proposed law concerning sacrilege of Guru Granth Sahib in Amritsar on Monday, April 6, 2026. Express photo by Rana Simranjit Singh" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/sacrilege-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">SGPC president Harjinder Singh Dhami addressing the Panthic gathering organized at its headquarters Teja Singh Samundri Hall to deliberate the proposed law concerning sacrilege of Guru Granth Sahib in Amritsar on Monday, April 6, 2026. Express photo by Rana Simranjit Singh</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The issue of sacrilege or <em>beadbi</em> has permeated Punjab’s politics since October 2015, when the pages of Sri Guru Granth Sahib were found torn and strewn in Bargari village of Punjab’s Faridkot town.</p>
+<p>Sri Guru Granth Sahib, the scripture containing the Gurbani (teachings) of Sikh Gurus, is considered the supreme and “the living Guru” by Sikhs, in the majority in Punjab. With Punjab’s social fabric extremely syncretic and Sikh-Hindu unity at its core, Gurbani is equally revered in Hindu, Muslim and other communities.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Two protestors who demanded punishment for disrespecting the Gurus were subsequently killed in police firing in neighbouring Behbal Kalan. The dual incidents upended the state’s politics so much so that the Shiromani Akali Dal (SAD)-BJP combine was unseated from power in 2017, and could not win even the 2022 Assembly polls.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Successive Punjab governments have promised to introduce a stringent anti-sacrilege law for over a decade, but have thus far failed. The most recent attempt by the ruling <a href="https://indianexpress.com/article/political-pulse/aap-mla-our-stance-on-anti-sacrilege-law-is-rightwording-issues-can-be-resolved-10765065/"><strong>Aam Aadmi Party (AAP) government</strong></a>, the Jaagat Jot Sri Guru Granth Sahib Satkar (Amendment) Act, 2026, was passed in the Vidhan Sabha and notified on April 20, but has earned the ire of the Akal Takht, the highest temporal seat of the Sikhs. The Takht has raised objections against several of its provisions, directing the government to put the new law on hold until it is suitably rectified.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Another challenge in implementing anti-sacrilege laws is that they should not contradict the “secular nature” of the Indian Constitution. This means its scope should cover scriptures of all faiths – Gita, Quran, Bible, Ramayana, etc., not just Sri Guru Granth Sahib.</p>
+<p>Here is what to know about Punjab’s anti-sacrilege legislation since 2015.</p>
+<p><strong>The IPC sections, subsequently BNS, continue to apply</strong></p>
+<p>Two sections of the Indian Penal Code, the erstwhile primary chief criminal code, allowed for cases concerning sacrilege and blasphemy to be recorded:</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Section 295 IPC dealt with “destroying, damaging, injuring or defiling any place of worship with intent to insult the religion of any class”.<br/>
+Section 295A of IPC covered “deliberate and malicious acts to outrage religious feelings of any class, by words either spoken or written, to insult its religion or religious beliefs.”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/akal-takht-history-powers-punjab-summons-10760576/">Why the Akal Takht wields such influence over Punjab’s politics</a></span></div>
+<p>The relevant sections in the Bharatiya Nyaya Sanhita (BNS), which replaced the IPC and has been effective since July 2024, are Sections 298 and 299, with a slight update to Section 295A.</p>
+<p>* Section 298 addresses injuring or defiling a place of worship, with intent to insult the religion of any class.</p>
+<p>* Section 299 addresses deliberate and malicious acts, intended to outrage religious feelings of any class by insulting its religion or religious beliefs. These also include “outraging religious feelings through electronic means” as an offence.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Sacrilege FIRs in Punjab continue to be registered under the BNS sections 298 and 299, irrespective of any other state legislation. Political parties have argued that the punishment under the BNS was “too mild,” given the maximum prison terms of three years under Section 299 and two years under Section 298.</p>
+<p><strong>A past state attempt to amend IPC ran into ‘secularism’ challenge</strong></p>
+<p>In 2016, following widespread public anger over Bargari sacrilege, the then SAD-BJP government passed the Indian Penal Code (Punjab Amendment) Bill, 2016, proposing to insert a Punjab-specific section 295AA in the IPC.</p>
+<p>The proposed Section 295AA mandated life imprisonment for anyone who caused injury, damage, or desecration specifically to the Sri Guru Granth Sahib.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The Union Home Ministry, however, rejected the amendment to the central law, saying that Punjab’s proposal “violated secularism” and that all religions must be treated equally. It added that a central law cannot be amended to apply only to Sri Guru Granth Sahib.</p>
+<p>The Centre directed the Punjab government to either withdraw or redraft the proposal.</p>
+<p>When the Congress came to power in 2017, it passed a revised version of this bill, expanding life imprisonment for sacrilege of four major scriptures — Sri Guru Granth Sahib, Quran, Bible and Bhagavad Gita. The 2018 Bill never received a nod from the Centre and the President, while critics argued that “life imprisonment” for sacrilege was “too excessive” a punishment.</p>
+<p><strong>Attempts by the Aam Aadmi Party government</strong></p>
+<p>Since coming to power in 2022, the Aam Aadmi Party (AAP) government, led by chief minister <a class="" href="https://indianexpress.com/about/bhagwant-mann/" rel="noamphtml">Bhagwant Mann</a>, has made two attempts to pass anti-sacrilege laws.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>In July 2025, it introduced an all-faith “The Punjab Prevention of Offences Against Holy Scriptures Bill, 2025” in Vidhan Sabha. This Bill covered the scriptures of all faiths, and proposed punishment for sacrilege of “not less than 10 years, which may be extended to life imprisonment” with a maximum fine of Rs 10 lakh.</p>
+<p>However, the bill was not passed in the Vidhan Sabha, with opposition parties, human rights groups and legal experts arguing that it had several shortcomings, and that it was framed without consulting stakeholders, including religious groups. It was eventually referred to the Select Committee headed by AAP MLA Dr Inderbir Singh Nijjar for wider discussions.</p>
+<p>With the state assembly elections expected in early 2027, the “Jaagat Jot Sri Guru Granth Sahib Satkar (Amendment) Act, 2026” was passed in the Vidhan Sabha on April 13.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/akal-takht-punjab-anti-sacrilege-law-10764571/">The Akal Takht’s 11 objections to Punjab’s anti-sacrilege law</a></span></div>
+<p>The bill amends the existing 2008 “Jaagat Jot Sri Guru Granth Sahib Satkar Act”, which dealt with administrative aspects of handling Sri Guru Granth Sahib. These include “printing, publication, storage, distribution and supply” of copies of scripture to ensure that their sanctity and “Rehat Maryada” (Sikh code of conduct) are maintained through the process.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The 2008 Act did not deal with sacrilege by common persons, and provided a maximum punishment of Rs 50,000 for violations and two years of imprisonment.</p>
+<p>Both the 2008 Act and the 2026 Satkar Act deal with the Sri Guru Granth Sahib, not other faiths.</p>
+<p><strong>What does the 2026 Act entail?</strong></p>
+<p>The 2026 Amendment Act has introduced stringent sacrilege-related punishments ranging from minimum of three years to life imprisonment (depending on nature and gravity of the offence) and a maximum fine of Rs 25 lakh. For instance, sacrilege with “criminal conspiracy” can be punished with 10 years jail time, extending to life imprisonment, and a fine of Rs 25 lakh.</p>
+<p>However, the Opposition MLAs from Congress and SAD alleged that they were never given enough time to read the “sensitive” Bill. They claimed that they were provided copies only on the night of April 12, hours before it was passed, “without any discussion or consultation with stakeholders.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>During a public hearing of cabinet ministers and MLAs on May 29, the Akal Takht raised its objections to the law’s provisions and terminology, and directed the AAP government to put it on hold for the time being and rectify objectionable clauses within one month.</p>
+<p>Addressing the issue of jurisdiction, a senior police officer told <em>The Indian Express</em>, “The Akal Takht is a religious authority, not Constitutional. The law has been passed and implemented as per the notification. We have still not received any written directions from the government to put the new law in abeyance. So, currently, both the new law and the BNS sections, as the situation permits, will be invoked if a new FIR is registered for sacrilege. The BNS, being a central code, will apply even if the special legislation is put on hold.”</p>
+<p>Since being notified on April 20, four cases have been registered under the Jaagat Jot Amendment Act. The first one was registered in Muktsar district after 20 pages of Sukhmani Sahib gutka were found strewn on a road in Malout. The FIR was registered under section 5 of the new Act and section 299 of the BNS on May 1.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10768303"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/divya-goyal/">
+<figure>
+<img alt="Divya Goyal" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/divya-goel.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/divya-goyal/"><span></span>Divya Goyal</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952122"></div><div class="follow_author_title" data-id="Divya Goyal"></div><div class="follow_author_slug" data-id="divya-goyal"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/share/vvVwdiVTDZHARUE6/">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://x.com/divya5521">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Divya Goyal is a Principal Correspondent at The Indian Express, based in Ludhiana (Punjab). She is widely recognized for her human-interest storytelling and in-depth investigative reporting on social and political issues in the region.
+
+Professional Profile
+
+Experience: With over 13 years in journalism, she joined The Indian Express in 2012. She previously worked with Hindustan Times.
+
+Education: A gold medalist in English Journalism from the Indian Institute of Mass Communication (IIMC), Delhi.
+
+Core Beats: She covers a diverse range of subjects, including gender issues, education, the Sikh diaspora, heritage, and the legacy of the Partition. She has also reported on minority communities in Pakistan and Afghanistan.
+
+Awards and Recognition
+
+Divya has earned significant acclaim for her sensitivity toward gender and social disparities:
+
+Laadli Media Award (2020): For her investigative report "Punjab: The Invisible Drug Addicts," which exposed the gender disparity in treating women addicts.
+
+Laadli Media Award (2023): For a ground report on the struggles of two girls who had to ride a boat to reach their school in a border village of Punjab.
+
+Signature Style
+
+Divya is known for "humanizing the news." Rather than just reporting on policy, she often focuses on the individuals affected by it—such as students dealing with exam stress, farmers struggling with diversification, or families impacted by crime. Her work often bridges the gap between West (Pakistan) and East (India) Punjab, exploring shared heritage and common struggles.
+
+X (Twitter): @DivyaGoyal_                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/divya-goyal/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July second, twenty twenty-six, at thirty-one minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/punjab-anti-sacrilege-law-bargari-2026-satkar-act-10768303/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-04 03:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
