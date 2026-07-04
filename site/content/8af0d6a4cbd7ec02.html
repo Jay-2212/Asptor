@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Gaza, Lebanon, Iran: How Israel’s wars have damaged heritage sites across the Middle East | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Gaza, Lebanon, Iran: How Israel’s wars have damaged heritage sites across the Middle East</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Israel-attacks-Tyre.jpg?w=1600" alt="Gaza, Lebanon, Iran: How Israel’s wars have damaged heritage sites across the Middle East">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Seen through a damaged building nearby, rescue workers use an excavator as they search for people under the rubble of a building that was hit on Monday in an Israeli strike in the southern port city of Tyre on June 2, 2026. (Daniel Berehulak/The New York Times)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Israel-attacks-Tyre.jpg?w=1600" width="650"/><span class="ie-custom-caption">Seen through a damaged building nearby, rescue workers use an excavator as they search for people under the rubble of a building that was hit on Monday in an Israeli strike in the southern port city of Tyre on June 2, 2026. (Daniel Berehulak/The New York Times)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Abhishek Nair</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Lebanon’s culture minister said last week that nearly four months of Israeli operations had damaged or destroyed heritage sites across the south. A ceasefire took hold a week earlier, but much of the affected area remained under Israeli military control.</p>
+<p>The Lebanon findings follow a similar pattern already documented in Iran and Gaza, where strikes have separately damaged palaces, mosques, and a centuries-old marketplace over the past two years.</p>
+<p><strong>Lebanon</strong></p>
+<p>Lebanese Culture Minister Ghassan Salame told <em>Reuters</em> on June 28 that authorities still cannot build a full picture of the damage because Israeli troops occupy a zone roughly 10 km deep into southern Lebanon that remains off-limits to Lebanese officials.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><div id="taboola-mid-article-personalisation"></div>
+<p>He said Israel’s air and ground campaign, which Israel describes as targeting Iran-backed Hezbollah, has damaged or destroyed revered heritage sites across the south.</p>
+<p>The most prominent site affected is Tyre, a nearly 5,000-year-old port city and UNESCO World Heritage Site in southern Lebanon that flourished under the Phoenicians, Greeks, Romans and Byzantines. The site sustained damage during Israel’s ongoing military campaign in southern Lebanon.</p>
+<p>A crown was blown off an ancient column at the UNESCO-listed Al-Bass site in Tyre, and barriers erected to shield the ruins from strikes were instead blown into the area they were meant to protect, according to <em>Reuters</em>. UNESCO said it was concerned about the site’s state of conservation, and Salame has asked the agency to reclassify Tyre as a World Heritage Site in Danger, a request that has not yet been granted.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In Nabatieh, Israeli strikes pummelled the city’s Mamluk-era market, a centuries-old commercial quarter dating to the medieval Mamluk Sultanate, during its ongoing campaign in Lebanon.</p>
+<p>Nearby, Beaufort Castle, a roughly 900-year-old Crusader-era fortress overlooking Nabatieh, also came under direct fire. Israeli forces went on to <a href="https://indianexpress.com/article/explained/explained-global/beaufort-castle-israel-lebanon-history-conflict-10722009/"><strong>capture the site on May 31</strong></a> despite the ceasefire. Israel has accused Hezbollah of placing weapons inside the castle, a claim Lebanese authorities deny.</p>
+<span class="custom-caption"><img alt="Chama citadel" class="lazyloading size-medium wp-image-10771405" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Chama-Citadel-Tyre.jpg?resize=600,450" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg 4000w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=450,338 450w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=600,450 600w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=768,576 768w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=540,405 540w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=1536,1152 1536w, https://indianexpress.com/wp-content/uploads/2026/07/Chama-Citadel-Tyre.jpg?resize=2048,1536 2048w" height="3000" sizes="(max-width: 4000px) 100vw, 4000px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="4000"/> View of the Tyre peninsula and coastal plain from the castle of Chamaa in Southern Lebanon, some 25 km southeast of Tyre. (Wikimedia Commons, 2019)</span>
+<p>UNESCO separately said it was “deeply alarmed” by reports of damage to the Chama Citadel, a 12th-century fortress in southern Lebanon, and condemned what it called “unlawful attacks against cultural property.” The citadel sustained severe damage during an Israeli airstrike on April 13, according to Lebanese authorities and ICOMOS Lebanon.</p>
+<p>Salame said the losses extend beyond ancient ruins. “Heritage is not only Roman and Phoenician antiquities,” he told <em>Reuters</em>. “Heritage is also historic buildings, archaeological sites, and buildings with a cultural function.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Israel’s military told <em>Reuters</em> it does not aim to cause excessive damage to civilian infrastructure, strikes only out of military necessity, and applies a “rigorous approval process” when sensitive sites are involved.</p>
+<p><strong>Iran</strong></p>
+<p>Since Israel and the United States launched a joint military campaign against Iran at the end of February, dozens of the country’s protected monuments have been damaged.</p>
+<p>The most prominent casualty is the Golestan Palace in central Tehran, which sustained damage during Israeli strikes on March 1. UNESCO confirmed the roughly 400-year-old palace, which began under the Safavid dynasty and was later expanded by the Qajars, was damaged by a strike in its buffer zone at Arg Square.</p>
+<p>According to the director of the Golestan Palace World Heritage complex, blast waves from a nearby airstrike on March 1 shattered windows and damaged delicate mirrorwork inside several halls. Museum objects had already been moved to secure storage before the strikes began.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>In early March, Iran’s cultural heritage ministry claimed that the Grand Bazaar of Tehran, a sprawling historic commercial complex dating back several centuries, was also among the sites hit. However, the ministry did not specify the extent of the damage to the market itself.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/israel-lebanon-us-trilateral-framework-hezbollah-10761770/">Israel-Lebanon deal: Takeaways from trilateral framework, how key players have reacted</a></span></div>
+<p>Iran’s cultural heritage ministry stated that 149 historical sites across 20 provinces were damaged during the conflict, with Tehran accounting for the highest level of destruction.</p>
+<p>In Isfahan, strikes in early March reached the 17th-century Chehel Sotoun Palace, which has been used for imperial receptions and ceremonies during the Safavid era, and the Masjed-e Jame, regarded as Iran’s oldest Friday mosque. UNESCO confirmed damage to both.</p>
+<p>Ali Qapu Palace, a 16th-century, six-story royal residence on Isfahan’s Naqsh-e Jahan Square, known as a masterpiece of Safavid architecture, was also targeted in strikes in early March. According to <em>Reuters</em>, more than 70% of its windows and doors were shattered, and cracks were visible on the building’s walls.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Buildings near the Khorramabad Valley, an area containing prehistoric caves with evidence of human occupation dating back roughly 63,000 years, were also damaged in the March campaign.</p>
+<p>In western Iran, Falak-ol-Aflak Citadel, also known as Shapur Khast Castle, a fortress in Khorramabad dating to the Sasanian era, was struck in March. Iran’s Ministry of Culture and Tourism said that the strikes targeted Lorestan’s cultural ministry, destroying the building, and that the blasts had damaged the castle and two museums.</p>
+<p>Iran’s cultural heritage minister, Reza Salehi Amiri, told Al Jazeera that the damage to Golestan Palace alone would require at least two years of specialised restoration work, but warned that some things might have been lost forever.</p>
+<p><strong>Gaza Strip</strong></p>
+<p>UNESCO’s preliminary damage assessment verified damage to 164 sites in the Gaza Strip as of late March 2026. This includes 14 religious sites, 128 buildings of historical or artistic interest, 9 monuments, 8 archaeological sites, 3 depositories of movable cultural property, and 2 museums.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Most of the documented damage occurred during Israeli military operations between October 2023 and March 2026.</p>
+<p>Among the sites UNESCO has documented are Gaza’s oldest mosque, the Great Omari Mosque, which was heavily damaged in December 2023, and its oldest church, the Church of Saint Porphyrius, which was struck in October 2023 and sustained damage during the ongoing war.</p>
+<p>The ancient port of Anthedon and 12 museums — including the Al Qarara Cultural Museum — have also sustained damage during Israel’s military operation in Palestine since 2023.</p>
+<p>UNESCO added the Saint Hilarion Monastery, one of the oldest monastery complexes in the Middle East, to its List of World Heritage in Danger. Israel has said its operations are directed at militant infrastructure and not at cultural property.</p>
+<p><em><strong>The author is an intern with The Indian Express.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10771355"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fourth, twenty twenty-six, at fifty-two minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/israel-heritage-site-damage-lebanon-iran-gaza-unesco-10771355/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-04 13:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Inside Japan’s defence pivot: Why it matters for India and the Indo-Pacific | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Inside Japan’s defence pivot: Why it matters for India and the Indo-Pacific</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-04</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/pm-modi-n-takaichi.jpeg?w=1600" alt="Expert Explains | Inside Japan’s defence pivot: Why it matters for India and the Indo-Pacific">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Ms. Takaichi Sanae, Prime Minister of Japan, with Prime Minister Narendra Modi during the ceremonial at Rashtrapati Bhawan in New Delhi (Express Photo by Renuka Puri)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/pm-modi-n-takaichi.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Ms. Takaichi Sanae, Prime Minister of Japan, with Prime Minister Narendra Modi during the ceremonial at Rashtrapati Bhawan in New Delhi (Express Photo by Renuka Puri)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Japanese Prime Minister Sanae Takaichi arrived in New Delhi on Wednesday (July 1) for the 16th India-Japan Annual Summit and a three-day visit. It comes shortly after she shared an updated vision for a “Free and Open Indo-Pacific” (FOIP), a framework Japan first underlined in 2016, and recent shifts in the country’s pacifist defence <a href="https://indianexpress.com/article/explained/explained-global/india-japan-strategic-partnership-takaichi-visit-indo-pacific-10768187/?ref=explained_pg"><strong>policy</strong></a>.</p>
+<p>Amid the visit, former <strong>Ambassador to Japan Sujan Chinoy, Director-General of the Manohar Parrikar Institute for Defence Studies and Analyses (MP-IDSA)</strong>, unpacks the geopolitical drivers behind Tokyo’s defence modernisation and what this historic shift means for India’s defence-industrial ambitions.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><strong>In May, Takaichi revealed the updated vision for the FOIP framework. What are the primary factors driving Japan’s pivot to defence spending?</strong></h2>
+<p>Japan has realised that it faces a multiplicity of threats in its immediate neighbourhood.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Firstly, Tokyo faces a direct danger from North Korea’s acquisition of nuclear weapons, a threat that has escalated since their last test in 2017, as well as their missile development.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Secondly, Japan remains entangled in an older territorial dispute with Russia over the so-called ‘Northern Territories’. Part of the Kuril Island chain for Russia, this friction has been exacerbated by the Russian invasion of Ukraine. The then PM Fumio Kishida had expressed the view that “Ukraine today may be East Asia tomorrow” too.</p>
+<p>Thirdly, Japan is confronting the phenomenal economic and military rise of China. Beijing’s use of economic leverages and its coercive maritime practices in support of irredentist claims over the Senkaku islands in the East China Sea have prompted Japan to review its passive defence posture.</p>
+<h2><strong>Is Japan’s newfound pursuit of an independent defence outlook influenced by shifting US security priorities at all?</strong></h2>
+<p>After WWII, America ensured that the Japanese defence industry was cut down in size. Ever since, Washington has continued to provide a security umbrella. Today, Japan is moving forward with the full cognizance that the American security umbrella cannot be taken for granted.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>There is a growing recognition of the accretion in China’s economic and military power and a realisation that Washington and Beijing might eventually reach a <em>modus vivendi</em> at the cost of Japan’s interests and regional stability. Should Tokyo fail to take responsibility for its own sovereignty and territorial integrity, it runs the risk of being relegated to a passive role in the emerging dynamics of the Asian theater.</p>
+<p>Additionally, the US’s demands for NATO and other allies and partners to increase defence spending and shoulder greater responsibility for their security have forced Tokyo to envision a future without the advantage of a US presence in East Asia. That is a compelling reason for the spike in defence spending from 1% to 2% –a 100% rise in a short span of time.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read </span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/record-high-spending-japan-defence-budget-10731240/">With record-high spending, what is driving Japan’s changing defence outlook?</a></span></div>
+<p><strong>There is a narrative that Takaichi has inherited former PM Shinzo Abe’s vision. Has this influenced Japan moving away from its strict defence export guidelines?</strong></p>
+<p>Takaichi seems to be following Abe’s strategic reasoning in a much more defined manner. In many ways, she is the successor to some of the impulses Abe had shown towards adopting an active defence profile but was unable to bring them all to fruition in his term since it had to be an incremental process.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>In 2013, during his second term, Abe had laid the groundwork for a decisive shift by establishing the National Security Council and reviewing restrictive arms export guidelines in place since 1967, which in fact had been tightened in 1976 to become almost a ban.</p>
+<p>These guidelines historically limited arms exports while isolating the Japanese defence industry from the global market. He further reinterpreted collective security guidelines in 2015, giving some more elbow room to the Japanese Self-Defence Forces.</p>
+<p>This momentum seems to have culminated in the overturning of the arms export ban earlier this year. Under the new rules, Japan has declared that it intends to privilege the 17 countries with which Japan has defence technology cooperation frameworks not only for arms sales, but also for joint production and development, including India.</p>
+<p>Today, Japan is free to export lethal equipment and technology to these 17 nations provided internal clearances are acquired.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><strong>India is one of the 17 countries with whom Japan has a defence cooperation agreement. Is India-Japan defence collaboration expanding across domains?</strong></h2>
+<p>India and Japan have a full spectrum arrangement in terms of multiple dialogues and joint exercises involving the three services. Notably, the ‘Dharma Guardian’ exercise, which began during my time as Ambassador in 2018, started out with focus on jungle warfare and counter-insurgency.</p>
+<p>This was the first instance of Japan exercising with any country other than the US in the ground domain. Now, the exercise has grown in scope.</p>
+<p>There are also two joint air exercises: ‘Shinyuu Maitri’ which kicked off in 2018 for transport aircraft and the ‘Veer Guardian’ exercise for fighter jets launched in 2023. Even otherwise, our aircraft have halted in Japan while en route to Alaska for the US-led Red-Flag exercises.</p>
+<p>The bilateral maritime exercise ‘JIMEX’ (now JAIMEX) operates alongside the multi-lateral Malabar exercises that Japan became a permanent participant of in 2015.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><strong>The Malabar naval exercises began at a time when the Indo-Pacific theatre lacked recognition. Since then, all four members of the Quadrilateral Security Dialogue (India, the US, Japan and Australia) have become permanent participants of the exercise. How important is the Quad today for Japan’s vision of FOIP?</strong></p>
+<p>Firstly, it’s important to understand that while the Quad and the Malabar exercises revolve around the same core members, neither is a strategic treaty-based alliance structure.</p>
+<p>That being said, the Malabar exercise has been equated as the naval flip-side of the Quad. Both these structures are vital to Japan because they foster information exchange and a habit of cooperation among partners to deal with regional challenges.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/c-raja-mohan-indo-pacific-is-here-to-stay-japan-takaichi-10764088/">C Raja Mohan writes: The Indo-Pacific is here to stay — with or without Washington</a></span></div>
+<p>The threat perceptions are heightened because of a lack of transparency. Naval presence in parts of the Indo-Pacific space often masquerades as anti-piracy deployment. Research vessels often have larger strategic objectives, including intelligence gathering.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Regular, multilateral exercises – hosted on a rotating basis by India, Australia, Japan and the US – could provide the institutional framework for regional stability.</p>
+<p>Crucially, this combined presence acts as a counter-weight to disruptions that could potentially threaten regional supply chains. This stability is necessary to create a secure environment in which the Japanese industrial complex can engage in collaboration, such as the co-production of defence platforms.</p>
+<h2><strong>You have previously identified supply chains as a critical component of warfare, moving forward in the Indo-Pacific. Does Japan’s changing outlook on defence offer any manufacturing opportunities for India?</strong></h2>
+<p>Given Japan’s limited geography, risk mitigation strategy dictates a dispersal of the military industrial complex to trusted partner countries. I think India is perfectly positioned to fill this need – our Aatmanirbhar Bharat policy in defence manufacturing does not exclude foreign collaboration.</p>
+<p>India could also benefit from potential collaborations on projects like the Mogami-class frigates, learning Japanese best practices in metallurgy and much else. The co-development of next-gen robotics and unmanned ground vehicles could also be considered. Beyond simply serving our domestic needs, such projects could also help build regional inventories for friendly nations.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>In future wars of attrition, the ability to build defence equipment and weapon systems faster than the rate of destruction will be a major deciding factor for outcomes.</p>
+<p><strong>Given your extensive experience with Japan, do you foresee any points of friction or concern that Tokyo might have when exploring deeper defence or manufacturing ties with India?</strong></p>
+<p>I think the paramount concern for Japan, which mirrors OECD apprehensions, would be the strict protection of Intellectual Property (IP) and preventing diversion to others.</p>
+<p>As defence manufacturing opens up beyond the public sector units (DPSU’s) to private players, the Indian government is doing its best to put in place stringent rules and regulations to allay such concerns. As such, these apprehensions in regard to India are baseless, given <a href="https://indianexpress.com/article/explained/expert-explains-how-india-and-japan-can-deepen-their-business-ties-10768799/?ref=explained_pg"><strong>India’s</strong> </a>unblemished record.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>In my view, there needs to be uniformity in our investment policies. Japanese companies often find it challenging to deal with different state-level regulations. The Japanese are accustomed to a degree of hand-holding.</p>
+<p><strong>China’s government has been openly questioning Japan’s pivot and has used history as precedent in their criticisms. Is Japan’s shift in outlook more of a reactionary change or here to stay?</strong></p>
+<p>The Japanese defence minister did not mince words at the Shangri-La dialogue this year in expressing his views about militarization in the region.</p>
+<p>Japan does not require any country’s permission to review its defence policies. Close economic ties with others in the region cannot be at the cost of one’s security.</p>
+<p>The Japanese nation tends to move unitedly. It is akin to a large vessel that takes time to change direction, but once it does, it can maintain a steady course. It is the national character that, I think, is one of Japan’s strongest assets.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10769548"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July third, twenty twenty-six, at fifteen minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/india-japan-ties/" href="https://indianexpress.com/about/india-japan-ties/">India Japan ties</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/indo-pacific/" href="https://indianexpress.com/about/indo-pacific/">Indo-Pacific</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/expert-explains-japan-defence-pivot-and-india-opportunity-10769548/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-04 13:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
