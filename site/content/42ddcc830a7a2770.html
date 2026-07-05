@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Scientist wins Rs 95-lakh prize for decoding bird calls: Why researchers are excited about zebra finches' mistakes | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Scientist wins Rs 95-lakh prize for decoding bird calls: Why researchers are excited about zebra finches' mistakes</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-05</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Zebra_Finches-1600.jpg?w=1600" alt="Scientist wins Rs 95-lakh prize for decoding bird calls: Why researchers are excited about zebra finches' mistakes">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="zebra finches" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Zebra_Finches-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">The subject of Dr Julie Elie's work were zebra finches. (Photo: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>An American scientist has won a $100,000-prize for her work on how zebra finches communicate with each other. Dr <strong><a class="" href="https://indianexpress.com/article/technology/science/researcher-wins-100000-prize-for-decoding-zebra-finch-calls-using-ai-10759218/" rel="noopener" target="_blank">Julie Elie at the University of California, Berkeley, won the Coller Dolittle Challenge</a></strong> for Two-Way Interspecies Communication for discovering that “zebra finches classify their calls according to meaning more so than acoustics,” the UK-based Coller Foundation said in a statement. Elie identified 11 different calls that the birds make, and their meanings.</p>
+<p>Dr. Antonio Jose Osuna Mascaró, an animal cognition researcher at the University of Veterinary Medicine in Vienna, explains how scientists study birds’ ‘language’, and why Elie’s work is significant.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>For decades, scientists have known that animals use distinct calls in different situations. What exactly is new about Julie Elie’s work?</h2>
+<p>Traditionally, humans observe animals, record their calls, examine their acoustic structure and the circumstances in which they are produced, and then divide them into categories. But that leaves an important question unanswered: do those categories also exist for the animals themselves?</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>These researchers trained zebra finches to distinguish the different call types in their repertoire, using many examples from different individuals. The birds were remarkably good at doing so.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The strongest result, in my opinion, comes from their mistakes. The researchers compared the birds’ pattern of errors with what would be expected purely from acoustic similarity. The birds were more likely than expected to confuse different calls associated with similar meanings (behavioral functions) rather than sound similarity. This suggests that their perceptual organisation reflects not only what calls sound like, but also something about what those calls are used for.</p>
+<p><strong>What are the main methods researchers use to investigate whether a call carries specific information or meaning, and how does Julie Elie’s approach differ from or build on the earlier techniques?</strong></p>
+<p>There are several complementary approaches. The starting point is usually naturalistic observation: researchers ask when a call is produced, who produces it, who is present and what happens afterwards. Acoustic analysis can then determine whether sounds produced in different situations are structurally distinct.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Playback experiments have been especially important. Researchers play a recorded call in the absence of the original event and ask whether receivers respond appropriately. Classic studies of alarm calls, for example, showed that animals can produce different responses to calls associated with different predators. Studying alarm calls is the most common and easiest approach to study vocal communication in the animal world, since we can perceive the trigger, the vocalisation, and the response.</p>
+<p>What is unusual about this study is its systematic scale and the use of the birds’ own classification errors as data.</p>
+<p>They compared two things: which calls an acoustic classifier tends to confuse, and which calls the birds themselves tend to confuse. The fact that these two error patterns are not identical is central to the argument. The birds’ additional errors appear to group calls according to behavioral function, to their “meaning”</p>
+<p>So, the study asks: how is the entire repertoire organised in the bird’s perceptual space?</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><strong>AI is often described as the game-changer in efforts to decode animal communication. What can machine-learning tools detect that earlier generations of researchers could not, and what are the risks of over-interpreting patterns that AI finds?</strong></p>
+<p>I would actually use this study as a good example of why we should not confuse machine learning with understanding.</p>
+<p>Machine-learning tools are enormously useful because they can process quantities of data that would be impossible for a human observer to examine manually. They can identify subtle combinations of acoustic features, detect structure in very large repertoires, distinguish individuals, discover graded variation and find statistical regularities across millions of vocalisations.</p>
+<p>But a machine finding categories does not mean that those categories matter to the animal.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>This study illustrates that distinction very nicely. The researchers use computational tools to characterise the acoustic relationships among calls, but the crucial evidence comes from comparing those computational classifications with the behavior of the birds. The birds’ perceptual organisation contains structure that cannot be completely predicted from acoustics alone.</p>
+<p>That is, in my view, the correct relationship between AI and experimental biology. Machine learning can reveal patterns and generate hypotheses, but we still need experiments to establish whether animals perceive those patterns, use them and respond to them flexibly.</p>
+<p>The major risk is anthropomorphism by algorithm. If an AI system discovers 47 statistically separable vocal clusters, it is tempting to call them 47 “words”. But the clusters may reflect individual identity, sex, emotional arousal, recording location or microphone characteristics. Statistical structure is not automatically communicative structure, and communicative structure is not automatically language.</p>
+<p>The decisive question remains: what does the animal do with the information?</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><strong>Some researchers now speak of two-way interspecies communication rather than simply decoding animal signals. Scientifically, what would count as genuine two-way communication?</strong></p>
+<p>There is a large conceptual distance between decoding a signal and having a conversation.</p>
+<p>At the simplest level, two-way communication requires that information genuinely passes in both directions. A human or machine-generated signal should change the animal’s behavior in a predictable way, and the animal should also be able to produce signals whose interpretation changes our subsequent behavior. But a convincing case for something resembling conversation would require considerably more.</p>
+<p>The exchange should be contingent: the meaning of one contribution should depend on what happened immediately before. It should also be flexible, rather than a fixed chain of trained responses. Ideally, the system should allow some form of generalisation to new situations or new combinations, because otherwise it is difficult to distinguish communication from an elaborate sequence of conditioned behaviors.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Personally, the most convincing evidence would be an exchange in which an animal spontaneously provides information that the human does not already possess, the human responds on the basis of that information, and the animal then adjusts its subsequent communication according to that response.</p>
+<p>If scientists eventually manage to communicate meaningfully with certain animals, what are the biggest implications—for animal welfare, conservation, farming, or laboratory research?</p>
+<p>That would be fantastic, of course, like science fiction to me. We have been close to that in the past, of course, with ALEX the parrot and with Kanzi the bonobo, but those were interactions far from what a naïve perspective would expect from a conversation between species.</p>
+<p>I think we should be careful not to imagine a future in which animals simply tell us in human-like sentences that they are frightened or in pain. Communication systems are adapted to the ecological and social problems faced by each species. What matters to a zebra finch, an elephant or a cuttlefish may be structured in ways that do not map neatly onto human categories.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>I think it’s important to free ourselves from trying to “force” other species into our own way to understand the world. It’s extremely interesting to learn about the vocal communication of other species, of course, and there might be many surprises waiting to be discovered. We have had to reshape our understanding of animal communication multiple times, and we should be open to do it again in the future. Nevertheless, our language might be unique, and it could be meaningless to expect something similar in other species.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10772482"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/yashee/">
+<figure>
+<img alt="Yashee" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2019/08/yashee-resized.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/yashee/"><span></span>Yashee</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="5895939"></div><div class="follow_author_title" data-id="Yashee"></div><div class="follow_author_slug" data-id="yashee"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Yashee is a Senior Assistant Editor at The Indian Express, and she heads the Explained Desk. With over 12 years of experience in mainstream journalism, she specializes in translating intricate geopolitical shifts, legal frameworks, and historical narratives into accessible insight.
+
+Having started her career with Hindustan Times and later contributing to India Today (DailyO), Yashee brings a veteran’s perspective to contemporary analysis. She holds a Bachelor’s degree in English Literature from the historic Presidency College, Kolkata, and a postgraduate diploma from the Asian College of Journalism (ACJ), Chennai. Her work provides readers with the deep context needed to navigate a complex world.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/yashee/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifth, twenty twenty-six, at fifty-three minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/coller-dolittle-winner-zebra-finches-birdsong-scientists-10772482/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-05 13:58 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
