@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>England face Azteca hurdle: Why playing at a high altitude is so difficult | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>England face Azteca hurdle: Why playing at a high altitude is so difficult</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-05</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/azteca.jpg?w=1600" alt="England face Azteca hurdle: Why playing at a high altitude is so difficult">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Azteca" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/azteca.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Estadio Azteca in Mexico City is located 2,240 metres above sea level. Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">As the English football team prepares for its FIFA World Cup Round of 16 match against Mexico on Monday, manager Thomas Tuchel will have another set of numbers on his mind apart from his team’s 4-2-3-1 formation — 2240.</p>
+<p dir="ltr">That’s the altitude of Mexico City’s Estadio Azteca, which poses the biggest, or rather highest, hurdle for a team looking to set up a quarter-final clash with Brazil or Norway.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The altitude is Mexico’s greatest ally as the rarefied air can impede the English players’ oxygen intake. And England had little possibility of acclimatising to that height with just a four-day turnaround time after their Round of 32 match against the Democratic Republic of Congo.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p dir="ltr">Tuchel, therefore, has leaned into a counterintuitive tactic — leaving arrival in Mexico to <a href="https://indianexpress.com/article/sports/football/sleep-devices-secret-location-karma-england-plan-for-mexico-10769153/"><strong>the last minute</strong></a>, or 48 hours, as FIFA mandates. This is not an exact science, but Tuchel wants to reduce the inevitable damage from the altitude disadvantage.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">Mexico, meanwhile, has won all four of its World Cup matches at the Azteca, netting eight goals and conceding none.</p>
+<p dir="ltr"><strong>Why is the Azteca so challenging?</strong></p>
+<p dir="ltr">To begin with, its altitude. At 2,240 metres above sea level, the partial pressure of oxygen falls by roughly 20%, reducing the amount of oxygen available with each breath.</p>
+<p dir="ltr">The lower pressure reduces the number of oxygen molecules in the air, thus lowering aerobic capacity and making breathing heavier. With less oxygen entering the bloodstream, the body tries to ensure enough supply to muscles while putting pressure on the lungs. Decision-making, like physical performance, also depends on adequate oxygen supply to the brain. Thus, a slower recovery time could hamper actions such as counterattacking runs.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/sports/football/mexico-defence-england-real-problem-world-cup-2026-round-of-16-10770807/">Forget Maradona’s ghost, England’s real Azteca problem is Mexico’s defence</a></span></div></p>
+<p dir="ltr">Mexico has played all but one of their four games at the Azteca, and travels from a base only 15 minutes away. Their pre-tournament camp would have helped even the majority of the squad who don’t all live at altitude. They also have a formidable record at the Azteca — 70 wins, 17 draws and two losses.</p>
+<p dir="ltr">A landmark 2007 study published in <em>The BMJ</em>, which analysed 1,460 international matches in South America over a century, observed that teams accustomed to living and training at high altitudes tended to perform better when playing at low altitudes, likely due to long-term physiological adaptations such as greater oxygen-carrying capacity.</p>
+<p dir="ltr"><strong>What are the immediate effects of playing at such a height?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">Teams are likely to rely more heavily on substitutions in the second half and run fewer kilometres. A half hour into the game, high presses may feel daunting, fast sprints and quick turns will test the lungs, and the risk of dehydration is imminent.</p>
+<span class="custom-caption"><img alt="England vs Mexico" class="lazyloading size-medium wp-image-10771712" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/england-world-cup.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/england-world-cup.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> England players celebrate after the World Cup round of 32 soccer match between England and Congo in Atlanta on July 1. AP</span>
+<p dir="ltr">While the running itself might feel unimpeded because of less resistance, sharp intake of breath between accelerations during recovery is a common symptom. British high altitude runner Callum Elson told The Independent: “Recovery is key — that idea of trying to catch your breath, trying to let your heart rate get back down, once it’s up, it literally just doesn’t come down.”</p>
+<p dir="ltr"><strong>How does the ball travel at over 2,200 metres?</strong></p>
+<p dir="ltr">The <em>BMJ</em> study mentioned above noted a reduced air resistance due to thinner air, meaning that shots and long passes travel faster, farther and with less spin, requiring players to adjust their technique.</p>
+<p dir="ltr">Ahead of the 2010 World Cup, an Adidas study estimated that a free kick at high altitude could reach the goal up to 5% faster than the same kick at sea level.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">This has posed a worry for England goalie Jordan Pickford, and his defenders, Marc Guehi, Ezri Konsa and Djed Spence.</p>
+<p dir="ltr">But Mexico, which has been scoring through long-range goals, can falter on set-pieces.</p>
+<p dir="ltr">Aside from altitude, the home team’s other advantages will be the humidity, the noisy crowd — and the ghost of Diego Maradona. This, after all, was the stadium where the Argentinian great scored his (in)famous ‘Hand of God’ goal.</p>
+<p dir="ltr"><strong>Why did Tuchel choose to get in so late?</strong></p>
+<p dir="ltr">The BMJ study notes that lowland teams cannot fully acclimatise to playing conditions at an altitude in a brief period. Recommendations from football medical authorities have suggested around 10 days of acclimatisation for matches above 3,000 metres.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Such preparation, however, is often impractical in modern tournament schedules. England, for instance, just had a four-day turnaround time.</p>
+<p dir="ltr">English sides in the past have attempted to acclimatise differently to elevated playing conditions ahead of crucial matches. The rugby team once opted for a late arrival in Johannesburg (1,753m) under Eddie Jones. Legendary football coach Sir Bobby Robson took the English squad to Mexico a year ahead of the 1986 World Cup to familiarise the team with the conditions. Both teams lost anyway.</p>
+<span class="custom-caption"><img alt="Mexico players celebrate after the World Cup round of 32 soccer match between Mexico and Ecuador in Mexico City, Tuesday, June 30, 2026. AP/PTI" class="lazyloading size-medium wp-image-10771589" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/AP07_01_2026_000072B.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg 6844w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=607,405 607w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=1536,1024 1536w, https://indianexpress.com/wp-content/uploads/2026/07/AP07_01_2026_000072B.jpg?resize=2048,1365 2048w" height="4563" sizes="(max-width: 6844px) 100vw, 6844px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="6844"/> Mexico players celebrate after the World Cup round of 32 soccer match between Mexico and Ecuador in Mexico City, Tuesday, June 30, 2026. AP/PTI</span>
+<p dir="ltr">Tuchel has pragmatically chosen to accept the disadvantage. Mercedes’ F1 driver George Russell has echoed this logic, telling German news agency DPA International: “Sleeping you feel your heart rate is elevated and you feel a bit breathless…try and arrive as late as possible, and leave as soon as possible, because you don’t sleep that well.”</p>
+<p dir="ltr">This could affect running. “Getting there late is the best thing. You want to go into those 90 minutes being as fresh as possible. Any extra hour you are there your body is not in as good a place,” Russell said.</p>
+<p><strong>Do effects of altitude linger?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The effects of a short stay at altitude do not usually linger after descent. Symptoms of altitude illness typically improve within hours to a couple of days, according to the CDC Yellow Book. However, athletes who live or train at altitude can retain physiological adaptations, such as improved oxygen-carrying capacity, that may continue to benefit performance after they return to lower elevations.</p>
+<p>While conquering Azteca might be a glorious challenge, England are obviously aiming further — heading towards Brazil/Norway in Miami heat. Elson told The Independent, “If they get through, how absolutely exhausted are they going to be afterwards? Even if they manage in the moment with adrenaline… the after-effects of how they recover will be the really hard bit.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10771547"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shivani-naik/">
+<figure>
+<img alt="Shivani Naik" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/untitled-42.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shivani-naik/"><span></span>Shivani Naik</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951947"></div><div class="follow_author_title" data-id="Shivani Naik"></div><div class="follow_author_slug" data-id="shivani-naik"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shivani Naik is a senior sports journalist and Assistant Editor at The Indian Express. She is widely considered one of the leading voices in Indian Olympic sports journalism, particularly known for her deep expertise in badminton, wrestling, and basketball.
+
+Professional Profile
+Role: Assistant Editor and Columnist at The Indian Express.
+
+Specialization: While she covers a variety of sports, she is the primary authority on badminton for the publication. She also writes extensively about tennis, track and field, wrestling, and gymnastics.
+
+Writing Style: Her work is characterized by "technical storytelling"—breaking down the biomechanics, tactics, and psychological grit of athletes. She often provides "long reads" that explore the personal journeys of athletes beyond the podium.
+
+Key Topics &amp; Recent Coverage (Late 2025)
+
+Shivani Naik’s recent articles (as of December 2025) focus on the evolving landscape of Indian sports as athletes prepare for the 2026 Asian Games and beyond:
+
+Indian Badminton's "Hulks": She has recently written about a new generation of Indian shuttlers characterized by power and physicality, such as Ayush Shetty and Sathish Karunakaran, marking a shift from the traditionally finesse-based Indian style.
+
+PV Sindhu’s Resurgence: A significant portion of her late-2025 work tracks PV Sindhu’s tactical shifts under new coaching, focusing on her "sparkle" and technical tweaks to break out of career slumps.
+
+The "Group of Death": In December 2025, she provided detailed tactical previews for Satwiksairaj Rankireddy and Chirag Shetty’s campaign in the BWF World Tour Finals.
+
+Tactical Deep Dives: She frequently explores technical trends, such as the rise of "backhand deception" in modern badminton and the importance of court drift management in international arenas.
+
+Legacy and History: She often revisits the careers of legends like Saina Nehwal and Syed Modi, providing historical context to current Indian successes.
+
+Notable Recent Articles
+BWF World Tour Finals: Satwik-Chirag have it all to do to get through proverbial Group of Death. (Dec 2025)
+
+The age of Hulks in Indian badminton is here. (Dec 2025)
+
+Treadmill, Yoganidra and building endurance: The themes that defined the resurgence of Gayatri and Treesa. (Dec 2025)
+
+Ayush Shetty beats Kodai Naraoka: Will 20-year-old be the headline act in 2026? (Nov 2025)
+
+Modern Cinderella tale – featuring An Se-young and a shoe that fits snugly. (Nov 2025)
+
+Other Sports Interests
+
+Beyond the court, Shivani is a passionate follower of South African cricket, sometimes writing emotional columns about her irrational support for the Proteas, which started because of love for Graeme Smith's dour and doughty Test playing style despite being a left-hander, and sustained over curiosity over their heartbreaking habit of losing ICC knockouts.
+
+You can follow her detailed analysis and columns on her official Indian Express profile page.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shivani-naik/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifth, twenty twenty-six, at zero minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sports/" href="https://indianexpress.com/about/explained-sports/">Explained Sports</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sports/england-vs-mexico-azteca-altitude-10771547/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-05 03:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
