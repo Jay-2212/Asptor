@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Diljit Dosanjh’s Satluj pulled from ZEE5: Who was Jaswant Singh Khalra, whose life it brings to screen | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Diljit Dosanjh’s Satluj pulled from ZEE5: Who was Jaswant Singh Khalra, whose life it brings to screen</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-06</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Satluj-takedown.jpg?w=1600" alt="Diljit Dosanjh’s Satluj pulled from ZEE5: Who was Jaswant Singh Khalra, whose life it brings to screen">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Satluj removed from ZEE5 two days after release" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Satluj-takedown.jpg?w=1600" width="650"/><span class="ie-custom-caption">Originally titled Punjab ‘95, the project had remained unreleased in India after the CBFC withheld certification and reportedly sought extensive changes.</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Just two days after it premiered on streaming service ZEE5, Diljit Dosanjh-starrer <em>Satluj</em>, a film based on the life of human rights activist Jaswant Singh Khalra, has been made unavailable in India.</p>
+<p>In a statement on Sunday (July 5), ZEE5 said, “In light of the current developments, <em>Satluj</em> will be unavailable in India until further notice.” The platform added that it remained committed to exploring “every appropriate avenue through due process” to bring the film back to Indian audiences. While it has now been pulled from India, the film continues to stream internationally on ZEE5 Global.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Directed by Honey Trehan and produced by Ronnie Screwvala’s RSVP alongside MacGuffin Pictures, the film was <a href="https://indianexpress.com/article/entertainment/bollywood/diljit-dosanjhs-satluj-removed-from-zee5-the-film-will-be-unavailable-in-india-10772827/"><strong>released on ZEE5</strong></a> on July 3 after certification troubles delayed it for around three years. Here is what to know.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2>Who was Jaswant Singh Khalra?</h2>
+<span class="custom-caption"><img alt="Jaswant Singh Khalra (Wikimedia Commons)" class="lazyloading size-full wp-image-10773435" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/JaswantSinghKhalra.jpg" height="250" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="196"/> Jaswant Singh Khalra (Wikimedia Commons)</span>
+<p>Khalra hailed from Amritsar and was known for campaigning against the disappearance of thousands of Sikh youths during the Punjab militancy from the 1980s to the 1990s. Many were later found to have been killed in fake encounters.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The Cooperative Bank director-turned-human rights activist was also appointed as general secretary of the Shiromani Akali Dal’s human rights wing, created especially to examine alleged cases of extra-judicial killings.</p>
+<p>However, Khalra himself became a victim of one such forced disappearance. On September 6, 1995, he was kidnapped from his house, allegedly at the behest of the then-Punjab Police officials. The activist was allegedly tortured at the Jhabal police station before being shot dead, and his body was disposed of near the Harike Bridge on the Sutlej river.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Following a petition filed by Khalra’s widow, Paramjit Kaur, the Supreme Court in 1996 ordered that the case be handed over to the Central Bureau of Investigation (CBI).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>A Patiala court in 2005 convicted six policemen of his murder. The verdict was upheld by the Supreme Court in 2011. The same year, the National Human Rights Commission (NHRC) directed a high-level state committee to probe 657 militancy-era cases of official agencies cremating unclaimed bodies, an issue that Khalra’s investigations had helped bring to national attention.</p>
+<p>Today, Paramjit Kaur runs the Khalra Mission Organisation in his memory. In 2025, an elementary school in Fresno, California, became the first in the US to be named after Jaswant Singh Khalra.</p>
+<h2>Why did the film face delays?</h2>
+<p>The film was produced with the Khalra family’s consent, which the makers sought before work began on the project.</p>
+<p>Originally titled <em>Punjab ‘95</em>, the project ran into certification hurdles after it was submitted to the CBFC in 2022. The board reportedly sought as many as 127 cuts and also asked to change its title. The filmmakers challenged the decision in the Bombay High Court before later withdrawing the case. In 2023, the film was also withdrawn from a planned premiere at the Toronto International Film Festival.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>After around three years in limbo, the makers abandoned plans for a theatrical release and opted to premiere the film directly on ZEE5. The film was released as <em>Satluj</em>, with director Honey Trehan saying the version that reached the platform was the complete film, “in its original form as we always intended”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/diljit-dosanjh-shares-satluj-village-screening-post-after-zee5-removes-film-in-india-10773366/">Diljit Dosanjh shares ‘Satluj’ village screening post after ZEE5 removes film in India</a></span></div>
+<p>However, just two days after its release, ZEE5 removed the film from its India catalogue. Director Honey Trehan said he learnt of the decision only after it was implemented. “I got to know about the removal of <em>Satluj</em> from ZEE5 in India at around 8.15 pm on Sunday. I am at a loss right now. I don’t know how to react to this development,” he told <em>The Indian Express</em>.</p>
+<p>In a statement, ZEE5 thanked viewers for what it described as an “overwhelming response” to the film and said it stood by “the creative vision behind” <em>Satluj</em>. “We believe powerful storytelling has the ability to inspire, endure and leave a lasting impact,” the platform said, adding that its commitment to creators and authentic storytelling remained “unwavering”.</p>
+<p>Before the film was taken down, Dosanjh had acknowledged concerns that such a move was possible during a live interaction on social media. “There was a fear that it could be removed. I think you might have downloaded the movie by now. So, now there is no fear,” he had said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Dosanjh has previously explored Punjab’s militancy on screen. <em>Punjab 1984</em>, which dealt with human rights during the insurgency, was released without facing similar hurdles in 2014. He later starred in <em>Chamkila</em>, based on singer Amar Singh Chamkila, who was assassinated in 1988.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10773399"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/">
+<figure>
+<img alt="Kamaldeep Singh Brar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/"><span></span>Kamaldeep Singh Brar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2673821"></div><div class="follow_author_title" data-id="Kamaldeep Singh Brar"></div><div class="follow_author_slug" data-id="kamaldeep-singh-brar"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Kamaldeep Singh Brar is a Principal Correspondent at The Indian Express, primarily covering Amritsar and the Majha region of Punjab. He is one of the publication's key reporters for stories involving the Akal Takht, the Shiromani Gurdwara Parbandhak Committee (SGPC), and the sensitive socio-political issues of the border districts.
+
+Core Beats &amp; Specializations
+
+Religious &amp; Panthic Affairs: He has deep expertise in the internal workings of the Akal Takht and SGPC, frequently reporting on religious sentences (Tankhah), Panthic politics, and the influence of Sikh institutions.
+
+National Security &amp; Crime: His reporting covers cross-border drug smuggling, drone activities from Pakistan, and the activities of radical groups.
+
+Regional Politics: He is the primary correspondent for the Majha belt, covering elections and political shifts in Amritsar, Tarn Taran, and Gurdaspur.
+
+Recent Notable Articles (Late 2025)
+
+His work in late 2025 has been centered on judicial developments, local body elections, and religious controversies:
+
+1. Religious Politics &amp; Akal Takht
+
+"Akal Takht pronounces religious sentences against former Jathedar Giani Gurbachan Singh" (Dec 8, 2025): Covering the historic decision to hold the former Jathedar guilty for granting a pardon to Dera Sacha Sauda chief Gurmeet Ram Rahim in 2015.
+
+"YouTube suspends SGPC’s channel for a week over video on 1984 Army action" (Nov 20, 2025): Reporting on the digital friction between global tech platforms and Sikh religious bodies.
+
+"As AAP govt grants Amritsar holy tag, a look at its fraught demand" (Nov 28, 2025): An analytical piece on the long-standing demand for declaring Amritsar a "holy city" and its political implications.
+
+2. Crime &amp; National Security
+
+"Mostly Khalistanis on Amritpal’s hit list: Punjab govt to High Court" (Dec 16, 2025): Reporting on the state government's claims regarding jailed MP Amritpal Singh orchestrating activity from prison.
+
+"Punjab man with links to Pakistan’s ISI handlers killed in encounter" (Nov 20, 2025): Detailing a police operation in Amritsar involving "newly refurbished" firearms likely sent from across the border.
+
+"15 schools in Amritsar get bomb threat emails; police launch probe" (Dec 12, 2025): Covering the panic and police response to mass threats against educational institutions.
+
+3. Political Analysis &amp; Elections
+
+"AAP wins 12 of 15 zones in SAD stronghold Majitha" (Dec 19, 2025): Highlighting a significant shift in the 2025 rural elections where the Akali Dal lost its grip on a traditional fortress.
+
+"Tarn Taran bypoll: woman faces threats after complaining to CM Mann about drug menace" (Nov 9, 2025): A ground report on the personal risks faced by citizens speaking out against the illegal drug trade in border villages.
+
+"AAP wins Tarn Taran bypoll, but SAD finds silver lining" (Nov 14, 2025): Analyzing the 2025 assembly by-election results and the surprising performance of Independents backed by radical factions.
+
+4. Human Interest
+
+"Two couples and a baby: Punjab drug addiction tragedy has new victims" (Nov 20, 2025): A tragic investigative piece about parents selling an infant to fund their addiction.
+
+"Kashmiri women artisans debut at Amritsar’s PITEX" (Dec 8, 2025): A feature on financial independence initiatives for rural women at the Punjab International Trade Expo.
+
+Signature Beat
+
+Kamaldeep is known for his nuanced understanding of border dynamics. His reporting often highlights the "drug crisis in the underprivileged localities" (like Muradpur in Tarn Taran, Nov 9, 2025), providing a voice to marginalized communities affected by addiction and administrative neglect.
+
+X (Twitter): @kamalsbrar                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/kamaldeep-singh-brar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July sixth, twenty twenty-six, at eleven minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/satluj-removed-zee5-india-diljit-dosanjh-film-10773399/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-06 08:56 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
