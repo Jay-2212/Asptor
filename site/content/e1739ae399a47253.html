@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>In India’s bumbling ethanol transition, Brazil’s masterclass in biofuel adoption offers takeaways | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>In India’s bumbling ethanol transition, Brazil’s masterclass in biofuel adoption offers takeaways</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-07</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/brazil-india-ethanol.jpg?w=1600" alt="In India’s bumbling ethanol transition, Brazil’s masterclass in biofuel adoption offers takeaways">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A commercial flex-fuel hybrid electric car tested with a Toyota Prius as development mule in Brazil." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/brazil-india-ethanol.jpg?w=1600" width="650"/><span class="ie-custom-caption">A commercial flex-fuel hybrid electric car tested with a Toyota Prius as development mule in Brazil. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In the mid-1970s, faced with surging oil import bills and an imploding global sugar market, Brazil made a bold bet: it would run its cars on alcohol. Half a century later, this Brazilian push to ramp up ethanol use in its auto fuel mix is now a masterclass in biofuel adoption.</p>
+<p>There are perhaps three key enabling factors that have made this a success: a graded, spaced-out approach to fuel blending with predefined milestones; the vehicular ecosystem being given enough time to adapt to this transition in tandem with clear communication guidance to motorists; and offering the power of choice and visible price incentives for consumers to shift to ethanol that is now enshrined in a national law.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>In India’s rushed and <a href="https://indianexpress.com/article/explained/explained-economics/e20-petrol-ethanol-mileage-engine-concerns-e25-10772358/"><strong>increasingly bumbling efforts</strong></a> to dovetail ethanol into its fuel mix, all three established Brazilian learnings have been flouted.</p>
+<p><strong>Context for adoption, then and now</strong></p>
+<p>Let’s consider the timing aspect. In response to the 1973 global oil crisis, the Brazilian government launched the National Alcohol Program (Proálcool) in 1975 to reduce petroleum dependence by promoting ethanol additives.</p><div id="taboola-mid-article-personalisation"></div>
+<p>But its first ethanol blending law, Brazil’s legislation requiring a 5% blend of anhydrous ethanol into petrol, goes all the way back to 1931. This decades-long arc culminated in the 2024 passage of the Fuel of the Future and Mover Program legislation to heavily boost low-carbon vehicle technologies and biofuel adoption, with E30 petrol blend mandated in 2025.</p>
+<p>In comparison, the timeline of India’s ethanol-blended petrol programme technically spans 2003 to 2026, but even in that, much of the action is front-loaded. It was only in 2022 that 10% ethanol blending was achieved, with a rapid increase to 20% in just three years.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/vikram-gulati-of-toyota-kirloskar-motors-ethanol-crucial-for-india-fastest-cheapest-way-to-decarbonize-road-mobility-10773077/">‘Ethanol crucial for India; fastest, cheapest way to decarbonise road mobility’</a></span></div>
+<p>The government had originally planned to dispense petrol blended with 20% ethanol only by 2030, but the E20 fuel is now the standard petrol variant available nationwide. Since then, there has been a move to shift to E25 as the base fuel, with a simultaneous push for E85-100 fuels for specialised flex-fuel vehicles (FFVs).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>FFVs are essentially internal combustion engine vehicles engineered to operate on more than one type of fuel — typically petrol blended with ethanol or methanol. These vehicles use a fuel composition sensor to automatically adjust fuel injection and ignition timing based on the blend in the tank, allowing seamless switching between petrol and ethanol and varying degrees of blends.</p>
+<p><strong>Getting the infra ready</strong></p>
+<p>On the second aspect of readying the vehicular ecosystem, too, big differences emerge. Brazil started early with its policy to promote FFVs, and the vehicles have been running for over two decades, seen as a solution for driving the country’s transition to a cleaner mobility model.</p>
+<p>It was way back in 1979 that Italian auto major Fiat launched the 147, the world’s first vehicle powered entirely by ethanol in Brazil. Volkswagen, GM, and Ford quickly followed suit amid the then global oil crisis. That tempo was lost as oil prices fell. The Brazilian auto industry subsequently started producing FFVs at scale from early 2003, when ethanol suddenly seemed economically viable again.</p>
+<p>On March 23 that year, Volkswagen introduced the first flex-fuel vehicle to the Brazilian market, and other companies — including General Motors and Ford — eventually followed suit, according to data from consultancy Argus.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Toyota brought in its Corolla flex. FFVs went on from selling just 48,178 units in 2003, or under 4% of total light motor vehicle demand, to 1.63 million vehicles last year, or nearly 90% of the Brazilian car fleet. The domestic car industry also reached a milestone of having delivered 40 million flex-fuel vehicles as of February since 2003, according to Brazilian industry body Anfavea.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/expert-explains-delhi-shift-ev-policy-challenges-10774137/">Expert Explains | From charging points to power grid, challenges in Delhi’s shift to EVs</a></span></div>
+<p>In India, even as E85 fuel dispensing stations are being established nationwide, only a few vehicle prototypes are in the works.</p>
+<p>While the flex fuel setup entails an entirely separate vehicle category and a range of fresh vehicle readiness certifications, as of now, India has only a handful of cars in the category: the newly launched WagonR flex fuel model and the Toyota Hycross hybrid flex fuel prototype, the Tata Punch and Hyundai Creta flex fuel versions, alongside some two-wheeler makers including Hero and TVS. Most cars and two-wheelers on Indian roads are not geared up for handling higher blends of ethanol in the fuel mix.</p>
+<p><strong>Choice to commuters</strong></p>
+<p>Over the past five decades, Brazil has also worked hard to give the power of choice to its motorists. At nearly every petrol pump in Brazil now, people have an option to choose between blended petrol, which typically includes E27 ethanol, and E100, which is pure hydrous ethanol. Alongside that, since Brazilians got carmakers to switch to FFVs, consumers can fill up with whichever option is cheaper at the pump on a particular day. Often, E100 is cheaper by 25-35% compared to lower blended petrol.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The flex fuel cars were a big hit with Brazilian consumers, largely because government price support made the blended fuel cheaper than petrol. Ethanol also improves acceleration and reduces knocking, an advantage in a country where Formula One racing is a national obsession. By the late 1980s, nine out of every 10 new cars sold in Brazil were capable of running on ethanol alone.</p>
+<p>In India, that is far from the case. Motorists here were told that performance would not be affected. But the definition of performance did not include mileage. That has come back to bite the decision-makers, as vehicle owners noticed a sharp dip in fuel efficiency, with the promise of more efficiency loss as blending increases. Concerns over vehicle damage appear somewhat exaggerated, though there are concerns about plastic and rubber parts getting degraded in older vehicles.</p>
+<p>All the while, Brazil was focusing on blended fuel and ethanol, implementing policies in a phased manner to ensure that people who had bought vehicles earlier did not feel at a disadvantage in terms of harm to their vehicles.</p>
+<p><strong>Questions for India</strong></p>
+<p>In India, the push to progressively raise ethanol blending in petrol from the current E20 level to E25, before transitioning towards flex-fuel vehicles and E85-E100 fuels, is an integral part of the strategy to reduce dependence on imported fossil fuels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>According to an official, “India’s future mobility ecosystem will combine EVs, biofuels, hydrogen and renewables in a manner suited to Indian realities”. India currently imports nearly 88.5% of its crude oil requirement, making the economy and energy security vulnerable to geopolitical disruptions. But the rushed manner in which it has happened, without adequate disclaimers or preparation, raises serious questions.</p>
+<p>Brazil’s story may have a template for how India could move forward. Its widespread use of flex-fuel vehicles is a story of strong government mandates, visible price incentives for consumers, clear guidance to car makers and robust consumer education that helped mainstream higher ethanol blends like E20 and above. For India, this offers a ready template.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10775385"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/anil-sasi/">
+<figure>
+<img alt="Anil Sasi" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/anil-sasi.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/anil-sasi/"><span></span>Anil Sasi</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951035"></div><div class="follow_author_title" data-id="Anil Sasi"></div><div class="follow_author_slug" data-id="anil-sasi"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Anil Sasi is the National Business Editor at The Indian Express, where he steers the newspaper’s coverage of the Indian economy, corporate affairs, and financial policy. As a senior editor, he plays a pivotal role in shaping the narrative around India's business landscape.
+Professional Experience Sasi brings extensive experience from some of India’s most respected financial dailies. Prior to his leadership role at The Indian Express, he worked with:
+
+
+ 	
+The Hindu Business Line
+
+ 	
+Business Standard
+
+
+His career trajectory across these premier publications demonstrates a consistent track record of rigorous financial reporting and editorial oversight.
+Expertise &amp; Focus With a deep understanding of market dynamics and policy interventions, Sasi writes authoritatively on:
+
+
+ 	
+Macroeconomics: Analysis of fiscal policy, budgets, and economic trends.
+
+ 	
+Corporate Affairs: In-depth coverage of India's major industries and corporate governance.
+
+ 	
+Business Policy: The intersection of government regulation and private enterprise.
+
+
+Education Anil Sasi is an alumnus of the prestigious Delhi University, providing a strong academic foundation to his journalistic work.
+Find all stories by Anil Sasi here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/anil-sasi/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July seventh, twenty twenty-six, at seventeen minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/ethanol/" href="https://indianexpress.com/about/ethanol/">ethanol</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/india-ethanol-transition-brazil-lessons-fuel-10775385/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-07 11:32 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
