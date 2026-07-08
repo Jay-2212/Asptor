@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why the Ram Temple Trust is changing — and how it differs from India’s other major temple bodies | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why the Ram Temple Trust is changing — and how it differs from India’s other major temple bodies</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-08</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-Ram-Mandir-Ayodhya_expl.jpg?w=1600" alt="Why the Ram Temple Trust is changing — and how it differs from India’s other major temple bodies">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="disc-paragraph story_details" id="pcl-full-content">
+<p><span style="font-weight: 400">The <strong><a class="" href="https://indianexpress.com/article/cities/lucknow/ram-temple-case-70-thefts-cctv-gaps-flawed-counting-5-key-findings-10775086/">Ram Temple Trust</a></strong> has accepted the resignations of its two most influential office-bearers, General Secretary Champat Rai and trustee Anil Mishra, and announced that it will appoint a Chief Executive Officer for the first time. The move marks the biggest administrative overhaul of the body that runs the Ayodhya temple since it was constituted in 2020.</span></p>
+<p><span style="font-weight: 400">But what exactly is this Trust, officially called the Shri Ram Janmabhoomi Teerth Kshetra? Who runs it? Who oversees it? And why does it function differently from India’s other major temple bodies?</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>How did the Trust come into being?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Advertisement</div><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250"></div></div>
+<p><span style="font-weight: 400">The Shri Ram Janmabhoomi Teerth Kshetra owes its existence to the Supreme Court’s November 2019 Ayodhya judgment. The Court directed that the government formulate a scheme within three months for setting up the trust and transferring the disputed land to it. Acting under the Acquisition of Certain Area at Ayodhya Act, 1993, the Centre constituted the Trust on February 5, 2020, and transferred the acquired land to it through a Gazette notification.</span></p>
+<p><span style="font-weight: 400">Unlike Tirupati, Jagannath, Vaishno Devi or Kashi Vishwanath, the Ram Temple is not governed by a dedicated statute enacted by a state legislature. Its legal foundation is a combination of the Supreme Court’s 2019 judgment, the 1993 Ayodhya Acquisition Act, the Central government’s scheme and notification, and the trust deed of the Shri Ram Janmabhoomi Teerth Kshetra.</span></p><div id="taboola-mid-article-personalisation"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/ram-temple-donation-system-ayodhya-vs-tirupati-jagannath-10766126/">How India’s biggest temples safeguard devotees’ offerings — and where Ayodhya’s Ram Temple differs</a></span></div>
+<p><span style="font-weight: 400">The trust is therefore neither a conventional private religious trust nor a statutory temple board established by legislation. It occupies a unique institutional position: a public religious trust brought into existence by executive action in implementation of a judicial mandate.</span></p><div class="desktop-full-ad"><div class="adsbox970x90" style=""><div class="ie-adtext">Advertisement</div><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_728X90"></div></div></div>
+<h2><b>Who runs the Trust?</b></h2>
+<p><span style="font-weight: 400">The 15-member Trust is the temple’s highest decision-making body. It is chaired by Mahant Nritya Gopal Das, although because of age and ill health, day-to-day leadership gradually came to rest with General Secretary Champat Rai, who emerged as the public face of the institution.</span></p>
+<p><span style="font-weight: 400">The trust deed provides for a combination of permanent members, nominated members and ex-officio representatives, ensuring representation from the religious community as well as the Centre and the Uttar Pradesh government. Construction has been supervised by a committee headed by former Principal Secretary to the Prime Minister, Nripendra Mishra, as ex-officio member.</span></p>
+<span class="custom-caption"><img alt="Ram Temple" class="lazyloading size-medium wp-image-10776130" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=600,462" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg 1540w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=450,347 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=600,462 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=768,592 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=525,405 525w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Ram-Temple_Key-faces.jpg?resize=1536,1184 1536w" height="1187" sizes="(max-width: 1540px) 100vw, 1540px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1540"/> The 15-member Ram Temple Trust is the temple’s highest decision-making body.</span>
+<p><span style="font-weight: 400">The Trust also includes senior advocate K Parasaran, IAS officer Prashant Lokhande as Central government representative, and IAS officers Sanjay Prasad and Shashank Tripathi as UP government representatives. Rest of the members are revered seers from the Hindu community associated with the Ram Janmabhoomi movement.</span></p>
+<p><span style="font-weight: 400">Unlike statutory temple boards headed by executive officers or chief administrators, the Ram Temple’s administration has so far largely been driven by trustees and office-bearers themselves.</span></p>
+<p><b>Who manages the temple every day?</b></p>
+<p><span style="font-weight: 400">Unlike Tirupati or Vaishno Devi, the Ram Temple has not had a professional chief executive. Instead, administrative responsibilities have been divided among individual office-bearers.</span></p>
+<p><span style="font-weight: 400">Champat Rai oversaw overall administration, trust member Anil Mishra supervised donations and recruitment linked to the counting system, retired banker Subhash Srivastava managed the counting process, while former RSS </span><i><span style="font-weight: 400">prant pracharak</span></i><span style="font-weight: 400"> Gopal Rao looked after day-to-day temple operations, including darshan arrangements.</span></p>
+<p><span style="font-weight: 400">The donation controversy exposed the limitations of this founder-led model. What had worked during the construction of the temple came under strain once it became one of the country’s busiest pilgrimage centres, receiving around one lakh devotees every day.</span></p>
+<p><span style="font-weight: 400">With a significant number of trustees and office bearers being connected with the RSS — Rai, Anil Mishra, Gopal Rao and Subhash Srivastava are all from the RSS — a “Sangh ecosystem” virtually runs the temple, sources said.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/ram-temple-donation-row-hindu-temple-management-india-10765396/">Ram Temple donation row: Who manages India’s temples, and what is the state’s role?</a></span></div>
+<p><span style="font-weight: 400">The recruitment rules of the Temple are not public, but police investigations into the donation theft case have found that quite a few people in the temple were engaged for daily work in an ad hoc manner and appointment letters for many have not been found yet. In fact, the six outsourced counting agents, who were supposedly hired by the State Bank of India for counting donations, were actually recommended to the bank by Trust office bearers. One of them is the relative of Rai’s driver Tinnu Yadav.</span></p>
+<p><span style="font-weight: 400">Yadav, who is under arrest, was entrusted with the keys to the donation boxes. The Trust has not yet made it clear under what rules he had been given that responsibility.</span></p>
+<p><span style="font-weight: 400">Investigations into the donation theft case have also revealed that while a standard operating procedure (SOP) was drafted under the leadership of Anil Mishra for temple operations, its implementation left a lot to be desired.</span></p>
+<p><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> had earlier reported that a private internal audit commissioned in 2020 had described the management at the execution level as “highly unprofessional” and flagged the absence of SOPs, systematic financial records, defined reporting hierarchies, HR processes and maker-checker controls.</span></p>
+<p><b>Why appoint a CEO now?</b></p>
+<p><span style="font-weight: 400">The Trust’s decision to appoint a Chief Executive Officer marks its biggest administrative restructuring since it was created in 2020.</span></p>
+<p><span style="font-weight: 400">Unlike the existing arrangement, where trustees directly supervised several operational functions, the CEO is expected to oversee day-to-day administration, leaving the Trust to focus on policy decisions.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/ayodhya-bar-association-funds-case-accused-10763043/">Ayodhya Bar Association refuses to represent the accused in Ram Temple funds case. Is this legal?</a></span></div>
+<p><span style="font-weight: 400">The move brings the Ram Temple closer to the governance model followed by several older temple institutions. Tirumala Tirupati Devasthanams is administered by an IAS Executive Officer, the Shri Mata Vaishno Devi Shrine Board functions through a CEO, Jagannath Temple has a Chief Administrator and Kashi Vishwanath is run through executive officers under a statutory framework.</span></p>
+<p><span style="font-weight: 400">The appointment comes in the backdrop of the donation controversy and the RSS’s call for “transparent financial management and efficient administrative systems” to restore public confidence.</span></p>
+<p><b>What does the rulebook say?</b></p>
+<p><span style="font-weight: 400">Unlike most of India’s major temple bodies, much of the Ram Temple Trust’s internal rulebook remains outside the public domain.</span></p>
+<p><span style="font-weight: 400">While the Centre notified the Trust’s creation in February 2020, the detailed government scheme under which it was constituted and the Trust Deed have not been publicly released. An RTI applicant seeking these records was denied access after the Ministry of Home Affairs told the Central Information Commission (CIC) that the documents formed part of a “confidential file” because of the sensitivity of the matter. The CIC also held that the Trust is not a “public authority” under the RTI Act and is therefore not obliged to disclose its internal documents.</span></p>
+<p><span style="font-weight: 400">Consequently, many aspects of the Trust’s functioning have entered the public domain only during controversies.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The donation row led the Trust to publicly explain its counting process, inventory registers and handling of donated valuables. Following the resignations of Champat Rai and Anil Mishra, another internal rule became public when senior trustee K Parasaran clarified that under the Trust’s constitution, a resignation takes effect immediately upon being submitted and does not require formal acceptance.</span></p>
+<p><span style="font-weight: 400">Earlier litigation over land purchases similarly brought into court parts of the Trust’s internal framework to explain the powers of office-bearers and committees.</span></p>
+<p><span style="font-weight: 400">By contrast, the governing Acts, rules and administrative structures of institutions such as Tirupati, Jagannath, Vaishno Devi and Kashi Vishwanath are publicly available. The Ram Temple’s institutional architecture has instead become visible largely through litigation, official statements and crises rather than through an accessible rulebook.</span></p>
+<p><span style="font-weight: 400">That distinction has acquired greater significance in the wake of the donation controversy. In its first public statement on the issue, the RSS itself called for an end to the “confusion and uncertainty” surrounding the temple’s administration and urged the Trust to restore public confidence through “transparent financial management and efficient administrative systems”. The proposed appointment of a CEO appears to be part of that broader effort to institutionalise the administration of a temple that has rapidly grown into one of the country’s biggest religious institutions.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10776127"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ayodhya-ram-temple-trust-ceo-governance-10776127/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-08 07:12 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
