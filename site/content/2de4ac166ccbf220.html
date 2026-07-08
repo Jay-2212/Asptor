@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | Why India’s engineering education needs a reset in the AI era | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | Why India’s engineering education needs a reset in the AI era</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-08</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-IIT-Delhi_expl.jpeg?w=1600" alt="Expert Explains | Why India’s engineering education needs a reset in the AI era">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="engineering" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-IIT-Delhi_expl.jpeg?w=1600" width="650"/><span class="ie-custom-caption">The IITs and a handful of premier public and private institutions continue to attract the country’s brightest students, achieve excellent placements, and expand their research and innovation ecosystems. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">India’s ambition to become a global-tech powerhouse hinges on its ability to produce world-class engineers. From artificial intelligence (AI), semiconductors, and quantum technologies to advanced manufacturing, clean energy, and the digital economy, engineering talent will be the cornerstone of the country’s next phase of growth and global competitiveness.</span></p>
+<p><span style="font-weight: 400">Yet, why is engineering education — the very pipeline expected to power the AI revolution — steadily losing its sheen?</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The contrast is striking. While the Indian Institutes of Technology (IITs) and a handful of premier public and private institutions continue to attract the country’s brightest students, achieve excellent placements, and expand their research and innovation ecosystems, a large segment of engineering colleges is witnessing declining admissions, weak faculty, outdated curricula, and poor employability. The trend is reflected in the All India Council for Technical Education’s (AICTE) decision during 2025-26 to place <strong><a class="" href="https://indianexpress.com/article/education/58-engineering-colleges-closed-across-india-uttar-pradesh-maharashtra-highest-aicte-govt-data-jee-main-2026-advanced-10772452/">58 engineering colleges</a></strong> under progressive closure and discontinue more than 950 engineering and technical courses.</span></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The challenge, therefore, is not that engineering has become less relevant; rather, the real crisis lies in the widening gap between the capabilities expected by a technology-driven economy and those delivered by a large section of India’s engineering education ecosystem. Unless this gap is bridged, India’s aspirations for global leadership in deep technologies could be constrained not by a shortage of opportunities but by a shortage of employable, high-quality engineering talent.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">We examine why engineering education is losing its appeal despite unprecedented demand for engineers, analyse the structural factors driving institutional decline, and explore the reforms needed to make engineering education future-ready, industry-responsive, and globally competitive.</span></p>
+<h2><b>How AICTE approves and closes engineering colleges</b></h2>
+<p><span style="font-weight: 400">The AICTE, India’s apex statutory regulator for technical education under the AICTE Act, 1987, traces its origins to an advisory body established in 1945. It is mandated to plan, coordinate, regulate, and promote the development of technical education by prescribing norms and standards, approving and inspecting institutions and programmes, framing regulations, and fostering quality, innovation, faculty development, and student welfare across the country.</span></p>
+<p><span style="font-weight: 400">Every engineering institution in India must obtain AICTE approval before admitting students. Approval is contingent upon compliance with the prescribed norms for infrastructure, faculty, governance, financial viability, laboratories, libraries, classrooms, and other academic and operational requirements. It is not a one-time licence but a continuous regulatory process that requires institutions to maintain these standards year after year. Based on periodic assessments of compliance and performance, AICTE may permit expansion, reduce student intake, impose restrictions, or even withdraw approval.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/what-makes-a-good-engineering-college-faculty-quality-internships-research-exposure-innovation-ecosystems-josaa-mhtcet-iit-nit-bits-vit-10697196/">What makes a ‘good’ engineering college</a></span></div>
+<p><span style="font-weight: 400">One of AICTE’s key regulatory mechanisms is “progressive closure”, introduced to safeguard students while ensuring the orderly exit of non-viable institutions. Under this framework, institutions are barred from admitting fresh students but allowed to continue until existing batches graduate.</span></p>
+<p><span style="font-weight: 400">Progressive closure is typically invoked for persistently low admissions, failure to recruit and retain qualified faculty, or continued non-compliance with prescribed academic, infrastructure, and operational norms. While such closures are a necessary regulatory correction to years of indiscriminate expansion, they also expose the deeper structural challenges confronting India’s engineering education ecosystem.</span></p>
+<p><b>Shift in policy focus</b></p>
+<p><span style="font-weight: 400">Until the late 1990s, engineering education in India was largely confined to publicly funded institutions such as the IITs, regional engineering colleges (now National Institutes of Technology, or NITs), a few state engineering colleges, and private institutions concentrated mainly in Maharashtra, Karnataka, and Tamil Nadu. Limited capacity made admissions highly competitive, leaving the country with a persistent shortage of engineering graduates.</span></p>
+<p><span style="font-weight: 400">The global IT boom around the Y2K revolution transformed this landscape. Surging worldwide demand for software professionals triggered an unprecedented expansion of engineering education. Thousands of new colleges emerged across metropolitan, urban, and rural India.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="engineering" class="lazyloading size-medium wp-image-10775915" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-NIT-rourkela.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ex-NIT-rourkela.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> The main building of NIT Rourkela. The Union government established new IITs and IIITs and upgraded the regional engineering colleges into NITs. Photo: Wikimedia Commons</span>
+<p><span style="font-weight: 400">At the same time, the Union government expanded the network of Institutes of National Importance (INIs) by establishing new IITs and Indian Institutes of Information Technology (IIITs) and upgrading the regional engineering colleges into NITs. Today, India has 79 INIs: 23 IITs, 31 NITs, and 25 IIITs. The remainder comprises state universities, affiliated colleges, and private engineering institutions regulated by AICTE.</span></p>
+<p><span style="font-weight: 400">As access widened, the policy focus shifted from expansion to excellence. While AICTE approval remained the statutory requirement for establishing and operating engineering institutions and programs (except most INIs, which enjoy statutory autonomy), the National Board of Accreditation (NBA) introduced outcome-based accreditation to benchmark programme quality against global standards. Replacing the traditional input-based approach, the NBA adopted internationally aligned accreditation criteria based on measurable learning outcomes, graduate attributes, continuous improvement, and industry relevance, consistent with the Washington Accord. Accreditation soon became a key prerequisite for programme expansion, marking India’s transition from expanding engineering capacity to building globally competitive engineering education.</span></p>
+<p><b>Survival and sustainability</b></p>
+<p><span style="font-weight: 400">The AI revolution, which gathered momentum in the mid-2010s, has fundamentally reshaped engineering education. As industry demand shifted rapidly towards computer science, AI, data science, and allied disciplines, student preferences followed suit, while traditional branches such as mechanical, electrical, and related engineering experienced sustained declines in demand.</span></p>
+<p><span style="font-weight: 400">The transition accelerated after the <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">COVID-19</a> pandemic, when AICTE removed the requirement for NBA accreditation to increase student intake or introduce new programmes, enabling institutions to respond more quickly to market demand. Consequently, many reputed institutions, including several premier colleges, expanded capacity in high-demand disciplines while rationalising seats in traditional branches. As admissions became concentrated in a relatively small number of institutions, hundreds of lower-tier colleges were left with severely depleted enrolments, eroding their financial viability.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/beyond-neet-paper-leak-expanding-supply-is-the-only-lasting-solution-10718676/">Beyond NEET paper leak: Expanding supply is the only lasting solution</a></span></div>
+<p><span style="font-weight: 400">India today has an approved undergraduate engineering intake of nearly 15 lakh seats</span><b>, </b><span style="font-weight: 400">of which the IITs account for about</span> <span style="font-weight: 400">19,000</span><b>, </b><span style="font-weight: 400">the NITs</span> <span style="font-weight: 400">for about 25,000, and the IIITs for about</span> <span style="font-weight: 400">11,000. Yet, several thousand seats even in NITs and IIITs remain unfilled each year, while 20-40% of seats in many traditional programmes remain vacant.</span></p>
+<p><span style="font-weight: 400">The imbalance between student demand and institutional capacity has made survival increasingly difficult for a large segment of engineering institutions. For many, progressive closure is no longer merely a regulatory measure but an inevitable consequence of a demand-driven engineering education ecosystem.</span></p>
+<p><b>The way forward</b></p>
+<p><span style="font-weight: 400">The next phase of engineering education must shift to one driven by learning, innovation, and employability. Curricula should be continuously aligned with emerging technologies such as AI, data science, cybersecurity, semiconductor design, robotics, and sustainability, while preserving strong foundations in mathematics, science, and core engineering. Equally important is a transition from rote learning to competency-based education through project-based learning, interdisciplinary problem-solving, design thinking, research, entrepreneurship, internships, and stronger industry-academia collaboration.</span></p>
+<p><span style="font-weight: 400">Regulation must also evolve from input-based compliance to outcome-based accountability. Institutional performance should be judged not merely by infrastructure and faculty strength, but by graduate employability, research, innovation, startups, patents, and industry engagement.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Engineering education 2.0 is therefore not about expanding capacity, but about enhancing quality, relevance, and adaptability. India’s aspiration to become a global knowledge and technology powerhouse will depend not on producing more engineering graduates, but on producing globally competitive engineers.</span></p>
+<p><span style="font-weight: 400">Transforming engineering education is no longer an academic reform — it is a strategic imperative. It must shift from quantity to quality, compliance to outcomes, and capacity expansion to global competitiveness. India already has islands of excellence in its IITs, leading NITs, and a few top institutions; the challenge is to replicate these strengths across the broader ecosystem while enabling the orderly exit of persistently non-performing institutions.</span></p>
+<p><span style="font-weight: 400">As India aspires to lead the AI and semiconductor era, its success will depend not on the number of engineering graduates it produces, but on the quality of engineers it creates.</span></p>
+<p><i><span style="font-weight: 400">The author is a former computer science professor at IIT Kharagpur, IIT Kanpur, BITS Pilani, and JNU. He is a former scientist at the Defence Research and Development Organisation and the Department of Science and Technology.</span></i></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10775875"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eighth, twenty twenty-six, at thirty-six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/engineering-education-ai-reforms-college-closures-expert-explains-10775875/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-08 02:53 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | From charging points to power grid, challenges in Delhi’s shift to EVs | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | From charging points to power grid, challenges in Delhi’s shift to EVs</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-08</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/delhi-ev.jpg?w=1600" alt="Expert Explains | From charging points to power grid, challenges in Delhi’s shift to EVs">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="EV DTC buses at the IP Depot in New Delhi." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/delhi-ev.jpg?w=1600" width="650"/><span class="ie-custom-caption">EV DTC buses at the IP Depot in New Delhi. (Express photo by Tashi Tobgyal)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Delhi government’s new Electric Vehicles (EV) policy seeks to ensure that 30% of Delhi’s vehicle fleet is electrified by March 31, 2030, to achieve the larger aim of curbing air pollution.</p>
+<p><a href="https://indianexpress.com/article/explained/ev-policy-two-wheelers-constitute-two-thirds-of-delhis-vehicles-why-this-shift-matters-10763611/"><strong>The policy cites</strong></a> the Commission for Air Quality Management (CAQM), which identified vehicular emissions as the largest contributor to air pollution in the National Capital Territory of Delhi. Two-wheelers constitute approximately 67% of the total vehicle stock in Delhi, it stated.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Different fuel sources mean that EVs and conventional vehicles operate differently. The former uses a battery pack to power the electric motor, and that battery must be periodically charged. In comparison, a petrol or diesel car typically uses Internal Combustion Engines (ICEs), where fuel is used to create combustion. The resulting energy powers the mechanical movement of parts. Such variations impact not just the functioning of the cars from a consumer standpoint, but also the larger ecosystem required for their smooth operations.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>Gauhar Raza</strong>, former professor at the Academy of Scientific and Innovative Research and Chief Scientist at the Council of Scientific and Industrial Research, spoke with <em>The Indian Express</em> about the planned shift, how EVs compare to conventional vehicles in terms of efficiency, and what the environmental gains could look like.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>Why is the transition to EVs important?</h2>
+<p>The transition is important because the ICE has largely reached its technological limits. For decades, engineers have tried to improve its efficiency. There have certainly been improvements, but most of them have come through better accessories, electronics, design and supporting systems rather than dramatic gains in the engine itself. There is very little room left for major improvements in ICE technology.</p>
+<p>That is why research and innovation are increasingly focused on electric mobility. This is where the next technological leap is expected to come from. The future of transportation is clearly moving in that direction.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/e20-petrol-ethanol-mileage-engine-concerns-e25-10772358/">Why mileage-conscious Indian motorists are resisting the ethanol mandate</a></span></div>
+<p>Recent events in West Asia have also exposed India’s vulnerability as an import-dependent country in terms of fossil fuels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><strong>What do these limits, in terms of the ICE, mean in terms of efficiency?</strong></p>
+<p>Efficiency is a technical concept. The overall efficiency of a vehicle is determined by the combined efficiency of all its components, not by the maximum efficiency of any single part.</p>
+<p>In an ICE, energy is lost at several stages — through heat, friction and the various mechanical systems that transfer power from the engine to the wheels. Even if individual components are improved, the overall efficiency has a practical ceiling. That is why, despite decades of research, there has been only limited scope for improvement.</p>
+<p>In an EV, the drivetrain or transmission system is inherently more efficient because there are fewer stages where energy is lost. More of the energy stored in the battery is actually used to move the vehicle.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Ultimately, efficiency is reflected in how much energy is consumed to cover a given distance, and that depends not only on the vehicle’s design but also on how it is driven.</p>
+<span class="custom-caption"><img alt="EV Charging Station at Rafi Marg, in New Delhi." class="lazyloading size-medium wp-image-10774183" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ev-policy.jpg?resize=600,411" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ev-policy.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/07/ev-policy.jpg?resize=450,308 450w, https://indianexpress.com/wp-content/uploads/2026/07/ev-policy.jpg?resize=600,411 600w, https://indianexpress.com/wp-content/uploads/2026/07/ev-policy.jpg?resize=591,405 591w" height="493" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> EV charging station at Rafi Marg, in New Delhi. (Express photo by Praveen Khanna)</span>
+<p><strong>Does that automatically make EVs environmentally superior?</strong></p>
+<p>Not entirely. EVs certainly reduce pollution within cities because they have no tailpipe emissions, but we also have to look at the entire energy chain.</p>
+<p>If the electricity used to charge these vehicles comes from thermal power plants, then a part of the environmental burden is shifted from cities to the places where electricity is generated. So, while EVs improve urban air quality, their overall environmental benefit depends on how clean the electricity grid becomes.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/e20-petrol-ethanol-reduces-mileage-of-car-bike-hardeep-puri-10769363/">Does E20 petrol reduce mileage of your car, bike? Centre answers</a></span></div>
+<p>The transition to electric mobility should, therefore, go hand in hand with cleaner sources of power generation.</p>
+<h2>From an engineering perspective, how are EVs different from conventional vehicles?</h2>
+<p>One important difference is regenerative braking. In a conventional vehicle, much of the energy is lost as heat when you apply the brakes. In an EV, part of that energy can be recovered and sent back to the battery.</p>
+<p>That means driving behaviour becomes much more important. Smooth acceleration, anticipating traffic conditions and avoiding unnecessary braking all help improve efficiency. The vehicle rewards efficient driving.</p>
+<h2>Why is ‘range’ such an important concern for EV users?</h2>
+<p>The battery can run the motor only for a limited period before requiring recharging because it stores a finite amount of energy. Its capacity is measured in ampere-hours, and the amount of energy it delivers depends on the electrical load placed on it.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>In simple terms, the more load you put on the battery, the faster its stored energy is consumed. Rapid acceleration, repeated braking and aggressive driving all increase the load on the battery, reducing the distance the vehicle can travel on a single charge.</p>
+<p>Suppose a vehicle is capable of travelling around 200 kilometres under a particular set of conditions. If the battery load becomes much higher because of the way it is driven, the available energy will be consumed faster, and the vehicle may not even complete 150 kilometres before it needs to be recharged.</p>
+<p>That is why range is so important for EV users. It is not determined only by the battery’s rated capacity but also by how efficiently the stored energy is used.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Opinion</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/rice-to-ethanol-policy-is-deepening-economic-and-environmental-stress-10772961/">Rice-to-ethanol policy is deepening economic and environmental stress</a></span></div>
+<p>Manufacturers usually specify a certified range under standard testing conditions. In real-world conditions, the actual range depends on how the vehicle is driven. This needs more assessment. If a vehicle is driven smoothly under favourable conditions, it may even exceed its certified range.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h2>What are the biggest challenges to EVs becoming mainstream in India?</h2>
+<p>The biggest challenge is that since India does not have lithium, cobalt, or nickel reserves, the raw materials for battery production will be a problem. Technologically, other than the body, an EV has three major components: the primary battery, electric motor, and the control system (software and hardware). Except for the motor, we lack the capabilities to produce efficient, durable and recyclable batteries and hardware for the control system. This could increase our dependence on suppliers like China.</p>
+<p>Then there is the availability of charging infrastructure. Another challenge is ensuring that electricity increasingly comes from cleaner sources.</p>
+<p>A major challenge that also needs attention is what happens to batteries after they reach the end of their life. We need effective systems for reuse, recycling and safe disposal. As EV adoption grows, battery lifecycle management will become increasingly important.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>From April 1, 2028, only electric two-wheelers will be permitted for new registration in the NCT of Delhi under the new policy. However, this timeline isn’t practical. On one hand, we will not be able to install enough charging points, and on the other hand, I think the national electrical grid will not be able to handle the load, which will be very different in its nature from the traditional load.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>As a whole, the transition requires putting the entire innovation chain in order. Fascinated by glittering technology, such policies are often implemented without thinking about their larger impact on society and future generations. Half-baked solutions implemented in haste may, in turn, lead to more dependence on other countries.</p>
+<p><strong>Some experts argue that hydrogen could eventually replace batteries. How do you see hydrogen as an alternative?</strong></p>
+<p>Hydrogen is a promising technology, and research is continuing in that area. But it is still a very expensive option. Producing hydrogen, storing it, transporting it and building the infrastructure required to use it involve high costs. We know that when Hydrogen and Oxygen are mixed, they form water (H2O). The same reaction is used for charging a ‘bank of cells’ which drives an electric motor. Oxygen is in plenty in the atmosphere, but Hydrogen as fuel is many times more expensive compared to traditional fuel or even electricity. Therefore, for the proliferation of this technology, either we have to wait for a major technological breakthrough or a situation where we run out of options. Hydrogen may play an important role in the future, particularly for certain applications, but at the moment it cannot replace battery-electric vehicles on a large scale. Only large buses and heavy transport vehicles fueled by Hydrogen come close to a viable option.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10774137"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sophiya-mathew/">
+<figure>
+<img alt="Sophiya Mathew" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/06/sophiya-mathew.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sophiya-mathew/"><span></span>Sophiya Mathew</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9398881"></div><div class="follow_author_title" data-id="Sophiya Mathew"></div><div class="follow_author_slug" data-id="sophiya-mathew"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sophiya Mathew is a Correspondent at The Indian Express, based in New Delhi. She joined the Delhi bureau in 2024, and has specialization in Integrated Multimedia Journalism from the Asian College of Journalism (ACJ), Chennai.
+
+Professional Background
+
+Core Beats: Her reporting is primarily focused on the Environment and Education.
+
+Specialization: She has gained recognition for her ground-level reporting on the Yamuna floodplains and the socio-economic challenges faced by those living on its banks. She also focuses on the disparities in Delhi's education system, ranging from elite private schools to government institutions and refugee education.
+
+Recent Notable Articles (December 2025)
+
+Her recent work has been heavily centered on Delhi's severe winter pollution crisis and the government's regulatory responses:
+
+1. The Air Pollution Crisis
+
+"A tale of two cities: Delhi govt schools choke in bad air, private classrooms set up air filters" (Dec 20, 2025): A high-impact feature contrasting the "Clean Air Bubbles" in elite schools with the reality of government school students who are exposed to an equivalent of 17 cigarettes a day due to outdoor exposure.
+
+"Delhi sees season's worst air day, second worst December AQI in nearly a decade" (Dec 15, 2025): An analytical report on the meteorological patterns trapping pollutants in the NCR.
+
+"Delhi bans non-BS VI vehicles from outside: Why curbing vehicular pollution is key" (Dec 17, 2025): Explaining the science behind targeting specific vehicle vintages to lower particulate matter.
+
+2. Enforcement &amp; Regulations
+
+"No fuel at pumps in Delhi without valid PUC certificate from December 18" (Dec 17, 2025): Breaking the news on the environment ministry's strict "No PUC, No Fuel" policy.
+
+3. Education Policy
+
+"Law to regulate school fee in Delhi risks becoming procedural, say parents" (Dec 13, 2025): Investigating the loopholes in the new Delhi School Education (Transparency in Fixation and Regulation of Fees) Bill, 2025.
+
+"Monsoon Session: Private school fee regulation Bill cleared after four-hour debate" (Aug 9, 2025): Covering the legislative passage of the controversial fee hike regulation.
+
+Signature Style
+
+Sophiya is known for her observational depth. Her reporting often includes vivid details from school corridors, hospital waitlists, or the banks of the Yamuna to illustrate how policy failures affect the city's most vulnerable residents. She is a frequent expert guest on the 3 Things podcast, where she explains the complexities of Delhi’s environmental laws.
+
+X (Twitter): @SophiyaMathew1                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sophiya-mathew/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July sixth, twenty twenty-six, at forty-six minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/delhi-2/" href="https://indianexpress.com/about/delhi-2/">delhi</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/electric-vehicles/" href="https://indianexpress.com/about/electric-vehicles/">electric vehicles</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/expert-explains-delhi-shift-ev-policy-challenges-10774137/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-08 02:53 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
