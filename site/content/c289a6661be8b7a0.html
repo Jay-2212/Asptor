@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Prambanan temple: Revisiting origins and history of Indonesia’s iconic heritage site | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Prambanan temple: Revisiting origins and history of Indonesia’s iconic heritage site</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-09</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-prambanan-temple_expl-hist.jpg?w=1600" alt="Prambanan temple: Revisiting origins and history of Indonesia’s iconic heritage site">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Prambanan temple" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-prambanan-temple_expl-hist.jpg?w=1600" width="650"/><span class="ie-custom-caption">Prime Minister Narendra Modi shakes hands with Indonesian President Prabowo Subianto during their visit at Prambanan Temple, in Yogyakarta, Indonesia, on July 8, 2026. Photo: AP/PTI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Prime Minister <strong><a class="" href="https://indianexpress.com/article/india/pm-narendra-modis-three-nation-tour-defence-critical-minerals-on-table-at-india-indonesia-meeting-today-10774654/">Narendra Modi’s visit</a></strong> to Yogyakarta, Indonesia, this week marked the beginning of India’s effort to help restore Indonesia’s iconic Prambanan Temple, a UNESCO World Heritage Site.</span></p>
+<p><span style="font-weight: 400">The Prambanan Temple Compounds, located on the border between Indonesia’s Yogyakarta Special Region and Central Java province on the island of Java, comprise Prambanan Temple (also known as </span><i><span style="font-weight: 400">Loro Jonggrang</span></i><span style="font-weight: 400"> or Candi Prambanan), Sewu Temple, Bubrah Temple, and Lumbung Temple. At the heart of the complex is Prambanan Temple, which originally consisted of 240 large and small temples.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">We revisit the long history of the temple’s origins.</span></p>
+<p><b>The birth of a Hindu temple</b></p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><span style="font-weight: 400">The Sanjaya dynasty was a Javanese dynasty that ruled the Mataram Kingdom in Central Java during the eighth and ninth centuries, and is generally associated with the revival of Shaivite Hinduism on the island. Its dominance, however, was challenged by the Sailendra dynasty, a powerful Buddhist royal house. Under the Sailendras, Javanese art, architecture, and technology flourished, while religion and mythology found expression in the construction of numerous temples and shrines between 700 and 900 CE. Java also emerged as a major centre of Buddhist scholarship during this period.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Following the end of the reign of Samaratungga of the Sailendra dynasty, Rakai Pikatan of the Sanjaya dynasty is believed to have married Samaratungga’s daughter, Pramodhawardhani, and ruled between 842 and 856 CE. He is widely credited with commissioning Prambanan as a grand Hindu sanctuary.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/c-raja-mohan-writes-us-china-india-indonesia-indo-pacific-10775667/">Beyond US and China, India and others are building a ‘G Minus Two’ for Indo-Pacific</a></span></div>
+<p><span style="font-weight: 400">In his journal article “Magnificent Prambanan and Borobudur Temples” (2026), researcher Hary Gunarto notes that the construction of Prambanan was intended to mark the return of the Hindu Sanjaya dynasty to power after nearly a century of Buddhist Sailendra dominance. Although the exact date construction began remains uncertain, inscriptions record the consecration of the temple in 856 CE.</span></p>
+<p><span style="font-weight: 400">For roughly the next century, Prambanan served as an important pilgrimage centre. But around 929-930 CE, the political centre of the Mataram Kingdom shifted to East Java. While this move is often linked to the eruption of Mount Merapi, historians have also suggested political and economic reasons. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">As Central Java was gradually abandoned, Prambanan fell into disuse and was eventually buried beneath vegetation and layers of volcanic debris. It remained largely forgotten until it was rediscovered by Europeans in the early 19th century.</span></p>
+<h2><b>Rediscovering Prambanan</b></h2>
+<p><span style="font-weight: 400">Who first rediscovered Prambanan after centuries of abandonment remains a matter of debate. One possible early visitor was the 15th-century East Javanese court poet Mpu Tanakung. Describing a ruined temple complex, he wrote: “A great temple complex from ancient time rose near a mountain stream, and the path there was lonely.” Scholars have noted striking similarities between his account and Prambanan.</span></p>
+<span class="custom-caption"><img alt="Prambanan" class="lazyloading size-medium wp-image-10777929" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ex-Prambanan-Temple-Yogyakarta-Indonesia.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> In modern Indonesian, candi means an ancient Hindu or Buddhist temple or shrine, while Prambanan is believed to derive its name from the village to which the temple complex once belonged. Photo: Wikimedia Commons</span>
+<p><span style="font-weight: 400">Another prominent figure associated with the site’s rediscovery is Thomas Stamford Raffles, Lieutenant-Governor of Java during the British interregnum (1811–16), who took a keen interest in documenting Central Java’s ancient monuments. Yet an even earlier European account comes from C A Lons, an official of the Dutch East India Company. As Roy E Jordaan notes in </span><i><span style="font-weight: 400">In Praise of Prambanan</span></i><span style="font-weight: 400"> (1996): “Lons was an employee of the Dutch East Indies Company who in 1733, while staying at the court of the Javanese sultan as a member of an embassy made a sightseeing tour of a number of temple ruins and reported on these to his superiors.”</span></p>
+<p><span style="font-weight: 400">Prambanan has since undergone several phases of restoration, many of them interrupted by the Second World War and Indonesia’s struggle for independence. “Thus the reconstruction of the main temple, which had been in progress since 1918, was only completed in 1953, under a new national flag. The inauguration ceremonies were conducted by Soekarno, Indonesia’s first president,” writes Jordaan.</span></p>
+<p><b>Symbol of religious harmony</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The marriage of the Hindu ruler Rakai Pikatan and a Buddhist princess is often seen as a symbol of religious harmony, also reflected in the architecture of Prambanan. The temple incorporates a Buddhist stupa-like element atop its superstructure, while Buddhist artistic influences are visible in several decorative sculptures across the complex.</span></p>
+<p><span style="font-weight: 400">Gunarto notes: “There are many Buddhist temples built around Candi Prambanan which were constructed at the same era, such as Candi Sewu, Candi Bubrah, Candi Lumbung, Candi Kalasan, Candi Plaosan, and Candi Sari.” This concentration of both Hindu and Buddhist monuments in the same landscape underscores the religious coexistence that characterised central Java during the 9th century.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">In modern Indonesian, </span><i><span style="font-weight: 400">candi</span></i><span style="font-weight: 400"> means an ancient Hindu or Buddhist temple or shrine, while Prambanan is believed to derive its name from the village to which the temple complex once belonged. At the heart of the complex are three temples dedicated to the Hindu trinity: Shiva, Vishnu, and Brahma decorated with relief panels depicting scenes from the Ramayana. Opposite them stand three temples dedicated to the animals who serve them. </span></p>
+<p><span style="font-weight: 400">Each of the four projecting sides of the temple has a stairway leading to a separate chamber, or </span><i><span style="font-weight: 400">cella</span></i><span style="font-weight: 400">. The eastern stairway opens into the main chamber, which houses the statue of Shiva. “In the western chamber stands the statue of Ganesa, Siva’s elephant-headed son. In the northern chamber we find the famous statue of Durga as Mahisasuramardini, showing the demon she has just extracted from the slain buffalo in which he had hidden. The local people call her </span><i><span style="font-weight: 400">Loro Jonggrang</span></i><span style="font-weight: 400">,” writes Jordaan.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">The Prambanan Temple Compounds was inscribed on the UNESCO World Heritage List in 1991. In 1998, it was designated as a National Cultural Property and the national law issued in 2010 also supports the protection and conservation of the property.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10777902"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between colonial history and contemporary issues, especially in gender, culture, and sport.
+
+For suggestions, feedback, or an insider’s guide to exploring Calcutta, feel free to reach out to her at nikita.mohta@indianexpress.com.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July ninth, twenty twenty-six, at thirty-six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/prambanan-temple-origins-indonesia-unesco-india-restoration-10777902/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-09 03:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
