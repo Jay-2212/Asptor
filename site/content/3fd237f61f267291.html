@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Should India restart dialogue with Pakistan? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Should India restart dialogue with Pakistan?</h1>
+                <div class="article-meta">
+                    <span>By Kallol Bhattacherjee</span> • <span>THE HINDU OPINION</span> • <span>2026-07-09</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71203749"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>India and Pakistan have not engaged in dialogue since 2016 when talks broke down after the terror attacks at Pathankot and subsequently at Uri. The last 12 years have witnessed major attacks at Pahalgam (2025) and Pulwama (2019) and that apart, there were several smaller terror attacks. Earlier this month, a group of eminent citizens led by Gandhian O.P. Shah drafted <a href="https://www.thehindu.com/news/national/over-100-individuals-from-india-pakistan-sign-open-letter-to-modi-shehbaz-seekdialogue-on-kashmir-resumption-of-bilateral-ties/article71170079.ece" target="_self">a joint appeal to the leaders of India and Pakistan</a> urging them to engage in dialogue. This has led to a public debate on whether India should restart dialogue with Pakistan. <b>Mani Shankar Aiyar</b>, who was a signatory to the letter, and <b>Tara Kartha</b> discuss the question in a conversation moderated by <b>Kallol Bhattacherjee</b>. Edited excerpts:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Should India and Pakistan restart dialogue at this moment, especially since they haven’t spoken to each other at the government level for a decade now?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Mani Shankar Aiyar</b>: It is precisely for that very reason, because we haven’t spoken to each other for the best part of the last 12 years, that it is absolutely necessary that we resume the dialogue as soon as possible. And as regards the time, my own view is that any time is as good as any other time. And all times when we don’t talk are bad for both of us. So I would urge the governments to talk to each other. And until they do, I think people of goodwill on either side of our border should be in touch with each other. I speak as somebody with nearly 40 years of experience of Pakistan and Pakistanis. I have been through several different Pakistani regimes, and it does not seem to me that it matters who is in power in Pakistan. When we engage with them, we engage with Pakistan, and not with a particular individual.
+				</p><p><b>Tara Kartha</b>: Ideally both countries should talk to each other because they are nuclear powers. These are dangerous times, especially since there was an active phase of hostility last year. But my problem is that the present leadership is basically Field Marshal Asim Munir. Let us forget about Shehbaz Sharif [the Prime Minister of Pakistan], for as much as I regard him, I’m sure he is a fine and good politician in his own right, Mr. Munir is in power and he’s even more powerful than General Pervez Musharraf was before him. He holds absolute power; him and a couple of core commanders, such as his ISI (Inter-Services Intelligence) chief. It is very important to understand that the rise of Field Marshal Munir began in a very systematic fashion once they carried out the terror strike in Pahalgam. I won’t say after Operation Sindoor; I’ll say after the Pahalgam attack.
+				</p><p>
+										I agree with Mr. Aiyar that it doesn’t matter who you talk to, provided that person is interested in peace. But the question is, what stake does Field Marshal Munir have in peace? In that case, he’ll have to step down for a civilian prime minister. The moment things get peaceful, they’ll tell the Pakistan military to go back to the barracks and that the civilians will take over. So why should he [be interested in peace]? It is a systemic issue. I’m not saying the army can never be talked to. This particular man will not. He is very dangerous.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is it the correct time to go ahead with the dialogue with Pakistan?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Mani Shankar Aiyar</b>: If we don’t go ahead, we’ll be stuck in the rut in which we are today. There was a mention of one man, Asim Munir, who’s been in power for approximately one year. But we haven’t talked to Pakistan for 12 years. So I don’t see how Asim Munir being there is the biggest obstacle. We could have talked to Nawaz Sharif. We could have talked to Imran Khan. We could have talked to several others.
+				</p><p>
+										And if you look at the past, we have had extremely fruitful talks with Pakistani generals but rarely with Pakistani civilians. Let me first run through the Pakistani army men with whom we have had successful interlocutions. Ayub Khan was the one who broke the deadlock on the Indus Waters Treaty. It was Zia-ul-Haq who broke the deadlock on Siachen. It was Musharraf, who broke the deadlock on what till then was being projected as the single biggest obstacle in India-Pakistan relations, namely the Kashmir question; they arrived at a four-point solution. However, Zulfiqar Ali Bhutto signed on the dotted line in Simla and then turned his back on it.
+				</p><p>
+										This is a false argument — that just because the Pakistani army is in power we can’t talk to them. We are currently talking to Israeli Prime Minister Netanyahu who has been indicted by the International Criminal Court (ICC) for war crimes. If we can talk to every dictator around the world, including army dictators, what’s the problem in talking to the people next door who have the misfortune of being led by an army commander?
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									So, the argument is that if the Government of India is in dialogue with several military dictators, then why should it not consider talking to Pakistan led by a military general?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Tara Kartha</b>: As someone who has been in the security establishment, my problem is how do I deal with terrorism? If a democratically elected government opens the door for dialogue and then gets hit by a terror attack — then the question is how to deal with terror attacks that disrupt dialogue? As a democratically elected government, can you justify dialogue? This is a point that was asked by even Nawaz Sharif who said that a terror attack takes place each time dialogue is attempted.
+				</p><p>
+										However, I will agree that a few military generals have shown remarkable good sense. In the recent past, when a BrahMos missile was accidentally fired at Pakistan, the Pakistan army handled it well. While the civilians protested, the Pakistan army took it in their stride and kept quiet. At the moment I am concerned with the timing of this proposal as Mr. Munir is in power.
+				</p><p>
+										The other issue is that Pakistan is in chaos as there are daily incidents that are being reported in various parts of the country. It’s in chaos. So right now he wants to talk. He may have every incentive to talk. Why should I talk? If there is even one indication from Pakistan that they are going to close down terrorist camps, I’m sure tomorrow the government will be ready to talk.
+				</p><p>
+										But if at all we are to go forward, I would like to see, for example, a talk on climate change. We are both countries that are equally in bad shape when it comes to climate vulnerabilities. I would like a talk on air pollution, as during a particular season of the year, both sides start burning crop residues triggering an environmental crisis. That kind of a functional dialogue, which does not involve any territorial issue, no vested or political interests is purely functional and people-centric.
+				</p><p>
+										I find the kind of wishful thinking which one sees in the letter as a little idealistic. It’s a bit over the top.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Does the current Indian government have the political bandwidth to talk to the Pakistani establishment?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Mani Shankar Aiyar</b>: Talking to them doesn’t mean bending our knees before them. If you have the courage to undertake surgical strikes against them, why don’t you have the courage to sit across a table and talk to them? That’s my simple point. And if you won’t do so, as I’m talking to the Government of India, then we will. We’ve got Zoom. But I am going to talk to my numerous friends in Pakistan. The number of my friends in Pakistan is larger than the number of enemies I have in India. And that’s a rather large number.
+				</p><p><b>Tara Kartha</b>: Before Prime Minister Narendra Modi, we had someone like Atal Bihari Vajpayee who put his career on the line and went to Lahore. Prime Minister Modi tried in 2015 and went to meet Nawaz Sharif and extended an olive branch. But all these have a political cost.
+				</p><p>
+										The question is what will we ask of them. If we have a dialogue tomorrow, we will ask them to stop exporting terrorism and they, in turn, will accuse us of doing things in Balochistan etc. whereas the Baloch people have been harassed since 1947. The question is what can India do in terms of the protests happening in Pakistan-occupied Kashmir (PoK). We should talk to Pakistan if General Munir shows some evidence that he is cutting down on terrorism.
+				</p><p><b><a href="https://www.thehindu.com/podcast/in-focus-podcast-should-india-restart-dialogue-with-pakistan/article71203414.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Mani Shankar Aiyar is a Former Member of Parliament; Tara Kartha is Former Director at the National Security Council Secretariat</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- July 10, 2026 12:30 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71203749" data-title="Should India restart dialogue with Pakistan?" data-url="https://www.thehindu.com/opinion/op-ed/should-india-restart-dialogue-with-pakistan/article71203749.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" onclick="copytext('https://www.thehindu.com/opinion/op-ed/should-india-restart-dialogue-with-pakistan/article71203749.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Should%20India%20restart%20dialogue%20with%20Pakistan%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" onclick="openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece&amp;t=Should%20India%20restart%20dialogue%20with%20Pakistan%3F')">
+                Facebook   
+                        
+            </li><li class="twitter" onclick="openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece&amp;text=Should%20India%20restart%20dialogue%20with%20Pakistan%3F')">
+                Twitter    
+                        
+            </li><li class="telegram" onclick="openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece&amp;text=Should%20India%20restart%20dialogue%20with%20Pakistan%3F')">
+                Telegram     
+                        
+            </li><li class="in" onclick="openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece&amp;title=Should%20India%20restart%20dialogue%20with%20Pakistan%3F')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" onclick="openShareLink('https://api.whatsapp.com//send?text=Should%20India%20restart%20dialogue%20with%20Pakistan%3F%20-%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" onclick="openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-india-restart-dialogue-with-pakistan%2Farticle71203749.ece&amp;title=Should%20India%20restart%20dialogue%20with%20Pakistan%3F')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71203749" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/should-india-restart-dialogue-with-pakistan/article71203749.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-09 22:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
