@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Prince Harry’s court case against the Daily Mail: What was it about and why did he lose? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Prince Harry’s court case against the Daily Mail: What was it about and why did he lose?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-10</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Britain_Prince_Harry_66368-0effd.jpg?w=1600" alt="Prince Harry’s court case against the Daily Mail: What was it about and why did he lose?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="This case marks the third time since 2019 of Prince Harry suing media outlets (AP Photo)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Britain_Prince_Harry_66368-0effd.jpg?w=1600" width="650"/><span class="ie-custom-caption">This case marks the third time since 2019 of Prince Harry suing media outlets (AP Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em><strong>Written by Abhishek Nair</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On July 7, a High Court judge in London ruled against Prince Harry in his long-running privacy case against Associated Newspapers Limited(ANL)– publisher of the <em>Daily Mail</em>, <em>Mail on Sunday</em>, and <em>MailOnline</em>.</p>
+<p>Justice Matthew Nicklin dismissed all claims made by Prince Harry and six other claimants citing the claimants’ failure to prove their allegations of unlawful information gathering.</p>
+<p>Harry called the verdict “a complete and obvious whitewash,” while ANL hailed it as “an overwhelming victory for the Daily Mail and its journalists.”</p><div id="taboola-mid-article-personalisation"></div>
+<p>Heard over a period of 46 days, the case ran from January 19 to March 31 this year with the combined legal costs estimated to be hovering around the 50 million pounds mark.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<h2><strong>What was the case about?</strong></h2>
+<p><a href="https://indianexpress.com/article/world/prince-harry-loses-privacy-lawsuit-daily-mail-publisher-10775938/"><strong>Harry</strong> </a>and six other individuals sued <em>Daily Mail’s</em> publisher and accused its journalists of illegally digging into their private lives for decades. They also claimed that the resulting information gathered had been used in dozens of stories over time. ANL, for their part, denied all wrong-doing.</p>
+<p>Prince Harry had initially filed the lawsuit in October 2022 with singer Sir Elton John, Sir Elton’s husband David Furnish, actress Elizabeth Hurley, Sadie Frost, Baroness Doreen Lawrence (mother to Stephen Lawrence whose 1993 racially motivated murder became a popular UK criminal justice case), and Sir Simon Hughes, a former Liberal Democrat MP.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The claims alleged the misuse of private information and breach of confidence, covering 57 disputed articles and incidents.</p>
+<p>The alleged methods included hiring private investigators, hacking phones, tapping landlines(secretly connecting a listening or recording device to a telephone line), and planting audio-capture devices. Hurley alleged these were taped to her windows and that “blagging” (obtaining information by deception) was involved.</p>
+<p>The claimants also alleged corrupt payments to the police. Lawrence claimed that the <em>Mail’s</em> journalists had bribed officers for details on her son’s murder investigation.</p>
+<p>Harry’s own complaint covered 14 stories from 2001-2013. The complaint was inclusive of claims that journalists had hacked his voicemails and obtained flight records of his former girlfriend, Chelsy Davy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The claimants’ case was largely based on testimony from former private investigator Gavin Burrows, who told Harry’s team in 2021 that he had been hired by the <em>Mail on Sunday</em> to carry out such work. By the time of trial however, Burrows called this “absolutely incorrect” and said his signature had been badly faked, damaging the claimants’ case.</p>
+<p>ANL argued that its journalists used only legitimate sources–such as friends, royal aides, or publicists– and that the claims had, in any case, been brought too late.</p>
+<h3><strong>Why did the court rule against Harry?</strong></h3>
+<p>The court’s own summary sets out its reasoning plainly–suspicion is not proof. Since these were civil claims, the test was whether the allegations were proved “on the balance of probabilities”.</p>
+<p>The claimants had to prove that the information was obtained unlawfully and not simply argue that it seemed likely. The court rejected the idea that an article must have been unlawfully sourced merely because it was private and ANL could not explain its source.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/editorials/the-third-edit-prince-harry-the-petulant-royal-9986904/">The Third Edit: Prince Harry, the petulant royal</a></span></div>
+<p>The court also stressed this was not a public inquiry into whether such tactics were “widespread and habitual” at ANL and that it ruled only on the specific claims before it.</p>
+<p>The credibility of Gavin Burrows’ testimony was key to this outcome. The judge said Burrows “did not give credible evidence,” and his 2021 statement–on which many claims depended– could not be relied upon.</p>
+<p>Separately, the claimants tried a different legal argument. Normally, this kind of claim has to be filed within six years. Harry’s group argued that this time limit shouldn’t apply to them because ANL had deliberately hidden the facts from them for years.<br/>
+Building on this argument, they claimed three senior ANL figures– Paul Dacre, Elizabeth Hartley, and Peter Wright– had lied to the Leveson Inquiry, a 2012 public inquiry into the conduct of the British press.</p>
+<p>The court ruled that this was not proven either. Since the main case had already failed, the judge didn’t need to decide the time-limit question for most of the claims. The specific claims by Hughes and Frost were the one exception– the court ruled that they were too late regardless.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>This is the third major media lawsuit Harry has filed since 2019. He had earlier won a partial victory and settlement against Mirror Group Newspapers (the <em>Daily Mirror’s</em> publisher) and settled separately with Rupert Murdoch’s News Group Newspapers (<em>The Sun’s</em> publisher). This <em>Daily Mail</em> case was his final unresolved fight with the press.</p>
+<p>Andrew Fremlin-Key, a media disputes partner at law firm Withers, said the outcome left no real winner. “Although Associated Newspapers has succeeded, financially, there is no real winner in this trial,” he told <em>CNN</em>, citing the roughly £40-50 million in legal costs. Claimants could seek an appeal, he added, but would first need the court’s permission.</p>
+<p>A two-day hearing on outstanding disputes, including costs, is set for July 29 and 30, 2026.</p>
+<p><em><strong>The author is an intern with  The Indian Express</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10777580"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eighth, twenty twenty-six, at two minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/prince-harry-case-against-daily-mail-10777580/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-10 08:16 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
