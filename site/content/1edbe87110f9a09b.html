@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Can India refuse to extradite Lawrence Bishnoi? Here’s what the law says | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Can India refuse to extradite Lawrence Bishnoi? Here’s what the law says</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Lawrence-Bishnoi-extradition.jpg?w=1600" alt="Can India refuse to extradite Lawrence Bishnoi? Here’s what the law says">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Lawrence Bishnoi, extradition" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Lawrence-Bishnoi-extradition.jpg?w=1600" width="650"/><span class="ie-custom-caption">Lawrence Bishnoi produced at Panchkula Court in August 2017. (Express Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The US Department of Justice has indicted jailed gangster Lawrence Bishnoi, Punjab Police SHO Gurinderjit Singh Nagra and several others on charges including racketeering conspiracy, murder and extortion, alleging that they were part of a <a href="https://indianexpress.com/article/india/besides-hardeep-singh-nijjar-us-charges-lawrence-bishnoi-for-attacks-on-salman-khan-gippy-grewal-moosewala-10779568/"><strong>transnational organised crime network</strong></a> operating across India, Canada and the United States. With Bishnoi and Nagra in India, the indictments are expected to be followed by formal extradition requests from Washington.</p>
+<p>If and when such requests are made, what legal process will they trigger? Do the charges qualify for extradition under the India-US treaty? Can India refuse to hand over the two accused, or at least delay their surrender? The answers lie in the India-US Extradition Treaty, India’s Extradition Act, 1962, and a legal process in which Indian courts and the Union government both play distinct roles.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>What governs extradition between India and the US?</h2>
+<p>Extradition between India and the US is governed by the bilateral Extradition Treaty signed in 1997 and India’s Extradition Act, 1962. At the heart of the treaty is the principle of dual criminality — an offence is extraditable if it is punishable with imprisonment of more than one year in both countries.</p>
+<p>The treaty bars extradition for political offences, although offences such as murder, hostage-taking, terrorism and drug trafficking are specifically excluded from that exception. Nor can extradition be refused merely because the person sought is an Indian citizen. Another safeguard is the rule of speciality, under which an extradited person can ordinarily be tried only for the offences for which extradition was granted.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>Do the charges against Bishnoi and Nagra make them extraditable?</strong></h2>
+<p>On the face of it, the charges levelled by US prosecutors appear to satisfy the treaty’s principal legal requirements.</p>
+<p>Although the indictment invokes US laws such as the Racketeer Influenced and Corrupt Organizations (RICO) Act, the treaty makes it clear that under the principle of dual criminality, the laws of the two countries need not describe offences in identical terms or place them under the same category. What matters is whether the underlying conduct constitutes a serious criminal offence in both jurisdictions. Murder, criminal conspiracy, extortion, drug trafficking and firearms offences are all punishable under Indian law as well.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/hardeep-singh-nijjar-case-canada-india-us-charges-bishnoi-brar-10777838/">Hardeep Singh Nijjar case explained: Canada’s latest findings and the US charges</a></span></div>
+<p>The Rana extradition proceedings illustrate how this principle operates. US prosecutors did not proceed on some offences invoked by India, such as conspiracy to wage war, because they did not satisfy dual criminality. However, they successfully argued that the remaining offences did so because the underlying conduct constituted crimes in both countries. US courts accepted this reasoning and eventually cleared Rana’s extradition.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2>What happens if Washington sends an extradition request?</h2>
+<p>Typically, an extradition request would be prepared by the US Department of Justice and transmitted by the State Department to India’s Ministry of External Affairs (MEA). The MEA, in consultation with the Ministry of Home Affairs and agencies such as the CBI, would examine whether the request conforms to the treaty and the Extradition Act.</p>
+<p>If the Centre decides the request merits consideration, it is placed before an Indian court, which examines whether the treaty requirements are satisfied and whether the material produced by the US would justify committal had the offence been committed in India.</p>
+<p>If satisfied, the court certifies the accused as extraditable and forwards its findings to the Central government. The final decision on surrender nevertheless rests with the Union government, which may impose conditions or seek diplomatic assurances before approving extradition. Any order can then be challenged before the High Court and the Supreme Court, making extradition proceedings inherently lengthy.</p>
+<p>Tahawwur Rana’s case illustrates this well. India’s request, made in 2019, was followed by proceedings before a US magistrate judge, habeas corpus proceedings before a district court, appeals before the Ninth Circuit and petitions before the US Supreme Court before his extradition was finally approved. Even a priority terrorism case took years to conclude.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>Can India refuse — or merely delay — extradition?</h2>
+<p>Even if the treaty requirements are satisfied, extradition is not automatic. Meeting the treaty’s conditions merely enables the process; it does not compel India to immediately surrender the accused.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/tahawwur-rana-extradition-9934287/">Tahawwur Rana on way to face justice in India. What is the story of the extradition of this Mumbai 26/11 terror attack accused?</a></span></div>
+<p>For Lawrence Bishnoi in particular, the most significant legal consideration is that he is already in judicial custody and faces numerous criminal prosecutions across India.</p>
+<p>Article 14 of the treaty says the requested state “may” temporarily surrender the accused for trial before requiring his return. But read with Section 31 of the Extradition Act, which permits India to postpone surrender while domestic proceedings are pending, it gives New Delhi considerable discretion over the timing of any extradition.</p>
+<p>This means India could legally argue that Bishnoi must first face trial — and, if convicted, serve any sentence — in the numerous murder, extortion and organised crime cases pending against him before any extradition takes place.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Nagra stands on a different footing as he is not facing comparable prosecutions in India. Even so, Indian authorities could initiate domestic proceedings if the conduct alleged in the US indictment also discloses offences under Indian law. Section 34 of the Extradition Act deems an extradition offence committed abroad to have been committed in India, while Section 34A empowers the Centre to prosecute a fugitive in India if it decides he cannot be surrendered.</p>
+<p>The Vikash Yadav case may provide a clue. After US prosecutors indicted the former RAW officer over the alleged plot to assassinate Khalistani separatist Gurpatwant Singh Pannun, Delhi Police registered an FIR and arrested him. If Washington eventually seeks his extradition, India will have to decide whether domestic prosecution should take precedence over extradition — a question that could equally arise in Nagra’s case.</p>
+<h2>How common are extraditions between India and the US?</h2>
+<p>Despite close strategic ties, extradition between India and the US has never been particularly frequent.</p>
+<p>India has extradited only a little over a dozen fugitives to the US since the treaty came into force. The first was Yogesh Ratilal Shah in 2002, wanted by the FBI in a bank fraud case. The latest was Ganesh Shenoy, extradited in 2025 to face prosecution in a fatal 2005 car crash. Notably, US authorities at the time claimed this was the first extradition from India since 2017.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>MEA data show the US extradited only 11 fugitives to India between 2002 and 2018, while around 60 Indian requests remained pending with US authorities.</p>
+<p>Past cases also show that close strategic ties do not guarantee extradition. The US refused to extradite David Coleman Headley because his plea agreement barred it, and earlier rejected India’s request for former Union Carbide chief Warren Anderson, citing deficiencies in the evidence submitted.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10779969"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July tenth, twenty twenty-six, at forty-one minutes past nine in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/lawrence-bishnoi-us-extradition-india-treaty-10779969/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-12 07:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
