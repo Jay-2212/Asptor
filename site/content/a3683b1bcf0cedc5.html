@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What the Election Commission’s new online registration requirement means for voters | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What the Election Commission’s new online registration requirement means for voters</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/eci-form-6-sir.jpeg?w=1600" alt="What the Election Commission’s new online registration requirement means for voters">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Booth Level Officers (BLOs) distribute and collect Special Intensive Revision (SIR) enumeration forms from voters in Kondhwa, Pune." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/eci-form-6-sir.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Booth Level Officers (BLOs) distribute and collect Special Intensive Revision (SIR) enumeration forms from voters in Kondhwa, Pune. (Express photo by Arul Horizon)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Election Commission of India’s (ECI) online voter registration portal, ECINET, now requires applicants to provide details of their parents’ status in the last Special Intensive Revision (SIR) of electoral rolls — down to the polling booth number and the individual elector’s serial number on that roll.</p>
+<p>This <a href="https://indianexpress.com/article/india/election-commission-changes-form-6-for-new-voters-inserts-section-asking-them-about-parents-in-sir-10782435/"><strong>is even as Form 6</strong></a>, which is the statutory form for new enrolments, has yet to be amended under the procedure established by law. Here’s what is known about the new procedure and what it means for new electors.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>What is the new procedure?</strong></p>
+<p>The EC’s ECINET portal lets users submit forms for new electoral registrations, changes to existing electoral rolls, and deletions.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>The version of Form 6, which is the electors’ enrolment form under the Representation of the People Act, 1950, and the Registration of Electors Rules, 1960, available for online submission now has a new part that requires applicants to answer whether their parents were in the last SIR. This is under a section called the “declaration form”.</p><div id="taboola-mid-article-personalisation"></div>
+<p>If yes, they are required to provide the Assembly constituency number, the polling booth number (known as part number) and the serial number at which their father or mother was registered in the last SIR.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/why-punjab-cm-bhagwant-mann-is-linking-the-sir-exercise-to-welfare-schemes-10779565/">Why Punjab CM Bhagwant Mann is linking the SIR exercise to welfare schemes</a></span></div>
+<p>So far, the EC has completed the SIR in 10 states and three Union Territories since June last year; for the remaining states/UTs, the last intensive revision refers to the exercise conducted in the early 2000s.</p>
+<p>The exercise is currently underway in 19 other states/UTs, while the EC is yet to announce the SIR for Himachal Pradesh, Ladakh and Jammu and Kashmir.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In the case of Assam, the EC has decided not to hold the SIR till the National Register of Citizens (NRC) exercise is completed in the state.</p>
+<p>For all states where the SIR has been completed or is underway, except for Bihar, the EC’s online Form 6 submission process requires the applicant to fill the new “declaration form” about their parents, inserted between existing parts of the form.</p>
+<p>If the applicant’s parents were not in the last SIR, then they must select that option and provide their parents’ names and Electors Photo Identity Card (EPIC) numbers, if available.</p>
+<p><strong>What does the law say?</strong></p>
+<p>Article 326 of the Constitution guarantees the right to enrol as an elector to all adult citizens who are ordinarily resident in a particular Assembly constituency, unless otherwise disqualified by law.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The Representation of the People Act, 1950 gives the Union government the power to make rules regarding the conduct of elections and the registration of electors.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>Section 28 of the RPA, titled “Power to make rules”, says: “The Central Government may, after consulting the Election Commission by notification in the Official Gazette, make rules for carrying out the purposes of this Act.” It also says that every rule made under the Act “shall be laid, as soon as may be after it is made, before each House of Parliament”.</p>
+<p>Form 6 is a part of the Registration of Electors Rules, 1960, which emanates from the Act. Therefore, any change to the form would require an amendment and gazette notification by the Law and Justice Ministry.</p>
+<p><strong>Has there been an amendment?</strong></p>
+<p>No, the Law and Justice Ministry is yet to notify any change to Form 6, as seen in the notifications available on the e-Gazette website from June 24, 2025 — when the EC first announced the SIR — until now.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>In fact, the Form 6 available for download on the EC’s ECINET portal, ostensibly for printing and submitting physically to electoral officials, does not have the new SIR “declaration form” part, showing that the form itself has not been amended according to due process.</p>
+<p>The EC did not respond to requests for comment, including on whether there had been an amendment and when the new declaration had been rolled out in the ECINET portal.</p>
+<p><strong>What does it mean for new electors?</strong></p>
+<p>New applicants, predominantly people who have recently turned 18, are now required to trace themselves or their parents to the last SIR. Since the EC has yet to comment on or announce this change, it is unclear whether those who are unable to provide the details will face greater scrutiny.</p>
+<p>The introduction of the SIR declaration assumes greater significance at a time when the EC is conducting an unprecedented SIR of electoral rolls, where the rolls are being prepared afresh instead of being revised as was done annually so far.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Previous intensive revisions conducted by the commission have not required all electors to submit forms and documents to prove their eligibility, including citizenship, as the SIR does.</p>
+<p>So far, the SIR has been completed in 13 states/UTs, leading to the deletion of 5.58 crore names, as per EC data, mostly on account of being found deceased, shifted, absent or enrolled at multiple places by Booth Level Officers.</p>
+<p>In West Bengal, 27 lakh electors who had provided documents have been deleted through an unprecedented judicial adjudication process, while their appeals are now pending before appellate tribunals. What impact the SIR declaration will have on the enrolment of the children of those deleted in the exercise is not known.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10782904"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/damini-nath/">
+<figure>
+<img alt="Damini Nath" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2022/11/Damini-Nath-The-Indian-Express.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/damini-nath/"><span></span>Damini Nath</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8269483"></div><div class="follow_author_title" data-id="Damini Nath"></div><div class="follow_author_slug" data-id="damini-nath"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/DaminiNath">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Damini Nath is an Assistant Editor with the national bureau of The Indian Express. She covers the housing and urban affairs and Election Commission beats. She has 11 years of experience as a reporter and sub-editor. Before joining The Indian Express in 2022, she was a reporter with The Hindu’s national bureau covering culture, social justice, housing and urban affairs and the Election Commission.
+Expertise
+
+ 	
+Key Coverage Areas: Damini Nath currently specializes in reporting on two crucial beats:
+
+
+ 	
+Housing and Urban Affairs: Providing in-depth analysis and reporting on India's urban development, policy, and housing issues.
+
+ 	
+Election Commission (EC): Offering authoritative coverage of electoral processes, policies, and the functioning of India's constitutional body responsible for conducting elections.
+
+
+
+
+
+ 	
+Professional Background: Her extensive experience includes roles as a reporter and sub-editor, demonstrating a comprehensive understanding of the journalistic process from fieldwork to final production.
+
+ 	
+Previous Role: Before joining The Indian Express in 2022, she served as a dedicated reporter with The Hindu’s national bureau, where her reporting portfolio included:
+
+
+ 	
+Culture
+
+ 	
+Social Justice
+
+ 	
+Housing and Urban Affairs
+
+ 	
+The Election Commission beat (a consistent area of focus).
+
+
+
+
+Trustworthiness
+Damini Nath's decade-plus career at two of India's most respected and authoritative news institutions, The Indian Express and The Hindu, underscores her commitment to factual, impartial, and high-quality reporting, establishing her as a trusted and credible source for news on urban governance and electoral matters.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/damini-nath/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twelfth, twenty twenty-six, at fifty-eight minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/election-commission-of-india/" href="https://indianexpress.com/about/election-commission-of-india/">Election Commission of India</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/election-commission-new-voter-registration-sir-form6-10782904/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-12 10:36 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
