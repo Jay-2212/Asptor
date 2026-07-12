@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Satluj row: What legal records reveal about Jaswant Singh Khalra’s lifework, and murder | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Satluj row: What legal records reveal about Jaswant Singh Khalra’s lifework, and murder</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-12</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Khalra-1600.jpg?w=1600" alt="Satluj row: What legal records reveal about Jaswant Singh Khalra’s lifework, and murder">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Jaswant Singh Khalra" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Khalra-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">Jaswant Singh Khalra and his wife Paramjit Kaur Khalra, who led the legal battle for 16 years. (Photos: Special arrangement)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Thirty-one years after his abduction and custodial death in 1995, Punjab’s human rights crusader Jaswant Singh Khalra is back in public discourse, after his biopic <em>Satluj</em> was removed from an OTT platform and banned in India within 48 hours of its release on July 3. On Saturday, the movie was also <strong><a class="" href="https://indianexpress.com/article/entertainment/bollywood/diljit-dosanjhs-satluj-pulled-from-zee5-internationally-days-after-india-takedown-10781658/" rel="noopener" target="_blank">pulled off internationally from the platform</a></strong>.</p>
+<p>Known as Laawaris laashan da waaris (guardian of unclaimed bodies), Khalra, 42, had rattled the Punjab Police and the then Congress government with his work on Punjab’s ‘disappearing’ men. Khalra was documenting the alleged illegal cremations of thousands of bodies during Punjab’s militancy years, after the police had branded them “unclaimed or unidentified”.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/long-reads/sutlej-controversy-jaswant-singh-khalra-the-man-who-counted-the-missing-10781202/">Jaswant Singh Khalra: The man who counted the missing</a></span></div>
+<p>His disappearance in 1995 prompted a Supreme Court-ordered CBI probe into both his abduction and the alleged illegal cremations. In 2011, the Supreme Court upheld life imprisonment for five Punjab policemen, including a DSP, for Khalra’s murder.</p>
+<p>Here’s a look at how the Khalra custodial murder case and the Punjab extra judicial killings case have been legally documented, from the CBI to the Supreme Court.</p><div id="taboola-mid-article-personalisation"></div>
+<h2>How Khalra’s case reached Supreme Court: Telegram by SGPC chief, wife’s petition</h2>
+<p>Soon after Khalra was abducted from his house in Kabir Park of Amritsar city on September 6, 1995, Gurcharan Singh Tohra, the then president of Shiromani Gurdwara Parbandhak Committee (SGPC) and a senior leader of the Shiromani Akali Dal (SAD), sent a telegram to Justice Kuldip Singh, which he acknowledged receiving on September 7, 1995.</p>
+<p>The telegram stated that Khalra, who was then the general secretary, Human Rights Wing, of SAD, was “kidnapped by the police.” Treating the telegram as a habeas corpus petition, the Supreme Court issued notice to the Punjab home secretary, the director general of police (DGP), and SSP Amritsar.</p>
+<p>Meanwhile, Khalra’s wife Paramjit Kaur Khalra also filed a habeas corpus plea in the Supreme Court, under Article 32 of the Constitution. According to the petition, Paramjit also stated that her husband was investigating “unclaimed dead bodies” and police excesses, and used to encourage families of victims to file writs in courts. She further stated she “strongly believes that her husband was picked up at the instance of Ajit Singh Sandhu, then SSP Tarn Taran, who had “several such allegations pending against him.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The Amritsar Police in its affidavit in the court said that “Khalra was neither arrested nor wanted by us in any criminal case.” SSP Sandhu claimed in the court on September 23, 1995 that he “never threatened Khalra”, and “never forced him to withdraw writ petitions filed against police excesses, custodial deaths etc.” The SSP also claimed he was on leave from September 5 to 11 for his daughter’s wedding in <a class="" href="https://indianexpress.com/section/cities/chandigarh/" rel="noamphtml">Chandigarh</a>.</p>
+<h2>Khalra’s press note on mass illegal cremations</h2>
+<p>Thus, Paramjit Kaur Khalra did not seek a probe only into her husband’s disappearance, she also placed before the court Khalra’s investigation of the alleged fake encounters and illegal cremations by Punjab Police.</p>
+<p>What became the basis for a CBI investigation was a press note issued by Khalra and his associate, Jaspal Singh Dhillon, on January 16, 1995.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>Placed before the Supreme Court, the press note revealed: “The investigation team decided to work in Amritsar and its neighboring police districts. It was learnt that police regularly brings bodies to municipality cremation grounds for cremation, declaring them as unclaimed… The only record available is through firewood receipts which were issued to dispose these bodies.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The note added, “In Amritsar district, maximum unclaimed bodies were brought for cremation near Durgiana Mandir. From June 1, 1984 to the end of 1994, about 2000 bodies have been cremated as unclaimed. During the first year of the government of (then Punjab chief minister) Beant Singh and 300 bodies were brought to Durgiana Mandir cremation ground. While 41 died of bullet injuries or police encounters, no reason was recorded for rest of 259 persons. No postmortem conducted on 276 bodies.”</p>
+<p>While Jaswant Singh Khalra and his wife always maintained that “at least 25,000 such disappearances of youths happened across Punjab during the militancy period”, as shown in the film, the “press note” submitted in the Supreme Court was focused on 2,097 such bodies in Amritsar district alone.</p>
+<p><strong>Landmark SC order</strong></p>
+<p>Clubbing Tohra’s telegram and Paramjit’s petition, the Supreme Court Bench of Justice Kuldip Singh and Justice S Saghir Ahmad, in a landmark order on November 15, 1995, appointed the Central Bureau of Investigation (CBI) to investigate both Khalra’s disappearance and the alleged extra-judicial killings in Punjab.</p>
+<p>Excerpts from the order state: “Court cannot close its eyes to the contents of the press note…even if partially true it would be a gory tale of human rights violations.”</p>
+<p><strong>CBI files report</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>On July 22, 1996, the Supreme Court acknowledged the CBI’s 74-page findings, which said that “prima facie, it has been found that a total of 984 bodies were cremated as “lavaris” by the police in Tarn Taran police district.” The CBI said in the court that probe was still ongoing.</p>
+<p><strong>‘Worst crime against humanity’</strong></p>
+<p>Meanwhile, the CBI on July 30, 1996, informed the apex court that it had decided to prosecute nine policemen, Ajit Singh Sandhu, SSP Tarn Taran; Ashok Kumar, DSP, Bhikhiwind; Jaspal Singh, DSP, Tarn Taran; Sub-inspector/SHO Satnam Singh (Jhabal police station), S-I Surinderpal Singh (Sirhali police station), SI Jasbir Singh (Manochacha police station), SI Rachpal Singh (Kang PS), ASI Amarjit Singh and head constable Pirthipal Singh, for Khalra’s abduction.</p>
+<p>However, Khalra’s whereabouts remained unknown even a year after he was picked up.</p>
+<p>In another landmark order on August 7, 1996, the Supreme Court said that Paramjit Kaur Khalra was undergoing the “worst crime against humanity.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>“… She has been running from pillar to post…Kidnapping of a person whose family is totally in dark about his whereabout – even about the fact where he is dead or alive – is the worst crime against humanity,” said the court, while directing the Punjab government to pay interim relief of Rs 10 lakh to the family.</p>
+<p><strong>CBI submits final report, NHRC roped in</strong></p>
+<p>After the CBI submitted its final report into the alleged illegal mass cremations of 2,097 bodies in Amritsar district, the Supreme Court on December 12, 1996 said: “The report is self explanatory and speaks for itself… Report indicates that 585 bodies were fully identified, 274 partially identified and 1238 unidentified. The report discloses flagrant violation of human rights on a mass scale.”</p>
+<p>The SC ordered that the report be sent to the National Human Rights Commission (NHRC) in a “sealed cover”, while directing the CBI to “continue the probe and register cases”, and present the “status report” in the court “every three months.” It directed the NHRC to see that family/heirs of the 585 identified people get adequate compensation under the Protection of Human Rights Act, 1993.</p>
+<p><strong>Khalra’s murder confirmed only after 3 years</strong></p>
+<p>On March 2, 1998, Kuldip Singh Bachra, then special police officer attached with SHO Satnam Singh, told the CBI that Khalra was “murdered secretly and his body thrown into the canal near Harike (the river Sutlej) at midnight just after Diwali” in 1995. His body was never recovered. Bachra also said Khalra had been tortured in custody.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>He also said he could not reveal these details earlier out of fear of then SSP Ajit Singh Sandhu, who allegedly died by suicide during the trial in 1997. Later, the CBI confirmed the date of Khalra’s murder as October 27, 1995.</p>
+<p>While the CBI’s trial court in Patiala convicted six policemen on November 18, 2005, the punishment of five of them was enhanced to life imprisonment by the Punjab and Haryana High Court on October 16, 2007 and one was acquitted. The Supreme Court on November 4, 2011 upheld the life imprisonment of five policemen for Khalra’s murder: DSP Jaspal Singh, SIs Satnam Singh, Jasbir Singh, Surinderpal Singh and HC Pirthipal Singh.</p>
+<p>The Supreme Court in its final verdict on November 4, 2011, had concluded: “Police atrocities in India had always been a subject matter of controversy and debate… CBI probe revealed that 984 dead bodies were cremated as “<em>lawaris</em>” in Tarn Taran alone and a large number of innocent persons had been killed by police for which there was sufficient material to register cases against the police officials…”</p>
+<p>The trials in several fake encounter cases are still ongoing, and over a 100 Punjab Police personnel have been convicted so far.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The SC further said: “Jaswant Singh Khalra had taken the task to expose the misdeeds of the police… killing innocent people under the pretext of being terrorists and cremating them without any identification.. Police authorities did not like such activities.. and tried to desist him. He was able to generate public pressure against police authorities. Ajit Singh Sandhu, SSP, hatched a conspiracy with other police personnel to eliminate him… Dead body could not be recovered… Police atrocities are always violative of the constitutional mandate… Tolerance of police atrocities would amount to acceptance of systematic subversion and erosion of rule of law…”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10783356"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/divya-goyal/">
+<figure>
+<img alt="Divya Goyal" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/divya-goel.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/divya-goyal/"><span></span>Divya Goyal</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952122"></div><div class="follow_author_title" data-id="Divya Goyal"></div><div class="follow_author_slug" data-id="divya-goyal"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/share/vvVwdiVTDZHARUE6/">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://x.com/divya5521">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Divya Goyal is a Principal Correspondent at The Indian Express, based in Ludhiana (Punjab). She is widely recognized for her human-interest storytelling and in-depth investigative reporting on social and political issues in the region.
+
+Professional Profile
+
+Experience: With over 13 years in journalism, she joined The Indian Express in 2012. She previously worked with Hindustan Times.
+
+Education: A gold medalist in English Journalism from the Indian Institute of Mass Communication (IIMC), Delhi.
+
+Core Beats: She covers a diverse range of subjects, including gender issues, education, the Sikh diaspora, heritage, and the legacy of the Partition. She has also reported on minority communities in Pakistan and Afghanistan.
+
+Awards and Recognition
+
+Divya has earned significant acclaim for her sensitivity toward gender and social disparities:
+
+Laadli Media Award (2020): For her investigative report "Punjab: The Invisible Drug Addicts," which exposed the gender disparity in treating women addicts.
+
+Laadli Media Award (2023): For a ground report on the struggles of two girls who had to ride a boat to reach their school in a border village of Punjab.
+
+Signature Style
+
+Divya is known for "humanizing the news." Rather than just reporting on policy, she often focuses on the individuals affected by it—such as students dealing with exam stress, farmers struggling with diversification, or families impacted by crime. Her work often bridges the gap between West (Pakistan) and East (India) Punjab, exploring shared heritage and common struggles.
+
+X (Twitter): @DivyaGoyal_                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/divya-goyal/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twelfth, twenty twenty-six, at fifty-three minutes past eight at night."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/satluj-cbi-court-reveal-about-jaswant-singh-khalra-10783356/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-12 17:41 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
