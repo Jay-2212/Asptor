@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>More people are now surrendering life insurance before maturity. What’s driving this? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>More people are now surrendering life insurance before maturity. What’s driving this?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/insurance_eb4af1.jpg?w=1600" alt="More people are now surrendering life insurance before maturity. What’s driving this?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Life insurance" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/insurance_eb4af1.jpg?w=1600" width="650"/><span class="ie-custom-caption">The number of policyholders exiting mid-way through the policy tenure is rising faster than those who complete the policy tenure. Photo: Magnific</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Blame it on financial stress <a href="https://indianexpress.com/article/business/insurance-regulator-irdai-likely-to-tighten-commission-norms-10770494/" rel="noopener" target="_blank"><strong>or mis-selling by insurers</strong></a> — surrenders and withdrawals of life insurance policies before maturity have been increasing over the past five years.</p>
+<p>Payouts for surrenders and withdrawals increased from around 30% of total benefits paid to policyholders in FY2022 to 38.3% in FY2026, suggesting that a growing number of policyholders are exiting their policies before maturity.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>In contrast, policyholders who completed the full policy term declined from about 48% in 2021-22 to 36.9% in 2025-26, according to data from insurance regulator IRDAI (Insurance Regulatory and Development Authority).</p>
+<p>This means the number of policyholders exiting mid-way through the policy tenure is rising faster than those who complete the policy tenure. “This could be due to mis-selling by insurers or financial constraints or stress of policyholders. This is not an ideal situation as policyholders won’t get the full benefit when they exit mid-way. They could even make losses,” said an insurance official.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><img alt="Insurance" class="lazyloading alignnone size-medium wp-image-10782277" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/insurance-chart-1.jpg?resize=559,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-1.jpg 602w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-1.jpg?resize=419,450 419w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-1.jpg?resize=559,600 559w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-1.jpg?resize=377,405 377w" height="600" sizes="(max-width: 559px) 100vw, 559px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="559"/></p><div id="taboola-mid-article-personalisation"></div>
+<p>In 2025-26, life insurers paid total benefits of Rs 7.3 lakh crore to policyholders, according to IRDAI data. As much as 38.3% of this is surrender/withdrawal, leading to premature payout of Rs 2.8 lakh crore during the financial year. When compared to this, maturity benefit paid by insurers after completing the full term is Rs 2.69 lakh crore.</p>
+<p><strong>What’s leading to premature exits?</strong></p>
+<p>According to insurance experts, many families have surrendered traditional life insurance policies to meet immediate cash needs due to inflation, rising living costs and higher loan repayments in recent years. Some customers purchase policies expecting short-term investment or FD-like returns, but discontinue them after realizing later about the long lock-in period and surrender penalties. Further, higher interest rates on bank FDs, <a class="" href="https://indianexpress.com/about/stock-market-today/" rel="noamphtml">stock market</a> and mutual fund investments have become more attractive, prompting many customers to move away from insurance policies that offered comparatively lower returns, they say.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/irdai-dark-patterns-insurance-mis-selling-crackdown-10767535/">Why IRDAI has brought in a statutory body to curb dark patterns in insurance</a></span></div>
+<p>“The near parity between surrenders and maturity payouts indicates that policyholders are increasingly exiting policies prematurely. This shift has direct implications for asset-liability management (ALM), as early exits disrupt the long-duration assumptions underpinning life insurance investment strategies and can force asset liquidation ahead of schedule,” the RBI’s Financial Stability Report (FSR) says. Persistently elevated surrender rates also signal policyholder dissatisfaction, product mis-selling, or competitive pressure from alternative financial instruments, it says. RBI and IRDAI had repeatedly warned against mis-selling by banks and NBFCs.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>While the insurance sector remains broadly resilient, several underlying structural pressures exist from a financial stability perspective. Sustained premium expansion has strengthened the sector’s ability to absorb shocks. However, elevated surrender behaviour in life insurance points to weaker policy persistency and introduces uncertainty in asset-liability management, RBI’s FSR says.</p>
+<p><strong>Net incurred claims rise</strong></p>
+<p>Net incurred claims in the general insurance segment rose from Rs 1.4 lakh crore in 2021-22 to Rs 2.1 lakh crore in 2025-26, an increase of nearly 50% over five years, according to the IRDAI data.</p>
+<p>Net claims paid is the amount paid to policyholders after accounting for any recoveries such as reinsurance.</p>
+<p><img alt="Insurance" class="lazyloading alignnone size-medium wp-image-10782278" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/insurance-chart-2.jpg?resize=600,466" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-2.jpg 665w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-2.jpg?resize=450,349 450w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-2.jpg?resize=600,466 600w, https://indianexpress.com/wp-content/uploads/2026/07/insurance-chart-2.jpg?resize=522,405 522w" height="466" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>This reflects rising frequency and severity of loss events, particularly in health and motor lines, which together constitute 95.3% of net incurred claims in 2025-26, IRDAI data shows. Health insurance claims have grown to 55% of total net incurred claims, driven by medical inflation, rising hospitalisation rates and expanding coverage. Motor claims account for 40.3%.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The concentration of claims in these two segments creates correlated and structurally growing loss exposure that may strain reserving adequacy and underwriting margins, if not continuously recalibrated.</p>
+<p><strong>Underwriting losses high</strong></p>
+<p>PSU general insurers continued to post the largest underwriting losses throughout the last five-year period, widening to Rs 31,000 crore in 2025-26 as against Rs 10,000 crore in the case of private insurers, IRDAI data shows.</p>
+<p>Private insurers also remained in underwriting losses, though at a much lower level of Rs 7,000-10,000 crore annually. Specialised insurers recorded underwriting profits of Rs 3,000-5,000 crore between 2022-23 and 2024-25 before breaking even in 2025-26, while standalone health insurers (SAHI) posted relatively modest underwriting losses of Rs 2,000-3,000 crore over the five-year period.</p>
+<p>In insurance parlance, an underwriting loss occurs when an insurer pays out more in claims and underwriting-related expenses than it earns from premiums during a given period. In other words, the insurer’s core insurance operations are unprofitable because the total cost of settling policyholders’ claims, paying commissions to agents and covering administrative and operating expenses exceeds the premium income collected from policyholders.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>However, an underwriting loss does not necessarily mean the insurer is operating at an overall loss as investment income from premiums invested in stocks, bonds or other assets may offset the underwriting deficit.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10782177"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/george-mathew/">
+<figure>
+<img alt="George Mathew" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/george-mathew-1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/george-mathew/"><span></span>George Mathew</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951944"></div><div class="follow_author_title" data-id="George Mathew"></div><div class="follow_author_slug" data-id="george-mathew"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> George Mathew is an Associate Editor with The Indian Express, based in Mumbai. A veteran of financial journalism with nearly three decades of experience, he is one of the country’s most authoritative voices on banking, regulation, and the corporate sector.
+Expertise &amp; Focus Areas Mathew’s reporting covers the nerve center of India’s economy. His specialized beats include:
+
+
+ 	
+The Reserve Bank of India (RBI): He has tracked the central bank's policy evolution through the tenures of multiple Governors, offering deep insights into monetary policy, repo rates, and banking regulation.
+
+ 	
+Banking &amp; Insurance: Extensive coverage of public and private sector banks, non-performing assets (NPAs), and key legislative reforms like the Insurance Amendment Bills.
+
+ 	
+Corporate Affairs: Mathew frequently breaks major stories related to India's largest conglomerates, with a specific focus on the Tata Group, documenting boardroom shifts and strategic decisions.
+
+ 	
+Financial Markets: Reporting on the complexities of Foreign Portfolio Investors (FPIs), IPOs, and currency fluctuations.
+
+
+Authoritativeness &amp; Insight With a career dating back to the late 1990s, Mathew possesses a rare institutional memory of India’s financial liberalization and market crises. His work is not limited to daily news; he frequently contributes to the "Explained" section, where he decodes complex financial legislations and market trends for a broader audience. His rigorous reporting has also been featured in scholarly platforms like the Economic and Political Weekly (EPW).
+Find all stories by George Mathew here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/george-mathew/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eleventh, twenty twenty-six, at forty-eight minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/life-insurance-policy-surrender-rise-india-explained-10782177/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-13 15:14 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

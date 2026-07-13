@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains: Why Indo-Pacific powers, including India, should worry about China’s new ballistic missile test | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains: Why Indo-Pacific powers, including India, should worry about China’s new ballistic missile test</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/china-icbm.jpg?w=1600" alt="Expert Explains: Why Indo-Pacific powers, including India, should worry about China’s new ballistic missile test">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="China ICBM: The latest test missile was reportedly launched from a PLA Navy Jin-class Type 094 submarine based in the South China Sea." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/china-icbm.jpg?w=1600" width="650"/><span class="ie-custom-caption">The latest test missile was reportedly launched from a PLA Navy Jin-class Type 094 submarine based in the South China Sea. </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>China tested its sea-based long-range intercontinental ballistic missile (ICBM) last week (July 6), marking its first-ever test of a submarine-based ballistic missile in international waters.</p>
+<p>Equally importantly, this is the <a href="https://indianexpress.com/article/explained/explained-global/china-this-week-military-generals-new-icbm-rocket-10783391/"><strong>People’s Liberation Army’s (PLA) second launch</strong></a> of a ballistic missile in international waters since 1980. China conducted a land-based ICBM test using the Dong Feng or DF-31 delivery system on September 21, 2024.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The latest test missile was reportedly launched from a PLA Navy Jin-class Type 094 submarine based in the South China Sea. It was carrying a dummy warhead that covered a distance of 7,300 km, reportedly flying over the Philippines, before landing in the Southern Pacific Ocean. The dummy warhead landed within an area designated under the Treaty of Rarotonga’s South Pacific nuclear-free zone (where testing or stationing of nuclear explosive devices is barred), after it flew over the Exclusive Economic Zones of Micronesia, Nauru, Kiribati, and Tuvalu.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p><strong>What is known about this missile test?</strong></p>
+<p>It is extremely difficult to determine if the missile was Ju Lang 2 (JL-2) or the latest Ju Lang 3 (JL-3). Both JL-2 and JL-3 are submarine-launched ICBMs, jointly developed with DF-31 and DF-41, respectively. ICBMs generally have a range of at least 5,000 km, and the JL-2 is capable of travelling 8,000-9,000 km, while the JL-3 reportedly has a range of over 9,000 km.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Both delivery systems can be paired with China’s current Type 094 SSBNs (nuclear-powered submarines with ballistic missiles). Based on the reported distance this warhead travelled, it is difficult to precisely determine which delivery system was used.</p>
+<p>But there was a possibility that China could have tested twice or used an alternative route. That is because, like any other country, China issues a navigation warning before missile tests or military exercises. This time, the warning notification suggests that they were considering two testing routes: (i) The one used by launching from the South China Sea towards the Southern Pacific Ocean, and (ii) A proposed launch from the Bohai Sea in the northeast and over Japan into the Pacific Ocean.</p>
+<p>An educated guess is that the second route would have an escalatory precedence, thereby prompting China to opt for the first route.</p>
+<p><strong>Why is Beijing testing now?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Since the turn of the decade, and especially in the past two years, Beijing has not shied away from overtly tom-tomming its improving nuclear capabilities.</p>
+<p>It has constructed multiple missile silos — without camouflaging them and with the awareness that they will be noticed by American satellites. Additionally, it displayed new and advanced nuclear delivery systems in its 2025 military parade and carried out a land-based ICBM test in the Pacific Ocean in 2024.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/chinas-massive-military-parade-and-capabilities-and-concerns-it-displayed-10232984/">China’s massive military parade, and capabilities and concerns it displayed</a></span></div>
+<p>China wants the world, and the United States in particular, to take note of its improving nuclear capabilities. These developments can be attributed to factors such as China’s efforts to demonstrate the construction of its nuclear triad (having the capability to deliver nuclear weapons via land, sea and air).</p>
+<p>It could also be attributed to China attempting to improve its second-strike capabilities, which are an extremely important part of its deterrence posture, since only India and China are the two declared “No-first-use” nuclear weapons states.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Beyond these simplistic explanations, these developments could also be attributed to China’s attempts to construct a nuclear shield, attain great-power status, or improve theatre-level nuclear dominance in the Indo-Pacific region.</p>
+<p><strong>Do these developments mean China’s nuclear strategy has changed?</strong></p>
+<p>No. The important pillars of China’s declaratory nuclear strategy are: i) No-first-use nuclear policy, ii) Assured retaliation, iii) Not to use or threaten to use nuclear weapons against non-nuclear-weapon states or in nuclear-weapon-free zones.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/china-reusable-rocket-long-march-10b-10782074/">China lands a reusable rocket for the first time: Why this matters for the space race</a></span></div>
+<p>These elements have not changed, however, China also subscribes to a “minimum nuclear deterrent” posture. With recent changes in size, diversity, accuracy, and posture, there is evidence that China is shifting away from its minimum nuclear deterrence approach.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>For instance, China could possess around 1,000 nuclear warheads by 2030. It is shifting at least a part of its force towards a “launch on warning” operational readiness posture, which Beijing refers to as “early warning counter-strike” (yujing fanji) — wherein Beijing initiates a counter-strike once a launch warning has been received but before targets in China have been hit.</p>
+<p>It is enhancing its nuclear command, control, and communication systems, it could be developing sub-10kt low-yield/warfighting-capable systems, and now, with a strengthened nuclear triad, there is a widening gap between declaratory doctrine and reality on minimum deterrence.</p>
+<p><strong>What are the implications for Indo-Pacific regional actors, including India?</strong></p>
+<p>For New Delhi, the recent test reinforces the widening strategic gap between India and China’s nuclear arsenal and delivery capabilities — both qualitatively and quantitatively. While India has operationalised its nuclear triad by activation of the Arihant-class SSBNs, its current submarine-launched ballistic missiles (SLBMs) have shorter ranges.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Chinese demonstration adds urgency for India to deploy its longer-ranged K-5 and K-6 missiles to ensure parity in second-strike survivability. Seen alongside China’s recent nuclear modernisation, it will push South Asia into a nuclear arms race.</p>
+<p>Furthermore, with the launch of the JL missile from the fortified South China Sea, Chinese submarines reduce their detection risk. Thus, India needs to expand its anti-submarine warfare capabilities and seabed domain awareness, at least across the Indian Ocean Region.</p>
+<p>For the US and the rest of the world, the launch was a direct demonstration of the maturation of China’s nuclear triad and its improved deterrence capabilities. Although the US has been aware of Chinese nuclear modernisation for a while, this test significantly complicates the US missile defence planning and compels it to refocus its attention and resources from the Middle East to East Asia. It further compels the US to deploy more resources, especially improved anti-submarine warfare and surveillance capabilities, closer to the Chinese coastline and in the South China Sea.</p>
+<p>Regional actors would also be aware that China’s improved capabilities raise the cost of outside intervention in its sphere of influence during any contingency. This comes at a time when, under <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>, uncertainty around expectations of US military support has heightened.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><em><strong>Suyash Desai is a political scientist and a non-resident fellow with the Foreign Policy Research Institute, Philadelphia.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10784573"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirteenth, twenty twenty-six, at forty-two minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/china/" href="https://indianexpress.com/about/china/">China</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/icbm/" href="https://indianexpress.com/about/icbm/">ICBM</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/peoples-liberation-army/" href="https://indianexpress.com/about/peoples-liberation-army/">People's Liberation Army</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/expert-explains-india-worry-china-missile-test-10784573/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-13 15:14 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
