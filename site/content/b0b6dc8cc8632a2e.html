@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>In SpaceX, OpenAI, Anthropic IPOs, how a funding tap could open for Indian start-ups | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>In SpaceX, OpenAI, Anthropic IPOs, how a funding tap could open for Indian start-ups</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-13</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-ipo_expl-econ_20260712234334.jpg?w=1600" alt="In SpaceX, OpenAI, Anthropic IPOs, how a funding tap could open for Indian start-ups">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="In SpaceX, OpenAI, Anthropic IPOs, how a funding tap could open for Indian start-ups" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-ipo_expl-econ_20260712234334.jpg?w=1600" width="650"/><span class="ie-custom-caption">OpenAI's Sam Altman, Anthropic's Dario Amodei, and SpaceX's Elon Musk. The IPOs are likely to draw intense interest from investors globally who, until now, have largely watched the AI boom from the sidelines. (Photo: Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>SpaceX’s $75-billion <a class="" href="https://indianexpress.com/article/explained/explained-sci-tech/spacex-ipo-ai-starlink-musk-takeaways-10706513/">Initial Public Offering (IPO)</a> last month made it the world’s largest listing, well ahead of the $25.6 billion raised by Saudi Aramco in late 2019. What SpaceX’s IPO also did was to set the stage for what may be equally gargantuan listings in the artificial intelligence (AI) space: <a class="" href="https://indianexpress.com/article/world/openai-files-for-us-ipo-after-anthropic-as-ai-giants-head-to-public-markets-10730562/">OpenAI</a> and <a class="" href="https://indianexpress.com/article/technology/tech-news-technology/anthropic-files-for-ipo-as-ai-startup-behind-claude-prepares-historic-us-stock-market-debut-10719359/">Anthropic</a>. And the returns from these <a class="" href="https://indianexpress.com/article/explained/explained-economics/openai-anthropic-spacex-ipo-ai-india-how-to-invest-10731833/">three IPOs could open the tap for thirsty Indian start-ups</a>.</p>
+<p>According to data compiled by private market intelligence platform Tracxn for The Indian Express, the 54 Private Equity (PE) and Venture Capital (VC) firms that have backed SpaceX, Anthropic, and OpenAI have deployed $57.8 billion across 1,376 rounds in Indian technology companies between 2016 and June 2026. Investments in Indian space-tech firms have been just $160 million, with 12 of the 54 participating in four rounds.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><img alt="In SpaceX, OpenAI, Anthropic IPOs, how a funding tap could open for Indian start-ups" class="lazyloading alignnone size-full wp-image-10783581" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/IPO-Funding.png" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/IPO-Funding.png 1168w, https://indianexpress.com/wp-content/uploads/2026/07/IPO-Funding.png?resize=450,295 450w, https://indianexpress.com/wp-content/uploads/2026/07/IPO-Funding.png?resize=600,393 600w, https://indianexpress.com/wp-content/uploads/2026/07/IPO-Funding.png?resize=768,504 768w, https://indianexpress.com/wp-content/uploads/2026/07/IPO-Funding.png?resize=618,405 618w" height="766" sizes="(max-width: 1168px) 100vw, 1168px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1168"/></p>
+<p>Apart from validating Elon Musk’s confidence in his space-plus-AI company, SpaceX’s <a class="" href="https://www.financialexpress.com/market/ipo/" rel="noopener" target="_blank">IPO</a> also made profits for those PE firms and VCs who invested early enough.</p>
+<p>Consider, for instance, Peter Thiel’s Founders Fund, whose $600 million investment in SpaceX was worth more than $50 billion at the company’s IPO price of $135, according to a Bloomberg report, which added that Andreessen Horowitz’s return from its investment in SpaceX would be the biggest in its history.</p><div id="taboola-mid-article-personalisation"></div>
+<p>SpaceX’s IPO valued it at $1.8 trillion. In June, both Anthropic and OpenAI had confidentially filed for a listing. While the latter wants to be valued at $1 trillion in its IPO, Anthropic in May said it had raised $65 billion at a valuation of $965 billion.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/openai-anthropic-spacex-ipo-ai-india-how-to-invest-10731833/">AI giants, SpaceX gear up for IPOs: Are these companies overvalued, and can Indians invest in them</a></span></div>
+<p>“Historically, successful exits have strengthened the ability of VC and PE firms to raise larger successor funds,” said Neha Singh, Tracxn’s Co-founder. “Given that India already features in the active portfolios of these 54 firms, a recovery in investment activity is plausible as fresh capital is raised and redeployed.”</p>
+<p>At the same time, Singh cautioned that it is difficult to estimate how much capital may come to India as IPO proceeds are primarily distributed to Limited Partners rather than directly increasing General Partner deployment capacity.</p>
+<p><strong>The scope</strong></p>
+<p>However, there are “early signs of capital recycling”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Take, for instance, Chicago-based VC firm Valor Equity Partners, whose 4% stake in SpaceX was worth around $70 billion at the IPO price. According to reports, Valor is looking to raise $2.5 billion by the end of 2026. But whether any of that money will reach Indian shores is up in the air given Valor’s focus on deep tech, defence, and late-stage AI infrastructure in the US, Singh of Tracxn said.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/spacex-ipo-ai-starlink-musk-takeaways-10706513/">Orbital data centres, extraterrestrial energy: Detailing Musk’s ambitions with $1.75 bn SpaceX IPO</a></span></div>
+<p>“As a result, any meaningful increase in India allocations is more likely to emerge over the medium term as successor funds are raised and deployed, rather than as an immediate post-IPO outcome,” she added.</p>
+<p>According to private capital data provider PitchBook, liquidity conditions in Asia-Pacific are improving. This suggests “the region’s capital recycling cycle is beginning to repair after several years of constrained realisations,” it said in a report late last month.</p>
+<p>Earlier this year in February, Peak XV had said it had raised $1.3 billion for its new India Seed, India Venture, and APAC funds.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>To be sure, there are differences in how the SpaceX-Anthropic-OpenAI investors have poured money into US and Indian firms. In India, while 71% of the investments of these 54 firms have been at the seed or early stage, 93% of the money in companies such as SpaceX, Anthropic, and OpenAI was at the late-stage.</p>
+<p>This, Singh of Tracxn said, reflects a “deliberate strategy of concentrating capital behind a small number of category-defining companies rather than following their typical investment pattern” which sees them invest just 12% at the late stage across the US portfolio.</p>
+<p>Whatever the money and stage, overseas funds will be welcomed not just by the start-ups but even Indian policymakers, with the Indian economy seemingly having sleepwalked into an exodus of foreign capital over the last couple of years as repatriation of past investments piled up rapidly, totalling $150 billion over 2023-24, 2024-25, and 2025-26.</p>
+<p>This is equal to 61% of gross Foreign Direct Investment (FDI) into the country, resulting in net FDI over the aforementioned three years being a mere $18 billion.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>In 2025-26, Indian start-ups raised $11.7 billion, down 18% from the previous year, according to Tracxn. As it is, private credit is becoming increasingly popular, with Moody’s Ratings estimating the size of the Indian market doubled in the last five years to $25 billion at the end of 2025.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10783575"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/siddharth-upasani/">
+<figure>
+<img alt="Siddharth Upasani" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2025/06/Siddharth-Upasani-.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/siddharth-upasani/"><span></span>Siddharth Upasani</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10062279"></div><div class="follow_author_title" data-id="Siddharth Upasani"></div><div class="follow_author_slug" data-id="siddharth-upasani"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/SiddharthUbiWan">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Siddharth Upasani is a Deputy Associate Editor with The Indian Express. He reports primarily on data and the economy, looking for trends and changes in the former which paint a picture of the latter. Before The Indian Express, he worked at Moneycontrol and financial newswire Informist (previously called Cogencis). Outside of work, sports, fantasy football, and graphic novels keep him busy.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/siddharth-upasani/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirteenth, twenty twenty-six, at fifty minutes past five in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/anthropic/" href="https://indianexpress.com/about/anthropic/">Anthropic</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/openai/" href="https://indianexpress.com/about/openai/">Openai</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/spacex/" href="https://indianexpress.com/about/spacex/">SpaceX</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/in-spacex-openai-anthropic-ipos-how-a-funding-tap-could-open-for-indian-start-ups-10783575/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-13 11:50 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
