@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Trump backtracks on 20% Hormuz fee plan: Why it was unworkable in the first place | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Trump backtracks on 20% Hormuz fee plan: Why it was unworkable in the first place</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Hormuz-transit-fee.jpg?w=1600" alt="Trump backtracks on 20% Hormuz fee plan: Why it was unworkable in the first place">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Hormuz transit fee" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Hormuz-transit-fee.jpg?w=1600" width="650"/><span class="ie-custom-caption">Two men wade in the waters of the Strait of Hormuz with vessels anchored in the background, off Bandar Abbas, Iran, Sunday, July 12, 2026. (Razieh Poudat/ISNA via AP)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>US President Donald Trump has reversed course on his plan to charge a 20% fee to facilitate the safe passage of commercial vessels through the <a href="https://indianexpress.com/article/explained/explained-economics/strait-of-hormuz-shipping-us-iran-tensions-oil-prices-10785410/?ref=explained_pg" rel="noopener" target="_blank"><strong>the Strait of Hormuz</strong></a>.</p>
+<p>“Based on highly productive conversations with Middle East leadership, I have decided to replace the 20% United States Reimbursement Fee with Trade and Investment Deals that the various Gulf States will be making into the United States…” he posted on Truth Social, his social media platform.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>This came just a day after Trump had announced the 20% fee, sparking scepticism among experts and analysts, given the lack of clarity on how the proposed fee would be implemented — or even calculated.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>It is not clear yet why Trump backtracked, and that too this fast. Going by his own statement, the other Gulf states, who are major energy exporters and depend heavily on the strait, might have played a role. Also, the move’s potential impact on global energy and shipping sectors, and Washington’s traditional stance on navigational freedom could have weighed on the US.</p>
+<p><strong>The many questions over the plan</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>There were questions about the viability of implementation as well as the legality of any such move under international law and conventions. There was also a big question mark over whether the US would indeed be able to guarantee the safety and security of commercial vessels in the region. So far, its response to Iranian strikes on vessels has been retaliatory, with an evident lack of pre-emptive measures.</p>
+<p>The International Maritime Organization (IMO) said that it opposes fees on ships passing through international ‌waterways. “We have always been consistent on our stance on fees – IMO stands firmly against charging ‌fees for passage through straits used for international navigation. There is no legal basis through which to introduce mandatory tolls simply to transit through a strait,” an IMO spokesperson was quoted as saying.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/oil-100-dollars-india-impact-iran-war-10572732/">Oil crosses $100: Amid escalating Iran war, supply security bigger priority for India than price</a></span></div>
+<p>The initial announcement was also surprising because the US has traditionally called for freedom of navigation in international waterways and has strongly opposed Iran’s moves to charge tolls from vessels transiting the Strait of Hormuz, which usually accounted for a fifth of global oil and liquefied natural gas (LNG) flows before the war broke out. By calling for a fee, Trump potentially handed Iran an opportunity to argue for its own tolls.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“The U.S.A. will be, from this point forward, known as ‘THE GUARDIAN OF THE HORMUZ STRAIT,’ but as such, and as a matter of FAIRNESS, will be reimbursed, at the rate of 20% on all cargo shipped, for any and all costs necessary to do the job of providing safety and security to this very volatile section of the World,” <a href="https://indianexpress.com/article/world/trump-hormuz-strait-cargo-charge-india-oil-bill-trade-impact-10785159/"><strong>Trump had posted</strong></a> on Truth Social on Monday.</p>
+<p>In his social media post, Trump did not detail how his proposed 20% fee would be calculated. Would it be 20% of the total cost of the cargo on board the ship, or 20% of the cost incurred by American forces to facilitate safe passage, or some other computation? If the fee would have been on the total value of the cargo, the cost of shipping through the Strait of Hormuz would have shot up, which would have notably increased the landed price of the commodity being transported.</p>
+<span class="custom-caption"><img alt="Hormuz" class="lazyloading wp-image-10786367 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/hormuz_d0e0c2.jpg?resize=556,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/hormuz_d0e0c2.jpg 727w, https://indianexpress.com/wp-content/uploads/2026/07/hormuz_d0e0c2.jpg?resize=417,450 417w, https://indianexpress.com/wp-content/uploads/2026/07/hormuz_d0e0c2.jpg?resize=556,600 556w, https://indianexpress.com/wp-content/uploads/2026/07/hormuz_d0e0c2.jpg?resize=376,405 376w" height="784" sizes="(max-width: 727px) 100vw, 727px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="727"/> The different routes through the Strait of Hormuz</span>
+<p><strong>The battle for control of Hormuz</strong></p>
+<p>Behind this flip-flop by Trump is a battle between Iran and the US to effectively control the Strait of Hormuz.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The interim pact between the US and Iran, which was signed on June 17, promised to open the Strait of Hormuz. Since mid-June, vessel movements through the strait have risen meaningfully, even crossing 90 on June 24, with the average being between 40 and 50 on most days, industry data shows. But these were still lower than the pre-war levels of up to 140 daily transits. But with the renewed flare-up in tensions over the maritime chokepoint, vessel transits through the critical trade artery have crashed to the lowest in nearly a month, to levels seen before the US-Iran MoU, industry data shows.</p>
+<p>“POTUS is absolutely right. Whoever provides secure and safe passage of commercial vessels through the Strait of Hormuz should be compensated for this service. Iran has always been the GUARDIAN of the Strait and will remain so FOREVER. 20% is of course too much. We will be fair,” Iran’s foreign minister Seyed Abbas Araghchi posted on X.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/fpi-inflows-india-stock-market-foreign-investor-sentiment-10781163/">After 4 months, FIIs start returning to Indian stocks — but not much has changed</a></span></div>
+<p>The Strait of Hormuz was free for navigation prior to the war that began late February, but since then, Iran has been claiming sovereignty over parts of the narrow waterway between the country and Oman. Unlike man-made shipping waterways like the Suez Canal and the Panama Canal, straits are natural waterways. There is generally no transit charge for crossing them, as per the United Nations Convention on the Law of the Sea (UNCLOS), although some countries do charge fees for services provided to vessels for crossing a few of these waterways. Although neither Iran nor the US have ratified the UNCLOS, it is widely accepted as international law.</p>
+<p>Since last week, Iranian forces have targeted vessels for sailing outside the shipping lanes authorised by Tehran. The US has been responding by striking Iranian military targets, and Tehran has in turn been targeting US assets in other West Asian countries. Moreover, Iran announced over the weekend that it was closing the strait to commercial vessels, and Trump announced Monday that the US was reinstating its naval blockade in the region.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Had Trump’s plan taken effect, it would have effectively forced shipping players to pick a side. They would have had to work with either the US or Iran to transit the strait, which would have also meant that they would be at risk of being targeted by the other.</p>
+<p>During the war, Iran actively regulated the flow of vessels through the strait, allowing only a handful to pass, and that too using routings approved by it. Following the June MoU with the US, Iran continued to insist that vessels should cross the strait only through the routings designated by it, and that too after seeking its permission. Tehran also planned to impose a service fee for transits, but at a later date.</p>
+<p>The US, on the other hand, hitherto maintained that navigation through the strait was free for all, rejected Iran’s regulation of maritime traffic through it, and strongly opposed Tehran’s plans to charge tolls or service fees. The US has been encouraging vessels to use the strait’s waters hugging Oman’s coastline as an alternative to Tehran-designated lanes. The stark differences in the MoU’s interpretation and the vagueness in its terms have now emerged as the flashpoints.</p>
+<p><strong>Why it would have been a worry for India</strong></p>
+<p>The US president’s plan, had it been implemented, would have been concerning for the shipping industry, energy markets, and large oil and gas importers like India as such a levy would inflate costs significantly.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>India is a large importer of energy, and around 40% of its crude oil imports, 60% of its LNG imports, and a whopping 90% of its liquefied petroleum gas (LPG) imports came from West Asia through the Strait of Hormuz. <a class="" href="https://indianexpress.com/article/explained/explained-global/strait-of-hormuz-india-impact-10559842/">The country’s dependence on imports stands at over 88% for oil, 60% for LPG, and about 50% for natural gas, which is imported as LNG.</a></p>
+<p>If a barrel of oil is priced at $75, a 20% fee on it would have inflated its landed price in India by $15 to well over $90 per barrel, as the final price paid by the importer includes the cost of freight and insurance, and not just the price of the commodity. And the West Asia conflict had already led to higher war-risk insurance premiums and freight charges for vessels in the region. A 20% fee on the value of the cargo would be exorbitant, according to industry experts, given that the actual shipping cost is usually notably lower.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/strait-of-hormuz-shipping-us-iran-tensions-oil-prices-10785410/">Strait of Hormuz transits plummet again. What are India’s concerns?</a></span></div>
+<p>As India imports 1.8-2 billion barrels of crude oil a year, every $1-per-barrel increase in oil prices bumps up the country’s oil import bill by up to $2 billion on an annualised basis.</p>
+<p>Assuming that 30% of India’s oil imports would still come via the Strait of Hormuz, the 20% fee at an oil price of $75 per barrel would alone translate to $9 billion on an annualised basis of additional cost for oil alone. It is worth remembering that India also imports large quantities of LNG, LPG, fertilisers, and industrial inputs from West Asia, which means billions of dollars more would have had to be spent on imports had the US charged its fee.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>India, like various other nations, has been wishing for a quick end to the conflict and a rapid normalisation in global energy flows. It has also <a class="" href="https://indianexpress.com/article/business/strait-of-hormuz-iran-toll-india-free-safe-navigation-waterway-10628228/">consistently maintained that navigation through international waterways like the Strait of Hormuz should be free and accessible to all.</a></p>
+<p>While highly diversified crude sourcing has helped ensure adequate oil supplies, the government was forced to ration gas supplies to certain industries and commercial consumers to ensure adequate availability for households and some priority sectors, and even take some emergency measures to prevent panic buying of fuels. As the situation visibly improved following the MoU, some of these measures were recently rolled back by the government.</p>
+<p>Moreover, the surge in international prices forced India to import oil and gas at extremely high rates, as the country had to prioritise supply security over price considerations. For instance, India’s oil imports in March-May surged by 47% year-on-year to $48.88 billion, as per provisional data from the Ministry of Petroleum and Natural Gas (MoPNG). Energy imports are a major component of India’s overall imports, and any meaningful increase has ramifications for the country’s trade balance, current account, inflation, and the rupee’s exchange rate, among others.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10786032"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fourteenth, twenty twenty-six, at forty-one minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/trump-strait-of-hormuz-20-percent-transit-fee-india-impact-10786032/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-14 18:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
