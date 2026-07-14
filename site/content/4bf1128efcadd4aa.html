@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Two Covid deaths in Andhra, eight cases: Is this a cause for concern? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Two Covid deaths in Andhra, eight cases: Is this a cause for concern?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/covidtesting.jpg?w=1600" alt="Two Covid deaths in Andhra, eight cases: Is this a cause for concern?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Covid" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/covidtesting.jpg?w=1600" width="650"/><span class="ie-custom-caption">Andhra Pradesh's health department has initiated contact tracing and testing measures. Representational image/file</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Andhra Pradesh health department is on alert following two successive Covid-19 deaths in the state. These are the first Covid-related deaths in the state since 2022.</p>
+<p>Eight other persons also tested positive for the virus and are being monitored, health department officials said. But they also said that these are sporadic cases that should not be considered a fresh outbreak.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><strong>Under what circumstances did the two deaths occur?</strong></h2>
+<p>The first victim was a 60-year-old man admitted to Sri Venkateswara Institute of Medical Sciences in Tirupati. He was later shifted to Christian Medical College in Vellore, in the neighbouring state of Tamil Nadu. The patient had extensive comorbidities, including diabetes and kidney disease, and died while undergoing treatment on June 28. A postmortem RT-PCR test confirmed a positive diagnosis for <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a>.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-health/hantavirus-zoonotic-spillover-risk-climate-change-10685338/">Hantavirus is a warning: Why outbreaks like this may become more common</a></span></div>
+<p>The next fatality was, on July 7, that of a 46-year-old man admitted to the Government General Hospital in Kadapa. The patient, who was admitted with acute breathlessness and persistent cough, succumbed to severe bilateral lung damage and pneumonia. Extensive lung damage consistent with Covid-19 was detected when he underwent a chest CT scan.</p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>What measures has the state taken?</strong></h2>
+<p>In response to the sudden occurrence of this cluster, the state’s health department has initiated contact tracing and testing measures. “Five cases were identified in Kadapa and the rest three were their contacts. We are monitoring the situation closely and there is no need to panic as this is a sporadic case,” Andhra Pradesh Health Secretary S Suresh Kumar told <em>The Indian Express</em>. He said that this was “not an outbreak” and that surveillance and contact tracing measures are already in place.</p>
+<p>Medical practitioners, however, are concerned whether this sudden occurrence of cases was caused by a more virulent strain of the Omicron subvariant.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-health/ebola-outbreak-who-uganda-congo-urban-spread-spillover-10701138/">Ebola: An Expert Explains why infection spillover is not a pandemic</a></span></div>
+<p>“Because there was rapid development of respiratory distress among patients, it is suspected that the current spike could be caused by an aggressive Omicron subvariant,” a doctor associated with the District Medical Office in Kadapa told The Indian Express.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>Is this a matter of concern?</strong></h2>
+<p>The Omicron variant of SARS-CoV-2 is considered to be highly contagious and spreads at a rapid pace even in the lungs. Healthcare systems in the country were overwhelmed at first by the spread of the Omicron variant. Children were also affected by the Omicron wave, unlike the previous Delta wave. However, Omicron infections have generally caused less severe disease on average than earlier variants owing to increased population immunity.</p>
+<p>“The concern is that the variant could quickly spread through the population and put stress on the healthcare mechanism,” a government doctor said. The state, however, is not expecting this. Health Secretary Kumar said: “In the past six days, no new cases have been reported. So we believe that this was just a sporadic incident”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/drc-ebola-outbreak-congo-conflict-health-crisis-10704622/">How conflict has complicated Congo’s battle against the Ebola outbreak</a></span></div>
+<p>The state government has sent throat and nasal swabs of the affected people, including those who died, to <a class="" href="https://indianexpress.com/section/cities/pune/" rel="noamphtml">Pune</a>’s National Institute of Virology (NIV) for genome sequencing. “The results of this are awaited. We expect this to come within the next couple of days,” Kumar said.</p>
+<p>A committee of five specialists have also ruled out the possibility of a new subvariant, Kumar said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2><strong>What can be done now?</strong></h2>
+<p>The basic effort of the state government is to “wait and watch”, top officials said. Meanwhile, the neighbouring state of Tamil Nadu, where the first Andhra patient died, in a statement said that “there was no evidence of a high-severity strain circulating in the state and that case numbers remain lower than in previous years”.</p>
+<p>The Tamil Nadu government said the Directorate of Public Health and Preventive Medicine is monitoring the situation. The NIV has found that the currently circulating strain causes only mild illness, it said. However, elderly persons, pregnant women, people with chronic health conditions, and those with low immunity have been advised to continue taking precautions.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10785543"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikhila-henry/">
+<figure>
+<img alt="Nikhila Henry" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/05/nikhila-400.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikhila-henry/"><span></span>Nikhila Henry</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9339943"></div><div class="follow_author_title" data-id="Nikhila Henry"></div><div class="follow_author_slug" data-id="nikhila-henry"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikhila Henry is an Assistant Editor at The Indian Express, based in Hyderabad. With a career spanning 17 years, she has established herself as an authoritative voice on South Indian affairs, specialising in the complex intersections of politics, education, and social justice.
+Experience &amp; Career: Nikhila commenced her journalism career in 2007 as an education correspondent for The Times of India in Hyderabad,where she gained recognition for her coverage of student politics. Her professional trajectory includes a four-year tenure at The Hindu, where she focused on minority affairs and social welfare. In 2019, she took on a leadership role as the South Bureau Chief for The Quint, where she directed regional coverage across all five South Indian states. Her expansive career also includes a tenure at the BBC in New Delhi and contributions to prestigious international outlets such as The Sunday Times (London) and HuffPost India.
+
+Expertise &amp; Focus Areas
+Nikhila’s reportage is marked by a deep-seated understanding of grassroots movements and institutional policy. Her core focus areas include:
+
+
+ 	
+Regional Politics: Comprehensive analysis of the socio-political dynamics across South India.
+
+ 	
+Education &amp; Student Movements: Chronicling the evolution of Indian academics and the rise of youth activism.
+
+ 	
+Minority Affairs: Rigorous reporting on the welfare, rights, and challenges facing marginalized communities.
+
+ 	
+National Beat: Elevating regional stories to national prominence through investigative and on-ground reporting.
+
+
+Authoritativeness &amp; Trust
+A respected figure in Indian media, Nikhila is not only a seasoned reporter but also an accomplished author and editor. She authored the critically acclaimed book The Ferment: Youth Unrest in India and edited Caste is Not a Rumour, a collection of writings by Rohith Vemula. Her dual background in daily news reporting and long-form authorship allows her to provide readers with a nuanced, historically-informed perspective on contemporary Indian society.
+
+
+
+Find all stories by Nikhila Henry here.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikhila-henry/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fourteenth, twenty twenty-six, at forty-eight minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-health/andhra-pradesh-covid-deaths-kadapa-cases-explained-10785543/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-14 10:42 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
