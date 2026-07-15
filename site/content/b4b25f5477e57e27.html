@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From Bishnoi associate to FBI target: the rise of Jaggu Bhagwanpuria’s global crime syndicate | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From Bishnoi associate to FBI target: the rise of Jaggu Bhagwanpuria’s global crime syndicate</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/jaggu.jpg?w=1600" alt="From Bishnoi associate to FBI target: the rise of Jaggu Bhagwanpuria’s global crime syndicate">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="According to US federal indictments, a Punjab police officer worked with members of the Jaggu Bhagwanpuria (in photo) organised crime group to target perceived rivals with false accusations and demands for money. (File Photo)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/jaggu.jpg?w=1600" width="650"/><span class="ie-custom-caption">According to US federal indictments, a Punjab police officer worked with members of the Jaggu Bhagwanpuria (in photo) organised crime group to target perceived rivals with false accusations and demands for money. (File Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>For years, Jaggu Bhagwanpuria was just another name in Punjab Police dossiers.</p>
+<p>Today, he is at the centre of a 44-page US federal indictment that alleges he helped build a transnational criminal enterprise stretching from Punjab to California and Canada.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The indictment, filed in a federal court in California, also places Bhagwanpuria alongside his former ally-turned-rival Lawrence Bishnoi, revealing how two gangsters who once worked together allegedly built competing global syndicates.</p>
+<h3><strong>From a border village to a global syndicate</strong></h3>
+<p>Thirty-eight-year-old Jagdeep Singh alias Jaggu Bhagwanpuria hails from Bhagwanpur village in Gurdaspur district. His mother, Harjit Kaur, was once the village sarpanch.</p><div id="taboola-mid-article-personalisation"></div>
+<p>A promising kabaddi player, he had his first major brush with the law in 2012, when Punjab Police booked him in an NDPS case involving the alleged recovery of 28 grams of heroin from Mattewal village in Amritsar district. Although he was eventually acquitted, investigators regard the case as his first significant entry into organised crime.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Since then he has had around 128 FIRs registered against him, including cases of murder, extortion, Arms Act violations, around a dozen NDPS cases, and conspiracy charges in some instances.</p>
+<p>He has spent much of the past decade in Punjab jails, including Patiala, Goindwal Sahib and Bathinda. In March 2025, the Narcotics Control Bureau detained him under the PIT-NDPS Act and shifted him to the high-security Silchar Central Jail in Assam in an attempt to sever his links with associates in Punjab.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>According to US prosecutors, Bhagwanpuria established the Bhagwanpuria Organised Crime Group, which allegedly has more than 1,000 members and associates spread across India, Canada, the United States, the United Kingdom, Europe, Australia and New Zealand.</p>
+<p>His influence, investigators allege, was not only confined to the underworld.</p>
+<p>In 2019, the North India Circle Style Kabaddi Federation wrote to the then DGP alleging that he dictated team selections for tournaments overseas.</p>
+<p><strong>From ally to arch-rival</strong></p>
+<p>Bhagwanpuria was once a close associate of Lawrence Bishnoi. The two were accused of plotting the assassination of popular Punjabi rapper <a class="" href="https://indianexpress.com/about/sidhu-moose-wala/" rel="noamphtml">Sidhu Moosewala</a> in May 2023. US prosecutors describe him as a “former associate” who eventually broke away to build an independent organisation powerful enough to challenge the Bishnoi syndicate.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The split was not merely personal. It was about control over extortion rackets, contract killings, narcotics routes and overseas networks.</p>
+<p>The fracture began in February 2023 inside Goindwal Sahib Central Jail, where members of the two gangs clashed in one of Punjab’s bloodiest prison incidents.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/lawrence-bishnoi-us-extradition-india-treaty-10779969/">Can India refuse to extradite Lawrence Bishnoi? Here’s what the law says</a></span></div>
+<p>Bhagwanpuria gang members <a class="" href="https://indianexpress.com/about/mandeep-singh/" rel="noamphtml">Mandeep Singh</a> alias Tufan and Manmohan Singh alias Mohna were killed. Within hours, Bishnoi associate Goldy Brar claimed responsibility in a Facebook <a href="https://indianexpress.com/article/cities/delhi/delhi-upsc-teacher-helped-lawrence-bishnoi-gang-threaten-businessman-arrested-10784559/"><strong>post</strong></a>.</p>
+<p><strong>How the network went global</strong></p>
+<p>Like the Bishnoi syndicate, Bhagwanpuria’s organisation allegedly followed Punjab’s migration routes overseas.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>According to the indictment, trusted associates settled in Canada and the United States which became operational nodes for trafficking drugs, moving firearms, collecting extortion money and laundering proceeds.</p>
+<p>California emerged as a major hub, with investigators alleging that cocaine, methamphetamine and heroin were transported across the United States before being routed into Canada.</p>
+<p>Over 250,000 Punjabis live in California, the largest population in the U.S. Bhagwanpuria targeted real estate developers, liquor contractors, transporters, and local businessmen. The FBI Sacramento field office first raised an alarm in May 2024, when it urged the Punjabi diaspora to report extortions.</p>
+<p><strong>Recruiting through Instagram</strong></p>
+<p>The indictment alleges that the gang deliberately targeted disgruntled, economically vulnerable youngsters and even minors, offering them quick money, status, gang identity and, eventually, a pathway abroad.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Those who proved loyal were allegedly rewarded with opportunities to relocate to Canada, the United States or the United Kingdom, where they became part of overseas operations.</p>
+<p>Punjab Police have previously pointed to social media as an important recruitment tool. In 2023, then <a class="" href="https://indianexpress.com/section/cities/ludhiana/" rel="noamphtml">Ludhiana</a> Range IG Kaustabh Sharma said three members of an international Bhagwanpuria-linked module had been recruited through Instagram.</p>
+<p>Social media, investigators say, also became a weapon. Murder claims, threats to extortion victims and images glorifying gang members were routinely circulated online to spread fear and attract fresh recruits. Earlier this year, the Punjab Anti-Gangster Task Force said it had blocked 643 social media pages promoting gangster culture.</p>
+<p><strong>Running a global operation from jail</strong></p>
+<p>Perhaps the most striking allegation in the indictment is that Bhagwanpuria allegedly continued to direct operations from prison.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>According to US prosecutors, he remained in touch with overseas associates through contraband mobile phones and encrypted communication platforms, settling disputes, approving consignments and overseeing narcotics trafficking.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/lawrence-bishnoi-gang-canada-probe-fbi-operation-hard-ball-explained-10777884/">From Canadian scrutiny to FBI’s Operation Hard Ball: How net tightened around Lawrence Bishnoi</a></span></div>
+<p>One episode cited in the indictment reads almost like a scene from a crime thriller.</p>
+<p>Investigators allege that Bhagwanpuria personally sent an FBI confidential informant the phone number of a drug coordinator and the serial number of a currency note that would authenticate the delivery of a 20-kg cocaine consignment destined for transport from Los Angeles to Vancouver.</p>
+<p>When US authorities intercepted the sham shipment in February this year, prosecutors say Bhagwanpuria immediately realised something had gone wrong. In a message allegedly sent from jail in Punjabi, he wrote that the “whole load got caught” before accusing the informant of blowing the operation because “a tracker was in your bricks…”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The exchange, prosecutors say, illustrates not only his real-time knowledge of the shipment but also the extent to which he allegedly remained involved despite spending years behind bars.</p>
+<h3><strong>Why the FBI stepped in</strong></h3>
+<p>For years, Punjab’s gang wars were largely investigated by Indian police agencies, with Canadian authorities increasingly drawn in as violence spread overseas. The FBI’s involvement marks a significant escalation.</p>
+<p>The indictment invokes the US Racketeer Influenced and Corrupt Organizations (RICO) Act, allowing investigators to treat the alleged offences as components of one criminal enterprise rather than isolated crimes.</p>
+<h2><strong>Why the case matters</strong></h2>
+<p>The indictment marks a watershed in the international scrutiny of Punjab-origin organised crime. For Punjab, it is a reminder that the state’s gang wars no longer end at the border.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>For the Punjabi diaspora, the human cost is already stark. Naindeep Singh of the Jakara Movement, says extortion victims in California often stay silent, fearing not just for themselves but for relatives back in Punjab . This fear became brutally real last year when Bhagwanpuria’s own mother, Harjit Kaur, and a cousin, were gunned down in Batala last year in a rival hit.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10784645"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/manraj-grewal-sharma/">
+<figure>
+<img alt="Manraj Grewal Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2019/05/manraj-1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/manraj-grewal-sharma/"><span></span>Manraj Grewal Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="5724412"></div><div class="follow_author_title" data-id="Manraj Grewal Sharma"></div><div class="follow_author_slug" data-id="manraj-grewal-sharma"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Manraj Grewal Sharma is a senior journalist and the Resident Editor of The Indian Express in Chandigarh, where she leads the newspaper’s coverage of north India’s most politically and institutionally significant regions. From Punjab and Haryana to Himachal Pradesh and the Union Territory of Chandigarh, she oversees reporting at the intersection of governance, law, politics and society. She also reports on the diaspora, especially in Canada and the US.
+
+With a career spanning journalism across several countries, academia and international development, Manraj brings a rare depth of perspective to regional reporting. She is widely regarded as a leading chronicler of Punjab’s contemporary history and socio-political evolution, particularly its long shadow of militancy, federal tensions and identity politics. Her book, Dreams after Darkness, remains a definitive account of the militancy years and their enduring aftermath.
+
+Professional Background &amp; Expertise
+
+A gold medalist in mass communication and a post-graduate in English literature, Manraj has a multifaceted career spanning journalism, academia, and international development. She was also awarded a fellowship by National Foundation of India and did several in-depth pieces on Manipur. Internationally, she has reported from Israel, US, UK, Myanmar, and Mauritius
+
+Her key focus areas include:
+
+Regional Politics, History, Agriculture, Diaspora, and Security. Of late, she has started focusing on Legal &amp; Judicial Affairs: Much of her recent work involves reporting on high-stakes cases in the Punjab and Haryana High Court, ranging from environmental policy to civil rights.
+
+International Consulting: She previously served as a consulting editor for the Asia Pacific Adaptation Network and a publishing consultant for the Asian Development Bank (ADB) in Manila.
+
+Academia: For five years, she was the managing editor of Gender, Technology and Development, a peer-reviewed international journal at the Asian Institute of Technology, Bangkok.
+
+Recent Notable Articles (Late 2025)
+Her recent reportage focuses heavily on judicial interventions and regional governance:
+
+1. Environment &amp; Governance
+"‘NGT can’t test legality of policy’: HC hears challenge to Punjab’s ‘Green Habitat’ plan" (Dec 22, 2025): Covering a critical legal battle over whether the National Green Tribunal has the authority to strike down a state policy regularizing farmhouses on delisted forest land.
+
+"High court pulls up Punjab poll panel over audio clip probe" (Dec 10, 2025): Reporting on judicial concerns regarding the transparency and fairness of local body elections.
+
+2. Legal Rights &amp; Social Welfare
+"HC issues notice to Punjab, Haryana over delay in building old age homes" (Dec 22, 2025): Reporting on a contempt petition against top officials for failing to establish government-run homes for the elderly as promised in 2019.
+
+"Victims can appeal acquittals in sessions court without seeking special leave" (Dec 19, 2025): Highlighting a significant procedural shift in criminal law following a Supreme Court ruling.
+
+"HC upholds benefits for Punjab FCI officer acquitted in 20-year-old bribery case" (Dec 19, 2025): A report on the concept of "honourable acquittal" and its impact on employee benefits.
+
+3. Human Rights &amp; Identity
+"As Punjab denies parole to MP Amritpal Singh, HC asks it to submit ‘foundational material’" (Dec 1, 2025): Covering the legal proceedings regarding the radical preacher and sitting MP's request to attend Parliament.
+
+"Protecting life paramount: HC backs Muslim woman in live-in after verbal divorce" (Nov 6, 2025): Analyzing judicial protections for personal liberty in the context of traditional practices.
+
+Signature Beats
+Manraj is recognized for her ability to decode complex judicial rulings and relate them to the everyday lives of citizens. Whether it is a 30-year-old land battle in Fazilka or the political implications of Kangana Ranaut’s candidacy in Mandi, her writing provides deep historical and regional context.
+
+Contact
+
+@grewal_sharma on X
+manrajgrewalsharma on Instagram                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/manraj-grewal-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirteenth, twenty twenty-six, at forty-five minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/bishnoi-to-rise-fbi-target-jaggu-punjab-10784645/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-15 10:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Modern political parties were born in the US: 250 years later, how they have evolved | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Modern political parties were born in the US: 250 years later, how they have evolved</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/political-parties-1600.jpg?w=1600" alt="Modern political parties were born in the US: 250 years later, how they have evolved">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="political parties" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/political-parties-1600.jpg?w=1600" width="650"/><span class="ie-custom-caption">Today, political parties appear both stronger and weaker than ever. (Photo: Freepik)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>As the <strong><a class="" href="https://indianexpress.com/article/world/us-news/why-the-us-is-marking-250-years-in-2026-and-why-it-matters-globally-10734990/" rel="noopener" target="_blank">United States marks 250 years since the Declaration of Independence</a></strong>, one of its most significant political innovations is undergoing a transformation. Modern political parties arguably emerged in the American republic, becoming the institutions that contested elections, recruited leaders, and gave citizens a platform to participate in public life.</p>
+<p>Today, however, parties appear both stronger and weaker than ever. While they continue to dominate elections, political power increasingly revolves around individual leaders, media ecosystems, and polarising issues rather than ideology.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>The earliest political parties in America</h2>
+<p>Political scientist E E Schattschneider famously claimed in 1942 that “modern democracy is unthinkable save in terms of parties.” His point was simple: political parties are not merely vehicles for winning elections; they organise political conflict, aggregate competing demands into governing programmes, recruit candidates, educate voters, create accountability, and provide a bridge between citizens and the state.</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<p>Yet America’s founders were deeply suspicious of them. They referred to political parties as ‘factions’—groups driven by self-interest that could push unjust laws and threaten republican government. In his farewell address, cited by political scientist L Sandy Maisel in his book American Political Parties and Elections (2007), George Washington warned “in the most solemn manner against the baneful effects of the spirit of party.”</p><div id="taboola-mid-article-personalisation"></div>
+<p>Despite these warnings, parties emerged almost immediately after the constitution was ratified. The first party system grew out of disagreements within George Washington’s own administration. Thomas Jefferson and James Madison opposed the economic vision of Alexander Hamilton, Washington’s Secretary of the Treasury. Hamilton championed a strong national government, public credit, and commercial development, while Jefferson and Madison envisioned a republic rooted in independent farmers and state autonomy.</p>
+<p>Madison encouraged Jefferson to organise opposition to Hamilton’s programme, and together they built what became the Democratic-Republican Party in the 1790s. Opposing them were the Federalists, led by Hamilton and supported by John Adams.</p>
+<p>The eventual two-party system would become one of the defining features of American democracy.</p>
+<p><strong>The era of mass party politics</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The War of 1812 marked the collapse of the Federalist Party and the end of the first American party system. By the late 1820s, supporters of Andrew Jackson had reorganised as the Democratic Party and championed limited government, low taxes, and states’ rights, while many also defended slavery.</p>
+<p>Jackson’s opponents rallied behind the Whig Party, which emerged from the National Republicans. The collapse of the Whigs over the issue of slavery, however, paved the way for the rise of the Republican Party in the 1850s. Since then, the Democratic and Republican parties have dominated American national politics.</p>
+<p>By the late 19th century, American politics had become an era of mass party organisation. As suffrage expanded, industrialisation accelerated and cities grew, parties evolved into institutions with local committees, patronage networks, partisan newspapers and national conventions.</p>
+<p><strong>The New Deal realignment</strong></p>
+<p>The 20th century marked a turning point in American party politics. Progressive reformers sought to curb the power of party organisations and local political bosses. Their goal was to weaken patronage, reduce corruption, and give citizens greater control over the democratic process. Reforms such as the introduction of the merit-based federal civil service reduced the influence of party patronage, while measures including the direct primary, the initiative, referendum and recall shifted power away from party leaders. The ratification of the Nineteenth Amendment in 1920 extended the right to vote to women.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The next great upheaval came with the onset of the Great Depression. Franklin D. Roosevelt’s role in reshaping American politics is striking. Responding to the Great Depression, and later leading the nation through the Second World War, Roosevelt built the New Deal coalition, uniting organised labour, urban immigrants, Catholics, Jews, African Americans in the North, and Southern whites under the Democratic Party.</p>
+<p>Speaking with <em>The Indian Express</em>, Rahul Verma, political scientist and fellow at the New Delhi-based Centre for Policy Research, described the New Deal as “a fundamental restructuring of the American government” in response to the economic collapse of 1929 and the Great Depression.</p>
+<p>The crisis devastated not only the United States but much of the global economy and unfolded amid a rapidly changing international order. The old European colonial powers had been weakened by the First World War, and there was “political instability in different parts of Western Europe,” Verma remarks.</p>
+<p>Against this backdrop, Verma says, “The Roosevelt administration recalibrated the relationship between the state and the economy. Through the New Deal, the federal government took on a much larger role in creating jobs, regulating markets and expanding social welfare. It created a very different social coalition for the Democratic Party.”</p>
+<p><strong>The age of polarisation</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The political landscape that emerged in the 1960s influences American politics even today.</p>
+<p>“The origins of the current state of polarisation in American politics can be traced back to the Civil Rights Act of 1964 and the changes introduced under Lyndon Johnson,” says Verma. The Republican Party built a coalition of white conservatives across the South, while voters from urban centres, labour unions, and industrial towns increasingly shifted towards the Democratic Party. “That realignment casts a long shadow over American politics even today,” Verma said.</p>
+<p>Over the following decades, he says, technological and institutional changes deepen these divisions. “The Republican and Democratic coalitions were once primarily policy coalitions. Over time, it becomes much more than policy differences. One side begins to see the other not just as an opponent, but as an existential threat. That is what affective polarisation means.”</p>
+<p>Verma says there are signs of a similar trend in India. “We don’t yet have the data to make the claim that Indian politics is experiencing the same kind of affective polarisation but what we can say is that over the last 25 years, the ideological distance between political parties has increased and political positions have hardened. BJP voters are increasingly distinct from Congress voters, who are increasingly distinct from supporters of regional parties. We cannot precisely measure how much that distance has grown, but there is a definite increase.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>He argues that polarisation is increasingly shaping social life as well as electoral politics. “In the past, I didn’t think political ideology would become a factor in friendships or romantic relationships,” he says. “But if you look at the younger generation today, many dating apps allow people to filter by political preferences. Political identity is increasingly mapping onto people’s social lives.”</p>
+<h2>The relevance of political parties today</h2>
+<p>Yet, Verma says the view that political parties are becoming irrelevant is perhaps overstated. He notes that in the 1980s, many scholars argued that parties were in decline as voter turnout fell and electoral politics became increasingly candidate-centric. “While television, and later social media, have made individual leaders far more prominent by enabling nationally coordinated, personality-driven campaigns, parties continue to play a central role in democratic politics”</p>
+<p>“Think about American politics or Indian politics…independent candidates or those without a party label are less likely to win.” Even as personalities dominate campaigns, party labels remain indispensable because they help voters identify candidates and enable political coordination.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10787544"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between colonial history and contemporary issues, especially in gender, culture, and sport.
+
+For suggestions, feedback, or an insider’s guide to exploring Calcutta, feel free to reach out to her at nikita.mohta@indianexpress.com.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifteenth, twenty twenty-six, at five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/modern-political-parties-born-in-the-us-are-they-irrelevant-10787544/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-15 10:51 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
