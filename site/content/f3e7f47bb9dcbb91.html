@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Explained: Challenges to Madhya Pradesh HC on Bhojshala-Kamal Maula dispute | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Explained: Challenges to Madhya Pradesh HC on Bhojshala-Kamal Maula dispute</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Bhojshala-dispute.jpg?w=1600" alt="Explained: Challenges to Madhya Pradesh HC on Bhojshala-Kamal Maula dispute">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A part of the Bhojshala-Kamal Maula Mosque complex in Dhar, Madhya Pradesh." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Bhojshala-dispute.jpg?w=1600" width="650"/><span class="ie-custom-caption">A part of the Bhojshala-Kamal Maula Mosque complex in Dhar, Madhya Pradesh. (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Supreme Court on Tuesday declined to pass any order for restoring the status quo at the disputed Bhojshala-Kamal Maula mosque complex in Dhar, Madhya Pradesh. It directed that Muslim worshippers be provided an adjacent alternative space for Friday prayers until the court examines the dispute in detail.</p>
+<p>The Madhya Pradesh High Court’s judgment in May held that the site’s religious character is that of a temple dedicated to Goddess Vagdevi (Saraswati). It is <a href="https://indianexpress.com/article/legal-news/supreme-court-bhojshala-case-friday-namaz-alternate-space-10785824/"><strong>now being challenged</strong></a> on several grounds.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>On site’s character and title</strong></p>
+<p>The principal challenge is that the HC “impermissibly delved into highly contentious and complex questions of fact, historical evidence, and archaeological interpretations to determine the ‘original’ character of the monument,” and that such “detailed examination… is beyond the scope of summary proceedings in writ jurisdiction and should have been relegated to a civil court.”</p><ev-engagement group-name="contentLogin"></ev-engagement><ev-engagement group-name="myNotification"></ev-engagement><div class="ev-meter-content ie-premium-content-block">
+<span class="custom-caption"><img alt="People offer prayers inside the Bhojshala-Kamal Maula mosque complex." class="lazyloading size-medium wp-image-10786457" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/bhojshala-prayers.jpg?resize=450,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/bhojshala-prayers.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/07/bhojshala-prayers.jpg?resize=338,450 338w, https://indianexpress.com/wp-content/uploads/2026/07/bhojshala-prayers.jpg?resize=450,600 450w, https://indianexpress.com/wp-content/uploads/2026/07/bhojshala-prayers.jpg?resize=304,405 304w" height="960" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> People offer prayers inside the Bhojshala-Kamal Maula mosque complex. (Express photo by Anand Mohan J)</span>
+<p>The petitioners argue that although the court repeatedly stated it was not deciding title, it declared the site’s religious character in terms that had direct consequences for worship rights “under the guise of Article 226.” The law accords High Courts the power to issue writs for enforcing fundamental rights, as well as for any other legal right against the State or authorities discharging public duties.</p><div id="taboola-mid-article-personalisation"></div>
+<p>This challenge goes to the heart of what the High Court did. The dispute arose from a 2003 Archaeological Survey of India (ASI) order that allowed Hindu worship on Tuesdays and during Basant Panchami, and Muslim prayers on Fridays. Hearing connected proceedings filed by Hindu, Muslim and Jain parties, the HC ordered the ASI to conduct a fresh scientific survey.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/bhojshala-case-hindu-muslim-arguments-mp-hc-10691153/">Bhojshala verdict: What the Hindu and Muslim sides argued in the High Court</a></span></div>
+<p>It then examined Section 16 of the Ancient Monuments and Archaeological Sites and Remains Act, 1958, which bars the use of a protected monument in a manner inconsistent with its character. The HC held that before deciding whether the 2003 arrangement complied with Section 16, it first had to ascertain the monument’s true character. It found the 2003 arrangement defective for having been issued without prior inquiry.</p>
+<p>Relying on the ASI report, which recorded Paramara-period foundations from the 9th or 10th century, temple-style pillars and inscriptions referring to “Sharada Sadan”, the HC held that the disputed area of the Bhojshala Complex and Kamal Maula Mosque was that of a temple.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The petitioners do not dispute the survey’s findings, but argue instead that the report was treated as conclusive without being tested through cross-examination and that it was read selectively. The plea points out that the report also recorded Arabic and Persian inscriptions, material associated with Islamic use of the structure and the continued official nomenclature “Bhojshala and Kamal Maula Mosque.”</p>
+<p><strong>On interpretation of law</strong></p>
+<p>The petitioners also challenge the HC’s interpretation of the <a href="https://indianexpress.com/article/explained/explained-law/sc-challenges-places-of-worship-act-10538918/"><strong>Places of Worship (Special Provisions) Act, 1991</strong></a>, which preserves the religious character of places of worship as they existed in August 1947.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read </span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/mp-high-court-bhojshala-temple-verdict-explained-10692190/">Why Madhya Pradesh High Court ruled that Bhojshala was a temple</a></span></div>
+<p>The HC held that Bhojshala fell within the exemption contained in Section 4(3)(a) because it is a protected monument governed by the 1958 Act. It further held that an official 1935 notification issued by the princely state of Dhar, recognising the structure as a mosque, could not prevail.</p>
+<p>However, the petitioners argue that the exemption “merely allows preservation and management of protected monuments and does not authorise the courts to revisit the site’s historical-religious character.” They further contend that preventing Muslims from offering prayers at the site is “a direct and arbitrary violation of their fundamental rights to freedom of religion and to manage their own religious affairs.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The plea also argues that the Kamal Maula Mosque is “a permanent and irrevocable Waqf under Muslim Law” and that the High Court “gravely erred in indirectly negating mosque and Waqf character”, while “entirely bypassing the statutory consequences flowing from notified Waqf status.”</p>
+<p><strong>On HC’s powers</strong></p>
+<p>The petition questions the standing of some of the original petitioners, noting that the organisation Hindu Front for Justice was registered shortly before litigation began and had declared objectives relating to the restoration of places of worship. Such “pleadings themselves disclosed a pre-determined denominational and restorationist agenda directly aligned with the relief sought in the writ petition,” it said.</p>
+<p>The challenge also extends to the HC’s directions regarding future administration of the site. The court directed the Union government and the ASI to decide on the administration of Bhojshala while retaining ASI’s supervisory control over the monument. It further stated that if Muslim parties sought alternative land for a mosque, the state government could consider allotting suitable land elsewhere in Dhar district.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10786444"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifteenth, twenty twenty-six, at zero minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/bhojshala-kamal-maula-masjid/" href="https://indianexpress.com/about/bhojshala-kamal-maula-masjid/">Bhojshala Kamal Maula Masjid</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/legal-challenge-bhojshala-kamal-maula-dispute-10786444/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-15 02:54 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
