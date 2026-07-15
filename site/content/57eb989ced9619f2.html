@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>When the Janata Party government fell: Short term, long shadow | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>When the Janata Party government fell: Short term, long shadow</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/desai-morarji.jpg?w=1600" alt="When the Janata Party government fell: Short term, long shadow">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Morarji Desai Janata Party" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/desai-morarji.jpg?w=1600" width="650"/><span class="ie-custom-caption">Morarji Desai was a senior leader of the Indian National Congress who had served as Deputy Prime Minister and Finance Minister. (Express photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>On July 15, 1979, the first non-Congress Prime Minister of India resigned,  leading to the collapse of the Janata Party government. While the <strong><a class="" href="https://indianexpress.com/article/political-pulse/janata-party-the-giant-slayer-slayed-by-own-giants-10085002/" rel="noopener" target="_blank">Janata experiment did not last its full term in power</a></strong>, it was a watershed moment for Indian politics.</p>
+<p>Here’s how the Janata Party was formed, how it came to power, and how it collapsed under the weight of its contradictions.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><strong>The lead-up</strong></p>
+<p>In January 1977, while announcing fresh elections, Prime Minister Indira Gandhi declared that “some eighteen months ago, our beloved country was on the brink of disaster”. Now that the country “is being nursed back to health”, she said, elections could be held.</p><div class="paywall container-wall-exclusive">
+<p>Even as Gandhi addressed the nation over the radio, her political opponents were being released from jails across the country. The next day, January 19, leaders of four parties met at Morarji Desai’s residence in New Delhi: the Jana Sangh, the Bharatiya Lok Dal, the Socialist Party, and Desai’s Congress (O).</p><div id="taboola-mid-article-personalisation"></div>
+<p>The following day, Desai told the press they had decided to contest the elections under a common symbol and a common name. On January 23, the Janata (People’s) Party was formally launched.</p>
+<h2>Janata Party comes to power</h2>
+<p>Desai was a senior leader of the Indian National Congress who had served as Deputy Prime Minister and Finance Minister. After the Congress split in 1969, he became a prominent face of the anti-Indira faction, known as Congress (O).</p>
+<p>On the night of March 20, 1977, election results were posted outside newspaper offices in Delhi as they came in. The next day’s papers reported that the crowds “were partisan and loudly pro-Janata”, cheering as “the kingpins of the Congress Party tumbled one after another”. In India after Gandhi (2023), historian Ramachandra Guha notes: “For the first time in the nation’s thirty-year history, a party other than the Congress would govern at the centre. No Indian alive in 1977 knew what it was like not to have the Congress as the country’s dominant and ruling political party.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>After the results were declared, a controversy arose over who should be chosen as prime minister. Jayaprakash Narayan and JB Kripalani were entrusted with making the choice. They settled on Desai, who had administrative experience as well as a spotless personal record.</p>
+<p>Jagjivan Ram was offered the Defence portfolio, Charan Singh the powerful Home Ministry, HM Patel the Finance Ministry, and Jana Sangh leader Atal Behari Vajpayee the External Affairs portfolio.</p>
+<p><strong>A continuity of the system</strong></p>
+<p>Despite the Janata Party’s initial ideological tilt towards the rural and small-scale sector, “the very opposite path of development, dictated by the national and international monopoly capital and by the landlord-rich peasant alliance, was continuously adhered to,” writes Georges Kristoffel Lieten in Janata as a Continuity of the System (1980).</p>
+<p>Lieten notes that the party “did some lip service to the defence of the small against the big, intended to benefit the intermediary strata in Indian society.” As a result, the ideals of land reform, reducing imperialist influence, and dispersing industrial power were pushed into the background, leading India towards “an ideologically more outspoken bourgeois-landlord state.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>There was also public anticipation about what the new government would do on the foreign policy front. “The Janata leaders did not want to reject the Soviets for the Americans, but to move towards a principled equidistance from the superpowers,” notes Guha. They also sought to mend fences with India’s neighbours. In November 1977, India and Bangladesh signed an agreement on sharing the waters of the Ganga. In 1978, Foreign Minister Atal Behari Vajpayee visited Pakistan and later, in 1979, China.</p>
+<p>If the Janata government was divided on economic policy, the “greatest consensus,” writes Guha, “was on the new regime’s treatment of the former prime minister. The Janata leaders were determined to make Mrs Gandhi pay for having imposed the emergency.” As many as eight Commissions of Enquiry, each headed by a retired judge, were appointed.</p>
+<p><strong>Rectifying the Constitution</strong></p>
+<p>One of the Janata government’s most enduring initiatives, however, came in the realm of constitutional reform. In an interview on the eve of the 1977 election, Morarji Desai remarked that during the Emergency, democracy itself had been ‘vasectomised’. If his party won, he said, they would “work for the removal of fear which has enveloped the people” and then undertake “to rectify the Constitution”. The principal target was the 42nd Amendment.</p>
+<p>To replace its ‘defiling’ provisions, the Janata government enacted the 43rd and 44th Constitutional Amendments. Together, they restored the normal five-year term of Parliament and the state legislatures, repealed provisions that had curtailed the judiciary’s powers, reinstated the Supreme Court’s authority to adjudicate election disputes—including those involving the prime minister, made it more difficult to proclaim a national Emergency, imposed stricter conditions on extending President’s Rule, and made the publication of parliamentary and legislative proceedings mandatory.</p>
+<p><strong>Morarji Desai resigns</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Through the first half of 1978, Home Minister Charan Singh and Prime Minister Morarji Desai exchanged a series of angry letters as their leadership tussle refused to die down.</p>
+<p>In June, Desai sacked Singh from the Cabinet, along with his close ally Raj Narain. Other Janata leaders tried to broker peace, but failed. In December, Singh returned to public life with a massive farmers’ rally in Delhi. Around 200,000 peasants, mostly from northern India and many from Singh’s own Jat caste, travelled to the capital in tractors and lorries to hear him speak.</p>
+<p>The show of strength forced Desai to bring Charan Singh back into the Cabinet. In February 1979, Singh was appointed finance minister and made one of two deputy prime ministers, alongside Jagjivan Ram.</p>
+<p>The truce did not last. The rift ultimately split the Janata Party, deprived the Desai government of its parliamentary majority, and led to the prime minister’s resignation on July 15, 1979.</p>
+<p><strong>A party other than the Congress</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Janata Party came to power amid grand promises of a second freedom from authoritarian rule and the full restoration of democracy. “It was soon noticed that in both the centre and the states Janata ministers were grabbing the best government bungalows, raiding the Public Works Department for air-conditioners and carpets, organising lavish parties and weddings for their relatives, running up huge telephone and electricity bills, travelling abroad at the slightest pretext…,” writes Guha.</p>
+<p>Even traditionally anti-Congress journals lamented the “death of idealism” within Janata, arguing that it had quickly become a “political party of the traditional type”.</p>
+<p>Lieten notes, “In its confrontation with the movements of the peasants, agricultural labourers, industrial workers, students, women and small entrepreneurs, Janata did not act significantly different from the Congress earlier. There has been even more repression, albeit condoned by the government, than in any period under the Congress rule, particularly in the form of repression by the upper caste landlords of the lower caste agricultural labourers and tenants.”</p>
+<p>Yet, despite collapsing within three years, the Janata Party left a lasting political legacy. It broke the Congress’s monopoly on power and restored key democratic institutions after the Emergency. It also changed politics beyond Delhi. In the states, power became more dispersed, with the Left Front taking office in West Bengal and the AIADMK winning in Tamil Nadu.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The late 1970s also saw the rise of new social movements, from campaigns highlighting the growing violation of women’s rights to environmental activism.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10787922"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between colonial history and contemporary issues, especially in gender, culture, and sport.
+
+For suggestions, feedback, or an insider’s guide to exploring Calcutta, feel free to reach out to her at nikita.mohta@indianexpress.com.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifteenth, twenty twenty-six, at forty-one minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/janata-party-morarji-desai-1078792-10787922/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-15 14:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

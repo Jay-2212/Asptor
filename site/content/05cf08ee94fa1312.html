@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>US Russia sanctions bill: The proposed 100% tariff and what it could mean for India | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>US Russia sanctions bill: The proposed 100% tariff and what it could mean for India</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-15</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Russian-oil-sanctions.jpg?w=1600" alt="US Russia sanctions bill: The proposed 100% tariff and what it could mean for India">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Russian oil sanctions" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Russian-oil-sanctions.jpg?w=1600" width="650"/><span class="ie-custom-caption">The new version of the bill proposes tariffs of up to 100% on top five buyers of Russian oil and natural gas, against the blanket proposal of a 500% tariff on buyers of Russian energy in the original bill. (Pixabay)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>A bill backed by the late US senator Lindsey Graham, aimed at squeezing Russia’s revenue from oil and gas exports, now has a new version. Following <a href="https://indianexpress.com/article/world/us-senator-lindsey-graham-dies-71-tariffs-india-russian-oil-10783221/" rel="noopener" target="_blank"><strong>Graham’s sudden demise</strong></a> last week, a bipartisan group of US senators on Tuesday unveiled the revised version of the Russia sanctions bill, which includes provisions for debilitating tariffs on the top buyers of Russian energy, including India, the second-biggest export market for Russian crude.</p>
+<p>Although it remains to be seen whether the bill will turn into law in its current form, considering the original bill failed to move beyond the initial phases for over a year, the proposed legislation would certainly be a cause of concern for New Delhi.</p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Notably, the new bill is a watered-down version of the original, and does offer some room for workarounds and concessions from Washington. India is expected to push for those, if at all, the bill is enacted, according to industry experts and analysts.</p>
+<p><strong>What the new bill proposes</strong></p>
+<p>The new version of the bill proposes tariffs of up to 100% on the top five buyers of Russian oil and natural gas, against the proposal of a blanket 500% tariff on buyers of Russian energy in the original version that had been hanging fire.</p><div id="taboola-mid-article-personalisation"></div>
+<p>While this reduction in proposed tariffs appears meaningful on paper, the cap is still too high for India, which is also working to finalise a trade deal with the US. Importantly, from New Delhi’s point of view, the new bill does give powers to the US president to waive the application of its provisions.</p>
+<p>For New Delhi, meaningfully reducing Russian oil imports <a href="https://indianexpress.com/article/business/india-russian-oil-imports-june-2026-record-high-strait-of-hormuz-10748099/" rel="noopener" target="_blank"><strong>is just not an option</strong></a> in the prevailing circumstances of global energy supply tightness amid the West Asia crisis. Even for Washington, taking away millions of barrels of Russian oil from the global market when energy flows from West Asia remain stifled wouldn’t be prudent. That would worsen an already worrying supply situation and would certainly send oil prices soaring, something that the <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> administration wouldn’t want ahead of the midterm polls in the US later this year.</p>
+<p>While there are calls from some US lawmakers to expedite the bill’s passage, the prevailing energy market dynamics and the West Asia conflict add uncertainty over the expected timeline, despite claims that the Trump administration is on board. Nonetheless, India would most certainly move to communicate its energy concerns to Washington, something that was done last year as well when the original bill was mooted.</p>
+<p><strong>India’s challenge</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>“India would almost certainly push for it (waiver), and it would make sense for the US to agree as a friendly concession, especially given how serious the situation is for New Delhi,” Abu Dhabi-based energy analyst Natalia Katona told <em>The Indian Express</em>.</p>
+<p>She added that the bill “risks colliding” with the India-US trade talks. That would be counterproductive for both Washington and New Delhi, which have made progress in negotiations after initial setbacks and hiccups. The use of tariffs under the proposed law as leverage by Washington cannot be ruled out. Any such ploy by the US would create additional pressure on India, which has consistently maintained that it is free to buy oil from whoever offers the best price, as long as the oil is not under sanctions.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/iran-oil-returns-indian-refiners-hold-back-why-10754745/">Iran oil returns, but Indian refiners likely to hold back. Here’s why</a></span></div>
+<p>“The proposed US tariffs on countries buying Russian crude should be viewed in the context of today’s exceptionally volatile global oil market. From India’s perspective, Russian crude has become the country’s strongest energy security hedge, particularly since the Strait of Hormuz disruptions. Russian barrels have enabled Indian refiners to maintain high refinery run rates, ensure uninterrupted fuel supplies, and avoid the disruptions experienced by several other Asian refining systems,” said Sumit Ritolia, modelling and refining manager at commodity market analytics provider Kpler.</p>
+<p>There are hardly any alternative suppliers capable of replacing Russian crude at the same scale, reliability, and economics. Russian crude remains the most practical and competitive source of supply for Indian refiners, and under current market conditions, it is difficult to see those volumes disappearing from the system in the near term, Ritolia said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Amid the West Asia crisis, as oil flows from the Gulf dried up, Russian crude became India’s strongest energy security hedge. As per Kpler data, India’s Russian oil imports rose to around 2.6 million barrels per day (bpd) in June, accounting for over half of New Delhi’s total crude imports. July arrivals are also tracking at healthy levels and could match or even exceed June’s volumes, as per estimates.</p>
+<p>India depends on imports to meet over 88% of its crude oil needs, and Russia has been the mainstay of India’s oil imports for nearly four years now. With much of the West shunning Russian crude following the country’s February 2022 invasion of Ukraine, Russia began offering discounts on its oil to willing buyers. Indian refiners were quick to avail the opportunity, leading to Russia—earlier a peripheral supplier of oil to India—emerging as India’s biggest source of crude, displacing the traditional West Asian suppliers.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/russian-oil-waiver-india-explained-10567530/">Russian oil ‘waiver’ explained: How war in West Asia forced Trump’s hand, giving India short-term relief</a></span></div>
+<p>In the months preceding the West Asia war, oil imports from Russia had reduced notably as the US imposed sanctions on Russian oil majors Rosneft and Lukoil, and amid trade pact negotiations with between New Delhi and Washington. The US made a meaningful reduction in Russian oil imports a prerequisite for scrapping its 25% additional penal tariff on India. But as supplies from West Asia dwindled due to the effective closure of the Strait of Hormuz, Russian oil came to India’s aid and volumes surged to historic highs.</p>
+<p><strong>Viability of revised Russia sanctions bill</strong></p>
+<p>The big question now is will the bill be enacted in its current form, and if yes, when? Energy market experts are sceptical about the prospects for the proposed legislation, particularly in the context of market volatility and stress due to the Strait of Hormuz crisis. Moreover, the presidential waiver provision and other changes in the bill provide enough room for the US government to make exceptions and navigate the prevailing situation more pragmatically even if the bill becomes law.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>“The question is whether this bill is economically real at all. I simply do not see this bill passing, or remaining in its current form. Firstly, it has already been diluted from a 500% tariff threat against virtually all buyers of Russian oil and gas to a maximum of 100% aimed at only the five largest. European exemptions and presidential waivers have also been added. That tells you the political slogan is already being adjusted to economic reality,” said Katona.</p>
+<p>“Secondly, the timing could not be worse. Trying to squeeze Russian oil out of the market during a renewed Gulf crisis would be dangerously explosive. Brent is already trading above $85 per barrel, while traffic through the Strait of Hormuz has dropped sharply. Removing or even threatening several million barrels per day of Russian supply at the same time would risk another price spike,” she added.</p>
+<p>Ritolia concurred, saying that if secondary tariffs of 100% are implemented in a way that materially reduces purchases of Russian crude, the market would first need to answer a simple question: where would the replacement barrels come from? With spare production capacity limited, Strait of Hormuz risks still elevated, and alternative supplies constrained, replacing Russian volumes at scale would be extremely challenging without triggering a sharp increase in oil prices, he said.</p>
+<p>According to Ajay Srivastava, a former trade officer and head of think tank GTRI, India has little reason for concern given the original bill sat in the US senate for more than 15 months without action, which suggests limited congressional support for such sweeping tariff powers. The revised bill may meet the same fate, he said in a note, adding that its prospects are further weakened by recent US Supreme Court rulings that struck down both the reciprocal tariff regime and Section 122 tariffs, underscoring the legal limits on using tariffs outside established trade laws.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>“India should continue to base its energy policy on national interest and energy security. Russian oil has helped contain inflation and secure stable energy supplies. The odds of this bill becoming law—and being enforced—appear low. Even if it does, India should continue buying Russian oil, just as China does, rather than allowing external political pressure to determine its energy policy,” he added.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10787864"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July fifteenth, twenty twenty-six, at two minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/us-russia-sanctions-bill-india-russian-oil-tariffs-10787864/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-15 14:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
