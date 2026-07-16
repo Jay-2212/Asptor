@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Indus Waters Treaty: Why India wants to renegotiate the pact with Pakistan | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Indus Waters Treaty: Why India wants to renegotiate the pact with Pakistan</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-16</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Indus-Kishanganga.jpg?w=1600" alt="Indus Waters Treaty: Why India wants to renegotiate the pact with Pakistan">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Indus" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Indus-Kishanganga.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Kishanganga Hydroelectric Project under construction on the Indus River in 2014. (Express File)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Several rhetorical statements have emerged from Pakistan in the last couple of weeks over India’s decision to keep the Indus Waters Treaty “in abeyance” following the terrorist strikes in Pahalgam last year. Pakistan even organised an ‘international’ conference on the Treaty last month, where senior cabinet ministers and prominent leaders threatened war and other consequences if the flow of rivers in the Indus basin was disrupted.</p>
+<p>Incidentally, Pakistan has still not responded to India’s two notices to modify and renegotiate the Treaty.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>While the decision to hold the Treaty in abeyance is an exceptional measure to deal with an extraordinary security situation arising from Pakistan’s continued support for cross-border terrorism, there is nothing unusual in India’s request to amend or renegotiate the Treaty. Many other transboundary riverwater-sharing arrangements have built-in provisions for periodic review.</p><div class="paywall container-wall-exclusive">
+<p>The need for reviewing and updating the Indus Waters Treaty has been articulated, even by Pakistani experts and scholars, for several years now, much before the present stand-off, which actually began in 2016 following the terror attack in Uri. However, India’s <a href="https://indianexpress.com/article/india/india-pakistan-terrorism-indus-water-treaty-frankenstein-state-anupama-singh-10747241/"><strong>request for modification</strong></a> or renegotiation of the Treaty is the first such official move from either side.</p>
+<p><strong>Dynamic systems</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>River systems are dynamic entities. As river flows and water use change, the populations dependent on these waters increase or decrease, new water management technologies and practices emerge, and better data and scientific knowledge develop. The management of these river waters, therefore, cannot be a static arrangement.</p>
+<p>There are at least 250 separate transboundary riverwater-sharing treaties worldwide, covering 113 transboundary river systems, according to a 2013 study. It is unclear how many of these have built-in provisions for review or update. But over time, these treaties gave rise to supplementary protocols, amendments, navigational or data-sharing arrangements, or other cooperative mechanisms, taking the total number of agreements to 688, according to the study.</p>
+<p>This number now exceeds 800, according to the International Freshwater Treaties database maintained by Oregon State University in the United States. This is evidence that many of these Treaties are constantly being reviewed and updated to reflect new ground realities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">An Expert Explains</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/indus-waters-treaty-fair-to-india-way-forward-10027741/">Has the Indus Waters Treaty been fair to India, and what is the way forward</a></span></div>
+<p>India’s other major transboundary river agreement, the 1996 agreement with Bangladesh on the Ganga River, has a 30-year validity, after which it must be renewed. This agreement is due for renewal this year.</p>
+<p>While the Indus Waters Treaty is often seen as a static agreement in perpetuity, it is not. Two provisions of the Treaty allow it to be adapted to newer situations. Article VII allows the Permanent Indus Commissions of the two countries to undertake new drainage or other engineering works through mutual agreement and cooperation. This provision has never been made use of. Additionally, Article XII provides for modification of the provisions of the Treaty “from time to time” but only through another government-level treaty. India has invoked this provision to serve Pakistan notices, seeking its modification or a complete renegotiation.</p>
+<p>Many modern riverwater-sharing arrangements, like the one over the Mekong River in Southeast Asia, finalised in 1995, have much more flexible institutional structures and easier processes for making changes. While the Permanent Indus Commission (PIC), established by the Indus Treaty, functions merely as its implementing agency, the Mekong River Commission also acts as a joint river water-management system. It cannot change provisions of the original treaty, but is otherwise empowered to develop and revise joint basin management strategies, data-sharing protocols and water quality rules. The PIC has so far largely focused on ensuring that the provisions of the Indus Waters Treaty are not violated.</p>
+<p><strong>Inadequate treaty</strong></p>
+<span class="custom-caption"><img alt="River Indus as it flows near Choklamsar in Ladakh. Express archive photo 31.07.1949" class="lazyloading size-medium wp-image-10788079" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ch1827640.jpg?resize=600,445" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg 6341w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=450,334 450w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=600,445 600w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=768,569 768w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=546,405 546w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=1536,1138 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ch1827640.jpg?resize=2048,1518 2048w" height="4700" sizes="(max-width: 6341px) 100vw, 6341px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="6341"/> River Indus as it flows near Choklamsar in Ladakh. Express archive photo 31.07.1949</span>
+<p>Even before the present stand-off, it was widely recognised that the Indus Waters Treaty, the result of a unique situation between the two countries in the 1950s, was not adequate to address contemporary water management challenges. This wasn’t just about climate change becoming an additional factor. No treaty negotiated before the 1990s could have factored in climate change.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>But several other important elements of modern integrated water management practices are also missing from the Treaty. For instance, it has no mention of groundwater resources, which, like surface waters, are connected across boundaries.</p>
+<p>It also has no provisions for water quality or maintaining environmental flows in the rivers. Pakistan, for example, has repeatedly complained that India dumps a lot of municipal and sewage waste in the eastern rivers over which it has full control under the Treaty, and that this adversely affects soil and water health in Pakistan.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/indus-waters-treaty-a-document-past-its-time-10260227/">Indus Waters Treaty: A document past its time</a></span></div>
+<p>These issues are not unique to the Indus Waters Treaty. Most water-sharing arrangements formulated at the time lack these features. However, the difficulties in updating or modifying the Indus Waters Treaty have now become an issue.</p>
+<p>Another way the Indus Treaty differs from other riverwater-sharing treaties is the manner in which it allocates water. Most water-sharing agreements ensure the availability of a certain volume of water from the rivers, or a minimum percentage of the flows, for all parties. The Indus Water Treaty is a rare example of an agreement in which entire rivers have been allocated to one party or the other. That is why it is often described as a partition agreement rather than a sharing arrangement. This kind of clean partitioning of entire rivers is seen as one of the major reasons for the lack of interest in developing joint river basin management programmes.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The case for modifying or renegotiating the treaty is both common-sensical and compelling. A recent study by Indian researchers Vimal Mishra and Urmin Vegad of IIT <a class="" href="https://indianexpress.com/section/cities/gandhinagar/" rel="noamphtml">Gandhinagar</a> showed how climate change was having differential impacts on water availability in the Indus basin. The basins of the eastern rivers, for example, have seen a 20% decline in annual rainfall over the last 70 years, while the precipitation in the basins of the western rivers has remained largely unchanged.</p>
+<p>As it stands, the Treaty is leading to highly inefficient utilisation of the Indus waters, and remains oblivious to the changing needs and demands. India’s request to renegotiate the Treaty has to be seen as delinked from its decision to put it in abeyance. In fact, agreeing to renegotiate can be the most reliable way for Pakistan to ensure that the Treaty is no longer held in abeyance.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10788019"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July sixteenth, twenty twenty-six, at fifty-seven minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/indus-waters-treaty-india-renegotiation-10788019/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-16 03:07 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
