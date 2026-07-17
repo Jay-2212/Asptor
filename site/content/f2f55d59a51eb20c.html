@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Nolan’s vision for 'The Odyssey' doesn't fit on India’s IMAX screens | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Nolan’s vision for 'The Odyssey' doesn't fit on India’s IMAX screens</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-17</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-nolanImaxcamera-5col.jpg.jpeg?w=1600" alt="Why Nolan’s vision for 'The Odyssey' doesn't fit on India’s IMAX screens">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Sir Christopher Nolan shoots 'The Odyssey' on an IMAX camera. (IMDB/ Universal Pictures)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-nolanImaxcamera-5col.jpg.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Sir Christopher Nolan shoots 'The Odyssey' on an IMAX camera. (IMDB/ Universal Pictures)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><em>‘The Odyssey’</em>s’ release today marks a landmark technical achievement in the world of film—it is the first full length feature movie shot entirely on an IMAX camera.</p>
+<p>Nolan has advocated that his films be watched on an IMAX screen that projects the analog 15 perforation/70mm film reel developed from the original colour negative (OCN).</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>While IMAX cameras capture better image resolution and details than others, they are both expensive and inconvenient to regularly handle due to their size and deafening internal motors. To bypass this, Nolan and the IMAX team created a new camera titled the ‘Keighley Camera’. This camera is housed inside a novel carbon-fibre casing termed ‘The Blimp,’ reducing the sound of the motors by 30-50%.</p><div class="paywall container-wall-exclusive">
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>India, however, will only screen digital versions of the film. A look into the post-production process and the architectural plus economical constraints Indian multi-plex operators might hold the answer.</p>
+<p><strong>First, the basics</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>The 15 perforation/70mm film reel refers to the physical reel where the strip’s width is 70mm with 15 perforations or sprocket holes punched alongside its edge. These holes advance the film frames during <a href="https://indianexpress.com/article/entertainment/movie-review/the-odyssey-movie-review-christopher-nolan-boundless-ambition-flawed-hero-homecoming-10787810/"><strong>projection</strong></a>.</p>
+<p>This technique yields an image resolution equivalent to 18K and a towering 1.43:1 aspect ratio.</p>
+<p>The aspect ratio is the proportion between the width and height of the displayed image. A 1.43:1 aspect ratio essentially means that the projected film appears taller with a square finish as opposed to the standard rectangular images in most films.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This set-up results in each frame of the movie being roughly 10 times larger than a standard 35mm film frame.</p>
+<h3><strong>Post-production</strong></h3>
+<p><em>‘The Odyssey</em>’s’ OCN was spliced together manually. In a conversation with The Indian Express, Andrew Oran, Senior Vice President at FotoKem labs (did Oppenheimer’s prints; only lab that can do features of this length for 15p/70mm) said, “It is true that the film was spliced together by hand, and that all 70mm/15perf. prints were made from the original cut original negative.”</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-culture/the-odyssey-nolan-film-story-characters-differences-10782394/">Never read The Odyssey? Here’s what you need to know before watching the new film</a></span></div>
+<p>An original colour negative refers to the film strip exposed inside a camera that captures an inverted image.</p>
+<p>Once the film is captured on celluloid, the post-production process is what sets apart the analog print of ‘The Odyssey’ from other versions. <em>‘The Odyssey’</em> employed an analog-only post production pipeline with limited digital corrections for VFX heavy scenes.</p>
+<p>The process largely followed these steps:</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>· Once the raw film leaves the movie sets, it reaches the lab where it goes through a processor — running through developer and fixer baths — before hitting the drying rack.</p>
+<p>· By the end of production, these rolls are digitised and scenes requiring VFX edits sent to the appropriate workshop. After the limited digital edits, these parts of the film are printed back onto the 15 perf./70mm film.</p>
+<p>· Then, the negatives are physically cut and glued together by the post-production lab — in this case, FotoKem in Burbank, California. This spliced together reel serves as the original colour negative.</p>
+<p>· The OCN then undergoes a photochemical colour correction process. This does not alter the negative itself. Color timers use a light table and physical filters to preview the addition of colour to a test print. The colour timer determines the exact colour balance needed.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The photonegative is run through a contact printer that projects light through the OCN onto blank positive film stock to create the final release print. The release prints are then dried after a final chemical bath. “Once the 65mm/15 perf. printing negative has been created– either by negative cutting or film recording– each 70mm/15 perf. print costs about the same” Oran told<em> The Indian Express.</em></p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<h3><strong>Massive image, massive reels</strong></h3>
+<p>The labour-intensive process involved in preparing the film ensures that the visual data remains purely analog from the lens to the projector.</p>
+<p>“The most intensive period of the post-production process for FotoKem was when we were creating the master printing negatives in all three film formats—70mm/15 perf., 70mm/5 perf. and 35mm—all at the same time,” Oran said.</p>
+<p>This maintains a theoretical resolution equivalent to 18K—up to three times the fidelity of the best digital cinema cameras available today.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>This enhanced resolution and aspect ratio delivers a final print weighing approximately 240 kilograms (530-600lbs), requiring a specialised 68-inch transport platter just to hold the reel.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/research/why-the-odyssey-has-endured-for-nearly-3000-years-10787324/">Why The Odyssey has endured for nearly 3,000 years</a></span></div>
+<p>“Our (FotoKem) role in relation to the 70mm/15 perf. release on<em> ‘The Odyssey’</em> was to provide prints of each of the film’s 54 reels to IMAX, who QC-screened and assembled the prints for shipping,” Oran said. He further clarified that, “Our role on the film, however, encompassed everything from processing and printing camera tests prior to production, to creating the home video masters after the theatrical run. But our work never extends into distribution—that is all IMAX.”</p>
+<p>The official theatrical run-time of 2 hours and 52 minutes comprises more than 17 kilometres of celluloid for a single 15/70mm print. Differing from standard 35mm film, the 15/70mm film runs horizontally (instead of vertically) through a cinema projector, pulling 15 perforations per frame.</p>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>Today, there are only 41 theatres across the globe equipped to project <em>‘The Odyssey’</em> in its native 15/70mm format. India doesn’t have any such commercial <a href="https://indianexpress.com/article/entertainment/hollywood/the-odyssey-vs-ramayana-christopher-nolan-epic-humanizes-king-odysseus-10787360/"><strong>theatre</strong></a>.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h2><strong>What India gets to see</strong></h2>
+<p>The Indian IMAX landscape is currently populated by three tiers of digital projection: dual 2K Xenon systems, single-lens 4K Commercial Laser (CoLa) and the 4K XT Laser.</p>
+<p>Both IMAX CoLa and XT systems are restricted by their architecture and digital systems to a maximum aspect ratio of 1.90:1. The CoLa projector is utilised for medium-to-large auditoriums and is typically paired with IMAX’s 12 channel audio system. The IMAX XT system is a newer and cost-effective solution deployed in retrofitted multiplex screens (typically under 50 feet wide).</p>
+<p>The only digital system capable of achieving a 1.43:1 aspect ratio is the IMAX Grand Theatre (<a class="" href="https://indianexpress.com/about/gujarat-titans/" rel="noamphtml">GT</a>) Dual Laser which uses two synchronized 4K laser projectors. As of 2026, no commercial cinema in India operates an IMAX GT Dual Laser system.</p>
+<span class="custom-caption"><img alt="Different IMAX technologies " class="lazyloading size-medium wp-image-10789903" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/IMAX-BOX.jpg.jpeg?resize=600,466" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/IMAX-BOX.jpg.jpeg 1054w, https://indianexpress.com/wp-content/uploads/2026/07/IMAX-BOX.jpg.jpeg?resize=450,350 450w, https://indianexpress.com/wp-content/uploads/2026/07/IMAX-BOX.jpg.jpeg?resize=600,466 600w, https://indianexpress.com/wp-content/uploads/2026/07/IMAX-BOX.jpg.jpeg?resize=768,597 768w, https://indianexpress.com/wp-content/uploads/2026/07/IMAX-BOX.jpg.jpeg?resize=521,405 521w" height="819" sizes="(max-width: 1054px) 100vw, 1054px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1054"/> <em><strong>Different IMAX technologies</strong></em></span>
+<p>When <em>The Odyssey</em>—shot to fill a towering 1.43:1 canvas—is projected onto India’s 1.90:1 CoLa or XT screens, the image is expanded horizontally to fit the screen width, but the top and bottom of the frame are permanently truncated.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>This does provide an advantage —Indian exhibitors do not receive a 300-kg metal platter containing sensitive film inside; they receive an encrypted, digital hard-drive that greatly democratises the distribution of the film.</p>
+<p><strong>That one screen in Ahmedabad</strong></p>
+<p>Imagine a fully operational, meticulously maintained 15-perforation 70mm IMAX projector and a colossal 1.43:1 screen (measuring 97 feet by 67 feet) —the likes of which Nolan himself might enjoy watching his creation on.</p>
+<p>Located in Ahmedabad, Gujarat Science City (GSC) boasts of exactly such a screen. But GSC, a government-owned venue, has a strictly educational mandate, aimed at fostering a scientific temperament for students and visitors.</p>
+<p>Demand and permission issues aside, there are other barriers prohibiting <em>‘The Odyssey’</em> from being screened here.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>First, the equipment and film prints imported by GSC are likely to benefit from specific customs duty exemptions reserved for educational material. Screening a commercial for-profit feature would violate these import tariffs and breach the institution’s charter of focussing on science and education.</p>
+<p>Secondly, the mechanical layout for projection is strictly tailored for short-form content, lasting around 40-50 minutes. Such features require considerably smaller film platters. ‘The Odyssey’s’ 172-minute runtime means that the GSC’s platter ecosystem is not engineered to support its weight or spatial demands.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10789863"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July seventeenth, twenty twenty-six, at thirty minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/why-nolans-vision-for-imax-odyssey-doesnt-fit-on-indias-screens-10789863/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-17 14:17 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
