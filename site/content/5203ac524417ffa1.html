@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why India’s imports of 3 agri-commodities may touch a new high this year | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why India’s imports of 3 agri-commodities may touch a new high this year</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-18</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/arhar_ebc682.jpg?w=1600" alt="Why India’s imports of 3 agri-commodities may touch a new high this year">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="imports" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/arhar_ebc682.jpg?w=1600" width="650"/><span class="ie-custom-caption">Within pulses, the year-on-year acreage drop has been 30.3% for arhar. (Express Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>In 2025-26 (April-March), India imported a record 16.4 million tonnes (mt) of vegetable oils and 1.1 mt of raw cotton, valued at $19.5 billion and $1.9 billion respectively.</p>
+<p>In addition, it imported nearly 6 mt of pulses – the highest after 2024-25 and 2016-17 – worth $3.6 billion.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><img alt="Indian imports of 3 crops" class="lazyloading alignnone size-medium wp-image-10790519" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Indian-imports-of-3-crops.jpeg?resize=600,415" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Indian-imports-of-3-crops.jpeg 1071w, https://indianexpress.com/wp-content/uploads/2026/07/Indian-imports-of-3-crops.jpeg?resize=450,311 450w, https://indianexpress.com/wp-content/uploads/2026/07/Indian-imports-of-3-crops.jpeg?resize=600,415 600w, https://indianexpress.com/wp-content/uploads/2026/07/Indian-imports-of-3-crops.jpeg?resize=768,531 768w, https://indianexpress.com/wp-content/uploads/2026/07/Indian-imports-of-3-crops.jpeg?resize=585,405 585w" height="415" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>The current fiscal could see even these records broken.</p>
+<p>The main reason is El Niño. The impact of this climate phenomenon – an abnormal warming of the central and eastern Pacific Ocean waters off the coasts of Peru and Ecuador, which is associated with dry weather across India, Southeast Asia and Australia – is already being felt.</p>
+<p>Rainfall for the country as a whole in June was 38% below the normal long-period average for the month. While July so far has registered a lower 7.3% shortfall, the cumulative deficiency for the four-month southwest monsoon season (June-September) as of July 16 is still at 24%.</p><div class="paywall container-wall-exclusive">
+<p><strong><em>Kharif</em> sowing lag</strong></p>
+<p><img alt="Kharif acreage percentage year-on-year" class="lazyloading alignnone size-medium wp-image-10790520" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Kharif-acreage-pc-yoy.jpeg?resize=600,546" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Kharif-acreage-pc-yoy.jpeg 803w, https://indianexpress.com/wp-content/uploads/2026/07/Kharif-acreage-pc-yoy.jpeg?resize=450,410 450w, https://indianexpress.com/wp-content/uploads/2026/07/Kharif-acreage-pc-yoy.jpeg?resize=600,546 600w, https://indianexpress.com/wp-content/uploads/2026/07/Kharif-acreage-pc-yoy.jpeg?resize=768,699 768w, https://indianexpress.com/wp-content/uploads/2026/07/Kharif-acreage-pc-yoy.jpeg?resize=445,405 445w" height="546" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p><div id="taboola-mid-article-personalisation"></div>
+<p>The lack of rains has affected <a href="https://indianexpress.com/article/india/kharif-sowing-rainfall-deficit-el-nino-india-monsoon-2026-10786016/"><strong>planting of most <em>kharif</em></strong></a> (monsoon-cultivated) crops. While overall sown area till July 10 was 16% below the coverage for the same period of 2025, the decline was even more in pulses (23.3%) and oilseeds (21%).</p>
+<p>Within pulses, the year-on-year acreage drop has been 30.3% for <em>arhar</em> (pigeon pea) and 29.7% for <em>urad</em> (black gram). In oilseeds, it has ranged from 16% for soyabean to 34% for groundnut and 46% for sesamum. The progressive area sown under cotton, too, has been 15.3% down compared to last year’s corresponding figure.</p>
+<p>“Rainfall has been weak and, moreover, scattered. There are areas within 20-25 km of the same <em>taluka</em> (sub-district) that have received showers and those which haven’t,” said Nitin Kalantri, a leading <em>dal</em> miller from Latur in Maharashtra.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The monsoon’s revival in July should help somewhat close the above gaps and may be reflected in the Agriculture Ministry’s <em>kharif</em> sowing data update for the coming week. “Sowing of pulses, including <em>arhar</em> (a 5-6 months crop), can take place till July-end. What we need is good rains over next two weeks,” added Kalantri.</p>
+<p>The same goes for cotton, where the sowing window in the main growing belts of central and southern India usually closes by mid-July. This can be extended till the month-end, if the monsoon is delayed or erratic.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/smartphone-manufacturing-scheme-indian-mobile-brands-10788882/">How a new govt subsidy plan hopes to create a competitive Indian smartphone brand</a></span></div>
+<p>“Cotton doesn’t need too much rain. The price sentiment for cotton is also good this time, with many farmers keen to shift from rice and maize,” M. Prabhakar Rao, chairman and managing director of the Medchal (Telangana)-based Nuziveedu Seeds Ltd, pointed out.</p>
+<p>According to him, less rainfall would be a problem more from the standpoint of pink bollworm (PBW) infestation: “PBW is a monophagous pest that feeds exclusively on cotton. Frequent rains help in disrupting the mating cycle of the adult moths, besides drowning the pupae in the soil. Prolonged dry weather is conducive for uninterrupted mating, egg-laying and the growth of larvae that bore into the developing bolls. The increased pest population can, then, bring down yields”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2><strong>El Niño worries</strong></h2>
+<p>While the monsoon rainfall deficit is quite significant now, the worry is more from a strengthening El Niño in the months ahead.</p>
+<p>The US National Oceanic and Atmospheric Administration (NOAA) has forecast an 81% probability of the present El Niño intensifying into a “very strong” event during October-December, with a 97% chance of it persisting through the spring months till March-April.</p>
+<p>Given that El Niño is known not only to suppress rainfall, but also to raise temperatures, it could translate into a relatively short and warm upcoming winter. That can potentially hurt the ensuing <em>rabi</em> (winter-spring) season crops such as wheat, rapeseed-mustard, <em>chana</em> (chickpea), <em>masoor</em> (red lentil) and potato as well.</p>
+<p>The brunt of all this would be borne by oilseeds, pulses, millets and cotton, which are predominantly rainfed crops, unlike rice, wheat or sugarcane. The current developing El Niño – which, NOAA believes, may turn out to be “among the largest…events in the historical record going back to 1950” – may result in India’s vegetable oil, pulses and cotton imports also scaling a new peak.</p>
+<p><strong>The comfort factors</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>On the positive side, though, stocks of rice and wheat in government godowns, at 68.3 mt and 53.4 mt respectively on June 1, were way above the corresponding minimum required levels of 13.5 mt and 27.6 mt for July 1.</p>
+<p>Government agencies are also reportedly holding over 4 mt of pulse stocks, which includes 2 mt of chana and 0.6-0.7 mt of <em>arhar</em>.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/monsoon-deficit-bajra-farmers-crop-choice-10753759/">In deficit monsoon year, why bajra is emerging as crop of choice</a></span></div>
+<p>“They can offload these in a worst-case scenario. There is also the option to import, especially with fresh shipments of <em>arhar</em> from Mozambique, Malawi and other East African countries expected in August-September. Likewise, masoor from Canada and Australia would be ready for shipping after September and November respectively. The voyage time for these would be 20-30 days,” noted Kalantri.</p>
+<p>Also, unlike in 2022, following Russia’s invasion of Ukraine, the world is awash with ample stocks from the record global harvests of wheat, rice, corn (maize), sugar and even soyabean, rapeseed and palm oil in 2025-26.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Food and Agriculture Organisation’s benchmark food price index was up just 1.7% year-on-year in June. The only commodity of worry is vegetable oils, where the index in June was 23.3% higher than a year ago. The landed price of imported crude palm, soyabean and sunflower oil in India, at $1,230, $1,290 and $1,450 per tonne now, is higher than their corresponding year-ago average levels of $1,100, $1,190 and $1,215 respectively.</p>
+<p>A key reason for vegetable oil prices firming up is their alternate use as biofuel. When crude petroleum prices harden – as they are with the resumption of the conflict in West Asia – there is added incentive to divert palm, rapeseed and soyabean oil for the production of fatty acid methyl ester, which can substitute regular diesel.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10789970"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/harish-damodaran/">
+<figure>
+<img alt="Harish Damodaran" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/10/harish1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/harish-damodaran/"><span></span>Harish Damodaran</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2195331"></div><div class="follow_author_title" data-id="Harish Damodaran"></div><div class="follow_author_slug" data-id="harish-damodaran"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Harish Damodaran is National Rural Affairs &amp; Agriculture Editor of The Indian Express. A journalist with over 33 years of experience in agri-business and macroeconomic policy reporting and analysis, he has previously worked with the Press Trust of India (1991-94) and The Hindu Business Line (1994-2014).
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/harish-damodaran/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July seventeenth, twenty twenty-six, at forty-seven minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/el-nino-impact-india-crops-vegetable-oil-pulses-cotton-imports-10789970/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-18 14:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
