@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India’s first night safari gets SC nod: What the Kukrail project will offer | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India’s first night safari gets SC nod: What the Kukrail project will offer</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-18</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Fallen_tree_Kukrail_Forest_Lucknow_2025_03.jpg?w=1600" alt="India’s first night safari gets SC nod: What the Kukrail project will offer">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Inside Kukrail forest, Lucknow (Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Fallen_tree_Kukrail_Forest_Lucknow_2025_03.jpg?w=1600" width="650"/><span class="ie-custom-caption">Inside Kukrail forest, Lucknow (Wikimedia Commons)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Supreme Court has okayed the Uttar Pradesh government’s ambitious Kukrail Night Safari and Day Zoo project, clearing the final hurdle for what is proposed to be India’s first Night Safari and the world’s fifth after Singapore, Thailand, China and Indonesia.</p>
+<p>The project had faced years of scrutiny because it is to come up inside the ecologically sensitive 2,027-hectare Kukrail Reserve Forest on the outskirts of <a class="" href="https://indianexpress.com/section/cities/lucknow/" rel="noamphtml">Lucknow</a>, which is also home to India’s first gharial conservation centre, established in 1975.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h3><strong>What is the project all about?</strong></h3>
+<p>The Rs 1,510-crore project will come up over 855 acres within the Kukrail <a href="https://indianexpress.com/article/cities/lucknow/night-safari-park-zoo-to-be-set-up-in-kukrail-forest-area-8094406/"><strong>Reserve</strong> </a>Forest and will be developed in two phases:</p><div class="paywall container-wall-exclusive">
+<p>-Phase I: Night Safari and Eco-tourism Zone</p>
+<p>-Phase II: Day Zoo</p>
+<p>According to the project plan, the Night Safari will feature theme-based zones inspired by wildlife landscapes in India and abroad, along with night trails, naturalistic animal habitats and forest trails.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Visitors will travel in battery-operated vehicles; the trail is being chalked out.</p>
+<p>The Uttar Pradesh government said the project will combine wildlife conservation, research, education and tourism.</p>
+<p>The master plan also includes conservation breeding facilities, wildlife interpretation and education centres, cafeterias, a 7D theatre and an auditorium.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>What will visitors see?</strong></h2>
+<p>Unlike conventional zoos, the Night Safari will allow visitors to observe nocturnal animals during their active hours using a special lighting system designed to mimic natural moonlight.</p>
+<p>Officials said this would be the unique feature of the night safari. “The proposed special lighting system would be designed to mimic moonlight. The idea is to allow visitors to observe wildlife clearly without disturbing or creating discomfort for the animals” explained an official.</p>
+<p>The proposal includes creating naturalistic habitats for several species, including: Asiatic lions, Bengal tigers, Leopards, Hyenas, Flying squirrels, and Gharials.</p>
+<p>The habitats will be modelled on natural ecosystems, incorporating grasslands, wetlands, rock formations and native vegetation for “immersive visitor experience”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The facility is expected to manage footfall of about 4,000 visitors during weekdays and about 8,000 on weekends or holidays.</p>
+<p><strong>Why was there a four-year wait for approval?</strong></p>
+<p>The project was first announced by Chief Minister <a class="" href="https://indianexpress.com/about/yogi-adityanath/" rel="noamphtml">Yogi Adityanath</a> in July 2022 and received Uttar Pradesh Cabinet approval the following month. However, because it was proposed inside the Kukrail Reserve Forest, it had to undergo multiple regulatory and judicial clearances.</p>
+<p>In 2023, the proposal received approvals from the State Wildlife Board and the Central Zoo Authority (CZA). Because it involved forest land and wildlife habitat, it also required forest, wildlife and environmental clearances.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/supreme-court-clears-uttar-pradeshs-night-safari-project-in-kukrail-reserve-forest-10788378/">Supreme Court clears Uttar Pradesh’s night safari project in Kukrail Reserve Forest</a></span></div>
+<p>The project was subsequently examined by the Supreme Court-appointed Central Empowered Committee (CEC), which conducted inspections and sought modifications to the project design.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>After multiple rounds of hearings, the SC finally approved the project this week.</p>
+<p>The prolonged scrutiny stemmed from the ecological significance of the reserve forest, one of Lucknow’s largest protected green spaces. Developed as a plantation forest in the 1950s, the reserve is named after the Kukrail stream, a tributary of the Gomti River, and serves as an important urban forest. Efforts are also under way to revive the Kukrail stream.</p>
+<p>The forest is also home to the Kukrail Gharial Rehabilitation Centre (KGRC), established in 1975 to save the critically endangered gharial.</p>
+<span class="custom-caption"><img alt="Baby gharial photographed Kukrail reserve forest, Lucknow (Wikimedia Commons)" class="lazyloading size-medium wp-image-10791237" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Baby_Gharial.jpg?resize=600,311" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Baby_Gharial.jpg 820w, https://indianexpress.com/wp-content/uploads/2026/07/Baby_Gharial.jpg?resize=450,233 450w, https://indianexpress.com/wp-content/uploads/2026/07/Baby_Gharial.jpg?resize=600,311 600w, https://indianexpress.com/wp-content/uploads/2026/07/Baby_Gharial.jpg?resize=768,398 768w, https://indianexpress.com/wp-content/uploads/2026/07/Baby_Gharial.jpg?resize=728,377 728w" height="425" sizes="(max-width: 820px) 100vw, 820px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="820"/> <em>Baby gharial photographed at Kukrail reserve forest, Lucknow (Wikimedia Commons)</em></span>
+<p>According to officials, the centre has, over the past five decades, become one of the most successful reptile conservation facilities, breeding and releasing gharials into rivers across India. It also houses research laboratories, veterinary facilities, and rescue enclosures for gharials and turtles.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The government said the Night Safari project is intended not merely as a tourism destination but also as a conservation and research facility, promoting wildlife conservation and breeding, research on nocturnal wildlife behaviour, and undertaking public awareness on wildlife protection.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10791206"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/maulshree-seth/">
+<figure>
+<img alt="Maulshree Seth" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/mausa.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/maulshree-seth/"><span></span>Maulshree Seth</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952033"></div><div class="follow_author_title" data-id="Maulshree Seth"></div><div class="follow_author_slug" data-id="maulshree-seth"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Maulshree Seth is an Assistant Editor with The Indian Express, based in Lucknow. With over 15 years of experience in mainstream journalism, she has built a formidable reputation for her on-ground reporting across Uttar Pradesh. Her expertise spans a wide array of critical beats, including state politics, governance, the judiciary, and rural development.
+Authoritativeness Maulshree’s work is characterized by depth and historical context. Her coverage of high-stakes state elections and landmark judicial rulings has established her as an authoritative voice on the intersection of law and politics in Northern India. She is frequently recognized for her ability to gain access to primary sources and for her nuanced understanding of the socio-economic factors that drive the world's most populous sub-national entity.
+Trustworthiness &amp; Ethical Journalism Her reporting is rooted in rigorous fact-checking and a steadfast dedication to neutral, unbiased storytelling. By prioritizing field-based verification—often traveling to the most remote corners of the state—she ensures that her readers receive a truthful and comprehensive view of events.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/maulshree-seth/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eighteenth, twenty twenty-six, at thirty minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/indias-first-night-safari-gets-sc-nod-what-the-kukrail-project-will-offer-10791206/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-18 02:55 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
