@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The journey of Sonam Wangchuk, the activist: Education to ecology to politics | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The journey of Sonam Wangchuk, the activist: Education to ecology to politics</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-18</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/wangchuk.jpg?w=1600" alt="The journey of Sonam Wangchuk, the activist: Education to ecology to politics">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Sonam Wangchuk" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/wangchuk.jpg?w=1600" width="650"/><span class="ie-custom-caption">Activist Sonam Wangchuk during his fast for educational reforms at Jantar Mantar in New Delhi on Wednesday. He was taken away on Saturday morning. Tashi Tobgyal</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Activist Sonam Wangchuk, who was on a hunger strike for the last 20 days at Jantar Mantar in New Delhi, <a href="https://indianexpress.com/article/cities/delhi/sonam-wangchuk-hunger-strike-live-updates-abhijeet-dipke-cjp-cockroach-janta-party-jantar-mantar-10791931/" rel="noopener" target="_blank"><strong>was taken away to a hospital</strong></a> by the Delhi Police on Saturday morning for “essential medical care”.</span></p>
+<p><span style="font-weight: 400">Wangchuk has been part of the protest <a href="https://indianexpress.com/article/political-pulse/sonam-wangchuk-interview-hunger-strike-cockroach-janta-party-protest-education-neet-10785080/" rel="noopener" target="_blank"><strong>organised by the Cockroach Janta Party</strong></a>, demanding broader reforms to the examination system and the resignation of Union Education Minister Dharmendra Pradhan over multiple examination paper leaks.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Here’s a look at how activism played a key role in Wangchuk’s life — right from a young age when his father went on hunger strike — and how the educator and innovator came to be involved with politics.</p><div class="paywall container-wall-exclusive">
+<p><b>Early life</b></p>
+<p><span style="font-weight: 400">Wangchuk was born in Uleytokpo, a riverside village in Leh, in 1966. His father, Sonam Wangyal, was a prominent Ladakhi politician who also served as a minister in Jammu &amp; Kashmir when Ladakh was part of the erstwhile state.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Wangyal led a hunger strike in 1984 to push for the region’s demand for Scheduled Tribe status for Ladakh. He died in 1998.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/how-sonam-wangchuks-father-broke-his-1984-fast-after-pm-indira-gandhi-met-him-10791775/">How Sonam Wangchuk’s father broke his 1984 fast after PM Indira Gandhi met him</a></span></div>
+<p><span style="font-weight: 400">Wangchuk was initially homeschooled by his mother because his village did not have a school. He completed his school education after nine years of age in Srinagar and New Delhi. He has a mechanical engineering degree from NIT Srinagar which was then, Regional Engineering College (Srinagar).</span></p>
+<p><b>His activism in education</b></p>
+<p><span style="font-weight: 400">After finishing his degree, Wangchuk set up an alternative learning school in Leh — Students Educational and Cultural Movement of Ladakh (SECMOL) — in 1988. SECMOL had the stated objective of improving the education system in Ladakh. At the time, school books used Urdu as the medium of instruction until class 8 and English in classes 9 and 10.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">SECMOL launched Operation New Hope as a way to address these issues. The movement turned into a campus where over 700 teachers and education officials and administrators were trained. In 1998, the Dalai Lama made a special contribution of Rs 1,50,000 to SECMOL for its educational work.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/delhi/sonam-wangchuk-hospitalised-wife-gitanjali-consent-before-treatment-10792085/">‘No treatment without our consent’: Wife Gitanjali after Sonam Wangchuk is hospitalised</a></span></div>
+<p><span style="font-weight: 400">New textbooks were specifically designed for Ladakh introducing English in primary schools paving the way for eventually taking the class 10 pass percentage in Ladakh schools from 5% in the late 1980s to 75% in the 2000s.</span></p>
+<p><span style="font-weight: 400">In 2005, Wangchuk was appointed a member of the National Governing Council for elementary education in the Ministry of Human Resource Development. </span></p>
+<p><b>His activism on ecological issues</b></p>
+<p><span style="font-weight: 400">In his years as a researcher and innovator, Wangchuk remained focused on addressing issues closest to home owing to its fragile ecology.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Ladakh was faced with water scarcity for large parts of the year owing to its harsh climate and topography. Wangchuk created artificial structures called “ice stupas” so as to augment the water supply in the summer, to store and gradually release water.</span></p>
+<span class="custom-caption"><img alt="ladakh ice stupas" class="lazyloading size-medium wp-image-10792151" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Ice-Stupaa.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Ice-Stupaa.jpg 1500w, https://indianexpress.com/wp-content/uploads/2026/07/Ice-Stupaa.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/07/Ice-Stupaa.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/07/Ice-Stupaa.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/07/Ice-Stupaa.jpg?resize=608,405 608w" height="1000" sizes="(max-width: 1500px) 100vw, 1500px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1500"/> Students of HIAL in front of their ‘Ice Stupa’ project in 2019. Wikimedia Commons</span>
+<p><span style="font-weight: 400">Wangchuk’s research into the problems being faced by the people of Ladakh led him to raise concerns about the environment both locally and internationally. Wangchuk studied the problems of the region and provided solutions that include the solar tent prototype, Agri Voltaic roadmap for Ladakh among others. In 2018, Wangchuk and his wife set up the Himalayan Institute of Alternate Learning (HIAL) to bring experiential learning to the students of Ladakh. This is also the year he won the Ramon Magsaysay award for his work in community-led educational reforms.</span></p>
+<p><span style="font-weight: 400">The harshest punishment at the school, he says in a video, is to be sent home for two weeks.</span></p>
+<p><b>And, finally, his political activism</b></p>
+<p><span style="font-weight: 400">After the constitutional changes of August 2019, splitting the state of Jammu &amp; Kashmir into two Union Territories — J&amp;K and Ladakh — Wangchuk was one of the first people to welcome the move. While areas under the Kargil district took to the streets in protest against the Centre’s decision almost immediately, Leh joined the dissent almost a year later, but with a view to gain larger democratic representation for the region.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">After Ladakh began to take shape as a Union Territory, Wangchuk, who had continued to stay away from active politics, in 2023 announced a climate fast at Khardung La — one of the highest passes in the world — to highlight the effects of climate change on the fragile ecosystem of Ladakh and to demand protections for the people of Ladakh under the Sixth Schedule. The Sixth Schedule under Article 244 provides for the formation of autonomous administrative divisions that have some legislative, judicial, and administrative autonomy within a state.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/innovator-to-provocateur-wangchuks-equation-with-delhi-changed-over-3-decades-10273868/">How Wangchuk’s equation with Delhi changed over 3 decades</a></span></div>
+<p><span style="font-weight: 400">The government didn’t allow the fast and put him under house detention.</span></p>
+<span class="custom-caption"><img alt="Sonam Wangchuk " class="lazyloading size-medium wp-image-10792159" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/wangchuk202-protest.jpg?resize=600,391" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg 3184w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=450,293 450w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=600,391 600w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=768,500 768w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=622,405 622w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=1536,1000 1536w, https://indianexpress.com/wp-content/uploads/2026/07/wangchuk202-protest.jpg?resize=2048,1333 2048w" height="2073" sizes="(max-width: 3184px) 100vw, 3184px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="3184"/> Sonam Wangchuk at a 2023 protest at Jantar Mantar seeking Sixth Schedule protections for Ladakh. Prem Nath Pandey</span>
+<p><span style="font-weight: 400">Wangchuk also made a political statement saying Ladakh was better off with Jammu &amp; Kashmir than a Union Territory. A year later, he announced a fast until death for his demand of constitutional safeguards for Ladakh. In September 2025, during his 21 day fast, protests turned violent and four locals from Leh were killed in police firing.</span></p>
+<p><span style="font-weight: 400">After this episode, Wangchuk was jailed under the National Security Act and incarcerated at the Jodhpur jail for six months. The Centre accused Wangchuk of instigating the youths with his “provocative statement” and revoked the FCRA licence of his institute. The charges were revoked in March 2026 and Wangchuk returned to Leh.</span></p>
+<p><b>His self-described ‘Gandhian’ protests</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Wangchuk describes himself as a Gandhian, opting for non-violent means of protest such as long fasts. In September 2024, Wangchuk marched to New Delhi along with a few supporters to pressure the Union government to grant Ladakh Sixth Schedule protections. He was detained on the outskirts of the capital.</span></p>
+<p><span style="font-weight: 400">In March 2024, he announced a “Pashmina March” for the restoration of pasture land for the shepherd raising pashmina goats in Ladakh. He modelled this march on Mahatma Gandhi’s </span><i><span style="font-weight: 400">dandi</span></i><span style="font-weight: 400"> march against the British in 1930.</span></p>
+<p><span style="font-weight: 400">In the years since his involvement with the agitation for Ladakh’s inclusion under Sixth Schedule, he has stated that his 21 day fasts are based on the fact that Gandhi ji’s longest fast was 21 days.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10792093"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/naveed-iqbal/">
+<figure>
+<img alt="Naveed Iqbal" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/naveed-iqbal/"><span></span>Naveed Iqbal</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951753"></div><div class="follow_author_title" data-id="Naveed Iqbal"></div><div class="follow_author_slug" data-id="naveed-iqbal"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Naveed Iqbal is a Senior Assistant Editor at The Indian Express, and reports from Jammu and Kashmir. With a career spanning over 15 years in frontline journalism, Naveed provides authoritative reporting on the region’s transition, governance, and the socio-political implications of national policies.
+
+Expertise
+Regional Specialization: Based in the Srinagar and New Delhi bureaus, Naveed has spent over a decade documenting the unique challenges of Jammu and Kashmir. Her reporting is distinguished by deep contextual knowledge of the region's post-Article 370, statehood debates, and local electoral politics.
+
+
+ 	
+Key Coverage Beats: Her extensive body of work covers:
+
+
+ 	
+Politics &amp; Governance: Tracking the National Conference (NC), PDP, and BJP dynamics, including in-depth coverage of J&amp;K’s first Assembly sessions and Rajya Sabha polls following the reorganization of the state.
+
+ 	
+Internal Security &amp; Justice: Providing rigorous reporting on counter-insurgency operations, terror module investigations, and judicial developments involving political detainees and constitutional rights.
+
+ 	
+Education &amp; Minority Affairs: Highlighting systemic issues such as quota rows in J&amp;K, public service commission reforms, and the challenges faced by minority communities.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/naveed-iqbal/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eighteenth, twenty twenty-six, at forty-four minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/sonam-wangchuk-activist-education-ecology-politics-10792093/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-18 07:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
