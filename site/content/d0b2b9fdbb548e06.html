@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Kerala is seeing record rooftop solar adoption. So why is it still facing power supply issues? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Kerala is seeing record rooftop solar adoption. So why is it still facing power supply issues?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/06/solar.jpg?w=1600" alt="Kerala is seeing record rooftop solar adoption. So why is it still facing power supply issues?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Solar" decoding="async" height="366" src="https://images.indianexpress.com/2026/06/solar.jpg?w=1600" width="650"/><span class="ie-custom-caption">Kerala has been an enthusiastic adopter of the Centre's rooftop solar scheme. Nirmal Harindran/File</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">Kerala is among India’s leading states when it comes to household adoption of rooftop solar panels under the PM Suryaghar Yojana.</p>
+<p dir="ltr">While the central scheme’s success has been uneven across the country, Kerala has been an enthusiastic adopter. In fact, it ranks fourth in rooftop solar installed capacity — ahead of several big states such as Tamil Nadu, Karnataka and Madhya Pradesh.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">Yet, it is this very success that is at the heart of the state’s challenge in meeting its power demand. This sounds counterintuitive — after all, shouldn’t more rooftop solar panels ease electricity supply?</p>
+<p dir="ltr">The answer is not so straightforward. Here’s a look at how the electricity consumption patterns in Kerala are undermining the successes from the state’s record solar energy generation.</p><div class="paywall container-wall-exclusive">
+<p dir="ltr"><strong>Kerala’s solar success story</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">According to the latest available state government data, Kerala’s solar power installed capacity touched 2,508 megawatts (MW) by the end of May 2026. The vast majority of this installed capacity — 2,036 MW — is from rooftop panels.</p>
+<span class="custom-caption"><img alt="Status of key solar schemes." class="lazyloading wp-image-10730716 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/06/Status-of-key-solar-schemes.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/06/Status-of-key-solar-schemes.jpg 907w, https://indianexpress.com/wp-content/uploads/2026/06/Status-of-key-solar-schemes.jpg?resize=450,289 450w, https://indianexpress.com/wp-content/uploads/2026/06/Status-of-key-solar-schemes.jpg?resize=600,386 600w, https://indianexpress.com/wp-content/uploads/2026/06/Status-of-key-solar-schemes.jpg?resize=768,494 768w, https://indianexpress.com/wp-content/uploads/2026/06/Status-of-key-solar-schemes.jpg?resize=630,405 630w" height="583" sizes="(max-width: 907px) 100vw, 907px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="907"/> <strong>Status of key solar schemes. Kerala’s data in this table is from the PM-Suryaghar portal. The state’s own numbers are different.</strong></span>
+<p dir="ltr">Under the PM Surya Ghar scheme, Kerala has 2.96 lakh installations covering 3,03,531 households. Its installed capacity from PM Surya Ghar alone is 1,150 MW.</p>
+<p dir="ltr">Neighbouring Karnataka, for comparison, has only 22,383 installations covering 33,843 households, with an installed capacity of 91 MW.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">The share of solar power as a whole is more than 50% per cent of the state’s total installed capacity from all sources. This proportion is even better than the all-India share of solar power in the overall power generation mix — 150 GW of the total installed capacity of 532 GW.</p>
+<p dir="ltr"><strong>So what is the issue with this?</strong></p>
+<p dir="ltr">In many industrially developed states, the demand for power peaks during the day. In Kerala, however, the peak demand is from 6 to 11 pm as 75% of the consumers are domestic. Industrial and commercial connections account for only around 20% of the total consumers.</p>
+<p dir="ltr">This has created a mismatch between an abundance of solar energy during the day and the shortage of power supply at night.</p>
+<p dir="ltr">To be sure, this mismatch is not a Kerala problem alone. The country’s power grid has indeed been facing its greatest strain at night time. This, however, is more a function of supply failing to even meet the relatively reduced night-time demand, rather than demand rising during those hours. In Kerala, the latter is the key problem — demand rises at night.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-solar-adoption-challenges-explained-10726748/">Power subsidies are slowing household solar adoption. A solution: More subsidies</a></span></div></p>
+<p dir="ltr">In the state, solar energy, which is generated during the day time, is not consumed during those hours.</p>
+<p dir="ltr">According to estimates by the KSEB, the decentralised ‘producers-cum-consumers’ of rooftop solar energy — or ‘prosumers’ — use only 36% of the solar power produced during the day. The remaining 64% is exported to the state power grid. At night, these prosumers take back (consume) around 45% of the banked power.</p>
+<p dir="ltr">A prosumer is a household or business that generates its own electricity via solar panels for personal use and feeds the excess power back into the utility grid.</p>
+<p dir="ltr"><strong>So how does this affect the grid?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">The power produced from solar plants during the day is exported to the low-tension power distribution grid. But excessive feeding of solar power to the grid during the day, when consumption is low, increases the voltage in the system. This, in turn, increases the chances of electrical appliances and transforms getting damaged.</p>
+<p dir="ltr">Normally, a 3 KW household solar power unit generates 12 units of power. The consumption is usually around six units. To maximise the gains from the on-grid rooftop solar plants, prosumers use more electrical appliances especially during the night hours, which again increases the demand for power supply in the peak hours.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-power-grid-demand-night-shortage-heatwave-10659385/">Temperature drops at night. So why is India’s power grid facing the most strain in those hours?</a></span></div></p>
+<p dir="ltr">An illustrative example of this is the increased sale of induction cookers in Kerala after the proliferation of rooftop solar plants.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">So, when power supply declines in the national market at night, Kerala’s electricity utility is forced to buy it at higher prices to meet its rising demand.</p>
+<p dir="ltr"><strong>Kerala’s power generation mix</strong></p>
+<p dir="ltr">Kerala has traditionally been dependent on hydroelectricity. But according to the latest data, 83% of its daily power demand is now met by purchases from power exchanges. According to data presented in the Assembly last month, the daily average consumption is 88.45 million units.</p>
+<p dir="ltr">Of this, the total domestic generation in Kerala from hydel, wind and solar is only 15 million units. The remaining 73.41 million unit demand is met by purchases from the national market at competitive rates — which often run up to Rs 10 per unit during peak hours.</p>
+<p dir="ltr">In the last ten years, Kerala was able to add only 150 MW to its hydel power production, whereas the solar capacity during the period increased by 2400 MW.</p>
+<p dir="ltr"><strong>The road ahead</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">The challenge facing Kerala, at its core, is the same challenge facing the country. As the share of renewable power sources increases, so does the mismatch between when electricity is generated and when it is needed. The answer, as <em>The Indian Express</em> has reported earlier, is storage.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/india-energy-storage-renewable-power-grid-explained-10681344/">India is rapidly scaling up renewable energy. Now it needs to store it</a></span></div></p>
+<p dir="ltr">The KSEB has lined up a battery energy storage system (BESS) to “store” the solar power produced during the day — rather than pumping it back into the grid. This will ensure that the power can be used during the peak nighttime hours.</p>
+<p dir="ltr">KSEB has been one of the early movers from among state-run entities in this regard. The first such storage unit with a capacity of 125 MW is expected to be commissioned at Mylatti in Kasaragod in October this year.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">Similar BESS facilities with varying capacity will come up in Kochi, Thiruvananthapuram and Areekode (Malappuram) at later stages. The KSEB has been demanding that the battery system be made mandatory for all solar plants above 3 KW. The suggestion, however, has not so far been cleared by the regulatory authority.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10792703"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shaju-philip/">
+<figure>
+<img alt="Shaju Philip" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/shajuphilip.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shaju-philip/"><span></span>Shaju Philip</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952072"></div><div class="follow_author_title" data-id="Shaju Philip"></div><div class="follow_author_slug" data-id="shaju-philip"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shaju Philip is a Senior Assistant Editor at The Indian Express, where he leads the publication's coverage from Kerala. With over 25 years of experience in mainstream journalism, he is one of the most authoritative voices on the socio-political, religious, and developmental landscape of South India.
+
+Expertise, Experience, and Authority
+
+ 	
+Decades of Regional Specialization: Shaju has spent more than two decades documenting the "Kerala Model" of development, its complex communal dynamics, and its high-stakes political environment.
+
+ 	
+Key Coverage Beats: His extensive reporting portfolio includes:
+
+
+ 	
+Political &amp; Governance Analysis: In-depth tracking of the LDF and UDF coalitions, the growth of the BJP in the state, and the intricate workings of the Kerala administration.
+
+ 	
+Crime &amp; Investigative Journalism: Noted for his coverage of high-profile cases such as the gold smuggling probe, political killings, and the state’s counter-terrorism efforts regarding radicalization modules.
+
+ 	
+Crisis Management: He has led ground-level reporting during major regional crises, including the devastating 2018 floods, the Nipah virus outbreaks, and the Covid-19 pandemic response.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shaju-philip/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July eighteenth, twenty twenty-six, at sixteen minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/kerala-rooftop-solar-power-challenge-explained-10792703/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-19 17:54 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
