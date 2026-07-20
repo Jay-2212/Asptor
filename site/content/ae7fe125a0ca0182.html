@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Delhi CJP protest: Sonam Wangchuk wants to join Parliament March, writes to Safdarjung Hospital | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Delhi CJP protest: Sonam Wangchuk wants to join Parliament March, writes to Safdarjung Hospital</h1>
+                <div class="article-meta">
+                    <span>By The Hindu Bureau</span> • <span>THE HINDU NATIONAL</span> • <span>2026-07-20</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent" id="content-body-71242448"><div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12 articleevents"><div class="article-live-blog generic"><div id="liveentryListskeyevent"><div id="cue-live-keyevents-update"><h5 class="red-font">Key Updates</h5><ul class="key-updates-list" id="key-updates-list"><li data-event-publish-date="2026-07-20T12:04:11.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426674"><a href="#426674">
+         CJP's Saurav Das and Ashutosh Ranka all set to meet Union Health Minister J.P. Nadda
+          </a></li><li data-event-publish-date="2026-07-20T11:42:04.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426658"><a href="#426658">
+         Activist Sonam Wangchuk demands release from Safdarjung Hospital in letter to director
+          </a></li><li data-event-publish-date="2026-07-20T11:21:59.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426647"><a href="#426647">
+         Government reaches out to the CJP team for talks; CJP wants dialogue with the Prime Minister or a Cabinet Minister
+          </a></li><li data-event-publish-date="2026-07-20T11:10:38.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426642"><a href="#426642">
+         Sporadic clashes reported from places around Jantar Mantar between protesters and security forces
+          </a></li><li data-event-publish-date="2026-07-20T10:40:12.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426616"><a href="#426616">
+         We will focus on conducting the march peacefully: Gitanjali Angmo
+          </a></li><li data-event-publish-date="2026-07-20T10:34:42.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426608"><a href="#426608">
+         CJP spokespersons appeal to people to maintain calm and peace ahead of the Parliament March
+          </a></li><li data-event-publish-date="2026-07-20T09:24:25.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426578"><a href="#426578">
+         
+Heavy security deployed at Jantar Mantar ahead of Parliament march
+          </a></li></ul></div></div><div id="pinEvent"><div class="stickyentry" data-event-id="426712" data-event-publish-date="2026-07-20T13:02:45.000+05:30" data-event-sticky="sticky" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426712" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><!--div class="fact-box"><h5 class="sub-title">Shami’s five-star comeback ! </h5><div class="fact-element"><a>Shami bowls last over vs Australia in T20 World Cup practice match; defends 10 and picks three wickets</a></div></div><div class="fact-box"><h5 class="sub-title">Shami’s five-star comeback ! </h5><div class="fact-element"><a>Shami bowls last over vs Australia in T20 World Cup practice match; defends 10 and picks three wickets</a></div></div --><div class="cue-live-event fact-box"><meta content="2026-07-20T13:02:45.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T13:02:45.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426712" itemprop="url"/><h5 class="sub-title" itemprop="headline"> 
+              Protesters have started marching towards Parliament
+     </h5><div class="fact-element" itemprop="articleBody"><p>Tear gas fired at protesters at Raisina Road, barely 200 metres from Parliament, after they have started marching towards Parliament. -                <i>Vijaita Singh</i></p><div class="embed-wrapper"><p class="title">Protesters brought down barricade near Parliament. Photo credit: Ishita Mishra</p></div></div></div></div></div><div class="article-live-blocker"><ul class="timeline liveentryLists tim431eline" id="entryList"><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426704" data-event-publish-date="2026-07-20T12:51:00.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426704" id="426704" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:51:00.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:51:00.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426704" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:51:00.000+05:30">July 20, 2026 12:51</div><div class="title" itemprop="headline"> Tear gas shells fired near Press Club of India to disperse the crowd</div><div class="sub-text" itemprop="articleBody"><p>Tear gas shells fired near Press Club of India to disperse the crowd as people gathered in support of CJP’s Parliament March on Monday (July 20).-                 <i>Sobhana K. Nair</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426697" data-event-publish-date="2026-07-20T12:40:18.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426697" id="426697" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:40:18.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:40:18.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426697" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:40:18.000+05:30">July 20, 2026 12:40</div><div class="title" itemprop="headline"> Protesters marching toward Parliament from Sansad Marg side were stopped by security forces </div><div class="sub-text" itemprop="articleBody"><p>Protesters marching toward Parliament from Sansad Marg side were stopped by security forces outside the Sansad Marg Police station. Security forces used batons to control the crowd. Few protesters who were injured and received first aid on site. -                 <i>Srimansi Kaushik</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426695" data-event-publish-date="2026-07-20T12:33:56.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426695" id="426695" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:33:56.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:33:56.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426695" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:33:56.000+05:30">July 20, 2026 12:33</div><div class="title" itemprop="headline"> Delhi Police block Vikas Marg, ITO</div><div class="sub-text" itemprop="articleBody"><p>Delhi Police has blocked Vikas Marg, ITO for vehicular movement. This is a key road, which connects ITO to central Delhi where Parliament and Jantar Mantar are located.-                 <i>Vijaita Singh.</i></p><div class="embed-wrapper"><p class="title">WhatsApp Image 2026-07-20 at 12.30.55 PM.jpeg</p></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426691" data-event-publish-date="2026-07-20T12:31:08.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426691" id="426691" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:31:08.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:31:08.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426691" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:31:08.000+05:30">July 20, 2026 12:31</div><div class="title" itemprop="headline"> People in large numbers arriving to take part in Parliament March</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079096657233478101?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426686" data-event-publish-date="2026-07-20T12:23:34.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426686" id="426686" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:23:34.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:23:34.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426686" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:23:34.000+05:30">July 20, 2026 12:23</div><div class="title" itemprop="headline"> Security forces lathicharge as protesters try to breach barricades near Parliament Street</div><div class="sub-text" itemprop="articleBody"><p>Security forces resorted to a baton-charge near Parliament Street after thousands of Cockroach Janta Party (CJP) protesters allegedly tried to breach barricades while marching towards Parliament on Monday.</p><p>At around 11.25 a.m., protesters attempted to push through multiple barricades erected in the high-security zone, sources said.</p><p>A scuffle-like situation ensued, in which some protesters and police personnel sustained minor injuries, they said.</p><p>Around 10-15 protesters were said to have been detained, sources said.-                 <i>PTI</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426683" data-event-publish-date="2026-07-20T12:20:05.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426683" id="426683" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:20:05.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:20:05.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426683" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:20:05.000+05:30">July 20, 2026 12:20</div><div class="title" itemprop="headline"> Three AISA members Neha, Manish and Aameen end their hunger strike on 23rd day </div><div class="sub-text" itemprop="articleBody"><p>The three All India Students’ Association (AISA) members Neha, Manish and Aameen ended their hunger strike on their 23rd day on Monday after appeal from the delegation led by parliamentarians Manoj Jha, Rajaram Singh, Amra Ram along with Dr. Yogendra Yadav, advocate Prashant Bhusan, Professor Atul Sood and actor Prakash Raj and Shabana Azmi. </p><p>Saying that the struggle will continue through other means, AISA in a statement said it will take up a month long campaign against Dharmendra Pradhan, NTA and NEP 2020 parallel to the Parliament session.-                 <i>Suruchi Kumari</i></p><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079080889343185008?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426681" data-event-publish-date="2026-07-20T12:15:46.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426681" id="426681" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:15:46.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:15:46.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426681" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:15:46.000+05:30">July 20, 2026 12:15</div><div class="title" itemprop="headline"> Thousands gather at Jantar Mantar despite heavy security </div><div class="sub-text" itemprop="articleBody"><p>Thousands gather at Jantar Mantar despite heavy security and mobile internet shutdowns in parts of central Delhi. Police baton-charged protesters near Parliament Street and some were also detained.<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079090083937046599?s=20"></a></blockquote></div></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426678" data-event-publish-date="2026-07-20T12:13:46.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426678" id="426678" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:13:46.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:13:46.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426678" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:13:46.000+05:30">July 20, 2026 12:13</div><div class="title" itemprop="headline"> Protesters heard sloganeering at Central Secretariat Metro Station</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079090746976846280?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426674" data-event-publish-date="2026-07-20T12:04:11.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426674" id="426674" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T12:04:11.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T12:04:11.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426674" itemprop="url"/><div class="time" data-publish-date="2026-07-20T12:04:11.000+05:30">July 20, 2026 12:04</div><div class="title" itemprop="headline"> CJP's Saurav Das and Ashutosh Ranka all set to meet Union Health Minister J.P. Nadda</div><div class="sub-text" itemprop="articleBody"><p>Cockroach Janta Party’s spokespersons Saurav Das and Ashutosh Ranka all set to meet Union Health Minister JP Nadda. ​​<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079091432938525117"></a></blockquote></div>​​</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426664" data-event-publish-date="2026-07-20T11:51:35.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426664" id="426664" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:51:35.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:51:35.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426664" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:51:35.000+05:30">July 20, 2026 11:51</div><div class="title" itemprop="headline"> CJP spokespersons en route to negotiations: Saurav Das</div><div class="sub-text" itemprop="articleBody"><p>CJP spokespersons en route to negotiations, “probably with a senior minister,” after barricades have been broken, CJP’s Saurav Das tells                 <i>The Hindu- Aroon Deep</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426658" data-event-publish-date="2026-07-20T11:42:04.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426658" id="426658" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:42:04.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:42:04.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426658" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:42:04.000+05:30">July 20, 2026 11:42</div><div class="title" itemprop="headline"> Activist Sonam Wangchuk demands release from Safdarjung Hospital in letter to director</div><div class="sub-text" itemprop="articleBody"><p>Activist Sonam Wangchuk wrote to the director of Safdarjung Hospital demanding his release on Monday (July 20). In the letter, he requested to be allowed to leave the hospital as his health parameters are good. He said that he could be released at least temporarily as he wants to join the Parliament March.</p><div class="embed-wrapper"><p class="title">WhatsApp Image 2026-07-20 at 11.32.26 AM.jpeg</p></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426655" data-event-publish-date="2026-07-20T11:34:39.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426655" id="426655" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:34:39.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:34:39.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426655" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:34:39.000+05:30">July 20, 2026 11:34</div><div class="title" itemprop="headline"> Protesters gather at Janpath for the Parliament March</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079081469054705739?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426647" data-event-publish-date="2026-07-20T11:21:59.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426647" id="426647" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:21:59.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:21:59.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426647" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:21:59.000+05:30">July 20, 2026 11:21</div><div class="title" itemprop="headline"> Government reaches out to the CJP team for talks; CJP wants dialogue with the Prime Minister or a Cabinet Minister</div><div class="sub-text" itemprop="articleBody"><p>Government reaches out to the CJP team for talks. DCP, New Delhi Sachin Sharma is talking on Centre’s behalf with the CJP team. CJP members were initially offered talks with District Magistrate, then a Secretary to the Union Government and also Minister of State, which was rejected by the members, sources said. The CJP wants a dialogue with the Prime Minister or a Cabinet Minister, they have submitted a list of Ministers to the DCP, said sources-                 <i>Vijaita Singh</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426645" data-event-publish-date="2026-07-20T11:18:38.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426645" id="426645" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:18:38.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:18:38.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426645" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:18:38.000+05:30">July 20, 2026 11:18</div><div class="title" itemprop="headline"> Cockroach Janta Party says that govt. "trying to crush a democratic and peaceful protest"</div><div class="sub-text" itemprop="articleBody"><p>Posting a video of police lathi-charging CJP protesters, CJP stated in their official account, “PM Modi tell your police to stand down. We are a democracy in case you have forgotten. The whole world is watching as you’re trying to crush a democratic and peaceful protest.”</p><div class="embed-wrapper"><p class="title">Cockroach Janta Party (CJP) founder Abhijit Dipke and supporters protest seeking resignation of Union Education Minister Dharmendra Pradhan over alleged examination irregularities and NEET paper leak, at Jantar Mantar in New Delhi on July 20, 2026.Photo by : Shashi Shekhar Kashyap/ The Hindu</p></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426642" data-event-publish-date="2026-07-20T11:10:38.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426642" id="426642" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T11:10:38.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T11:10:38.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426642" itemprop="url"/><div class="time" data-publish-date="2026-07-20T11:10:38.000+05:30">July 20, 2026 11:10</div><div class="title" itemprop="headline"> Sporadic clashes reported from places around Jantar Mantar between protesters and security forces</div><div class="sub-text" itemprop="articleBody"><p>Massive crowds—several thousand strong—gathered at Jantar Mantar as mobile internet was shut down in parts of central Delhi. Protesters had sporadic clashes with authorities, according to emerging visuals. Even as security forces tried to hold the crowds at bay, people gathered in batches of hundreds at the Jantar Mantar protest area and crowded Tolstoy Marg on the north end of the protest strip. CJP leaders appealed to protesters to demonstrate peacefully.</p><p> “India’s youth have shown that they’re not like the Gen Z of other countries,” said Gitanjali J. Angmo, activist Sonam Wangchuk’s wife, from the protest site stage. The speakers’ remarks were inaudible beyond just a hundred metres from the stage, as chanting crowds drowned out instructions from protest leaders and security forces’ loudspeakers alike. Crowds spilled in and out from a narrow entry point at Janpath, where traffic has been heavily restricted.-                 <i>Aroon Deep</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426625" data-event-publish-date="2026-07-20T10:54:06.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426625" id="426625" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:54:06.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:54:06.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426625" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:54:06.000+05:30">July 20, 2026 10:54</div><div class="title" itemprop="headline"> Lathi-charge reported as students march towards Jantar Mantar</div><div class="sub-text" itemprop="articleBody"><p>Delhi Police used sticks and batons to disperse hundreds of students and youth activists marching from Mandi House Metro Station towards Jantar Mantar in an attempt to reach the Cockroach Janta Party (CJP) protest site on Monday (July 20), eyewitnesses said.</p><p>The protesters, including a large number of women, raised slogans against the Centre while proceeding towards Jantar Mantar. Heavy deployment of Delhi Police personnel was seen in the area as police sought to prevent the march from advancing.</p><p>There was no immediate official statement from the police on the reported use of force or any detentions.-                <i> PTI </i></p><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079072603927707878?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426624" data-event-publish-date="2026-07-20T10:51:50.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426624" id="426624" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:51:50.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:51:50.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426624" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:51:50.000+05:30">July 20, 2026 10:51</div><div class="title" itemprop="headline"> Saurav Das, chief spokesperson, Cockroach Janta Party, taken to the Deputy Commissioner's office</div><div class="sub-text" itemprop="articleBody"><p>Saurav Das, chief spokesperson, Cockroach Janta Party, has been taken to the Deputy Commissioner’s office.-                 <i>ANI</i></p><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079073319354327450?s=20"></a></blockquote></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426616" data-event-publish-date="2026-07-20T10:40:12.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426616" id="426616" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:40:12.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:40:12.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426616" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:40:12.000+05:30">July 20, 2026 10:40</div><div class="title" itemprop="headline"> We will focus on conducting the march peacefully: Gitanjali Angmo</div><div class="sub-text" itemprop="articleBody"><p>Activist Sonam Wangchuk’s wife, Dr Gitanjali Angmo, says, ‘We will focus on this march. Three points are very important today. First, we will focus on conducting the march peacefully. Let us stay focused on the issue- the issue of education, which is a vital need for this country and remain vigilant.”-                 <i>ANI</i></p><p>​<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079060067144683772?s=20"></a></blockquote></div>​</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426614" data-event-publish-date="2026-07-20T10:38:45.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426614" id="426614" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:38:45.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:38:45.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426614" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:38:45.000+05:30">July 20, 2026 10:38</div><div class="title" itemprop="headline"> Security intensified in Delhi ahead of Cockroach Janta Party's "Chalo Sansad" march</div><div class="sub-text" itemprop="articleBody"><p>Security intensified in Delhi ahead of Cockroach Janta Party’s “Chalo Sansad” march. <div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079064291639189583?s=20"></a></blockquote></div></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426611" data-event-publish-date="2026-07-20T10:37:28.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426611" id="426611" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:37:28.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:37:28.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426611" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:37:28.000+05:30">July 20, 2026 10:37</div><div class="title" itemprop="headline"> VMMC and Safdarjung Hospital issue Sonam Wangchuk's health update</div><div class="sub-text" itemprop="articleBody"><p>The health bulletin stated, “Shri Sonam Wangchuk continues to receive comprehensive medical care at VMMC &amp; Safdarjung Hospital. His vital parameters remain stable. Blood parameters continue to warrant close clinical observation. Mr. Wangchuk remains under continuous medical management and the close supervision of a multidisciplinary team of experts. Based on the clinical assessment of the treating teams from VMMC &amp; Safdarjung Hospital and AIIMS, New Delhi, continued medical intervention and uninterrupted clinical monitoring remain necessary to ensure early detection and timely management of any potential complications.”-                <i> PTI </i>​<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079066770670019013?s=20"></a></blockquote></div>​</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426608" data-event-publish-date="2026-07-20T10:34:42.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426608" id="426608" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:34:42.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:34:42.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426608" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:34:42.000+05:30">July 20, 2026 10:34</div><div class="title" itemprop="headline"> CJP spokespersons appeal to people to maintain calm and peace ahead of the Parliament March</div><div class="sub-text" itemprop="articleBody"><p>In a video message ahead of CJP’s Parliament March, CJP spokesperson Sourav Das appealed to people to maintain calm and peace. “Please remain calm wherever you might be! The Police is making it hard for some of you with many Metro stations closed. Even if you’ve been stopped at certain points, remain calm and maintain peace. We will only win this with peace and love!”, CJP spokespersons have said.</p><p>​<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079067461723316351?s=20"></a></blockquote></div>​</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426604" data-event-publish-date="2026-07-20T10:30:26.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426604" id="426604" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:30:26.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:30:26.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426604" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:30:26.000+05:30">July 20, 2026 10:30</div><div class="title" itemprop="headline"> Chief of the Azad Samaj Party, Chandrashekhar Azad arrives at Jantar Mantar protest site </div><div class="sub-text" itemprop="articleBody"><p>Chief of the Azad Samaj Party, Chandrashekhar Azad arrives at Jantar Mantar protest site ahead of Cockroach Janta Party’s “Chalo Sansad” march.-                <i> PTI </i><div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079061626981097756?s=20"></a></blockquote></div></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426602" data-event-publish-date="2026-07-20T10:25:13.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426602" id="426602" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:25:13.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:25:13.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426602" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:25:13.000+05:30">July 20, 2026 10:25</div><div class="title" itemprop="headline"> Protesters arriving from different parts of Delhi to Jantar Mantar for Parliament March</div><div class="sub-text" itemprop="articleBody"><p>​<div class="embed-wrapper"><blockquote class="twitter-tweet" lang="en"><a href="https://twitter.com/threadless/status/2079064107446358182?s=20"></a></blockquote></div>​</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426598" data-event-publish-date="2026-07-20T10:12:37.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426598" id="426598" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T10:12:37.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T10:12:37.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426598" itemprop="url"/><div class="time" data-publish-date="2026-07-20T10:12:37.000+05:30">July 20, 2026 10:12</div><div class="title" itemprop="headline"> Wangchuk's wife Gitanjali Angmo challenges Delhi HC's order to retain him in Safdarjung Hospital</div><div class="sub-text" itemprop="articleBody"><p>Sonam Wangchuk’s wife, Gitanjali J. Angmo, has approached a Division Bench of the Delhi High Court, challenging the single judge’s refusal to order the transfer of Mr. Wangchuk from Safdarjung Hospital to Medanta Hospital in Gurugram.</p><p>The plea is likely to be mentioned before the court today.</p><p><i>-Rocky Soibam</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426593" data-event-publish-date="2026-07-20T09:58:30.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426593" id="426593" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T09:58:30.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T09:58:30.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426593" itemprop="url"/><div class="time" data-publish-date="2026-07-20T09:58:30.000+05:30">July 20, 2026 09:58</div><div class="title" itemprop="headline"> Metro gates closed</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><p class="title">WhatsApp Image 2026-07-20 at 9.47.40 AM.jpeg</p></div><p>Metro gates were seen closed as supporters of Sonam Wangchuk and Cockroach Janta Party (CJP) founder Abhijit Dipke protest seeking the resignation of Union Education Minister Dharmendra Pradhan over alleged examination irregularities and the NEET paper leak, at Jantar Mantar.</p><p>Gates of Central Secretariat and Rajiv Chowk have been opened, and interchange facilities are available.</p><p>The rest of the stations will be opened as per further instructions, said DMRC officials.</p><p>Photo: Shashi Shekhar Kashyap</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426590" data-event-publish-date="2026-07-20T09:36:10.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426590" id="426590" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T09:36:10.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T09:36:10.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426590" itemprop="url"/><div class="time" data-publish-date="2026-07-20T09:36:10.000+05:30">July 20, 2026 09:36</div><div class="title" itemprop="headline"> Actress Shabana Azmi reaches Jantar Mantar</div><div class="sub-text" itemprop="articleBody"><p>Film actress Shabana Azmi is seen arriving at Jantar Mantar to meet the protesters.</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426578" data-event-publish-date="2026-07-20T09:24:25.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426578" id="426578" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T09:24:25.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T09:24:25.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426578" itemprop="url"/><div class="time" data-publish-date="2026-07-20T09:24:25.000+05:30">July 20, 2026 09:24</div><div class="title" itemprop="headline"> 
+Heavy security deployed at Jantar Mantar ahead of Parliament march</div><div class="sub-text" itemprop="articleBody"><div class="embed-media-wrapper"></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426570" data-event-publish-date="2026-07-20T09:16:32.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426570" id="426570" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T09:16:32.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T09:16:32.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426570" itemprop="url"/><div class="time" data-publish-date="2026-07-20T09:16:32.000+05:30">July 20, 2026 09:16</div><div class="title" itemprop="headline"> Five metro stations in Delhi closed due to 'security reasons'</div><div class="sub-text" itemprop="articleBody"><p>Delhi Metro today announced the closure of Janpath, Rajiv Chowk, Patel Chowk, Central Secretariat and Seva Teerth metro stations, ahead of the Parliament march, due to ‘security reasons’.</p><p>“Due to security reasons, Janpath, Rajiv Chowk, Patel Chowk, Central Secretariat and Seva Teerth metro stations have been closed till further instructions,” Delhi Metro Rail Corporation posted on X.</p><p>Interchange is allowed only at Rajiv Chowk and Central Secretariat.</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426540" data-event-publish-date="2026-07-20T09:01:44.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426540" id="426540" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T09:01:44.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T09:01:44.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426540" itemprop="url"/><div class="time" data-publish-date="2026-07-20T09:01:44.000+05:30">July 20, 2026 09:01</div><div class="title" itemprop="headline"> Supporters of CJP gathered for Parliament march</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><p class="title">WhatsApp Image 2026-07-20 at 8.51.17 AM (1).jpeg</p></div></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426530" data-event-publish-date="2026-07-20T08:18:46.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426530" id="426530" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T08:18:46.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T08:18:46.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426530" itemprop="url"/><div class="time" data-publish-date="2026-07-20T08:18:46.000+05:30">July 20, 2026 08:18</div><div class="title" itemprop="headline"> Actor Prakash Raj at protest site</div><div class="sub-text" itemprop="articleBody"><div class="embed-wrapper"><p class="title">365be91d-052d-4f98-8ed4-0e3ca74dc984.jpg</p></div><p>Film actor Prakash Raj is seen taking a rest at the protest site in Jantar Mantar, New Delhi, with other protesters.</p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426528" data-event-publish-date="2026-07-20T07:40:25.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426528" id="426528" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T07:40:25.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T07:40:25.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426528" itemprop="url"/><div class="time" data-publish-date="2026-07-20T07:40:25.000+05:30">July 20, 2026 07:40</div><div class="title" itemprop="headline"> Delhi Police on high alert ahead of CJP's 'Chalo Sansad' march</div><div class="sub-text" itemprop="articleBody"><p>Delhi Police is on high alert ahead of the Monsoon Session of Parliament and the Cockroach Janta Party’s (CJP) proposed “Chalo Sansad” march today, with heavy deployment of personnel visible at every nook and corner around Jantar Mantar, Parliament and other key locations.</p><p>Authorities have also imposed prohibitory orders under Section 163 of the BNSS in the New Delhi district.</p><p>Deputy Commissioner of Police (DCP) Sachin Sharma shared a public advisory on X yesterday, stating that “Delhi Police categorically clarifies that no permission has been sought or granted for any such protest march/procession.” The prohibitory order under Section 163 BNSS (formerly Section 144 CrPC) is currently in effect in the New Delhi district, according to the DCP’s post.</p><p>“Accordingly, protest marches, processions, demonstrations and assemblies of five or more persons are strictly prohibited, except at the designated protest site at Jantar Mantar, with prior permission,” the post read.</p><p>The DCP warned that any person violating these prohibitory orders could face prosecution under Section 223 BNS and other applicable laws.</p><p><i>-PTI</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426521" data-event-publish-date="2026-07-20T07:16:12.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426521" id="426521" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T07:16:12.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T07:16:12.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426521" itemprop="url"/><div class="time" data-publish-date="2026-07-20T07:16:12.000+05:30">July 20, 2026 07:16</div><div class="title" itemprop="headline"> Truck loaded with stones and a 'wrecked' van shown up near Jantar Mantar</div><div class="sub-text" itemprop="articleBody"><p>A “wrecked” van has shown up near Jantar Mantar along with a lorry with stones, Cockroach Janta Party founder Abhijeet Dipke said. The CJP plans to start their march to Parliament at 9 a.m. </p><p>The All India Students’ Association (AISA), three members of whom are on the 23rd day of their hunger strike, said they would receive a delegation urging them to end their hunger strike.</p><p><i>-Aroon Deep</i></p></div></div></li><li class="time-list blog-item cue-live-event live-snippet-border" data-event-id="426519" data-event-publish-date="2026-07-20T07:13:17.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426519" id="426519" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T07:13:17.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T07:13:17.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426519" itemprop="url"/><div class="time" data-publish-date="2026-07-20T07:13:17.000+05:30">July 20, 2026 07:13</div><div class="title" itemprop="headline"> Will end fasting today if government takes accountability for failures in education system, says Sonam Wangchuk</div><div class="sub-text" itemprop="articleBody"><p>Sonam Wangchuk said that he will end his hunger strike on Monday (July 20, 2026) if the government is ready to take accountability for failures in the education system or the MPs are ready to take up the issue in the parliament.</p><p>In a post shared on his X handle, he said his health doesn’t permit him to participate in the Parliament march; the MPs of different parties should meet him at the Safdarjung Hospital to ensure that they will take up the issue of paper leaks in the Parliament.</p><p>He added that his freedom of speech and communication are restricted during his “illegal detention” at the Safdarjung Hospital.</p></div></div></li><li class="time-list blog-item last-child-no-line cue-live-event live-snippet-border" data-event-id="426514" data-event-publish-date="2026-07-20T07:02:01.000+05:30" data-event-uri="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece/liveEvent/entry/426514" id="426514" itemprop="liveBlogUpdate" itemscope="" itemtype="https://schema.org/BlogPosting"><div class="time-list-story"><meta content="2026-07-20T07:02:01.000+05:30" itemprop="datePublished"/><meta content="2026-07-20T07:02:01.000+05:30" itemprop="dateModified"/><meta content="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece#426514" itemprop="url"/><div class="time" data-publish-date="2026-07-20T07:02:01.000+05:30">July 20, 2026 07:02</div><div class="title" itemprop="headline"> Crowd swells at CJP protest site ahead of Parliament march</div><div class="sub-text" itemprop="articleBody"><p>On Sunday (July 19, 2026) afternoon, thousands of people were flowing through both entries to the Cockroach Janta Party (CJP) protest site at Jantar Mantar in central Delhi. With thousands of people inside the protest area, it was almost impossible to walk without bumping into another person. </p><p>Read more:</p><p>​<div style="width:100%; border: 1px solid #cdcdcd;"><div><a href="https://www.thehindu.com/news/national/cjps-vigil-begins-crowds-camp-at-jantar-mantar-on-eve-of-parliament-march-call/article71242700.ece"><img alt="" class="lazy" data-original="https://th-i.thgim.com/public/incoming/ntq5k3/article71242708.ece/alternates/LANDSCAPE_1200/2026-07-19T175141Z_145826985_RC22HMAEX8QI_RTRMADP_3_INDIA-GEN-Z-ACTIVIST.JPG" data-src-template="https://th-i.thgim.com/public/incoming/ntq5k3/article71242708.ece/alternates/LANDSCAPE_1200/2026-07-19T175141Z_145826985_RC22HMAEX8QI_RTRMADP_3_INDIA-GEN-Z-ACTIVIST.JPG" height="100%" src="/theme/images/th-online/1x1_spacer.png" width="100%"/></a></div><div style="padding:5px;"><h3 style="display: block; padding:0; margin: 5px 0;">Crowd swell at CJP protest site ahead of Parliament march</h3><p style="display: block; padding:0; margin: 5px 0;">CJP's night vigil at Jantar Mantar draws 20,000 supporters ahead of a planned march to Parliament on July 20.</p></div></div>​</p></div></div></li></ul></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- July 20, 2026 06:56 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71242448" data-title="CJP protest in Delhi LIVE: Protesters start marching towards Parliament; tear gas shells fired near Press Club of India" data-url="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; copytext('https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece&amp;t=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India')">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece&amp;text=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India')">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece&amp;text=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India')">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece&amp;title=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://api.whatsapp.com//send?text=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India%20-%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-69619e97f3b9f93fc7779d6a-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk%2Farticle71242448.ece&amp;title=CJP%20protest%20in%20Delhi%20LIVE%3A%20Protesters%20start%20marching%20towards%20Parliament%3B%20tear%20gas%20shells%20fired%20near%20Press%20Club%20of%20India')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71242448" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/cjp-protest-july-20-2026-cockroach-janata-party-jantar-mantar-parliament-march-sonam-wangchuk/article71242448.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-20 07:43 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
