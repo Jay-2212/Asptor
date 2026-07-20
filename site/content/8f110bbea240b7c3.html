@@ -1,0 +1,451 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>CJP protest in Mumbai: How Azad Maidan became the city’s site of agitations, with restrictions | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>CJP protest in Mumbai: How Azad Maidan became the city’s site of agitations, with restrictions</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-20</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/cjp-protest-mumbai-azad-maidan.jpeg?w=1600" alt="CJP protest in Mumbai: How Azad Maidan became the city’s site of agitations, with restrictions">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A Cockroach Janta Party protest at Azad Maidan, Mumbai, raising demands for a transparent, accountable and corruption-free examination system and resignation of Union Education Minister Dharmendra Pradhan over the NEET paper leak." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/cjp-protest-mumbai-azad-maidan.jpeg?w=1600" width="650"/><span class="ie-custom-caption">A Cockroach Janta Party protest at Azad Maidan, Mumbai, raising demands for a transparent, accountable and corruption-free examination system and resignation of Union Education Minister Dharmendra Pradhan over the NEET paper leak. (Express photo by Ganesh Shirsekar)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Mumbai-based activists and citizens have been gathering at the Azad Maidan since last week in solidarity with the Cockroach Janta Party (CJP) protest being held at Jantar Mantar, New Delhi, over the NEET-UG 2026 entrance examination paper leak.</p>
+<p><a href="https://indianexpress.com/article/cities/mumbai/students-protest-against-sonam-wangchuks-detention-mumbai-police-book-organisers-10793074/"><strong>On Saturday (July 18),</strong></a> the <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> Police filed two FIRs against some of the protestors, citing the Public Meetings, Agitations and Processions Rules, 2025, which prohibit protests at the maidan on weekends.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The FIRs have been filed at the Marine Drive and Azad Maidan police stations. The former names student leaders of NCP (SP) for protesting outside Mantralaya or the state secretariat, while the latter concerns protests held by activist-writer Sudhir Dhawale (also an accused in the Elgaar Parishad case) and others outside Azad Maidan. The police said that they were booked under sections related to disobedience of an order promulgated by a public servant and unlawful assembly.</p><div class="paywall container-wall-exclusive">
+<h2>How did Azad Maidan become a designated protest site in Mumbai?</h2>
+<p>In 1997, the Nariman Point Churchgate Citizens’ Association and other resident associations in South Mumbai approached the Bombay High Court, claiming that protests held in the area caused them disturbance.</p><div id="taboola-mid-article-personalisation"></div>
+<p>They complained of constant ‘noise pollution’ due to sloganeering along the arterial routes leading up to Kala Ghoda and Churchgate, where several morchas (rallies) would gather to present their demands to the government.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-politics/sonam-wangchuk-activist-education-ecology-politics-10792093/">The journey of Sonam Wangchuk, the activist: Education to ecology to politics</a></span></div>
+<p>The petition claimed that this affected residents, college students, and office workers who commuted to Nariman Point every day. At that time, the court issued an interim order stating that all protests and morchas would terminate at Azad Maidan, a ground close to the Chhatrapati Shivaji Maharaj Terminus and the headquarters of the Brihanmumbai Municipal Corporation (BMC).</p>
+<p>Since then, based on the interim order, protests held in South Mumbai have been held within the designated space at Azad Maidan. The organisers of the protests, too, require permission from the Mumbai police. Protesters would earlier demonstrate right up to Vidhan Sabha or Mantralaya, but this is no longer permitted.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The Mumbai police also continually extend a public order under Section 144 of the Criminal Procedure Code (replaced with Section 163 of the Bhartiya Nagarik Suraksha Sanhita, 2023), prohibiting large gatherings by citing “disturbance of public tranquillity”.</p>
+<span class="custom-caption"><img alt="A CJP protest at Azad Maidan, Mumbai. " class="lazyloading wp-image-10793793 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/cjp-mumbai.jpeg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/cjp-mumbai.jpeg 820w, https://indianexpress.com/wp-content/uploads/2026/07/cjp-mumbai.jpeg?resize=450,272 450w, https://indianexpress.com/wp-content/uploads/2026/07/cjp-mumbai.jpeg?resize=600,362 600w, https://indianexpress.com/wp-content/uploads/2026/07/cjp-mumbai.jpeg?resize=768,464 768w, https://indianexpress.com/wp-content/uploads/2026/07/cjp-mumbai.jpeg?resize=671,405 671w" height="495" sizes="(max-width: 820px) 100vw, 820px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="820"/> A CJP protest at Azad Maidan, Mumbai. (Express photo by Gandesh Shirsekar)</span>
+<p>During the proceedings in relation to the 1997 petition, the state said in 2011 that a committee had been set up, comprising the additional chief secretary (home), the police commissioner, and the BMC commissioner, which would investigate the issue and develop a policy.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/innovator-to-provocateur-wangchuks-equation-with-delhi-changed-over-3-decades-10273868/">Premium Innovator to ‘provocateur’, Wangchuk’s equation with Delhi changed over 3 decades</a></span></div>
+<p>In 2016, the court was informed that the committee had not met even once; as a result, the court directed the government to formulate a policy soon. The petitioners had sought that facilities should be provided at the ground for protests, so that traffic and security are regulated, ‘in such a way that others are not inconvenienced’.</p>
+<p>In 2020, the High Court was again informed that the state has undertaken steps to frame rules and regulations on public meetings. The court again took up the case for hearing in March 2025 and directed that the rules be established soon, stating that 28 years had passed since the petition was filed.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The state had then informed the court that the Public Meetings, Agitations and Processions Rules, 2025, would be notified, earmarking Azad Maidan as the designated area for conducting dharnas, agitations, pickets, meetings, processions, hunger strikes, or any other forms of protest.</p>
+<h2>What do the Public Meetings, Agitations and Processions Rules, 2025, say?</h2>
+<p>The key guidelines of the notified Rules state that all protests should be held only between 9 am and 6 pm, with prior police permission. The protests cannot be held on weekends and public holidays. A maximum of 5,000 persons can be present at a time, and permission can be denied on days including festivals, Independence Day, Republic Day, during Legislative Assembly sessions, government functions or VIP movement.</p>
+<p>It prohibits protestors from carrying objectionable placards, banners, and from making any abusive or provocative speeches. It directs that using any inflammatory language that could incite or promote enmity between different groups on grounds of religion, race, birth, caste and language or any act that disturbs public peace and tranquillity, should be avoided.</p>
+<p>It also bars protesters from burning government documents, effigies, books, or sitting on hunger strikes. Sloganeering or marching towards or from the designated protest area is also not allowed. Loudspeakers or public address systems can only be used with permission, limited to certain decibel levels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>When these rules were notified, some political leaders criticised them. NCP spokesperson Anish Gawande described them as “unconstitutional and undemocratic” in a social media post. He wrote, “This is the biggest attack on free speech in Mumbai. Now, protests allowed only at Azad Maidan on weekdays after permission. No more than 5,000 people. Until 6pm. What is going on?”</p>
+<p>After the rules were notified, one of the major protests held at Azad Maidan was for Maratha reservation, led by activist Manoj Jarange Patil. While hearing a plea for permission, the HC cited the Supreme Court judgment in the Amit Sahni vs Commissioner of Police case, in connection with the anti-CAA protests at Shaheen Bagh in Delhi. The SC had then stated that occupying public ways can cause inconvenience to commuters and was unacceptable.</p>
+<p>Eventually, when permission was granted, more than 5,000 protestors gathered at the Maratha protests, with many residing outside the maidan.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10793775"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sadaf-modak/">
+<figure>
+<img alt="Sadaf Modak" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2016/02/sadaf.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sadaf-modak/"><span></span>Sadaf Modak</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2657634"></div><div class="follow_author_title" data-id="Sadaf Modak"></div><div class="follow_author_slug" data-id="sadaf-modak"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sadaf Modak is a distinguished Legal Correspondent based in Mumbai whose work demonstrates exceptional Expertise and Authority in covering the intricacies of the judicial and correctional systems. Reporting for The Indian Express, she is a highly Trustworthy source for in-depth coverage of courtroom proceedings and human rights issues.
+Expertise 
+
+ 	
+Specialized Role: As a dedicated Legal Correspondent, Sadaf Modak possesses deep, specialized knowledge of legal procedures, statutes, and judicial operations, lending immense Authority to her reports.
+
+ 	
+Core Authority &amp; Focus: Her work primarily centers on:
+
+
+ 	
+Trial Court Proceedings: She mainly covers the trial courts of Mumbai, providing crucial, on-the-ground reporting on the day-to-day legal processes that affect citizens. She maintains a keen eye on both major criminal cases and the "ordinary and not so ordinary events" that reveal the human element within the justice system.
+
+ 	
+Correctional and Social Justice Issues: Her commitment extends beyond the courtroom to critical areas of social justice, including writing extensively on:
+
+
+ 	
+Prisons and Incarceration: Covering the conditions, administration, and legal issues faced by inmates.
+
+ 	
+Juvenile Justice: Reporting on the complexities of the juvenile justice system and the legal rights of children.
+
+ 	
+Human Rights: Focusing on fundamental human rights within the context of law enforcement and state institutions.
+
+
+
+
+
+
+Experience
+
+ 	
+Institutional Affiliation: Reporting for The Indian Express—a leading national newspaper—ensures her coverage is subject to high editorial standards of accuracy, impartiality, and legal rigor.
+
+ 	
+Impactful Detail: Her focus on trial courts provides readers with direct, detailed insights into the workings of the justice system, making complex legal narratives accessible and establishing her as a reliable and trusted chronicler of the legal landscape.
+
+
+Sadaf Modak's blend of judicial focus and commitment to human rights issues establishes her as a vital and authoritative voice in Indian legal journalism.
+She tweets @sadafmodak                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sadaf-modak/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July nineteenth, twenty twenty-six, at two minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/azad-maidan/" href="https://indianexpress.com/about/azad-maidan/">Azad Maidan</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/cockroach-janta-party/" href="https://indianexpress.com/about/cockroach-janta-party/">Cockroach Janta Party</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/cjp-protest-mumbai-azad-maidan-restrictions-10793775/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-20 15:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

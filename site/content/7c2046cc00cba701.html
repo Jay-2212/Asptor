@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Cap on private school fees hike, refund for ‘extra’ fees: What’s in Punjab’s new ordinance? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Cap on private school fees hike, refund for ‘extra’ fees: What’s in Punjab’s new ordinance?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-20</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/punjab-school-fees.jpg?w=1600" alt="Cap on private school fees hike, refund for ‘extra’ fees: What’s in Punjab’s new ordinance?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="The OrdinanceIt further mandates refunds in cases where fee increases have exceeded 15% over the last three years. (Express photo by Gurmeet Singh)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/punjab-school-fees.jpg?w=1600" width="650"/><span class="ie-custom-caption">The OrdinanceIt further mandates refunds in cases where fee increases have exceeded 15% over the last three years. (Express photo by Gurmeet Singh)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Punjab government introduced an Ordinance earlier this week for regulating fee hikes in private schools.</p>
+<p>It comes <a href="https://indianexpress.com/article/cities/chandigarh/punjab-private-school-fee-hike-cap-refund-10785136/"><strong>amid recent</strong></a> reports of a 17-year-old student’s alleged death by suicide due to pressure from her school over pending dues. Chief Minister <a class="" href="https://indianexpress.com/about/bhagwant-mann/" rel="noamphtml">Bhagwant Mann</a> said he received calls from many parents on the subject, complaining of arbitrary fee hikes by private schools. The state has around 32 lakh students studying across 7,800 private schools.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Promulgated by the Governor, the Ordinance seeks to amend the Punjab Regulation of Fee of Unaided Educational Institutions Act, 2016 and comes into force immediately.</p>
+<p><strong>What does the Ordinance say?</strong></p>
+<p>The Punjab Regulation of Fees of Unaided Educational Institutions (Amendment) Ordinance, 2026, caps annual fee hikes for private unaided schools at 5%.</p><div class="paywall container-wall-exclusive"><div id="taboola-mid-article-personalisation"></div>
+<p>It further mandates refunds in cases where fee increases have exceeded 15% over the last three years, and treats all charges (such as transport and building fees) as part of tuition fees. Stringent penalties, including derecognition, have been announced for violations.</p>
+<p>Mann stated that a dedicated portal would become operational immediately and all private schools would be required to upload details of fees charged during the past four years within 10 days. The information would then be scrutinised over the following month.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/chandigarh/private-school-fee-hike-punjab-10722854/">What parents in Punjab must know about existing law on private school fee hike, what’s new</a></span></div>
+<p>The government had initially considered amending the rules framed under the 2016 Act. However, after examining the potential legal objections, it concluded that several proposed changes would not survive judicial scrutiny, unless incorporated into the parent legislation itself.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>An Ordinance is introduced when the state legislature is not in session. It carries the same force as an Act until it is approved by the State Legislative Assembly and remains valid for six weeks from the date the next session starts.</p>
+<p><strong>What exactly is considered as fees under the amended law?</strong></p>
+<p>The Ordinance considerably expands the definition of fees so that schools cannot avoid regulation by collecting money under different names or categories. Instead of limiting itself to tuition fees, the law now covers almost every compulsory payment.</p>
+<p>This includes development charges, annual charges, activity fees, smart class or technology charges, laboratory and library fees, examination charges, transport charges where transport is not separately contracted, and any other compulsory amount collected directly by the school or indirectly through an associated trust or society.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Only genuine refundable security deposits that are actually returned to parents have been kept outside this definition.</p>
+<p><strong>What is the new cap on fee hikes?</strong></p>
+<p>The Ordinance allows private schools to increase their total fee by up to 5% over the fee charged in the previous academic year without prior approval. The government says this recognises the need for a reasonable annual increase to meet rising operational costs, while preventing arbitrary or excessive hikes.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/state-private-school-fees-delhi-law-10428874/">How states regulate private school fees and where the new Delhi law fits in</a></span></div>
+<p>However, any school seeking to raise fees by more than 5% can no longer do so on its own. It will have to approach the District Regulatory Body headed by Deputy Commissioners at least six months before the start of the academic session, justify the proposed increase and secure written approval before implementing it.</p>
+<p>While considering such a request, the body can order a forensic audit of the school’s accounts. It can even examine the finances of the trust or society running the institution to determine whether the proposed increase is based on genuine financial needs or if it amounts to profiteering. Until the authority takes a decision, the school must continue charging the existing fee.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><strong>Why are schools being asked to refund fees collected over the last three years?</strong></p>
+<p>The most significant provision of the Ordinance is the retrospective correction of fee hikes. The government has introduced the concept of “cumulative fee enhancement”, under which it will compare the fee charged during the last three years.</p>
+<p>If the overall increase from the beginning of that period to date exceeds 15%, the school will have to refund the excess amount collected from parents within 90 days of the notification of the Ordinance. This provision is expected to affect schools that substantially increased fees in the years following the pandemic.</p>
+<p>The government maintains that parents should not continue to bear the burden of what it considers excessive increases merely because they were imposed over several years instead of all at once.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><strong>How will the government ensure that schools follow the law?</strong></p>
+<p>The Ordinance significantly strengthens the powers of the District Regulatory Bodies, which will now function as the principal enforcement authorities. Apart from examining applications for fee hikes, they will be able to order forensic audits either in response to parent complaints or on their own if they suspect violations.</p>
+<p>Schools found to have violated the law can face substantially higher penalties than before. Those failing to refund excess fees despite directions can be fined every day until compliance and, in cases of continued defiance, may even face withdrawal of recognition or affiliation after being given an opportunity to present their case.</p>
+<p>The law also seeks to improve transparency by requiring schools to publish their fee structure on their websites and school premises at least 90 days before the beginning of the academic session and communicate any revision to parents through recognised modes such as circulars, email, WhatsApp messages or parent-teacher meetings.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10793705"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/kanchan-vasdev/">
+<figure>
+<img alt="Kanchan Vasdev" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/kanchan-vasdev-400.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/kanchan-vasdev/"><span></span>Kanchan Vasdev</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952647"></div><div class="follow_author_title" data-id="Kanchan Vasdev"></div><div class="follow_author_slug" data-id="kanchan-vasdev"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Kanchan Vasdev is a Senior Assistant Editor in The Indian Express’ Punjab bureau. She is a highly experienced journalist with 22 years of expertise covering high-stakes politics, governance, and social issues in Northern India.
+
+Professional Background
+Role: Primary reporter covering the Punjab Chief Minister’s Office (CMO), government policies, and the Aam Aadmi Party (AAP) leadership in the state.
+
+Experience: She previously worked with The Tribune and has played a key role in launching various city editions.
+
+Special Projects:
+
+Abandoned Brides: Authored a monograph on brides abandoned by NRIs as part of the Prabha Dutt Memorial Fellowship.
+
+Environment: Worked as a Centre for Science and Environment (CSE) fellow, focusing on the pollution levels in the Satluj river.
+
+Recent Notable Articles (Late 2025)
+Her recent reporting focuses on the legislative strategies and political maneuvers of the Bhagwant Mann-led Punjab government:
+
+1. Legislative &amp; Governance Standoffs
+"Punjab govt advances special Assembly session to pass resolution against VB-G RAM G Bill" (Dec 20, 2025): Reporting on the state's move to block the Centre's "Viksit Bharat" mission, which the state claims will undermine MGNREGA.
+
+"Punjab govt doubles down on special sessions, sixth in January" (Dec 19, 2025): Detailing the AAP government's use of special sessions as a legislative tool amid tensions with the Governor.
+
+"Punjab asks 'VIP teachers' working near Chandigarh to go back to border districts" (Dec 16, 2025): Reporting on CM Mann's move to end the practice of influential teachers avoiding postings in remote areas.
+
+2. Political Analysis &amp; Rural Polls
+"Punjab rural polls: Why Akalis are likened to dinosaurs in Punjab" (Dec 19, 2025): Analyzing CM Bhagwant Mann's rhetoric against the Shiromani Akali Dal (SAD) following local body elections.
+
+"AAP claims win in 78% Punjab zila parishads as counting continues" (Dec 18, 2025): Breaking down the results of the 2025 rural elections.
+
+"Rahul Gandhi and Sidhu alike, says Bhagwant Mann" (Dec 13, 2025): Covering the CM's critique of the Congress leadership.
+
+3. Law Enforcement &amp; Bureaucracy
+"Suspended Punjab IPS officer Ravjot Kaur Grewal awaits reinstatement" (Dec 10, 2025): Investigative reporting on the bureaucratic red tape involving the Election Commission and the state government.
+
+"Punjab declines to give parole to Amritpal Singh" (Nov 27, 2025): Detailing the state government's refusal to grant parole to the radical preacher and sitting MP.
+
+4. Welfare &amp; Economy
+"Punjab government's plan to add more freebies to 'atta-dal' scheme hits funds roadblock" (Dec 4, 2024): An analysis of the fiscal challenges facing the state's flagship food security program.
+
+"Mann leads Punjab delegation to Japan and South Korea for investor outreach" (Dec 2, 2025).
+
+Signature Beat
+Kanchan Vasdev is known for her insider access to Punjab's political executive. Her writing provides deep insights into how state policies are formulated and the friction points between the state government and central authorities. Her dual expertise in environment and law allows her to report on complex issues like the "Farmhouse Policy" (Dec 18, 2025) and river pollution with a unique policy-oriented lens.
+
+X (Twitter): @kanchan99                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/kanchan-vasdev/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July nineteenth, twenty twenty-six, at forty-two minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/punjab/" href="https://indianexpress.com/about/punjab/">Punjab</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/school-fee-hike/" href="https://indianexpress.com/about/school-fee-hike/">school fee hike</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/cap-refund-private-school-fee-hike-punjab-10793705/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-20 15:02 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
