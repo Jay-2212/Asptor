@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India-U.K. FTA creates predictability for businesses on both sides: City of London policy chief | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India-U.K. FTA creates predictability for businesses on both sides: City of London policy chief</h1>
+                <div class="article-meta">
+                    <span>By Sriram Lakshman</span> • <span>THE HINDU OPINION</span> • <span>2026-07-21</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71248657"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Will British companies manufacture and invest more in India as a result of this trade deal, or are you expecting it to spur exports to India mostly?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I think it will do both, but the bigger story is investment.
+				</p><p>
+										The U.K.-India Comprehensive Economic and Trade Agreement (CETA) creates a more predictable and attractive environment for businesses on both sides. For British companies already operating in India, it gives them greater confidence to expand their presence, invest for the long term, and participate in India’s growth story. For firms not yet in the market, it lowers barriers and makes India a more accessible destination.
+				</p><p>
+										India is the world’s fastest-growing major economy, with ambitious plans around infrastructure, manufacturing, digitalisation and energy transition. Those are areas where British firms bring expertise, capital and professional services. As a result, I expect to see increased U.K. investment into India alongside stronger trade flows.
+				</p><p>
+										Equally, during my recent visit, I saw first-hand how Indian companies are eager to continue expanding into the U.K.. At an FDI fintech round table I chaired in Mumbai, many Indian fintech companies expressed their excitement at the prospect of investing in the U.K.
+				</p><p>
+										India is already one of the largest sources of investment projects into Britain, and I expect the agreement to accelerate that trend.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How far are the two countries from signing a Bilateral Investment Treaty (BIT)? Can you specify what the major stumbling blocks are right now in these negotiations?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									The U.K. and India both recognise the value of a high-quality Bilateral Investment Treaty and there is a shared desire to strengthen investor confidence and unlock additional capital flows.
+				</p><p>
+										However, these are complex negotiations and it would not be appropriate for me to speculate on timelines or discuss the details of ongoing government-to-government discussions.
+				</p><p>
+										From a business perspective, the priority is clear: investors in both countries benefit from transparency, legal certainty and predictable frameworks. A successful agreement that commands confidence on both sides would be a valuable addition to the wider U.K.-India economic partnership.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The two countries set up the U.K.-India Infrastructure Financing Bridge in September 2024. A year after it began there were no projects in the pipeline and you’d said more work had to be done. Specifically, projects in India needed to be de-risked to attract investment from the U.K. Almost two years in, has the investment environment in India changed and what more needs to be done?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									There has certainly been progress. On my recent trip to India, I had the pleasure of visiting the Versova Sea Link as part of the U.K.-India Infrastructure Financing Bridge (UKIIFB), a concrete example of the type of project that U.K. firms can invest in.
+				</p><p>
+										So far, the UKIIFB has brought together top infrastructure financing experts from the U.K. and India to make Indian projects more investable, unlocking global capital to help achieve India’s $4.5 trillion infrastructure target by 2030.
+				</p><p>
+										I’m incredibly proud to have launched the UKIIFB with India almost two years ago. We are continuing to work closely with State-level governments in India to turn ambition into execution.
+				</p><p>
+										In the U.K., we recently hosted an event with ICICI Bank, convening senior British institutional investors and industry leaders to help prepare investor-ready projects and strengthen market connectivity between India and global capital markets.
+				</p><p>
+										More generally, the Indian government has demonstrated a strong commitment to infrastructure investment and has introduced a number of reforms aimed at improving ease of doing business and attracting long-term capital. Recent measures around asset monetisation, insurance liberalisation and infrastructure financing signal serious intent. India’s sustained public investment programme has also created a substantial pipeline of opportunities.
+				</p><p>
+										The purpose of the U.K.-India Infrastructure Financing Bridge has never been simply to identify projects. It is about bringing together expertise from both countries to help make projects investment-ready and connect them with global pools of capital. That work remains important and I believe the opportunity is significant.
+				</p><p>
+										The U.K.-India Infrastructure Financing Bridge reflects the City of London Corporation’s commitment to supporting India’s global growth ambitions.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What opportunities does the CETA create for firms in the financial sector that did not exist before and what challenges remain?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									The agreement is significant because it creates a stronger platform for growth in financial and professional services, which are central to both our economies.
+				</p><p>
+										The U.K. is the world’s largest net exporter of financial services and London remains a global centre for banking, insurance, asset management, capital markets, and fintech. The agreement should help deepen connectivity between our financial ecosystems and create new opportunities for collaboration.
+				</p><p>
+										Particularly promising areas include insurance, reinsurance, sustainable finance, fintech, asset management and capital markets. India’s decision to increase foreign investment limits in insurance opens meaningful opportunities for closer cooperation between British and Indian firms.
+				</p><p>
+										The agreement should also encourage more Indian firms to use London’s capital markets and financial expertise as they pursue international growth.
+				</p><p>
+										Challenges remain, of course. Businesses would welcome continued progress on market access, regulatory complexity, data flows, professional services mobility and reducing compliance burdens. The CETA is an important milestone, but it should be viewed as the beginning of a deeper financial partnership rather than the end of the journey.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What can you say to Indian investors, exporters, or those looking to set up companies in the U.K. who are nervous about frequent changes in Prime Ministers and policy instability?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I would say that investors should look beyond day-to-day politics and focus on the long-term fundamentals.
+				</p><p>
+										The U.K. has one of the world’s most established legal systems, respected independent institutions, deep capital markets and a long track record as a stable destination for international investment. Governments change, but those foundations remain consistent.
+				</p><p>
+										Indian companies clearly recognise this. India has been one of the most significant sources of investment into Britain for several years and hundreds of Indian-owned companies are successfully expanding across the U.K.
+				</p><p>
+										The U.K. remains open, competitive and internationally connected. We continue to be Europe’s leading destination for financial services investment and one of the world’s foremost centres for innovation, technology and global finance.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									U.K. Prime Minister-in-waiting Andy Burnham wants to spread economic activity more evenly across the U.K. rather than concentrate it in London. What might this mean for Indian companies and investors looking at the U.K. market over the next three years?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									We’ve recently announced a new digital platform called InvestConnect, which will link global institutional investors, including those in India, with infrastructure opportunities across all U.K. nations and regions.
+				</p><p>
+										So far, Cornwall Council, the Scottish Government and Liverpool City Region have all signed up. In short, this will make it easier for Indian investors to take advantage of opportunities across the U.K.
+				</p><p>
+										Ultimately, the City of London competes for the regions, and the U.K. economy wins when sustainable growth is shared across the country. Economic growth in London or the regions is a false choice. We need both to succeed.
+				</p><p>
+										Let’s not forget that the U.K.’s financial and professional services sector is one of our greatest national assets. It employs 2.4 million people, two-thirds of them outside London. The sector generates investment, tax revenues and innovation across every region of the country, not just London. The City of London plays a vital role in this. We generate £109 billion in output, accounting for 4% of GVA. The City contributes around 12% of all U.K. tax receipts, which help fund public services.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									India has signed trade deals with several countries and blocs recently, including the EU and EFTA. What makes the U.K. an attractive destination for Indian companies and investment? In other words, why London and why the U.K.?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									The answer is that the U.K. offers something few countries can: global reach.
+				</p><p>
+										London is the world’s leading international financial centre. It provides access to capital, investors, professional services, insurance expertise, legal certainty and international networks that are difficult to replicate elsewhere.
+				</p><p>
+										For Indian companies seeking to expand globally, London offers a trusted platform from which to raise capital, manage risk, attract investment and grow internationally. Whether you are a major infrastructure developer, a fintech company, a renewable energy business or a fast-growing technology firm, London provides access to a uniquely deep ecosystem.
+				</p><p>
+										The U.K. also benefits from exceptional people-to-people ties. Our 1.9 million-strong Indian diaspora creates personal, cultural and commercial connections that underpin business confidence and investment.
+				</p><p>
+										Brexit has not changed London’s role as a global city. If anything, it has reinforced the U.K.’s focus on building economic partnerships with high-growth markets around the world. The U.K.-India CETA is a strong example of that ambition.
+				</p><p>
+										So when I speak to Indian businesses, my message is simple: if you want to raise equity, come to London; if you want access to world-class insurance and risk management, come to London; if you want global investors, international expertise and a trusted business environment, come to the U.K. The U.K. remains one of the best places in the world to do business, and we want Indian companies to be at the heart of our future growth story.
+				</p></div></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- July 21, 2026 04:16 pm IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71248657" data-title="India-U.K. FTA creates predictability for businesses on both sides: City of London policy chief" data-url="https://www.thehindu.com/opinion/interview/india-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief/article71248657.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; copytext('https://www.thehindu.com/opinion/interview/india-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief/article71248657.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece&amp;t=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief')">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece&amp;text=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief')">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece&amp;text=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief')">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece&amp;title=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://api.whatsapp.com//send?text=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief%20-%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-a62db997bd2bdfd4576c9733-="" onclick="if (!window.__cfRLUnblockHandlers) return false; openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Finterview%2Findia-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief%2Farticle71248657.ece&amp;title=India-U.K.%20FTA%20creates%20predictability%20for%20businesses%20on%20both%20sides%3A%20City%20of%20London%20policy%20chief')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71248657" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/interview/india-uk-fta-creates-predictability-for-businesses-on-both-sides-city-of-london-policy-chief/article71248657.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-21 14:28 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
