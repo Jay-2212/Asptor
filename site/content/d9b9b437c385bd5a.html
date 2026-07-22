@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>CJP march to Parliament: What is the law invoked to impose curfew across New Delhi, how it is used | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>CJP march to Parliament: What is the law invoked to impose curfew across New Delhi, how it is used</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-cjp-march_expl-law.jpg?w=1600" alt="CJP march to Parliament: What is the law invoked to impose curfew across New Delhi, how it is used">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="CJP" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-cjp-march_expl-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">Cockroach Janta Party (CJP) supporters raise slogans during a protest march, at Connaught Place, in New Delhi. (PTI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Around 12,000 protesters <strong><a class="" href="https://indianexpress.com/article/india/sonam-wangchuk-hunger-strike-cjp-centre-sansad-chalo-march-today-updates-10794799/">attempted to march</a></strong> from Jantar Mantar to Parliament on Monday (July 20), demanding the resignation of Union Education Minister Dharmendra Pradhan over irregularities in the NEET-UG examination, which has driven several students to suicide, and several paper leaks. Ahead of the march, the Delhi Police imposed prohibitory orders under Section 163 of the Bharatiya Nagarik Suraksha Sanhita (BNSS) across the New Delhi district. Deputy Commissioner of Police Sachin Sharma said no permission had been sought or granted for the march and warned that legal action would be taken against those violating the order.</p>
+<p>As protesters attempted to move towards Parliament, police stopped them at multiple barricades short of Parliament Street. While the Delhi Police, in an official statement, said that “no such incident has taken place and protest is being handled professionally”, eyewitness accounts from the protest site showed police personnel using lathis to push back sections of the crowd.</p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>According to Cockroach Janta Party (CJP) spokespersons, government representatives later opened talks with the party leadership. Meanwhile, climate activist Sonam Wangchuk, who was taken by the Delhi Police to Safdarjung Hospital on Saturday after completing 21 days of his indefinite fast, remains under observation.</p>
+<p>The day’s events have put Section 163 of the BNSS back in focus. The provision is most associated with restrictions on protests and public assemblies. But an empirical study of its use in Delhi suggests protest-related orders account for only a small share of what the section is actually used for.</p>
+<p><strong>Emergency power</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>Section 163 replaced Section 144 of the Code of Criminal Procedure (CrPC), which empowers a Executive Magistrate to act where “there is sufficient ground for proceeding under this section and immediate prevention or speedy remedy is desirable”.</p>
+<p>A written order, directing “any person to abstain from a certain act or to take certain order with respect to certain property”, where the direction is likely to prevent “obstruction, annoyance or injury to any person lawfully employed, or danger to human life, health or safety or a disturbance of the public tranquillity, or a riot, or an affray”.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/cjp-march-parliament-right-to-protest-police-permission-rules-10793832/">CJP march to Parliament: Why police nod is needed for a public protest in India</a></span></div>
+<p>The provision assumes that a magistrate is responding to something specific and immediate, that the order is specific to that threat, and that it lapses within two months once the threat has passed. Public familiarity with the provision comes almost entirely from its use against protests and gatherings. Data on how it functions in Delhi tells a different story.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>What the numbers show</strong></h2>
+<p>In March 2023, Advocates Vrinda Bhandari, Abhinav Sekhri, Natasha Maheshwari, and Madhav Aggarwal filed RTI applications and carried out manual inspections at police stations across Delhi’s 18 districts and units. The report, titled “The use and Misuse of Section 144 CrPC”, examined around 5,400 of the 6,100 orders passed under Section 144 of the CrPC between January 2021 and 2022.</p>
+<p>They found that only 81 orders (1.5%) prohibited unlawful assemblies. Five of Delhi’s 18 police districts and units did not issue a single assembly restriction order during the study period.</p>
+<p>What filled the space were orders with no obvious emergencies — 25.6% of orders directed hotels, banks, ATMs, liquor vends, and cinema halls to install CCTV cameras; 43% required businesses from courier services to cyber cafes and secondhand goods dealers to maintain customer or employee records; smaller batches banned metallic kite strings or “<em>manjha</em>”, paan shops near schools, and drones and hot air balloons.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/cjp-protest-mumbai-azad-maidan-restrictions-10793775/">CJP protest in Mumbai: How Azad Maidan became the city’s site of agitations, with restrictions</a></span></div>
+<p>The report states that “far from an exceptional measure resorted to for addressing emergencies, orders under Section 144 of the CrPC have become a part of the regular legal framework such that they are periodically re-issued at the expiry of two months”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>It further characterises the provision as having been transformed into a “tool for micro-level governance in the hands of today’s district administrators — the police — to unimaginable lengths”.</p>
+<p><strong>Repeated renewals</strong></p>
+<p>The study also examined how long these orders had remained in force. It was found that almost every order in the sample had been reissued the moment the two-month statutory limit expired, characterising it as “city-wide mechanical process of issuing cyclostyled orders” including during <a class="" href="https://indianexpress.com/about/coronavirus/" rel="noamphtml">Covid-19</a> lockdowns when the conditions that justified the original order no longer held.</p>
+<p>Take for instance, CCTV orders for girls’ schools, PGs, liquor vends, and ATMs were renewed on schedule even during Covid-19 lockdowns when many institutions were shut.</p>
+<p>Tenant verification orders requiring landlords to furnish tenant details to the police were reissued the most consistently. This was despite the Delhi High Court’s ruling in <em>Bhanwar Singh</em> that Section 144 “cannot be repeatedly extended” and must lapse within two months.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>Cyber cafe operators were made to keep visitor logs and photograph customers on a rolling basis, lockdown or not. And prohibitions on flying kites with metallic <em>manjha</em>s or carrying tiffin boxes into public parks were cycled through the same two-month renewal.</p>
+<p>The study describes this as a city-wide mechanical process of issuing cyclostyled orders to keep the underlying legal regime in place, the language of an emergency power operating on autopilot.</p>
+<p><strong>What courts have said</strong></p>
+<p>The Supreme Court has repeatedly held that Section 144 is an exceptional preventive power, not a tool for routine administration.</p>
+<p>In <em>Babulal Parate v. State of Maharashtra</em> (1961), the court upheld the constitutional validity of the provision but stressed that it can be invoked only in an emergency to prevent specific threats to public order. It held that the power is conditioned by the circumstances set out in the statute and is not “unlimited or untrammelled”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The Supreme Court, in <em>Mazdoor Kisan Shakti Sangathan v. Union of India</em> (2018), set aside a National Green Tribunal order that had banned all protests along Jantar Mantar Road, holding that a blanket prohibition went further than necessary. It noted that the “solution was not to ban the demonstrations altogether” and directed authorities to frame a regulated permission mechanism instead.</p>
+<p>On a related challenge to Section 144 orders restricting assembly near Parliament, the Court found the orders valid on their face but held that police had, in practice, turned a permission-based restriction into an outright ban by never actually granting permission and directed that this too be corrected through proper guidelines.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10794960"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twentieth, twenty twenty-six, at fifty-four minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/section-163-bnss-cjp-protest-delhi-parliament-10794960/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-22 03:16 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
