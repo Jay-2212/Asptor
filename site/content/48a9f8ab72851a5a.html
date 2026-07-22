@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>First sanctions, now US strikes: What happens to India’s $120-mn investment in Iran’s Chabahar port? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>First sanctions, now US strikes: What happens to India’s $120-mn investment in Iran’s Chabahar port?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/chabahar.jpg?w=1600" alt="First sanctions, now US strikes: What happens to India’s $120-mn investment in Iran’s Chabahar port?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="chabahar collapse" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/chabahar.jpg?w=1600" width="650"/><span class="ie-custom-caption">US Defence Secretary Pete Hegseth shared the image of a tower at the Chabahar port appearing to collapse.  X/@PeteHegseth</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">A dramatic image posted on social media by US Secretary of War Pete Hegseth last week fuelled concern in India. It showed the maritime control tower at <a href="https://indianexpress.com/article/world/us-strikes-iran-chabahar-port-bushehr-nuclear-plant-trump-ceasefire-over-10779208/" rel="noopener" target="_blank"><strong>Iran’s Chabahar port</strong></a> collapsing after US military strikes. The image was part of a series of photographs posted by Hegseth, captioned: “Iran does not control the Strait of Hormuz”. </span></p>
+<p><span style="font-weight: 400">While New Delhi is already reeling under the impact of US sanctions on its strategically vital infrastructure project in Iran, where it has invested billions, the military strikes sparked fresh concerns.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The Ministry of External Affairs (MEA) clarified that the terminal it operates at Chabahar Port, Shahid Beheshti, was not damaged in the US strikes. “We have seen some reports in that regard, but we can also tell you that the terminal itself did not face any damage,” said MEA spokesperson Randhir Jaiswal. The ministry, however, reiterated India’s position that civilian infrastructure should not be targeted during conflicts. </span></p><div class="paywall container-wall-exclusive">
+<p><span style="font-weight: 400">Here’s a look at the strategic importance of Chabahar for India, New Delhi’s investment in the project and how its future hangs in the balance.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>India’s stakes in Chabahar</b></h2>
+<p><span style="font-weight: 400">The Chabahar port has two main terminals — Shahid Beheshti and Shahid Kalantari — with India managing the former. It is operated by India Ports Global Ltd (IPGL), a wholly owned subsidiary of India Ports Global Chabahar Free Zone (IPGCFZ), under a 10-year renewable agreement with Iran’s Ports and Maritime Organisation.</span></p>
+<span class="custom-caption"><img alt="Chabahar" class="lazyloading size-medium wp-image-10796551" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/chabaharport.jpg?resize=600,337" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg 5464w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=600,337 600w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=721,405 721w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=1536,863 1536w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=2048,1151 2048w, https://indianexpress.com/wp-content/uploads/2026/07/chabaharport.jpg?resize=150,83 150w" height="3070" sizes="(max-width: 5464px) 100vw, 5464px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="5464"/> A tower at the Chabahar port in 2021. Wikimedia Commons</span>
+<p><span style="font-weight: 400">India and Iran have been developing Chabahar as a key trade and connectivity hub, particularly to improve access to Afghanistan and Central Asia. Chabahar holds strategic importance for India as it provides an alternative trade route to Afghanistan, bypassing Pakistan, which does not allow Indian goods transit through its territory. For Iran, Chabahar is vital because it is its only oceanic port with direct access to the Indian Ocean, bypassing the congested Strait of Hormuz.</span></p>
+<p><span style="font-weight: 400">To ensure its continuous operation, India and Iran signed a landmark 10-year contract in May 2024 — replacing previous short-term contracts — to equip and operate the Shahid Beheshti terminal. To avoid financial penalties in the wake of US sanctions, India prepaid its $120 million investment and transferred its operational stake at Shahid Beheshti to local entities.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><b>US sanctions on Chabahar</b></h2>
+<p><span style="font-weight: 400">American sanctions on Chabahar stem from its broader economic and military measures against Tehran. Despite India’s continued efforts to develop the port for regional connectivity, the history of these sanctions and waivers has severely restricted the project’s progress.</span></p>
+<p>The <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> administration walked the US out of the Iran nuclear deal in 2018, and imposed sanctions on dealing with Tehran. At the same time, it also <span style="font-weight: 400">granted a targeted sanctions waiver for the Chabahar port to support humanitarian and economic efforts in Afghanistan. </span></p>
+<span class="custom-caption"><img alt="chabahar port" class="lazyloading size-medium wp-image-9117762" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2024/01/chabahar.jpg?resize=472,600" data-srcset="https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg 1600w, https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg?resize=354,450 354w, https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg?resize=472,600 472w, https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg?resize=768,977 768w, https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg?resize=318,405 318w, https://indianexpress.com/wp-content/uploads/2024/01/chabahar.jpg?resize=1207,1536 1207w" height="2036" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Chabahar port location</span>
+<p><span style="font-weight: 400">For several years, the port facilitated the delivery of Indian wheat and medical supplies to Afghanistan. </span>In September last year, the US administration withdrew the sanctions waiver, only to grant the exemption again <span style="font-weight: 400"><a href="https://indianexpress.com/article/india/in-turnaround-us-gives-six-month-relief-from-sanctions-to-chabahar-10336461/" rel="noopener" target="_blank"><strong>through a six-month waiver</strong></a> in October that officially expired on April 26.</span></p>
+<p><span style="font-weight: 400">Jaiswal said that India has been in discussions with “relevant stakeholders” after the expiry of the waiver.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">“There was a waiver which was given by America and that waiver got over some time back. Post that, we have been in discussion with relevant stakeholders as to how to take this particular issue forward,” he said. Owing to the end of the sanctions waivers, India is losing its direct operational control over the Chabahar project.</span></p>
+<p><b>Importance for New Delhi, Tehran</b></p>
+<p><span style="font-weight: 400">Chabahar is vital for India not only because it provides direct, secure access to Afghanistan and Central Asia, but also because it serves as a counterweight to China’s development of the Gwadar Port in Pakistan, located just 140 km away. The sea-land transit route that allows India to bypass Pakistan is also viewed as an important part of the International North-South Transport Corridor, a multi-mode transport network connecting India with Iran, Russia, Europe and parts of Central Asia. In that sense, the port represents far more than maritime infrastructure.</span></p>
+<p><span style="font-weight: 400">For Tehran, however, it also serves as a crucial economic hub in the Sistan-Baluchistan province, functioning as a gateway to connect Iran with landlocked Central Asian states, Afghanistan and Russia. As Chabahar was hit by the US military strikes last week, Iran Foreign Ministry Spokesperson Esmaeil Baqaei lashed at Hegeseth, talking about Chabahar in the same breath as the Minab school attack.</span></p>
+<blockquote class="twitter-tweet">
+<p dir="ltr" lang="en">The Chabahar Maritime Surveillance Tower — a civilian facility dedicated to maritime safety and navigation — was deliberately targeted by the United States on 16 June as part of its ongoing aggression that began on 28 February. The U.S. Secretary of War proudly released footage… <a class="" href="https://t.co/iytELuDFg4" rel="nofollow, noopener" target="_blank">pic.twitter.com/iytELuDFg4</a></p>
+<p>— Esmaeil Baqaei (@IRIMFA_SPOX) <a class="" href="https://x.com/IRIMFA_SPOX/status/2078514055376158791?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">July 18, 2026</a></p></blockquote>
+<p><span style="font-weight: 400">“The Chabahar Maritime Surveillance Tower — a civilian facility dedicated to maritime safety and navigation — was deliberately targeted by the United States on 16 June as part of its ongoing aggression that began on 28 February. The US Secretary of War proudly released footage of the tower’s collapse,” Baqaei posted. “Had he been able, he would likely have broadcast the lethal missile attack on the Minab school and the massacre of civilians in Lamerd with the same chilling pride.”</span></p>
+<p><b>Future hangs in balance</b></p>
+<p><span style="font-weight: 400">In 2021, External Affairs Minister S Jaishankar told Parliament that the grant assistance for the supply of equipment (to Chabahar) had been enhanced to $120 million. “India has also committed to provide a Line of Credit of $250 million in rupee equivalent for the development of Chabahar Port. Since 2018, the port has handled over 450 vessels, 1,34,082 TEUs (Twenty-foot Equivalent) of containerised cargo and more than 8.7 million tons of bulk and general cargo,” he said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">India has already supplied port equipment worth about $24 million to develop the port, he said, adding: “The process for procurement of remaining port equipment for Chabahar Port is underway.”</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/history-of-iran-chabahar-port-india-9117732/">The history of Iran’s Chabahar port</a></span></div>
+<p>Chabahar had received an allocation of Rs 400 crore allocation in the previous financial year. But the <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">Union Budget</a> for 2026-27 made no allocation for the port. <span style="font-weight: 400">This has left questions hanging over the future of this strategic trade route to Afghanistan, and further to Central Asia. </span></p>
+<p><span style="font-weight: 400">Without Chabahar, India loses its primary non-Pakistani corridor to landlocked markets, effectively undoing New Delhi’s decades of connectivity planning. The port had reduced transit times by 40% and costs by nearly a third, making it indispensable for India’s regional strategy. </span></p>
+<p><span style="font-weight: 400">Also, the situation is set to fuel strategic concerns for New Delhi if Beijing (via the China-Pakistan Economic Corridor, and through Gwadar) could increase its geopolitical footprint in Iran. The elimination of the Chabahar waiver by the US by default tilts the regional balance toward China and Pakistan.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10796314"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/divya-a/">
+<figure>
+<img alt="Divya A" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/divya1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/divya-a/"><span></span>Divya A</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952690"></div><div class="follow_author_title" data-id="Divya A"></div><div class="follow_author_slug" data-id="divya-a"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/divs13">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Divya A reports on travel, tourism, culture and social issues - not necessarily in that order - for The Indian Express. She's been a journalist for over a decade now, working with Khaleej Times and The Times of India, before settling down at Express. Besides writing/ editing news reports, she indulges her pen to write short stories. As Sanskriti Prabha Dutt Fellow for Excellence in Journalism, she is researching on the lives of the children of sex workers in India.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/divya-a/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-first, twenty twenty-six, at six minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/chabahar-port-india-us-sanctions-explained-10796314/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-22 14:47 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

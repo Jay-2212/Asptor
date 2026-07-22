@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What EPFO 3.0 proposes: Pension cover for all, social security for gig workers | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What EPFO 3.0 proposes: Pension cover for all, social security for gig workers</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-22</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-epfo-3pt0_expl-econ.jpg?w=1600" alt="What EPFO 3.0 proposes: Pension cover for all, social security for gig workers">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="EPFO" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-epfo-3pt0_expl-econ.jpg?w=1600" width="650"/><span class="ie-custom-caption">Over the last one year, the retirement fund body has worked on improving access to funds and easier claims settlement under EPFO 2.0. Photo: File (Image enhanced by AI)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">A universal pension cover for all workers with option of either annuity or systematic withdrawal plan, first-time social security contributions for unorganised sector workers including gig and platform workers, an upgradation of tech ecosystem to incorporate core banking solution (CBS) — these are some of the key changes being planned by the Employees’ Provident Fund Organisation (EPFO) as part of its <strong><a class="" href="https://indianexpress.com/article/business/epfo-reforms-new-universal-contributory-pension-scheme-target-retirement-sum-10790779/">3.0 reforms phase</a></strong>.</span></p>
+<p><span style="font-weight: 400">Over the last one year, the retirement fund body has worked on improving access to funds and easier claims settlement under EPFO 2.0, which has now taken shape in the form of a revamped portal with a centralised database merging 123 regional databases ensuring timely interest credit and visibility of eligible balance for withdrawal to members.</span></p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The EPFO is now set to move towards the next phase of reforms through a CBS-enabled tech platform, a shift that has been seen as necessary to help it navigate payments for social security schemes covering the complete range of India’s workforce — over 60 crore workers, out of which over three-quarters are in the unorganised sector, with limited or no pension coverage.</span></p>
+<p><span style="font-weight: 400">CBS is a centralised payments software which forms the backbone of banks in India allowing operations like deposits, withdrawals, in real time across all branches. </span></p>
+<p><b>Pension cover for all</b></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">The new pension cover will have a defined contribution framework with contributions from multiple sources including workers themselves, employers, government co-contributions for lower-income workers, aggregators in the case of gig and platform workers, and corporate social responsibility (CSR) or third-party funds. This is the first time that the EPFO is considering such forms of contributions or withdrawals at the time of retirement: presently, it only allows advance claims or partial withdrawals for certain categories such as education, illness, housing, and marriage during the membership tenure, or a lumpsum final settlement at the time of retirement.</span></p>
+<p><span style="font-weight: 400">The contributions will accumulate over time, and be invested in government-backed securities, with annual crediting of interest, giving two options for conversion of the “Target Retirement Sum (TRS)” at the time of retirement — pension, based on prevailing annuity and interest rates, or a systematic withdrawal plan.</span></p>
+<p><span style="font-weight: 400">“Till the time of retirement, it will operate like PF, you keep on accumulating. At that stage when you are retiring, it converts into an annuity or a systematic withdrawal plan,” an official told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/in-a-first-epfo-interest-for-fy26-credited-in-one-go-to-35-crore-accounts-10788438/">In a first, EPFO interest for FY26 credited in one go to 35 crore accounts</a></span></div>
+<p><span style="font-weight: 400">The system will compute the proposed TRS dynamically based on the member’s chosen pension goal and expected retirement age. Members will have personalised dashboards showing total contributions, real-time corpus status, and progress towards the TRS for applicable schemes. The system will project the required contribution amount and frequency to achieve the declared TRS.</span></p>
+<p><span style="font-weight: 400">“Adjustments to TRS will be allowed and contribution requirements could then be recomputed accordingly. The system will accept and categorise contributions from multiple sources such as members, employers, or third-parties and update the member’s pension balance,” the official said.</span></p>
+<p><b>Singapore model, inflation-linked simulation</b></p>
+<p><span style="font-weight: 400">Global models are being studied to incorporate similar features such as that of Singapore, which has a deferred annuity scheme that sets aside savings not just for retirement but also for housing and healthcare.</span></p>
+<p><span style="font-weight: 400">Singapore’s social security scheme, Central Provident Fund (CPF), relies not just on individual CPF contributions for the retirement income as apart from a contribution of 20% of the salary to CPF, individual efforts are supplemented by employers, loved ones, and the government, as per the information on the Singapore government website. Unlike pension schemes in other countries, CPF members have a differential interest rate, with members earning an interest of up to 6% for those aged 55 and above, and 5% for those aged below 55.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The flexibility to decide the amount for pension payouts, or the drawdown, will be given to the member as they will also have access to inflation-adjusted projections. The EPFO 3.0 system will allow users to simulate pension amounts based on parameters such as age, corpus, interest rate, and retirement age. It will also include additional input fields for voluntary contributions and contribution frequency.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/new-epfo-portal-facilities-changes-employees-10778653/">What changes with new EPFO portal: Centralised database, facility to see amount for withdrawal, and more</a></span></div>
+<p><span style="font-weight: 400">The system will provide inflation-adjusted projections as an optional feature. The estimated monthly pension, projected corpus at retirement, and comparative graphs will be displayed to the member, allowing multiple scenario comparisons for decision making taking into account variable contributions and multiple employment scenarios.</span></p>
+<p><span style="font-weight: 400">The member can choose to increase or decrease the drawdown under the systematic withdrawal plan. “For example, if 8% interest is declared. That 8% over Rs 1 crore translates into Rs 8 lakh, so you divide it by 12 and that becomes your monthly pension payout. If you want higher in the initial stage, then it will be a drawdown from your principal. At the same time, you can reduce drawdown, then your interest will get added to your principal. So, towards the later part, it becomes almost like an inflation-linked plan where you can have a higher payout,” the official said.</span></p>
+<p><span style="font-weight: 400">The annuity model already exists under the National Pension System (NPS). However, in December 2025, the mandatory annuity requirement under NPS was reduced to 20%, easing the lumpsum payouts for non-government subscribers of the NPS from 60:40 ratio earlier. The proposed EPFO pension scheme will be more flexible than the NPS, the official said.</span></p>
+<p><b>Gig and platform workers coverage</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">As the EPFO expects around 2.5 crore gig workers and building and other construction workers (BOCW) over the next five years, the pension scheme is also being designed keeping in mind their inclusion into social security coverage for the first time. The scheme will incorporate “one-to-many mapping” where one Universal Account Number (UAN) will be registered with multiple employers and aggregators, showing total PF and pension contributions from all sources for these workers while maintaining their employer-wise breakdowns.</span></p>
+<p><span style="font-weight: 400">The EPFO system plans to allow third-party contributions like NGOs, individuals, donor organisations, CSR, and track all contributions under each UAN with a configurable upper limit. The new pension initiative would operationalise this through flexible co-contribution models, ensuring inclusion of delivery partners, drivers, and other platform workers.</span></p>
+<span class="custom-caption"><img alt="EPFO building and construction worker" class="lazyloading size-medium wp-image-10795378" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-epfo-bocw.jpg?resize=600,372" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg?resize=450,279 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg?resize=600,372 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg?resize=768,476 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg?resize=653,405 653w, https://indianexpress.com/wp-content/uploads/2026/07/ex-epfo-bocw.jpg?resize=1536,952 1536w" height="992" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> The EPFO expects around 2.5 crore gig workers and building and other construction workers (BOCW) over the next five years. Photo: Karma Sonam Bhutia</span>
+<p><span style="font-weight: 400">The scheme also seeks to address coverage for BOCWs. India has over 3.5 crore registered BOCWs, with net cess collections exceeding Rs 70,000 crore across state welfare boards. “The new scheme will provide a structured avenue to channel these resources into sustainable pensions, ensuring adequacy and portability of benefits,” the official said.</span></p>
+<p><span style="font-weight: 400">The scheme also proposes family and survivor pensions for spouse, children, and orphans funded through a pooled “Family Benefit Fund”, managed on actuarial principles. Members of EPF, GPF (General Provident Fund), and other provident funds could also be allowed to transfer balances into the new pension initiative.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><b>EPFO 3.0 features</b></h2>
+<p><span style="font-weight: 400">The EPFO 3.0 phase will also pave the way for PF contributions for all unorganised sector workers and gig workers, in line with the Code on Social Security that brings gig and platform workers into the social security net for the first time. The Code mandates aggregator contributions of 1-2% of annual turnover for social security, with the total contribution not exceeding 5% of the amount payable by the aggregator.</span></p>
+<p><span style="font-weight: 400">The EPFO will also incorporate CBS software on its tech platform. Since the next phase will cover all workers, the EPFO has to prepare for a large volume of transactions for a workforce of over 60 crore.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">“We have to prepare for such a large volume, it was thought that the core banking solution, which is already validated and regulated by the RBI, would be a very robust system for us. So that is the foundation,” the official said. </span></p>
+<p><span style="font-weight: 400">While the core scheme’s foundation will remain the same — employee PF, pension scheme — the platform will allow changes in the mechanism of contributions that will be built on the split-payment model on aggregators at present.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">“On that we have tried to build in all concepts which are futuristic. For example, for unorganised workers, there is no contribution, they themselves can make a contribution. Or else, a third party can make a contribution. Or it could be donation, tip or payment related diversion. For example, when you buy anything using a food delivery app, you have an option to make a donation, something to a delivery boy, restaurant. There is a possibility of a single payment transaction being split into multiple. So, if there is a diversion of say, 5%, towards social security, then we have made a provision for it,” the official said.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10795334"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/ravi-dutta-mishra/">
+<figure>
+<img alt="Ravi Dutta Mishra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/ravi-dutta-mishra/"><span></span>Ravi Dutta Mishra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9125751"></div><div class="follow_author_title" data-id="Ravi Dutta Mishra"></div><div class="follow_author_slug" data-id="ravi-dutta-mishra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Ravi Dutta Mishra is a Principal Correspondent with The Indian Express, specializing in economic policy and financial regulations. With over five years of experience in business journalism, he provides critical coverage of the frameworks that govern India's commercial landscape.
+Expertise &amp; Focus Areas: Mishra’s reporting concentrates on the intersection of government policy and market operations. His core beats include:
+
+
+ 	
+Trade &amp; Commerce: Analysis of India's import-export trends, trade agreements, and commercial policies.
+
+ 	
+Banking &amp; Finance: Covering regulatory changes and policy decisions affecting the banking sector.
+
+
+Professional Experience: Prior to joining The Indian Express, Mishra built a robust portfolio working with some of India's leading financial news organizations. His background includes tenures at:
+
+
+ 	
+Mint
+
+ 	
+CNBC-TV18
+
+
+This diverse experience across both print and broadcast media has equipped him with a holistic understanding of financial storytelling and news cycles.
+Find all stories by Ravi Dutta Mishra here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/ravi-dutta-mishra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/aanchal-magazine/">
+<figure>
+<img alt="Aanchal Magazine" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2016/03/aancahl.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/aanchal-magazine/"><span></span>Aanchal Magazine</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2691446"></div><div class="follow_author_title" data-id="Aanchal Magazine"></div><div class="follow_author_slug" data-id="aanchal-magazine"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/AanchalMagazine">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Aanchal Magazine is a Deputy Associate Editor with The Indian Express, serving as a leading voice on the macroeconomy and fiscal policy. With 15 years of newsroom experience, she is recognized for her ability to decode complex economic data and government policy for a wider audience.
+Expertise &amp; Focus Areas: Magazine’s reporting is rooted in "fiscal arithmetic" and economic science. Her work provides critical insights into the financial health of the nation, focusing on:
+
+
+ 	
+Macroeconomic Policy: Detailed tracking of GDP growth, inflation trends, and central bank policy actions.
+
+ 	
+Fiscal Metrics: Analysis of taxation, revenue collection, and government spending.
+
+ 	
+Labour &amp; Society: Reporting on labour trends and the intersection of economic policy with employment.
+
+
+Her expertise lies in interpreting high-frequency economic indicators to explain the broader trajectory of the Indian economy.
+Personal Interests: Beyond the world of finance and statistics, Aanchal maintains a deep personal interest in the history of her homeland, Kashmir. In her spare time, she reads extensively about the region's culture and traditions and works to map the complex journeys of displacement associated with it.
+Find all stories by Aanchal Magazine here                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/aanchal-magazine/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-first, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/epfo-3-0-universal-pension-gig-workers-cbs-reforms-10795334/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-22 14:47 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
