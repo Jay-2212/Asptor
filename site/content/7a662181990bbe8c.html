@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>NSA power for Delhi Police Commissioner amid Jantar Mantar protests: What this means | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>NSA power for Delhi Police Commissioner amid Jantar Mantar protests: What this means</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/NSA-detentn.jpg?w=1024" alt="NSA power for Delhi Police Commissioner amid Jantar Mantar protests: What this means">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="NSA detention" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/NSA-detentn.jpg?w=1024" width="650"/><span class="ie-custom-caption">The NSA has been widely criticised as “draconian” because of the powers of preventive detention that it grants the government. (Express Photo - Tashi Tobgyal)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The Delhi Lieutenant Governor (L-G) has issued an order allowing the Commissioner of Police to exercise powers under the National Security Act (NSA) for three months, spanning July 19 to October 18.</p><div class="paywall container-wall-exclusive">
+<p>However, the police said that the <a href="https://indianexpress.com/article/cities/delhi/delhi-police-commissioner-nsa-powers-july-october-routine-order-10799923/"><strong>order is “routine”</strong></a> and formally gazetted on July 15 — well before the latest Cockroach Janta Party protests commenced. In a social media post, Delhi Police said, “No special request or order was initiated in connection with recent events.”</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<blockquote class="twitter-tweet">
+<p dir="ltr" lang="en">A routine quarterly renewal of powers under the National Security Act (NSA) has been falsely linked to the ongoing CJP protests.</p>
+<p>The renewal predates the protests and is part of the standard administrative process.</p>
+<p>Citizens are advised to rely only on official information and… <a class="" href="https://t.co/t50ABgZBh0" rel="nofollow, noopener" target="_blank">pic.twitter.com/t50ABgZBh0</a></p>
+<p>— Delhi Police (@DelhiPolice) <a class="" href="https://x.com/DelhiPolice/status/2080210739747533240?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">July 23, 2026</a></p></blockquote>
+<p>Police also said that no specific request had been made in the context of <a href="https://indianexpress.com/article/cities/delhi/jantar-mantar-protest-live-updates-cjp-abhijeet-dipke-jp-nadda-sonam-wangchuk-hunger-strike-parliament-congress-bjp-10799380/"><strong>the ongoing protests</strong></a>, and that the renewal was a routine administrative exercise. It said that the order should not be taken out of context.</p>
+<p><strong>First, the National Security Act in brief</strong></p>
+<p>The NSA was passed by Parliament after Indira Gandhi returned to power in 1980, and notified in the official gazette. It was described as “an Act to provide for preventive detention in certain cases and for matters connected therewith”. The Act repealed the National Security Ordinance, 1980.</p>
+<p>It has been widely criticised as “draconian” because of the powers of preventive detention that it grants the government. The detention under the NSA can extend up to 12 months, or even for longer if the government can produce more evidence against the detainee.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Under the Act, a District Magistrate or Police Commissioner can issue a detention order, typically for up to 12 days unless otherwise approved by the state. Within three weeks, the detaining authority must place every order before an Advisory Board, comprising persons eligible to be High Court judges, with the Board required to submit its opinion within seven weeks of the date of detention.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/pm-modis-push-for-fast-track-courts-how-they-work-and-what-the-law-allows-10799867/">PM Modi’s push for fast-track courts amid paper leak protests: How they work, what the law allows</a></span></div>
+<p>If no sufficient cause is found, the government must revoke the order. Otherwise, the government may issue a continuation or extension of such detention up to three months at a time, for a maximum of 12 months under a single order.</p>
+<p>However, the detaining authority may issue a fresh detention order against the same person provided the combined period doesn’t exceed 12 months under a single order. However, Section 14(2) of the Act allows a fresh order to be issued if new facts about the case have arisen — irrespective of the revocation or expiry of the previous order.</p>
+<p><strong>Reading the order…</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="Delhi Police NSA notification 2026" class="lazyloading wp-image-10800340 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/2026-notification-NSA.jpg?resize=600,363" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/2026-notification-NSA.jpg 715w, https://indianexpress.com/wp-content/uploads/2026/07/2026-notification-NSA.jpg?resize=450,273 450w, https://indianexpress.com/wp-content/uploads/2026/07/2026-notification-NSA.jpg?resize=600,363 600w, https://indianexpress.com/wp-content/uploads/2026/07/2026-notification-NSA.jpg?resize=669,405 669w" height="433" sizes="(max-width: 715px) 100vw, 715px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="715"/> The order dated July 15, 2026</span>
+<p>The notification was issued by the Delhi Home Ministry’s Police II Department, which oversees the statutory, administrative, legal and operational policies concerning Delhi Police.</p>
+<p>Signed by Ramesh Kumar, Deputy Secretary in the state Home Department, it empowers the Delhi Police Commissioner to act as the detaining authority under Section 3(2) of the NSA. This is a power typically enjoyed by the governor — hence the Delhi L-G.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/can-police-ask-for-live-location-india-law-explained-10799885/">Can police seek live location to stop people attending protests?</a></span></div>
+<p>The Act allows detentions without immediate criminal prosecution for a specified period, subject to safeguards laid down in the law. These include “acting in any manner prejudicial to the security of the State or…the maintenance of Public order or…the maintenance of supplies and services essential to the community”.</p>
+<p><strong>…and relevant sections from the NSA</strong></p>
+<p>The order was issued under Section 3(3) of the NSA, to be read with Section 2(e) of the Act.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><strong><span style="color: #800000">Section 3(3)</span></strong> of the Act allows a state government to delegate the power of detention under 3(2) to the District Magistrate or Commissioner of Police if the government is satisfied of its necessity.</p>
+<p>The order also mentions <span style="color: #800000"><strong>Section 2(e)</strong></span> of the Act, which simply defines what counts as “State Government” for Delhi, which is a union territory as well, and identifies its administrator as having the authority to make this delegation.</p>
+<p>The powers of the detaining authority are contained in <span style="color: #800000"><strong>Section 3(2)</strong></span> of the NSA. This section empowers the “detaining authority” to order that a person be detained to prevent them from “acting in any manner prejudicial to the maintenance of supplies and services essential to the community”. These specifically concern defence, foreign relations, national security, and maintenance of public order or essential supplies.</p>
+<p><strong>How the latest order compares with past orders issued by the L-G</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<span class="custom-caption"><img alt="The order dated January 10, 2020." class="lazyloading" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2020/01/order.jpg" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg"/> The order dated January 10, 2020.</span>
+<p>An identical order was issued by the L-G on January 10, 2020, in the wake of continued protests against the Citizenship Amendment Act (CAA), the National Population Register (NPR) and the National Register of Citizens (NRC). Even then, the Delhi Police had clarified that the order was routine and issued periodically.</p>
+<span class="custom-caption"><img alt="The order dated October 16, 2015" class="lazyloading wp-image-6223056 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2020/01/1-19.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2020/01/1-19.jpg 759w, https://indianexpress.com/wp-content/uploads/2020/01/1-19.jpg?resize=450,206 450w, https://indianexpress.com/wp-content/uploads/2020/01/1-19.jpg?resize=600,274 600w, https://indianexpress.com/wp-content/uploads/2020/01/1-19.jpg?resize=728,333 728w" height="347" sizes="(max-width: 759px) 100vw, 759px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="759"/> The order dated October 16, 2015</span>
+<p>Another order was issued on October 16, 2015, conferring the “powers of detaining authority” upon the Commissioner for the period 19.10.2015 to 18.1.2016.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10800333"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-third, twenty twenty-six, at thirty-two minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/national-security-act-nsa-delhi-police-protestors-10800333/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-23 15:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

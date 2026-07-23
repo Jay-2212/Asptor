@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>‘Wagh Nakh’ on its crest, how submarine-hunter INS Malvan will help the Navy shield India’s coast | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>‘Wagh Nakh’ on its crest, how submarine-hunter INS Malvan will help the Navy shield India’s coast</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/INSMALVAN.jpeg?w=1024" alt="‘Wagh Nakh’ on its crest, how submarine-hunter INS Malvan will help the Navy shield India’s coast">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="INS Malvan" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/INSMALVAN.jpeg?w=1024" width="650"/><span class="ie-custom-caption">The INS Malvan is the Navy's second Mahe-class Anti-Submarine Warfare Shallow Water Craft. PIB</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Indian Navy on Wednesday <a href="https://indianexpress.com/article/india/future-wars-air-chief-ap-singh-ins-malvan-10798798/" rel="noopener" target="_blank"><strong>commissioned the INS Malvan</strong></a>, its second Mahe-class Anti-Submarine Warfare Shallow Water Craft (ASW-SWC). </span>On its crest is the <span style="font-weight: 400">‘Bagh Nakha’ (Wagh Nakh)</span>, a <span style="font-weight: 400">a tribute to the tiger-claw weapon associated with </span><span style="font-weight: 400">Chhatrapati Shivaji Maharaj</span>.</p>
+<p><span style="font-weight: 400">ASW-SWC is a specialised class of warships in India that is designed for anti-submarine and patrolling operations along the littoral zone  — the shallow maritime zone near the shore that is strategically and economically critical. Other countries too deploy such littoral craft, but under different names.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The first ship in the class, <a href="https://indianexpress.com/article/cities/mumbai/navy-commissions-ins-mahe-army-chief-general-upendra-dwivedi-armed-forces-synergy-10383193/" rel="noopener" target="_blank"><strong>INS Mahe, was commissioned in November last year</strong></a>. Here’s a look at the strategic significance of these versatile, next-generation vessels and why the Navy is inducting a total of 16 of them.</span></p><div class="paywall container-wall-exclusive">
+<p><b>The craft and its crest: The symbolism</b></p>
+<p><span style="font-weight: 400">INS Malvan is the second of eight Mahe-class vessels being built by Cochin Shipyard Ltd (CSL), Kochi, and the sixth of 16 ASW-SWCs under construction by CSL and Garden Reach Shipbuilders and Engineers (GRSE), <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a>.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">According to the Defence Ministry, more than 80% of its components are indigenous.</span></p>
+<span class="custom-caption"><img alt="INS Malvan" class="lazyloading size-medium wp-image-10800205" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/malvan-crest.jpg?resize=529,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/malvan-crest.jpg 593w, https://indianexpress.com/wp-content/uploads/2026/07/malvan-crest.jpg?resize=397,450 397w, https://indianexpress.com/wp-content/uploads/2026/07/malvan-crest.jpg?resize=529,600 529w, https://indianexpress.com/wp-content/uploads/2026/07/malvan-crest.jpg?resize=357,405 357w" height="672" sizes="(max-width: 593px) 100vw, 593px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="593"/> The INS Malvan crest</span>
+<p><span style="font-weight: 400">The ship derives its name from the coastal town of Malvan in Maharashtra, a region synonymous with maritime vision and legacy of Chhatrapati Shivaji Maharaj. </span></p>
+<p><span style="font-weight: 400">It also carries forward the role of an inshore minesweeper of the same name that was in service till 2003. </span><span style="font-weight: 400">INS Malvan’s crest bears the ‘Bagh Nakha’ (Wagh Nakh) — which means tiger’s claw. This is meant to symbolise courage, audacity and agility — in line with the with the ship’s role of attacking rapidly and silently. </span><span style="font-weight: 400">The waves on the Bagh Nakha crest reflect the vast sea surrounding the coasts. The ship’s motto — ‘Silent Claws’ — also reflects the crest, embodying lethality, stealth and the ability to strike the adversary swiftly, the Navy said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">At the commissioning ceremony at Karwar, Karnataka on Wednesday, Chief of Air Staff Air Chief Marshal AP Singh emphasised the importance of safeguarding sea lines of communication to ensure uninterrupted maritime trade amid global uncertainties.</span></p>
+<p><b>Why are these ships strategically important?</b></p>
+<p><span style="font-weight: 400">The ASW-SWC fleet significantly enhances the Indian Navy’s ability to secure its coastline against underwater threats. Designed for operations in shallow coastal waters, these vessels fill a long-standing capability gap by detecting and countering stealthy diesel-electric submarines that larger surface combatants cannot effectively pursue. </span></p>
+<p><span style="font-weight: 400">Their low draught (meaning they require less water beneath the hull to operate), advanced sonar systems and high manoeuvrability make them well suited to protect harbour approaches, sea lanes, offshore energy installations and key naval bases.</span></p>
+<p><span style="font-weight: 400">With 16 vessels planned, the Navy will establish a dedicated anti-submarine screen along the coastline, strengthening coastal defence while allowing larger warships to focus on blue-water operations. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The fleet will also make covert underwater intrusions by adversaries far more difficult, enhancing India’s maritime security posture in the Indian Ocean Region. Integrated with coastal radar networks, underwater sensors and maritime patrol aircraft, the vessels will provide a layered indigenous anti-submarine warfare capability for rapid detection and response to underwater threats.</span></p>
+<p><b>What is the Mahe class?</b></p>
+<p><span style="font-weight: 400">The Mahe class ships are designed primarily for anti-submarine warfare in coastal waters. These vessels are also equipped for underwater surveillance, search and rescue, low intensity maritime operations and mine-laying. These are the largest Indian Navy warships to be powered by a diesel engine-waterjet propulsion system (which reduces underwater noise while improving manoeuvrability).</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/three-ships-different-strategic-roles-navy-inducted-10750084/">What are the three ships with three different strategic roles that Navy inducted</a></span></div>
+<p><span style="font-weight: 400">The Mahe class has been designed and built by CSL in accordance with the classification rules of Det Norske Veritas (DNV), an internationally recognised classification society that certifies ships against stringent technical and safety standards. </span></p>
+<p><span style="font-weight: 400">According to CSL, each vessel measures 78 metres, has a beam of 11.36 metres and a draught of about 2.7 metres, with a displacement of 896-1,100 tonnes. The ships have a top speed of 25 knots and an endurance of 1,800 nautical miles. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">They are configured to operate indigenously developed sonar systems and are equipped with advanced sensors, weapons and communication suites to detect, track and engage sub-surface threats. The class also incorporates advanced machinery, automation and integrated control systems for sustained operations in shallow waters. The ships are armed with torpedoes, multifunctional anti-submarine rockets, and advanced radar and sonar systems.</span></p>
+<p><b>Why were these vessels needed?</b></p>
+<p><span style="font-weight: 400">Before the ASW-SWC programme, the Indian Navy operated four Abhay-class corvettes — customised versions of the Soviet-origin Pauk II-class — for coastal patrol and anti-submarine warfare. They served for decades before being decommissioned between 2017 and October 2025. To replace and expand this capability, the Defence Acquisition Council (DAC) approved the acquisition of 16 ASW-SWCs in December 2013 at a cost of over Rs 13,000 crore.</span></p>
+<p><span style="font-weight: 400">Contracts were subsequently awarded to CSL and GRSE to build eight vessels each. With India’s 7,500-km coastline, 12 major ports, 184 minor ports and 1,197 islands, dedicated shallow-water ASW platforms are considered critical for coastal surveillance and maritime security.</span></p>
+<p><span style="font-weight: 400">Of the 16 vessels, the Arnala-class is being built by GRSE and comprises INS Arnala, Androth, Anjadip, Amini, Abhay, Agray, Ajay and Akshay. CSL is constructing the Mahe-class, comprising INS Mahe, Malvan, Mangrol, Malpe, Mulki, Magdala and Machilipatnam. All 16 vessels are expected to be inducted over the next two to three years.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10800161"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sushant-kulkarni/">
+<figure>
+<img alt="Sushant Kulkarni" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/sushant-1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sushant-kulkarni/"><span></span>Sushant Kulkarni</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952003"></div><div class="follow_author_title" data-id="Sushant Kulkarni"></div><div class="follow_author_slug" data-id="sushant-kulkarni"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sushant Kulkarni is a Special Correspondent with The Indian Express in Pune with 12+ years of experience covering issues related to Crime, Defence, Internal Security and Courts. He has been associated with the Indian Express since July 2010.
+Sushant has extensively reported on law and order issues of Pune and surrounding area, Cyber crime, narcotics trade and terrorism. His coverage in the Defence beat includes operational aspects of the three services, the defence research and development and issues related to key defence establishments. He has covered several sensitive cases in the courts at Pune.
+Sushant is an avid photographer, plays harmonica and loves cooking.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sushant-kulkarni/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-third, twenty twenty-six, at forty minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained/" href="https://indianexpress.com/about/explained/">Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/ins-malvan-mahe-class-asw-swc-explained-10800161/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-23 15:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
