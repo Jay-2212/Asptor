@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>As NEET protests grow beyond the exam, an IIT professor explains what drives young people to take to the streets | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>As NEET protests grow beyond the exam, an IIT professor explains what drives young people to take to the streets</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/neet-protests.jpeg?w=1600" alt="As NEET protests grow beyond the exam, an IIT professor explains what drives young people to take to the streets">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Protests stemming from the NEET question paper leak at Jantar Mantar in New Delhi on July 22." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/neet-protests.jpeg?w=1600" width="650"/><span class="ie-custom-caption">Protests stemming from the NEET question paper leak at Jantar Mantar in New Delhi on July 22. (Express photo by Gajendra Yadav)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>With thousands of students taking to the streets in recent days, carrying placards and demanding accountability for the NEET exam paper leaks, the protests are increasingly reflecting more than just anger over a compromised examination.</p>
+<p>They underscore a deeper psychological shift among young people, who see collective action as the only way to make institutions listen when trust begins to erode. The demonstrations show how personal anxieties over an uncertain future can transform into a shared sense of injustice and collective purpose.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Such movements are not unique to India or the present day, but the <a href="https://indianexpress.com/article/india/no-discussion-without-dharmendra-pradhan-resignation-opposition-cjp-protests-10799667/"><strong>movements of today</strong></a> do have their own unique characteristics. What drives young people to mobilise, and why do such movements become spaces of solidarity and empowerment? <strong>Yashpal Jogdand</strong>, Associate Professor, social and political psychology, Department of Humanities and Social Sciences at IIT Delhi, explains the factors behind youth-led movements, collective efficacy, and the changing relationship between young citizens and institutions.</p><div class="paywall container-wall-exclusive">
+<h2>Scholars describe social movements as a “psychological sanctuary” for youth. How do you interpret this concept and what evidence supports it?</h2>
+<p>Adolescence and early adulthood are when people are trying to make sense of themselves, their place in society, and the challenges facing their generation. This is a period of high uncertainty. Social movements can provide spaces where young people feel understood, validated and connected to others who share their concerns.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Psychologically, movements can feel like sanctuaries because they transform private troubles into shared concerns. A young person worried about climate change, discrimination, unemployment, gender-based violence, or threats to democracy may initially experience these as personal anxieties.</p>
+<span class="custom-caption"><img alt="Protests in New Delhi." class="lazyloading size-medium wp-image-10799857" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/neet-youth-protests.jpeg?resize=600,315" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/neet-youth-protests.jpeg 720w, https://indianexpress.com/wp-content/uploads/2026/07/neet-youth-protests.jpeg?resize=450,236 450w, https://indianexpress.com/wp-content/uploads/2026/07/neet-youth-protests.jpeg?resize=600,315 600w" height="378" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> Protests in New Delhi. (Express photo by Gajendra Yadav)</span>
+<p>Encountering others who share the same concerns can be profoundly validating. What feels like an individual burden becomes part of a collective experience. This realisation reduces isolation and creates a sense of belonging and newfound agency.</p>
+<p>This was seen clearly in Fridays for Future (FFF), a youth-led and -organised global climate strike movement or the “March for Our Lives” protest after the Parkland school shooting of 2018, one of the largest youth-led movements in recent US history.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Rather than withdrawing in fear, students felt they were all connected by grief, the same as what is happening over the NEET paper leak, with students connected by the deaths of 22 students. This process has been documented in raising feminist consciousness, anti-racism and anti-caste activism, where collective action provides both a language and a framework for understanding injustice.</p>
+<h2>How does identity formation during adolescence make young people particularly receptive to joining mass movements?</h2>
+<p>This assumption is not universally valid and can easily drift into a form of developmental reductionism — the tendency to explain political participation primarily in terms of age-related psychological processes, while overlooking broader social and political influences.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/plainclothes-police-identification-law-india-10797724/">Can police hide their identity during protests? What the law, court rulings say</a></span></div>
+<p>Young people are not only exploring who they are as individuals but also which groups they identify with, what values they wish to embody, and what kind of future they want to help create. Mass movements can speak directly to these concerns.</p>
+<p>However, many young climate activists join movements not because they are merely exploring possible identities, but because they perceive an urgent threat to their future, similar to the current exam leak protesters.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<h2>What psychological factors foster a sense of collective efficacy or agency among young people, and why is this needed for sustaining movements?</h2>
+<p>One of the most important psychological foundations of social movements is the belief that collective action can make a difference. Social psychologist Albert Bandura referred to this as collective efficacy — the shared conviction that “We can achieve change together.” Without some belief that collective action can matter, sustained activism becomes less likely, even when people feel strong anger, frustration, or a sense of injustice.</p>
+<p>However, collective efficacy does not always exist before participation. Research suggests that participation in collective action itself can generate feelings of empowerment. Drawing on studies of crowd experience in protests and mass gatherings, researchers show that individuals experience a shift from seeing themselves as powerless, disconnected individuals to seeing themselves as members of a collective capable of influencing events.</p>
+<p>This transformation is especially likely when participants experience solidarity with others and see evidence that their collective actions have attracted attention or challenged authority. In this sense, empowerment is not simply an internal psychological state. People often discover their collective power by exercising it.</p>
+<p>These effects can extend beyond a particular protest or campaign. Participation can create new social networks, strengthen collective identities and foster an enduring sense of political possibility. What once appeared fixed and unchangeable can begin to seem open to change. Some researchers have described this phenomenon as the “Greta Thunberg effect” — the capacity of visible youth activism to inspire engagement and political participation among other young people.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<h2>How significant is the generation gap in motivating youth participation in mass movements, particularly when young people see established institutions as unresponsive to contemporary challenges?</h2>
+<p>We need to move beyond the frame of simple conflict between young and old.</p>
+<p>The best way to understand youth participation in mass movements is through the lens of legitimacy, or the belief that authorities, institutions, and social arrangements are appropriate, proper and just.</p>
+<p>Youth movements often gain momentum when the legitimacy of institutions is questioned or begins to erode. When authorities are perceived as unresponsive, unfair, or disconnected from young people’s concerns, the question shifts from, “Do we agree with this decision?” to “Do these institutions still deserve our trust and confidence?”</p>
+<h2>What will shape youth participation in mass movements over the next decade, particularly in the context of global crises and technological change?</h2>
+<p>I see a growing politicisation of anxiety. Many young people today are coming of age amidst overlapping crises: climate change, economic insecurity, democratic backsliding, armed conflicts, displacement and rapid technological disruption. Increasingly, feelings such as anxiety, uncertainty and loss of control are being interpreted not as private psychological problems but as symptoms of broader structural conditions. This shift can become a powerful driver of collective action.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/nepal-philippines-youth-protests-morocco-madagascar-10300879/">After Nepal and the Philippines, why have youth-led protests rocked Morocco and Madagascar?</a></span></div>
+<p>Second, questions of humiliation and dignity are likely to become increasingly important. Young people are often mobilised not only by material grievances but by experiences of exclusion, disrespect or invisibility. Future movements may increasingly centre demands for dignity, respect, fair treatment and social inclusion.</p>
+<p>Third, young people increasingly encounter social and political reality through an algorithmically curated information environment. As a result, participation may become more emotionally driven, more rapid, and more networked than in previous generations. Movements can emerge quickly, spread globally, and generate tremendous momentum, but they can also fragment just as rapidly.</p>
+<p>Fourth, mental health and activism become more tightly intertwined. Earlier generations often separated political engagement from psychological well-being. Today many young activists explicitly discuss trauma, burnout, resilience and care within their movements. We are likely to see greater attention to sustainable activism, mutual support networks, and collective forms of coping. Successful movements may increasingly function not only as vehicles for political change but also as communities that help people make sense of uncertainty and adversity.</p>
+<p>Finally, there is a broader shift. Psychology has traditionally focused on how individuals adapt to difficult circumstances. Many young activists are asking a different question: should people simply adapt to an unequal, insecure, or environmentally damaged world, or should they work collectively to change it? That question is likely to define youth movements in the years ahead.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10799844"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/columnist/rinku-ghosh/">
+<figure>
+<img alt="Rinku Ghosh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2021/11/rinku.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/columnist/rinku-ghosh/"><span></span>Rinku Ghosh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="7625937"></div><div class="follow_author_title" data-id="Rinku Ghosh"></div><div class="follow_author_slug" data-id="rinku-ghosh"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rinku Ghosh is the Health Section Lead at The Indian Express, where she oversees the publication’s comprehensive health, wellness, and medical science vertical. With years of experience in high-impact journalism, Rinku specializes in translating complex medical research into actionable insights for the public. Her reporting spans a wide spectrum—from deep-dives into childhood obesity and the effects of urban pollution to the frontiers of medical technology, such as the use of AI and nanobots in cancer treatment.
+Authoritativeness: As a veteran editor at one of India’s most trusted news organizations, Rinku has interviewed world-renowned experts, including cardiologists from the Mayo Clinic, oncologists from AIIMS, and researchers from the Indian Institute of Science (IISc). Her column often serves as a primary source for "Explained" features, where she breaks down global health trends, vaccine safety, and public health policy. Her work is recognized for bridging the gap between clinical data and the lived experiences of patients.
+Trustworthiness: Rinku’s editorial approach is rooted in the "Journalism of Courage" philosophy, prioritizing evidence-based science over healthcare myths. In an era of medical misinformation, she ensures that every piece of advice—whether regarding chronic disease management or nutritional supplements—is backed by peer-reviewed studies and verified by leading medical practitioners.                        <a class="more-abt-author" href="https://indianexpress.com/profile/columnist/rinku-ghosh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-third, twenty twenty-six, at forty-four minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/cockroach-janta-party/" href="https://indianexpress.com/about/cockroach-janta-party/">Cockroach Janta Party</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/neet-cjp-protests-youth-student-participation-explained-10799844/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-23 10:55 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
