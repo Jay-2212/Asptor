@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Right to a lawyer, retracted confession: What SC said in judgment on 1996 Samleti bus blast case | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Right to a lawyer, retracted confession: What SC said in judgment on 1996 Samleti bus blast case</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-23</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-legal-representation_expl-law.jpg?w=1600" alt="Right to a lawyer, retracted confession: What SC said in judgment on 1996 Samleti bus blast case">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Samleti bus blast" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-legal-representation_expl-law.jpg?w=1600" width="650"/><span class="ie-custom-caption">The Supreme Court ruled that the denial of legal representation to an accused facing the death penalty strikes at the very root of a fair trial. Photo: Unsplash</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Supreme Court in a judgment Tuesday (July 21) has ordered a fresh trial for a prime accused in the <strong><a class="" href="https://indianexpress.com/article/legal-news/supreme-court-samleti-rajasthan-bus-bomb-blast-fresh-trial-10796494/">1996 Samleti bus blast case</a></strong>, ruling that the denial of legal representation to an accused facing the death penalty strikes at the very root of a fair trial.</span><span style="font-weight: 400"> At the same time, the court acquitted another person convicted in the case on the basis of what the court found to be an inadmissible confession.</span></p>
+<p><span style="font-weight: 400">The judgment, written by Justice Sandeep Mehta on behalf of a bench also comprising Justices Vikram Nath and Sanjay Karol, delves into principles governing the constitutional right to legal representation, the admissibility of confessional evidence, and the strength of evidence required to secure a prosecution in a terror matter.</span></p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The case stems from an explosion inside a Rajasthan Roadways bus travelling from Agra to Bikaner in May 1996 near Samleti in Rajasthan’s Dausa district, which claimed 14 lives and left 37 injured.</span></p>
+<h2><b>Lack of legal representation</b></h2>
+<p><span style="font-weight: 400">For Dr Abdul Hameed, sentenced to face the death penalty in the case, the Supreme Court’s directive means he will face a trial for the third time. During his original trial — which resulted in his conviction in 2014 — he was forced to cross-examine witnesses himself because he did not have a lawyer nor was provided one by the court. Recognising this flaw, the Rajasthan High Court had in April 2015 remanded his case back to the trial court, only to pass a fresh order on his sentence. The trial court had in December 2015 sentenced him to death again.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">The Supreme Court noted that the absence of legal representation had plagued the entire trial and was not limited to the sentencing phase. It said that the right to be defended by a lawyer “is not an empty ritual or a mere procedural embellishment, rather, it is a substantive safeguard that lies at the heart of a fair criminal justice system”. Leaving an accused undefended in proceedings carrying grave penal consequences means “the fairness of the trial itself may stand seriously compromised”, the court noted.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/denial-of-legal-assistance-why-supreme-court-set-aside-death-sentence-in-1996-dausa-blast-case-10797416/">Denial of legal assistance: Why Supreme Court set aside death sentence in 1996 Dausa blast case</a></span></div>
+<p><span style="font-weight: 400">Owing to the flawed trial, the court had to decide whether to acquit Hameed or order a fresh trial. The bench chose the latter, in order to balance the rights of the accused with “the nature and gravity of the offence, its impact on society and the larger interests of justice”. Acquitting Hameed solely on the ground of denied legal representation, the court noted, “would neither advance the cause of justice nor appropriately balance the competing interests involved”. The court held that while a fresh trial is “an exceptional course”, it becomes “indispensable where a constitutional infirmity is so fundamental that the conviction cannot be sustained” yet “the interests of justice require that the prosecution to be carried to its logical conclusion”.</span></p>
+<p><span style="font-weight: 400">The bench directed the setting up of a special court in Jaipur to conduct the trial expeditiously, preferably within a year.</span></p>
+<p><b>Inadmissible confession</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">While Hameed’s case hinged on procedural fairness, the case against another convict, Pappu alias Salim, was invalidated by the Supreme Court due to the weakness of the evidence against him. Salim had been sentenced to life imprisonment primarily on the basis of his own confessional statements.</span></p>
+<p><span style="font-weight: 400">The bench found that Salim had been subjected to multiple recordings of confessions over a protracted period. He gave his first confessional statement before a magistrate in September 1997 in connection with a separate blast case at Jaipur’s Sawai Man Singh Stadium. Five years later, in October 2002, a second confessional statement was recorded in the Samleti bus blast case.</span></p>
+<p><span style="font-weight: 400">Following concerns by the trial court regarding procedural lapses in the statement, a fresh statement was recorded for a third time in January 2011. Finally, when produced before the trial court as an approver — an accused who turns a state’s witness in exchange for a pardon — in February 2011, Salim disowned his earlier statements, claiming they were made under pressure.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The Supreme Court noted that this “unusual and protracted course of recording confessional statements is wholly inconsistent with the safeguards ordinarily governing the recording of voluntary confessions”. In criminal law, a retracted confession is considered a weak piece of evidence. The court emphasised that a retracted confession, “particularly one whose voluntariness is seriously questioned and whose authenticity is rendered doubtful by repeated recording and subsequent repudiation, cannot constitute the foundation of a conviction unless it receives strong and independent corroboration from reliable evidence”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">In Salim’s case, the court found a complete absence of any independent corroboration. The police had not recovered any explosives, weapons, or incriminating documents from his possession. “Once the very foundation of that evidence stands discredited, the superstructure sought to be erected upon it must necessarily collapse,” the court ruled, acquitting him of all charges.</span></p>
+<p><b>No corroboration or discovery</b></p>
+<p><span style="font-weight: 400">The court also dismissed the State of Rajasthan’s appeal against the High Court’s acquittal in 2019 of six other accused. The prosecution had sought to implicate five of them based on the confessional statement of a co-accused in a separate case. The Supreme Court reiterated the settled legal principle that the confession of a co-accused is not substantive evidence and can only be used to “lend assurance to a conclusion otherwise reached on the basis of independent and legally admissible substantive evidence” which, it found, was absent in the case.</span></p>
+<p><span style="font-weight: 400">The police had also claimed that two of the acquitted accused persons had pointed out locations, such as a hotel or a bus stand, during the investigation. The court clarified the law regarding such discoveries under the Indian Evidence Act (replaced in 2023 by the Bharatiya Sakshya Adhiniyam). For a disclosure statement made in police custody to be admissible, it must lead to the discovery of a new, relevant fact not previously known to the investigating agency.</span></p>
+<p><span style="font-weight: 400">“The alleged pointing out of certain places, by itself, does not constitute a discovery of an incriminating fact,” the court noted, adding that without the recovery of any incriminating article having a direct nexus with the blast, such statements hold no evidentiary value.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10798971"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-third, twenty twenty-six, at thirty-six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/samleti-bus-blast-case-supreme-court-fresh-trial-legal-aid-10798971/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-23 03:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
