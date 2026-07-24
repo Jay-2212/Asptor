@@ -1,0 +1,466 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Youth protests: How Indian states' expenditure on education has declined over 12 years | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Youth protests: How Indian states' expenditure on education has declined over 12 years</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/student-protests.jpeg?w=1024" alt="Youth protests: How Indian states' expenditure on education has declined over 12 years">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="A protest in Ludhiana against the police's lathicharge in New Delhi." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/student-protests.jpeg?w=1024" width="650"/><span class="ie-custom-caption">A protest in Ludhiana against the police's lathicharge in New Delhi. (Express photo by Gurmeet Singh)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The ongoing youth protests at Jantar Mantar in Delhi and in several other cities, demanding the resignation of Education Minister Dharmendra Pradhan, have brought attention to the state of education in India.</p>
+<p>In a <strong><a href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-cjp-protests-neet-education-budget-modi-govt-analysis-10795484/">recent explainer, <em>The Indian Express</em> reported</a></strong> how the Education Ministry’s share of the <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">Union Budget</a> had sharply declined over the past 12 years — from 4.6% in 2013-14 (the last year that the Congress-led UPA government was in power) to 2.5% in 2025-26. The fall suggests that the BJP-led NDA government reduced emphasis on education.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>However, as a subject of policymaking, education is not the sole preserve of the Union government.</p>
+<p><strong>States and the Union both have roles to play</strong></p><div class="paywall container-wall-exclusive">
+<p>Education falls under the Concurrent list in the Seventh Schedule of the Indian Constitution.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The schedule essentially divides powers and responsibilities between the Union government and the state governments through three lists — Union, State and Concurrent. Both the Centre and state governments can legislate on subjects under the Concurrent list.</p>
+<p>So, how do states act on the subject of education and what policy significance do they attach to it? A broad marker of priority is to examine the share of a state’s total expenditure on education. The <em>table</em> and <em>chart</em> alongside provide a glimpse of where things stand.</p>
+<span class="custom-caption"><img alt="Share of states' spending in education over time. " class="lazyloading wp-image-10802142 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/education-spending-states.jpeg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/education-spending-states.jpeg 1197w, https://indianexpress.com/wp-content/uploads/2026/07/education-spending-states.jpeg?resize=450,312 450w, https://indianexpress.com/wp-content/uploads/2026/07/education-spending-states.jpeg?resize=600,417 600w, https://indianexpress.com/wp-content/uploads/2026/07/education-spending-states.jpeg?resize=768,533 768w, https://indianexpress.com/wp-content/uploads/2026/07/education-spending-states.jpeg?resize=583,405 583w" height="831" sizes="(max-width: 1197px) 100vw, 1197px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1197"/> <em>Share of states’ spending in education over time.</em></span>
+<p>Apart from providing an average for all states and Union Territories, the <em>table</em> also looks at a selection of states to provide a geographically and politically diverse sample for the country.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>To provide some context about the status of education in the respective states, while many variables could be chosen, the <em>table</em> shows data on gross enrolment ratio (GER) at the secondary education level (that is, Classes 9 to 12). The GER is the total number of students enrolled in a specific level of education — regardless of their age — divided by the total population of the official age group for that level, multiplied by 100. A look at the GER in the second column confirms the long-held notions of which states are better educated and which are laggards.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/neet-paper-leak-nationwide-protests-10800902/">‘Not CJP or BJP, it’s about student rights’: Protests rage nationwide; many detained</a></span></div>
+<p>For instance, Bihar’s GER is 45 while that of Kerala is 94. A low GER also reveals the distance any state has to cover to achieve a better level of education in the state. This is especially relevant when one considers the population difference in states such as Bihar and Kerala. In essence, it gives a sense of the need for the state government to spend on education.</p>
+<p>The first column in the <em>table</em> shows the data for the concerned state’s expenditure on education as a percentage of total expenditure. As against the average for all states and UTs, Bihar and Delhi stand out.</p>
+<p>To be sure, both these states were spending even higher than this in the years preceding 2025-26. In the same period, states such as Kerala and Tamil Nadu have shares below the national average. Looking at longer-term data — going back all the way to 2008-09 — shows that Tamil Nadu has largely tracked and then fallen just behind the national level. Kerala used to allocate a higher share than the national average until the Covid year of 2020, and has lagged since then. Gujarat, too, has lagged behind the national average more often than not.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>What is concerning is that the national average of all states and UTs itself has been trending down, as the <em>chart</em> alongside shows. After staying at around 17% in 2013-14, the average share of expenditure on education has gradually fallen since then. This fall is crucial, since it mirrors the fall in the share of money spent by the Union government as well.</p>
+<p>There are exceptions to this trend, though. Take the UT of Delhi under the Aam Aadmi Party, which initially made health and education the key pillars of its pitch to voters. Between 2014-15 and 2024-25, when the AAP was ruling Delhi and deciding its Budget priorities, education’s share went up sharply, in contrast to the falling trend of the national average.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10802134"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-fourth, twenty twenty-six, at fifty-four minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/cockroach-janta-party/" href="https://indianexpress.com/about/cockroach-janta-party/">Cockroach Janta Party</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/student-protests-indian-states-education-spending-decline-10802134/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-24 18:33 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
