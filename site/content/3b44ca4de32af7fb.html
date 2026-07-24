@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why the ED’s case against Lalit Modi was overturned and what it means for his return | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why the ED’s case against Lalit Modi was overturned and what it means for his return</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/bcci-lalit-modi-ed-case.jpg?w=1024" alt="Why the ED’s case against Lalit Modi was overturned and what it means for his return">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Former IPL chairman Lalit Modi said he plans to visit India later this year or early next year after receiving major legal relief from the Appellate Tribunal in the long-running 2009 IPL South Africa foreign exchange case." decoding="async" height="366" src="https://images.indianexpress.com/2026/07/bcci-lalit-modi-ed-case.jpg?w=1024" width="650"/><span class="ie-custom-caption">Former IPL chairman Lalit Modi said he plans to visit India later this year or early next year after receiving major legal relief from the Appellate Tribunal in the long-running 2009 IPL South Africa foreign exchange case. (PTI Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>When the Indian Premier League (IPL) was shifted to South Africa in 2009 because of the general elections, it triggered a case that played out for more than 15 years.</p>
+<p>The Enforcement Directorate (ED) alleged that former <a class="" href="https://indianexpress.com/section/sports/ipl/" rel="noamphtml">IPL</a> chairman Lalit Modi, the Board of Control for Cricket in India (BCCI), its office-bearers, and banks handling the transactions violated foreign exchange laws while transferring hundreds of crores abroad to conduct the tournament.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Earlier this month, the appellate tribunal under the Smugglers and Foreign Exchange Manipulators (Forfeiture of Property) Act, 1976, overturned most of the ED’s findings. While exonerating Lalit Modi, among others, the tribunal upheld two procedural violations against the BCCI. It also reduced a penalty imposed on the body. Reacting to the verdict, Modi said in a video post that he was now looking forward to returning to India.</p><div class="paywall container-wall-exclusive">
+<blockquote class="twitter-tweet" data-media-max-width="560">
+<p dir="ltr" lang="en"><a class="" href="https://x.com/hashtag/WATCH?src=hash&amp;ref_src=twsrc%5Etfw">#WATCH</a> | IPL founder and first chairman Lalit Modi to return to India.</p>
+<p>He says, “I’m really happy with the verdict yesterday. It’s really been a great day. 16 years I have fought and whatever I have been saying to the media and to everybody has finally emerged as the truth. I’m… <a class="" href="https://t.co/QTN7VkzuEy" rel="nofollow, noopener" target="_blank">pic.twitter.com/QTN7VkzuEy</a></p>
+<p>— ANI (@ANI) <a class="" href="https://x.com/ANI/status/2079877796663644385?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">July 22, 2026</a></p></blockquote>
+<h2>Why was the IPL held in South Africa?</h2>
+<p>In 2009, security concerns around the general elections led the BCCI to shift the second edition of the IPL abroad. The Board entered into a “Heads of Agreement” (to set out key terms at the outset) with Cricket South Africa (CSA), which had agreed to host the event. It was required to open and operate a dedicated bank account in the name of “IPL South Africa”.</p>
+<p>To finance the tournament, the BCCI transferred about $49.86 million (around Rs 243.45 crore) to CSA between 2009 and 2010. CSA also earned ticket-sale revenue of about South African Rand 3.83 crore, which was repatriated to India only later.</p>
+<p><strong>And what was the dispute?</strong></p><div id="taboola-mid-article-personalisation"></div>
+<p>The ED’s case was focused on whether the BCCI’s payment to CSA was an ordinary business payment or a regulated foreign investment requiring RBI approval.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/sports/cricket/lalit-modi-quit-cricket-reason-dawood-ibrahim-ipl-hits-10724376/">Modi on why he quit cricket administration: ‘Dawood Ibrahim took 3 hits at me’</a></span></div>
+<p>It said that the money transferred to South Africa constituted a “capital account transaction” under the Foreign Exchange Management Act (FEMA) because the agreement created “contingent liabilities” abroad. Since no final <a class="" href="https://indianexpress.com/about/budget/" rel="noamphtml">budget</a> had been prepared when the agreement was signed, the agency argued, the liabilities were uncertain and fell outside the scope of ordinary business payments.</p>
+<p>The Heads of Agreement, it argued, was a “mechanism designed to circumvent the provisions of FEMA” rather than a “genuine commercial agreement.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>ED also invoked Section 42 of the FEMA to hold Modi personally liable, arguing that as the “chief architect” and the “brainchild” of IPL, he was responsible for the transactions.</p>
+<p><strong>What the law says</strong></p>
+<p>The tribunal’s decision was based on understanding how FEMA distinguishes between current account transactions and capital account transactions.</p>
+<p>Section 2(j) treats payments made for “trade, other current business, services, and short-term banking and credit facilities in the ordinary course of business” as “current account transactions”, which are generally permitted under Section 5 without the prior approval of the RBI.</p>
+<p>Section 2(e) defines a capital account transaction as one that “alters the assets or liabilities, including contingent liabilities, outside India” and is subject to tighter regulations.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The case depended on whether the BCCI’s payments were simply for hosting services or whether they amounted to creating foreign liabilities requiring RBI approval.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Explained Law</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/what-new-fast-track-courts-can-address-lapses-in-exam-leak-probes-weak-legal-provisions-10800807/">What new fast-track courts can address: Lapses in exam leak probes, weak legal provisions</a></span></div>
+<p>The tribunal also examined Section 42(1), which says, “every person who, at the time the contravention was committed, was in charge of, and was responsible to, the company for the conduct of the business of the company as well as the company, shall be deemed to be guilty of the contravention.”</p>
+<p>Following an investigation, the ED issued 12 show-cause notices and in 2018 imposed heavy penalties on the BCCI, Lalit Modi, former BCCI secretary N Srinivasan, former treasurer MP Pandove, the State Bank of Travancore (now SBI), and its chief manager, AK Nazeer Khan.</p>
+<p><strong>What the tribunal held</strong></p>
+<p>In its decision, the tribunal rejected the ED’s main argument, stating that payments to CSA were “purely in the nature of current account transactions.” It reasoned that the contract did not reveal any alteration of assets or liabilities or even transfer of ownership.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>On the other hand, the contract “enforces that BCCI would pay consideration for the services and assistance in connection with IPL,” for which a fixed fee of $3 million was set at the time of signing of the agreement.</p>
+<p>It thus upheld the petitioner’s contention that the arrangement was based on a cost-plus-fee basis, and the arising liabilities were definite. The tribunal further said that “a liability does not become contingent merely because its precise quantification or final settlement was to occur at a later date.”</p>
+<p>Since the payments were current account transactions, they fell within the framework of Section 5 of FEMA, which did not require the RBI’s prior approval.</p>
+<p><strong>What did it say about those accused?</strong></p>
+<p>Exonerating Lalit Modi, the tribunal set aside all penalties imposed on him, stating that liability under Section 42(1) can attach only to someone both “in charge of” and “responsible to” the company for its business conduct.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Examining the BCCI’s own rules, it noted that office bearers of the BCCI, comprising the president, secretary, treasurer and joint secretary, “were responsible for the conduct of affairs,” leaving out Modi, who was at that time the chairman of an IPL sub-committee.</p>
+<p>The tribunal held that he “was not in-charge of the affairs” and “had been framed in the case without any material showing his responsibility.” It thus held that the penalty that was imposed on him “is wholly erroneous is thus interfered.”</p>
+<p><a href="https://indianexpress.com/article/legal-news/returning-to-india-lalit-modi-tribunal-clears-fema-violation-10799033/"><strong>Speaking to <em>The Indian Express</em>,</strong></a> Lalit Modi’s counsel Mahmood Abdi said, “In this regard, there is no other case pending against Mr Modi.” At the time, the BCCI had also made many allegations against Modi, including breaching confidentiality agreements between the BCCI and franchises and rigging auctions — which he denied. He was sacked by the BCCI in 2010 and soon left India.</p>
+<p>Two findings against the BCCI survived. First, the tribunal found that its own books recorded a “due amount” of only Rs 4 crore toward CSA, while the board had actually remitted the full settlement figure, leaving “an excess remittance of Rs.44,15,99,200/-”. With no “justification or even the basis” offered for the gap, the tribunal held that the “penalty of Rs.4 Crores on the BCCI needs no interference.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Secondly, on the 15-month delay in repatriating ticket-sale revenue, the tribunal dismissed BCCI’s explanations around “mingling of the accounts with others” and ongoing “settlement of certain issues with CSA,” holding that “the settlement of account does not justify delay of 15 months.” But since the funds were eventually brought back, it reduced the penalty from Rs 4 crore to Rs 1 crore, calling the original fine “too excessive.”</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10801147"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-fourth, twenty twenty-six, at four minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/bcci/" href="https://indianexpress.com/about/bcci/">BCCI</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/lalit-modi/" href="https://indianexpress.com/about/lalit-modi/">lalit modi</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/ed-case-lalit-modi-ipl-return-india-10801147/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-24 07:31 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
