@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Can an Indian airport operator own an airline? Concerns over market access, fair play | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Can an Indian airport operator own an airline? Concerns over market access, fair play</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-delhi-airport_expl-econ.jpg?w=1024" alt="Can an Indian airport operator own an airline? Concerns over market access, fair play">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Delhi airport" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-delhi-airport_expl-econ.jpg?w=1024" width="650"/><span class="ie-custom-caption">Terminal 3 at the Delhi international airport, which is operated by the GMR group (74% stake). Currently, there are stringent restrictions on airport operators having stakes in airlines. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">There is talk that the Centre may be weighing policy relaxations that could allow airport operators to own airlines, with preliminary internal discussions being underway as per sources. While nothing is concrete yet, such a move could pave the way for airport operators like the Adani group and the GMR group to enter the airline business.</span></p>
+<p><span style="font-weight: 400">Earlier, there were indications that initial discussions on cross-ownership in airport operators and airlines followed the Adani group’s request for an enabling policy environment, but <strong><a class="" href="https://indianexpress.com/article/business/adani-foray-airline-business-allowing-airport-operators-airlines-10800127/">Adani Enterprises</a></strong> on Friday (July 24) denied that it was evaluating any proposal to enter the airline business.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The government, on its part, has been calling for more airlines in the Indian skies, given the duopoly of IndiGo and the Air India group, which have a cumulative domestic market share of over 90%. The objective of the discussions to allow airport operators to also run airlines is to foster more competition in the sector, sources said.</span></p><div class="paywall container-wall-exclusive">
+<p><span style="font-weight: 400">Currently, there are stringent restrictions on airport operators having stakes in airlines. For instance, operators of India’s largest airports at Delhi (GMR has 74% stake) and <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a> (Adani group has 74%) are barred from owning more than 10% in a scheduled carrier. </span><span style="font-weight: 400">The converse is also true, with strict limits on airlines’ ownership in airports.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><b>Conflict of interest</b></h2>
+<p><span style="font-weight: 400">But a move to allow airport operators to run airlines is bound to face resistance from existing carriers and other aviation stakeholders. IndiGo Managing Director Rahul Bhatia on Thursday said that any such move will create a “massive conflict of interest” and will be against the interest of consumers.</span></p>
+<p><span style="font-weight: 400">Globally, aviation and competition regulators have viewed this type of vertical integration with abundant caution, as airports are natural monopolies and provide critical infrastructure for the aviation ecosystem. This implies that they must facilitate fair market access to carriers without prejudice. If an airport also owns an airline, there are bound to be questions about competition, fair play and non-discriminatory market access.</span></p>
+<p><span style="font-weight: 400">“One can see where the instinct (of allowing airport operators to own airlines) comes from. India’s entry problem is capital. New airlines… cannot afford to lose money for seven years against a carrier with two-thirds of the market. Adani and GMR can,” said Anupam Manur, professor of economics at the Takshashila Institution.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">“There is even an efficiency argument: airport profits increasingly come from footfall, so an airport that owns an airline wants more flights at lower fares, not fewer at higher ones. But, obviously problems abound — both economically and ethically,” he told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">.</span></p>
+<span class="custom-caption"><img alt="Mumbai airport" class="lazyloading size-medium wp-image-10802265" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg 4867w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=2048,1152 2048w, https://indianexpress.com/wp-content/uploads/2026/07/ex-mumbai-airport_expl-econ.jpg?resize=150,83 150w" height="2738" sizes="(max-width: 4867px) 100vw, 4867px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="4867"/> The Mumbai airport is operated by the Adani group, which has 74% stake. Photo: Wikimedia Commons</span>
+<p><span style="font-weight: 400">The most obvious concern is conflict of interest in important decisions like slot allocation to airlines. If the airport operator is the slot coordinator, there will be an inherent conflict if its own airline was competing with others for prime slots. Even if discrimination doesn’t actually occur, experts believe that it still will be a concern for stakeholders. Generally, anti-trust policies focus on maintaining a level-playing field and not just on instances of actual discrimination.</span></p>
+<p><span style="font-weight: 400">Airlines depend on airports for critical operational infrastructure such as parking bays, check-in counters, aircraft stands, boarding gates, and ground handling facilities, among others. As an airport usually controls them, they are expected to be neutral infrastructure and service providers. Any apparent and meaningful difference on these counts between airlines, even owing to differences in commercial agreements, could lead to allegations of anti-competitive practices. So, regulatory confidence in airport neutrality is particularly important to prevent an environment of even subtle forms of preferences or discrimination.</span></p>
+<p><b>Global trends</b></p>
+<p><span style="font-weight: 400">Aviation and competition regulators worldwide have largely preferred keeping airports and airlines operationally independent. Even in the few cases of common ownership, like in the major hub airports in West Asia, the government ultimately owns both the airlines and the airports. Dubai airport and Emirates are government-owned but are separate corporate entities. So are Etihad and the Abu Dhabi airport, and Qatar Airways and Doha airport. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Similarly, Singapore’s Changi Airport and Singapore Airlines are linked through the Singapore government investment ecosystem, but have distinct management structures and regulatory oversight.</span></p>
+<p><span style="font-weight: 400">Moreover, all these examples involve large hub airports in territories that have virtually non-existent domestic air traffic, and primarily operate as pure-play international airports serving as hubs for airlines owned by the respective governments as part of an integrated hub development strategy. Domestic airline competition is also absent.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/rahul-bhatia-airport-operators-run-airlines-conflict-of-interest-indigo-10800619/">‘Massive conflict of interest’ if airport operators are allowed to run airlines: IndiGo’ Rahul Bhatia</a></span></div>
+<p><span style="font-weight: 400">But in India, all airlines — except for regional carrier Alliance Air — are in the private sector, and a growing number of major airports are being operated by private sector operators and not the government-owned Airports Authority of India. That makes India’s aviation market more like Europe than West Asian states or Singapore.</span></p>
+<p><span style="font-weight: 400">Competition rules in the European Union are among the most stringent in the world, with strict oversight and enforcement. It also mandates that the airport slot coordinating agencies must be functionally independent from any interested party. In the US, most major airports are owned by city and county governments, port authorities, and independent airport authorities. They receive federal funding, for which they must comply with Federal Aviation Administration grant assurances that prohibit them from discriminating among airlines and effectively prevent income from airport operations to be invested in airlines.</span></p>
+<p><b>Necessary safeguards</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">If India does allow airport operators or entities affiliated to them to also run an airline, experts say that a watertight regulatory and competition oversight system is required.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">Safeguards should include structural separation between airport and airline businesses, independent boards and management teams for the airport operator and the airline, strict protection of carriers’ commercially sensitive information, independent airport slot coordinators, and transparent gate and terminal allocation policies.</span></p>
+<p><span style="font-weight: 400">There also needs to be enhanced oversight by regulators, including the Airports Economic Regulatory Authority of India, the Directorate General of Civil Aviation, and the Competition Commission of India.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10802257"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects and sectors, notably energy and aviation. He has over 16 years of experience in journalism with a body of work spanning areas like politics, development, equity markets, corporates, trade, and economic policy. He considers himself an above-average photographer, which goes well with his love for travel.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-fifth, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/airport-operators-owning-airlines-india-policy-10802257/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-25 03:11 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
