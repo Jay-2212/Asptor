@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Indus Waters Treaty: A year on, India’s case for freezing it and what it plans next | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Indus Waters Treaty: A year on, India’s case for freezing it and what it plans next</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-26</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/salal-dam.jpg?w=1024" alt="Indus Waters Treaty: A year on, India’s case for freezing it and what it plans next">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="IWT" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/salal-dam.jpg?w=1024" width="650"/><span class="ie-custom-caption">The Salal dam on the Chenab. Pakistan had objected to its construction. Photo: Wikimedia Commons</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Pakistan has been increasingly targeting India in recent weeks over the Indus Waters Treaty (IWT), which New Delhi <a href="https://indianexpress.com/article/india/indus-waters-treaty-government-focus-on-chenab-projects-renegotiation-10795741/" rel="noopener" target="_blank"><strong>had placed in “abeyance”</strong></a> after the Pahalgam terror attack last April.</p>
+<p>The Pakistan government organised a seminar in Islamabad that brought together civilian leaders, climate experts and civil-military officials to discuss the growing threat from India’s “weaponisation of the Indus waters”. Pakistan’s Defence Minister Khawaja Asif recently said his country would not hesitate to go to war if its water security is breached. And its military leadership signalled its own institutional readiness to act through a formal statement issued on July 6, following a Corps Commanders Conference chaired by General Asim Munir.</p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On April 23, 2025, the Cabinet Committee on Security had said: “The Indus Waters Treaty of 1960 will be held in abeyance with immediate effect, until Pakistan credibly and irrevocably abjures its support for cross-border terrorism.” About 15 months later, it is time to evaluate why India did so, the key arguments, and what New Delhi is planning now.</p>
+<p><strong>Pakistan’s actions</strong></p>
+<p>India maintains it has honoured the treaty through six decades amid wars, military crises, terror attacks and prolonged periods of bilateral hostility as Pakistan pursued a sustained policy of cross-border terrorism. According to New Delhi, agreements of this nature cannot remain insulated from persistent acts of hostility.</p><div id="taboola-mid-article-personalisation"></div>
+<p>India also feels that Pakistan’s conduct under the treaty has reflected a consistent pattern of obstruction. Since the early years of implementation, virtually every Indian project on the Western Rivers (meant for Pakistan’s use) — irrespective of its size, storage capacity or technical design — has been objected to by Pakistan.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/indus-waters-treaty-india-renegotiation-10788019/">Indus Waters Treaty: Why India wants to renegotiate the pact with Pakistan</a></span></div>
+<p>Indian officials argue that the treaty’s dispute resolution provisions, intended as an exceptional mechanism for resolving genuine differences, were progressively converted into instruments for delaying Indian projects.</p>
+<p>While India’s argument is that it can develop its own water system, its rhetoric of “water and blood cannot flow together” has been perceived to be directed at its domestic political constituency. That weakens its argument in front of the global audience, which often is more sympathetic to Pakistan which portrays itself as the victim as a lower riparian country.</p>
+<p><strong>New hydrological realities</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The IWT reflects the technological and hydrological realities of the late 1950s. More than six decades later, those circumstances have changed fundamentally. India’s population has increased several-fold, resulting in substantially higher demand for drinking water, irrigation, industry and urban development needs.</p>
+<p>States dependent upon the Indus Basin — including Punjab, Haryana and Rajasthan — face increasing water stress and growing developmental requirements that could not have been envisaged when the Treaty was negotiated.</p>
+<span class="custom-caption"><img alt="Indus Basin map" class="lazyloading size-medium wp-image-10792475" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/way-of-wateer.jpg?resize=600,402" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/way-of-wateer.jpg 1244w, https://indianexpress.com/wp-content/uploads/2026/07/way-of-wateer.jpg?resize=450,302 450w, https://indianexpress.com/wp-content/uploads/2026/07/way-of-wateer.jpg?resize=600,402 600w, https://indianexpress.com/wp-content/uploads/2026/07/way-of-wateer.jpg?resize=768,515 768w, https://indianexpress.com/wp-content/uploads/2026/07/way-of-wateer.jpg?resize=604,405 604w" height="834" sizes="(max-width: 1244px) 100vw, 1244px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1244"/> Indus Basin</span>
+<p>India also faces a serious challenge of declining groundwater levels, particularly in Punjab and Haryana, making greater utilisation of available surface water an urgent national priority.</p>
+<p>At the same time, the hydrological regime has evolved, with reduced availability in the Eastern Rivers (for India’s use) while flows in the Western Rivers (for Pakistan’s use) have not experienced a comparable decline.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Climate change has further altered basin dynamics through greater hydrological variability, increasing the need for flood moderation, drought resilience, storage optimisation and adaptive reservoir operations.</p>
+<p>Engineering practices have undergone a profound transformation since 1960. Modern dam safety and sustainability require low-level outlets, drawdown flushing, gated spillways, advanced sediment management and flexible reservoir operations. These technologies were either unavailable or not widely recognised when the treaty was drafted.</p>
+<p>India’s commitments towards clean energy transition and climate goals require efficient development of hydropower infrastructure using state-of-the-art engineering practices, rather than technologies frozen in the engineering standards of the 1950s.</p>
+<p><strong>The IWT’s structural asymmetry</strong></p>
+<p>The Indian government has long maintained that the IWT remains one of the most generous water-sharing arrangements ever accepted by an upper riparian state. Under the treaty, Pakistan received rights over nearly 80% of the waters of the Indus Basin — approximately 135 million acre-feet (MAF) annually — while India retained only about 20% (33 MAF), despite being the upper riparian state.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/indus-waters-treaty-fair-to-india-way-forward-10027741/">Has the Indus Waters Treaty been fair to India, and what is the way forward: An Expert Explains</a></span></div>
+<p>The asymmetry extends beyond water allocation. The IWT imposes extensive obligations upon India concerning project design, storage limits, spillway configuration, operational procedures and advance information, while imposing virtually no corresponding obligations on Pakistan regarding efficient utilisation, irrigation practices or water conservation.</p>
+<p>This structural imbalance has become even more pronounced over time.</p>
+<p>Pakistan continues to construct modern hydropower projects using contemporary engineering technologies while objecting to similar technological advancements in India.</p>
+<p><strong>What about Pakistan’s water crisis?</strong></p>
+<p>Pakistan’s recurring claims of water insecurity are contradicted by its own official documents and public statements. The Pakistan National Water Policy acknowledges that approximately 35 MAF of water flows annually into the Arabian Sea without productive utilisation.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>It records that nearly 30-40% of canal water is lost during conveyance, with barely about 58 MAF ultimately reaching farms out of more than 100 MAF diverted through the canal system.</p>
+<p>These figures reveal that Pakistan’s principal challenge is not upstream water availability but inefficient water management. Chronic canal seepage, ageing irrigation infrastructure, inadequate storage capacity, poor irrigation efficiency, delayed modernisation and inefficient cropping patterns continue to constrain Pakistan’s agricultural productivity. These are domestic governance and infrastructure issues that cannot reasonably be attributed to India’s hydropower projects.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/indus-waters-treaty-a-document-past-its-time-10260227/">Indus Waters Treaty: A document past its time</a></span></div>
+<p>Significantly, even senior Pakistani leaders have publicly acknowledged this reality. Former foreign minister Shah Mahmood Qureshi admitted that Pakistan’s water shortages arise primarily from internal mismanagement rather than any diversion by India.</p>
+<p>Pakistan has also attempted in recent times to portray fluctuations in the Chenab River as evidence of hostile manipulation. But officials say this ignores both hydrological realities and established operational practices of run-of-the-river hydropower projects. River flows at downstream locations such as Marala are inherently influenced by seasonal snowmelt patterns in the Himalayas. Variations in winter snowfall, delayed melting, or cooler spring temperatures naturally affect early-season discharge levels. Such fluctuations cannot, by themselves, be interpreted as evidence of deliberate interference.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Temporary fluctuations for a few hours in downstream river flows during sediment flushing or maintenance operations are normal, carefully regulated engineering phenomena observed in reservoir operations across the world.</p>
+<p><strong>What India may now be looking at</strong></p>
+<p><span style="color: #993300"><strong>Utilising waters:</strong></span> India is expediting projects designed to prevent the avoidable wastage of waters allocated to it.</p>
+<p>A key priority will be the accelerated development of hydropower projects on the Chenab basin. These are critical for India’s clean energy transition, grid stability and regional development.</p>
+<p>Major projects under implementation include the 1,856 MW Sawalkot Hydroelectric Project, the 1,000 MW Pakal Dul Project, the 850 MW Ratle Project, the 624 MW Kiru Project and the 540 MW Kwar Project.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>These projects, expected to be commissioned progressively over the next few years, will substantially enhance India’s hydropower capacity while enabling the fuller utilisation of its legitimate rights under the Indus basin.</p>
+<p>The Ujh Multipurpose Project, on a tributary of the Ravi, will enable the storage and productive utilisation of waters that presently flow unutilised across the International Boundary while simultaneously providing irrigation, drinking water, flood moderation and hydropower benefits to Jammu &amp; Kashmir and other states.</p>
+<p>In addition to this, steps are being undertaken for utilisation of rightful share of waters to water-stressed areas to meet increased water demand for purposes such as irrigation and drinking.</p>
+<p><span style="color: #993300"><strong>Flushing reservoirs:</strong></span> India will also restore the efficiency and sustainability of existing hydropower projects through modern reservoir and sediment management practices. For decades, essential maintenance measures such as sediment flushing and operation of low-level outlets were either delayed or constrained because of persistent objections from Pakistan, despite these being internationally accepted engineering practices.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>The Salal Hydroelectric Project, particularly, illustrates the long-term engineering consequences of such restrictions. Originally designed with a gross storage capacity of about 284 MCM, the project was compelled to plug its low-level sediment outlets following Pakistan’s objections, depriving the reservoir of its primary sediment management mechanism. As a result, the reservoir rapidly silted up within a few years of commissioning, reducing its effective storage to barely 9 MCM, increasing turbine abrasion and significantly impairing its operational efficiency.</p>
+<p>The recent sediment flushing undertaken at the Baglihar and Salal Hydroelectric Project marks the beginning of a systematic programme to restore lost storage, improve reservoir performance and enhance the long-term safety and efficiency of hydropower infrastructure. Similar measures are being undertaken at other projects wherever technically warranted.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10803622"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubhajit-roy/">
+<figure>
+<img alt="Shubhajit Roy" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/untitled-3.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubhajit-roy/"><span></span>Shubhajit Roy</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1951102"></div><div class="follow_author_title" data-id="Shubhajit Roy"></div><div class="follow_author_slug" data-id="shubhajit-roy"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="http://ShubhajitRoy">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubhajit Roy, Diplomatic Editor at The Indian Express, has been a journalist for more than 25 years now. Roy joined The Indian Express in October 2003 and has been reporting on foreign affairs for more than 17 years now. Based in Delhi, he has also led the National government and political bureau at The Indian Express in Delhi — a team of reporters who cover the national government and politics for the newspaper. He has got the Ramnath Goenka Journalism award for Excellence in Journalism ‘2016. He got this award for his coverage of the Holey Bakery attack in Dhaka and its aftermath. He also got the IIMCAA Award for the Journalist of the Year, 2022, (Jury’s special mention) for his coverage of the fall of Kabul in August 2021 — he was one of the few Indian journalists in Kabul and the only mainstream newspaper to have covered the Taliban’s capture of power in mid-August, 2021.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubhajit-roy/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-sixth, twenty twenty-six, at thirty minutes past eight in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/indus-waters-treaty-abeyance-explained-10803622/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-26 07:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
