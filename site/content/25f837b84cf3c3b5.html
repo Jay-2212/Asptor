@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>JPSC controversy: Why recruitment exams in Jharkhand have faced scrutiny | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>JPSC controversy: Why recruitment exams in Jharkhand have faced scrutiny</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-27</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-jpsc-protests_expl.jpg?w=1024" alt="JPSC controversy: Why recruitment exams in Jharkhand have faced scrutiny">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="JPSC" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-jpsc-protests_expl.jpg?w=1024" width="650"/><span class="ie-custom-caption">BJP workers stage a protest over the alleged Jharkhand Public Service Commission examination scam and alleged irregularities in the Jharkhand Staff Selection Commission examination, in Ranchi on July 24, 2026. Photo: PTI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">Amid the nationwide debate over irregularities in competitive examinations, <strong><a class="" href="https://indianexpress.com/article/india/jharkhand-unveils-plan-to-adopt-ai-in-governance-10779867/">Jharkhand</a></strong>’s own recruitment system has once again come under scrutiny. The resignation of former Chief Secretary and Jharkhand Public Service Commission (JPSC) Chairperson L Khiangte has intensified the political storm around the alleged irregularities in the 14th Combined Civil Services Examination that was held this April. His resignation came last week on the heels of CID raids at his residence and the old JPSC office.</span></p>
+<p><span style="font-weight: 400">The CID probe has already led to the arrest of several people, including JPSC officials and employees of the private agency associated with conducting the examination. Opposition parties have demanded a CBI probe, while student groups continue to protest, alleging that the credibility of Jharkhand’s constitutional body is at stake.</span></p><div class="paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">But the controversy surrounding the 14th JPSC examination is not merely about one result. It has revived an old question that has followed the Commission almost since Jharkhand was carved out in 2000: Why does almost every major JPSC recruitment find itself in controversy?</span></p>
+<h2><b>The latest controversy</b></h2>
+<p><span style="font-weight: 400">The controversy began soon after JPSC declared the preliminary examination results of the 14th Combined Civil Services Examination earlier this month.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Against 103 vacancies, the Commission shortlisted 2204 candidates for the Main examination. Soon after, candidates began raising several questions.</span></p>
+<p><span style="font-weight: 400">The first demand was for the publication of category-wise cut-off marks, which the Commission did not release along with the result. The second objection was over the merit list itself. Several candidates claimed that the published merit list did not carry the signatures of the Commission’s constitutional members, raising questions over the process adopted before declaring the results.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/out-of-syllabus-errors-in-questions-why-santhali-candidates-are-seeking-re-test-of-jharkhand-staff-selection-exam-10802471/">‘Out of syllabus’, ‘errors’ in questions: Why Santhali candidates are seeking re-test of Jharkhand staff selection exam</a></span></div>
+<p><span style="font-weight: 400">The controversy escalated further after several alleged OMR sheets surfaced on social media. One of the viral sheets purportedly belonged to a candidate from another state who had attempted only around 48 questions in Paper-I, a figure that would likely yield far less than the estimated qualifying threshold of approximately 144 marks. However, the student was still declared qualified. Similar claims were later made in the backlog recruitment examination, where another candidate was alleged to have answered only a limited number of questions yet figured among the successful candidates.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The authenticity of the viral OMR sheets has not been independently verified, but they triggered widespread protests by candidates outside the JPSC office. Following the pressure, the state government directed the CID to form an SIT and initiate an investigation.</span></p>
+<p><b>An arrest that became central to the probe</b></p>
+<p><span style="font-weight: 400">One of the biggest developments in the investigation has been the arrest of Abhay Tiwari alias Manoj Kunmar Tiwari, a Block Supply Officer (BSO) in Godda district whom the CID alleges played a major role in the recruitment racket. Tiwari used his name Abhay as a government official while hiding another name as part of the agency.</span></p>
+<p><span style="font-weight: 400">According to investigators, Tiwari was simultaneously working as the Marketing Manager of TSR Data Processing Private Limited (TDPL), the private testing agency associated with conducting the examination. The agency itself has come under scrutiny as it had earlier been blacklisted by the Jharkhand government in connection with examination-related issues.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/jharkhand-jssc-field-worker-exam-low-attendance-admit-card-row-10799212/">75% candidates miss Jharkhand government exam; many blame late emails, far-off centres</a></span></div>
+<p><span style="font-weight: 400">Investigators are also examining the recruitment of Tiwari’s close family members, including his brother and sister-in-law, who are serving in government jobs. Tiwari had also cleared five other examinations under JPSC and Jharkhand Staff Selection Commission (JSSC). The CID is probing whether there was any connection between these recruitments and the alleged examination irregularities. No conclusion has yet been reached.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The probe has also uncovered allegations that Tiwari acted as a middleman, allegedly demanding large sums of money from candidates seeking selection. These allegations remain under investigation.</span></p>
+<p><b>TDPL under the scanner</b></p>
+<p><span style="font-weight: 400">Questions are also being raised over the role of </span><span style="font-weight: 400">TDPL</span><span style="font-weight: 400">, the <a class="" href="https://indianexpress.com/section/cities/lucknow/" rel="noamphtml">Lucknow</a>-based agency involved in conducting the examination.</span></p>
+<p><span style="font-weight: 400">The agency had earlier faced action from JSSC for non-compliance with the agreement and was blacklisted in May 2025. A month later, however, the agency was handed over the exam work to be conducted. The agency was also blacklisted in Uttar Pradesh and other states.</span></p>
+<p><span style="font-weight: 400">Candidates and opposition parties are now questioning how an agency that had previously faced such action was again entrusted with conducting one of the state’s most important recruitment examinations.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/jharkhand-has-the-greatest-mineral-wealth-and-great-poverty-its-an-administrative-failure-10802107/">Jharkhand has the greatest mineral wealth – and great poverty. It’s an administrative failure</a></span></div>
+<p><span style="font-weight: 400">The recent development in the investigation revealed that in January this year, a person from Karnataka wrote a complaint letter to the JPSC Chairperson complaining about the irregularities in around 500 OMR sheets related to the Forest Range Officer (FRO) exam and ACF Exam (Assistant Conservator of Forests) conducted before. The complaint letter mentioned Abhay Tiwari’s name, along with two others — implying that Khiangte perhaps knew about the irregularities but didn’t take any action against the agency.</span></p>
+<p><span style="font-weight: 400">The CID is examining the agency’s role, along with that of JPSC officials, in the conduct of the examination.</span></p>
+<p><b>Not an isolated controversy</b></p>
+<p><span style="font-weight: 400">For many candidates, the present controversy fits into a much larger pattern.</span></p>
+<p><span style="font-weight: 400">Since Jharkhand’s formation, every major Civil Services exam conducted by JPSC has faced allegations of one kind or another: revised results, additional result lists, interview mark disputes, reservation-related litigation, answer key errors, evaluation controversies, or court intervention.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">The first and second Civil Services examinations continue to cast a long shadow over the Commission. The CBI probe into alleged irregularities in those recruitments is still under way.</span></p>
+<p><span style="font-weight: 400">The case returned to public attention last year after Shalini Vijay, one of the toppers of the first JPSC examination and among those facing scrutiny in the CBI investigation, was found dead along with her mother and brother at their residence in Kochi days before she was scheduled to appear before the CBI’s special court. Police treated it as a case of suicide, while the CBI investigation into the recruitment case continues separately.</span></p>
+<span class="custom-caption"><img alt="Raghubar Das" class="lazyloading size-medium wp-image-10805698" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-raghubar-das.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ex-raghubar-das.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Former Jharkhand Chief Minister Raghubar Das. During the five-year tenure of the Raghubar Das-led BJP government, no JPSC Civil Services examination was conducted. Photo: ANI</span>
+<p><span style="font-weight: 400">Recruitment itself also slowed considerably over the years. During the five-year tenure of the Raghubar Das government, no JPSC Civil Services examination was conducted.</span></p>
+<p><span style="font-weight: 400">After the <a class="" href="https://indianexpress.com/about/hemant-soren/" rel="noamphtml">Hemant Soren</a>-led government came to power in 2019, it promised regular recruitments and attempted to clear the backlog by conducting combined Civil Services examinations. The 7th to 10th examinations were held together, followed by the combined 11th to 13th recruitment.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Even those examinations, however, witnessed protests over delays in declaring results, evaluation issues and litigation before the High Court. Several candidates had staged repeated demonstrations demanding publication of results.</span></p>
+<p><b>Political row</b></p>
+<p><span style="font-weight: 400">What initially began as protests by candidates has now turned into a full-fledged political issue.</span></p>
+<p><span style="font-weight: 400">The BJP and its youth wing, Bharatiya Janata Yuva Morcha (BJYM), staged demonstrations outside the JPSC office and later protested outside the Congress headquarters in Ranchi, accusing the Hemant Soren government of failing to ensure transparent recruitment.</span></p>
+<p><span style="font-weight: 400">The BJP has demanded that the investigation be transferred to the CBI, arguing that only an independent central agency can ensure a fair probe.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The Jharkhand Loktantrik Krantikari Morcha (JLKM) has also demanded intervention by the Governor and sought postponement of the Main examination until the allegations are fully investigated.</span></p>
+<p><span style="font-weight: 400">Meanwhile, the Commission has maintained that the preliminary result was published in compliance with the Jharkhand High Court’s June 30 order. However, it has not yet issued a detailed public clarification on several questions raised by candidates, including the category-wise cut-off, the viral OMR sheets and the alleged discrepancies flagged after the results.</span></p>
+<p><b>What next</b></p>
+<p><span style="font-weight: 400">The JPSC has postponed nine competitive recruitment examinations for around 500 posts, including the Combined Civil Services Main Exam, until further notice. The CID investigation is continuing, and officials say more arrests are possible as the probe progresses.</span></p>
+<p><span style="font-weight: 400">For candidates, however, the issue goes beyond one examination. Candidates are demanding the CBI to investigate the whole scam and are demanding the education minister’s resignation. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">Many argue that after over two decades of recurring controversies, the bigger question is no longer whether there was an irregularity in one particular recruitment but whether public confidence in Jharkhand’s recruitment system can be restored.</span></p>
+<p><span style="font-weight: 400">That may ultimately be the biggest challenge before JPSC. Every fresh controversy not only delays recruitment but also deepens the trust deficit among lakhs of aspirants who spend years preparing for one of the state’s most competitive examinations.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10805675"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shubham-tigga/">
+<figure>
+<img alt="Shubham Tigga" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2023/08/Shubham-1.jpeg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shubham-tigga/"><span></span>Shubham Tigga</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8905937"></div><div class="follow_author_title" data-id="Shubham Tigga"></div><div class="follow_author_slug" data-id="shubham-tigga"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shubham Tigga is a Correspondent at The Indian Express, presently based in Pune, where he covers the intersections of infrastructure, labor, and the modern economy. His reporting focuses on civil aviation, urban mobility, the gig economy, and workers' unions, providing critical insights into how transit and commercial sectors impact the daily lives of citizens.
+
+Expertise &amp; Background
+Before moving to Pune, he reported extensively from his home state of Chhattisgarh, where he focused on Indigenous (Adivasi) issues, environmental justice, and grassroots struggles in mainland India. This experience gives him a unique lens through which he analyzes the impact of large-scale infrastructure projects on local communities.
+
+Academic Foundation
+He is an alumnus of the prestigious Asian College of Journalism (ACJ), where he honed his skills in investigative reporting and ethical journalism. His academic training, combined with his field experience in Central India, allows him to navigate complex socio-economic landscapes with nuance and accuracy.
+You can reach out to him on LinkedIn                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shubham-tigga/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-seventh, twenty twenty-six, at fifty-two minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/jharkhand/" href="https://indianexpress.com/about/jharkhand/">Jharkhand</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/jpsc-exam-controversy-jharkhand-recruitment-irregularities-10805675/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-27 12:29 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
