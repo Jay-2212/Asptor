@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Bihar cop suspended over AK-47: When can police use such weapons, what are the rules for protests | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Bihar cop suspended over AK-47: When can police use such weapons, what are the rules for protests</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/bihar-cop-ak47.jpeg?w=1024" alt="Bihar cop suspended over AK-47: When can police use such weapons, what are the rules for protests">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="AK-47" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/bihar-cop-ak47.jpeg?w=1024" width="650"/><span class="ie-custom-caption">A video of the policeman firing the AK-47 had surfaced, prompting questions. </span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The <strong><a class="" href="https://indianexpress.com/article/india/bihar-policeman-seen-firing-ak-47-during-protests-suspended-10805391/" rel="noopener" target="_blank">Bihar Police has suspended Siwan constable Abhishek Kumar</a></strong> for firing four rounds into the air with his AK-47 during Saturday’s (July 25) protest. But the big question remains: can police use sophisticated weapons during bandhs and protests?</p>
+<p>Though there is no uniform central law on this — with law and order being a state subject—provisions in the Bharatiya Nyaya Sanhita (BNS), Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS), and state police manuals throw some light on the issue.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2>What does the Bihar Police Manual say?</h2>
+<p>Under the Bihar Police Manual, the Standard Operating Procedures (SOPs) for law enforcement, and relevant directives from the Ministry of Home Affairs (MHA), the deployment and firing of automatic assault rifles like the AK-47 are strictly regulated. Automatic assault rifles (such as AK-47s, INSAS, and SLRs), classified as “Platoon and Section Arms,” are meant to be deployed with formation units rather than individual personnel, and are prohibited for general law-and-order duties.</p><div class="paywall container-wall-exclusive">
+<p>They are strictly restricted to Special Security Group (SSG) for VIP protection (specifically for top figures like the Chief Minister and Governor), Special Task Force (STF), Special Operation Group (SOG), and Anti-Naxal / Counter-Terrorism operational units, High-Threat/Counter-Insurgency Zones, and designated anti-extremist operational areas.</p><div id="taboola-mid-article-personalisation"></div>
+<p>As per state circulars based on MHA guidelines, regular security bodyguards assigned to politicians, judges, and senior IAS/IPS officers are prohibited from carrying AK-47s. State directives mandate replacing automatic rifles on bodyguard duty with short-range weapons like revolvers, pistols, and carbines.</p>
+<p><strong>What happened in the Siwan case?</strong></p>
+<p>While an official press release by Bihar Police headquarters said constable Abhishek Kumar, carrying an AK-47 rifle, fired four rounds into the air after he was “besieged” by a mob, police headquarters sources said the constable had been one of two bodyguards assigned to Siwan SP Puran Kumar Jha. The constable reportedly used his weapon, though without any orders from his seniors, after the SP was targeted in stone-pelting during the Bihar bandh in Siwan on July 25.</p>
+<p>A former DGP told The Indian Express: “Though sophisticated weapons can be used in anti-Maoist, anti-terrorist, and other such operations, how can police differentiate between a normal protest and one in which a mob attacks the police? If an SP is under attack, can his bodyguard wait to get an order? These are tricky questions without clear answers.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The Bihar Police started using AK-47s after 2000. Earlier, they had been using .303 rifles and SLRs.</p>
+<h2>But don’t BNSS provisions ban AK-47s during civilian protests?</h2>
+<p>Under statutory police manuals and procedures (governed alongside provisions in procedural codes like the BNSS and CrPC), there is a strict ban on automatic firearms (like the AK-47) during civilian protests.</p>
+<p>A senior police officer explained: “There is a clear escalation protocol in case of law and order problems during civilian protests. It starts with verbal warnings and negotiation, followed by physical barricading, the use of water cannons and tear gas, lathi charges, and non-lethal or riot-control rounds (e.g., rubber bullets or tear shells) —in that order. Discharging firearms is permitted only as an absolute last resort to prevent loss of life, in self-defence against lethal threats, or to prevent the imminent looting of police armories and weapons.”</p>
+<p>However, the Siwan police did not follow this protocol. “It is for that simple reason that Constable Abhishek Kumar will also have to face a departmental inquiry,” said a senior police officer, adding that no police officer or constable is permitted to fire an automatic weapon without explicit orders from an authorised superior officer (such as a magistrate on duty or a senior police officer on the scene).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Rules state that discharging an automatic weapon, even for warning or aerial shots, without explicit orders constitutes a major breach of discipline and SOP.</p>
+<p>What do central laws say about the use of sophisticated weapons?</p>
+<p>“Police” and “Public Order” are State subjects in India under the Seventh Schedule of the Constitution. Hence, the deployment and authorisation of automatic firearms are governed by individual State Police Manuals, Police Regulations, and Standard Operating Procedures (SOPs).</p>
+<p>However, AK-47 rifles are classified as Prohibited Bore (PB) high-rate-of-fire weapons across the country with very few exceptions. They are not issued to routine beat constables or for everyday law enforcement. They are allocated primarily to specialised units such as Anti-Naxal Operations (ANO), Special Task Forces (STF), Counter-Terrorism / Anti-Terror Squads (ATS), VIP Protection / Special Security Groups (SSG), and riot or border control commandos.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Under police firing protocols, whether an officer fires a 9mm pistol or an AK-47, the legal standard for using lethal force remains identical. While there is no single national statute specifically governing automatic rifles, uniform national frameworks dictate how automatic weapons like the AK-47 may be drawn and fired. Neither the Bharatiya Nyaya Sanhita (BNS), 2023 nor the Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023 explicitly mentions the phrase “AK-47” or any specific firearm brand.</p>
+<p><strong>What do NHRC guidelines say?</strong></p>
+<p>The National Human Rights Commission (NHRC) guidelines require the immediate registration of an FIR, an independent police investigation, and a mandatory Magisterial Inquiry whenever police firing (whether by an AK-47 or any other firearm) results in fatal casualties.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10807486"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/santosh-singh/">
+<figure>
+<img alt="Santosh Singh" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/santosh.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/santosh-singh/"><span></span>Santosh Singh</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952026"></div><div class="follow_author_title" data-id="Santosh Singh"></div><div class="follow_author_slug" data-id="santosh-singh"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://m.facebook.com/story.php?">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://x.com/santoshchitra?t=jrdMK3A1qX0f0ftboTCwWQ&amp;s=08">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Santosh Singh is a Senior Assistant Editor with The Indian Express since June 2008.
+
+Expertise
+
+ 	He covers Bihar with main focus on politics, society and governance.
+ 	Investigative and explanatory stories are also his forte. Singh has 25 years of experience in print journalism covering Bihar, Delhi, Madhya Pradesh and Karnataka.
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/santosh-singh/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-eighth, twenty twenty-six, at thirty-five minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/bihar-when-can-police-use-ak-47-rules-for-protests-10807486/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-28 14:56 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
