@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Expert Explains | What the entry of the Houthis means for the US-Iran conflict | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Expert Explains | What the entry of the Houthis means for the US-Iran conflict</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/saudi-yemen-sanaa.jpg?w=1024" alt="Expert Explains | What the entry of the Houthis means for the US-Iran conflict">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Houthi" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/saudi-yemen-sanaa.jpg?w=1024" width="650"/><span class="ie-custom-caption">Saudi airstrikes on the Sanaa International Airport compound in Yemen. AP</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">It’s now five months since the US and Israel launched a joint military offensive against Iran. Conceived as a short, high-intensity campaign, it instead morphed into a contest of attrition with no immediate end in sight. Despite the US-Israel military superiority, Iran succeeded in gaining strategic leverage through its counter-actions.</p>
+<p dir="ltr">Owing to the grossly divergent positions taken by the belligerents, the fragile ceasefire brokered through mediators last month stands violated. Now, the entry of Yemen’s Houthi militant group, threatening shipping through the Bab el-Mandeb Strait, has potentially opened up a second front.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">The war is no longer only about Iran nuclear installations, missile capabilities or regional influence. It now directly threatens the world’s two most important maritime chokepoints, which could seriously affect global energy supply chains and commerce.</p><div class="paywall container-wall-exclusive">
+<p dir="ltr"><strong>Strategic stalemate: Deadlocked negotiations</strong></p>
+<p dir="ltr">The US-Israel joint campaign launched on February 28 this year sought to neutralise Iran’s nuclear structure, weaken its war waging potential and diminish Tehran’s ability to project power through regional armed groups, besides forcing a regime change.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">Although the intense precision strikes caused serious damage to Iran’s military infrastructure and severely dented its apex politico-military structure and command-control architecture, it fell short of achieving the intended objectives.</p>
+<span class="custom-caption"><img alt="Iran War Strait of Hormuz" class="lazyloading size-medium wp-image-10807441" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/bandar-abbas.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/bandar-abbas.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Vessels anchored in the Strait of Hormuz off Bandar Abbas, Iran, on Monday, July 27. AP</span>
+<p dir="ltr">Iran’s response was in the form of a calibrated strategy of resilience, not direct head-on confrontation. By combining missiles and drone attacks with the support of the regional proxies, Iran demonstrated that it has the capacity to impose costs without triggering an uncontrollable regional war.</p>
+<p dir="ltr">In the era of hybrid wars, decisive outcomes remain elusive. Realising that the conflict has degenerated into a strategic stalemate, both the sides agreed to indirect negotiations; the mediation process is being steered by Pakistan, Qatar, Egypt and Saudi Arabia. A Memorandum of Understanding (MoU) was signed by the heads of US and Iran on June 17, 2026, resulting in a fragile ceasefire and laying out a two-month timeline to reach a final agreement.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p dir="ltr">However, the core issues — uranium enrichment, sanctions relief, unfreezing of funds, verification mechanism and long-standing security guarantees — proved irreconcilable. Hence, the diplomatic pause merely slowed down the pace of military operations, with post-MoU talks making no headway.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-oil-supply-saudi-disruption-russian-crude-10806998/">With Red Sea disrupted, India may have to import more Russian oil. That comes with risks</a></span></div></p>
+<p dir="ltr">With negotiations stalled, conflict resumed toward late June, the situation significantly escalating by the day. It is now becoming increasingly expensive for the US to sustain naval deployment and maintain a high state of air defence assets in the region. The core of Tehran’s strategy is based on endurance and raising the cost of war, convincing Washington that the conflict is yielding diminishing returns.</p>
+<p dir="ltr"><strong>The Houthi factor</strong></p>
+<p dir="ltr">The Houthis, an Islamist proxy outfit backed by Iran and based in Northern Yemen, has been targeting Red Sea shipping. The group was lying low but entered the fray at a crucial juncture. It attacked two Saudi oil tankers and threatened a broader blockade as it has the ability to interdict Bab el-Mandeb, thus disrupting the Red Sea-Suez Canal route. Around 12% of global commerce passes through this corridor. The disruption will force shipping traffic to sail around the Cape of Good Hope, increasing transit times and driving up freight rates.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">This new dimension threatens both the Hormuz and Bab el-Mandeb straits. Simultaneous pressure on the two chokepoints could seriously disrupt the flow of energy exports from the Gulf region to Europe and Asia, and affect maritime trade.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/bab-el-mandeb-strait-houthi-saudi-blockade-explained-10798188/">What is the Bab el-Mandeb Strait, and why does the Houthi ‘blockade’ threat against Saudi Arabia matter?</a></span></div></p>
+<p dir="ltr">Further, Houthis provide an asymmetric leverage that Iran can employ to impose global economic costs.  A “non-state actor” armed with missiles, drones and amphibious mines could disrupt one of the busiest shipping corridors.</p>
+<p dir="ltr"> There is also a risk of Saudi Arabia being <a href="https://indianexpress.com/article/world/saudi-arabia-shoots-down-iran-drones-riyadh-oil-facilities-west-asia-conflict-10806081/" rel="noopener" target="_blank"><strong>directly involved in the conflict</strong></a> as attacks on the Kingdom’s shipping would seriously affect its economy. This would lead to the revival of its military confrontation with Houthis, which otherwise witnessed relative calm over the last three years.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">The US would now require additional resources to keep the Red Sea shipping route open which is bound to stretch its strategic reach. As it is, to defend the Gulf partners and secure Hormuz, America is feeling a resource constraint.</p>
+<p dir="ltr"><strong>Strategic ramifications</strong></p>
+<p dir="ltr">The Houthi entry marks a decisive shift in the nature of ongoing conflict. It transforms the war from a regional confrontation into a global maritime security challenge. It also internationalises the economic cost of conflict.</p>
+<p dir="ltr">The Houthi intervention introduces a new layer of energy security, exposing two of the world’s most crucial chokepoints to disruption. This volatility in the oil and LNG markets comes at a time when global economic recovery is already in a delicate state. Given the regional stakes, the revenues of Gulf states and Egypt’s from the Suez Canal will be directly linked to the trajectory of the Iran conflict.</p>
+<p dir="ltr">For India, the implications are significant. Nearly all its maritime trade with Europe passes through the Red Sea-Suez corridor, while the Gulf sea lanes remain central to its energy security. A prolonged disruption would have a severe impact on India’s economy.</p>
+<p dir="ltr"><strong>What lies ahead</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">Five months on, the Iran War has reached an inflection point. The Houthi entry to the fray has intrinsically connected the war’s objectives to the global trade arteries.</p>
+<p dir="ltr">The moot question is no longer whether the US and Israel can further degrade Iran’s military capabilities. The more consequential one is whether they can prevent the conflict from spilling into a global maritime crisis. Unless multi-track diplomacy and backchannel initiatives catch up with the expanded battlefield, the existing  stalemate is set to evolve into a wider international calamity.</p>
+<p dir="ltr"><em>(The writer, a war veteran and former assistant chief of Integrated Defence Staff, is currently professor of Strategic and Management Studies at Lal Bahadur Shastri Institute of Management)</em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10807399"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-eighth, twenty twenty-six, at forty-eight minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/iran-war-houthi-red-sea-shipping-explained-10807399/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-28 18:39 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

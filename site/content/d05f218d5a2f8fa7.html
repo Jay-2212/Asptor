@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The rupee is no longer overvalued: Why this may help India | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The rupee is no longer overvalued: Why this may help India</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-28</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/rupee_772e06.jpg?w=1024" alt="The rupee is no longer overvalued: Why this may help India">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="rupee" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/rupee_772e06.jpg?w=1024" width="650"/><span class="ie-custom-caption">Simply put, the rupee has moved from being an overvalued currency — the REER, in fact, ruled above 100 till July 2025 — to an undervalued currency. (Express photo by Amit Chakravarty)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>The hardening of global oil prices, following the resumption of hostilities between the US and Iran, saw the rupee breach the 96-to-the-dollar mark afresh on July 14 and remain at those levels till Friday (July 24).</p>
+<p>The pause in daily strikes since has led to the domestic currency strengthening to around 95.9, even as Brent crude prices have eased to below $85 per barrel after surging past $95 on July 23.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Amid these spikes and drops — the rupee hit an all-time-low of 96.96-to-the-dollar on May 20 and Brent crossed $126.4 per barrel on April 30 — one thing is clear: The rupee is no longer an overvalued currency.</p>
+<p>On the contrary, as Reserve Bank of India (RBI) governor Sanjay Malhotra told <em>The Hindu businessline</em> in an interview, “one could argue that the rupee has become undervalued… Once the situation in West Asia stabilises, one could very well see the rupee appreciate as one has seen during similar past periods and episodes of external shock-driven volatility”.</p><div class="paywall container-wall-exclusive"><div id="taboola-mid-article-personalisation"></div>
+<h2>Effective exchange rates</h2>
+<p>One of the best, and most widely used, gauges to measure whether a <a href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-to-defend-or-not-to-defend-the-rupee-that-is-the-question-10702550/"><strong>currency is over or undervalued</strong></a> is its so-called Nominal Effective Exchange Rate (NEER) and Real Effective Exchange rate (REER) indices. These reflect the rupee’s movement against not just the dollar, but a basket of currencies of countries that account for the bulk of India’s exports and imports.</p>
+<p>The NEER and REER are indices similar to the consumer price index (CPI). CPI is the weighted average retail price value of a representative basket of consumer goods and services for a given month or year, relative to a fixed base period.</p>
+<p>The NEERs/REERs are indices of the weighted average of the rupee’s exchange rates vis-à-vis the currencies of the country’s key trade partners. The basket here comprises 40 currencies and the base year (used as a reference for comparison, with its value set at 100) is taken as 2015-16. The currency weights are derived from the share of the individual countries in India’s total foreign trade, just as the weight of each commodity in the CPI is based on its relative importance in the overall consumption basket.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The 40 currencies are of countries having a combined share of about 88% in India’s annual trade flows.</p>
+<p><strong>From overvaluation to undervaluation</strong></p>
+<p>In November 2024, when the rupee’s average exchange rate was 84.4 to the dollar, the NEER index stood at 91.68. It meant that the rupee had already fallen around 8.3% against the currencies of India’s major trade partners since 2015-16.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/explainspeaking-cjp-protests-neet-education-budget-modi-govt-analysis-10795484/">ExplainSpeaking: Share of education Budget has shrunk under Modi govt. Here is where it stands, and what this means</a></span></div>
+<p>The NEER, however, is a summary index that captures movements in the external value of the rupee relative to a basket of global currencies without factoring in inflation. If a currency’s nominal exchange rate falls less than the domestic inflation rate during a particular period, it has actually appreciated in “real” terms.</p>
+<p>The REER is basically the NEER index adjusted for the inflation differentials between India and its trading partners. It is, hence, a true measure of whether the rupee is undervalued, overvalued or fairly valued against the currencies of other countries, after taking into consideration both exchange rate and relative price movements. If the rupee’s nominal exchange rates stay the same, but prices in India rise faster than in other countries, the REER goes up, resulting in Indian products becoming relatively more expensive and less competitive in the world market.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The accompanying <em>chart</em> shows the REER index in November 2024 at 108.03. In other words, the rupee was over 8% higher compared to its “real” effective exchange value of 100 in 2015-16, making it an overvalued currency at that time.</p>
+<span class="custom-caption"><img alt="Chart." class="lazyloading size-medium wp-image-10807737" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/rupee.jpeg?resize=513,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/rupee.jpeg 649w, https://indianexpress.com/wp-content/uploads/2026/07/rupee.jpeg?resize=385,450 385w, https://indianexpress.com/wp-content/uploads/2026/07/rupee.jpeg?resize=513,600 513w, https://indianexpress.com/wp-content/uploads/2026/07/rupee.jpeg?resize=346,405 346w" height="759" sizes="(max-width: 649px) 100vw, 649px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="649"/> Chart.</span>
+<p>But cut to May 2026, when the rupee-dollar exchange rate averaged 95.5. Not only did the NEER plunge to a record low of 77.19, so had the REER to 89.08. While both have recovered a tad in June, the REER of 91.26 still translates into a significant 8.7% “real” weakening of the rupee’s exchange rate.</p>
+<p>Simply put, the rupee has moved from being an overvalued currency — the REER, in fact, ruled above 100 till July 2025 — to an undervalued currency, which is consistent with the RBI governor’s statement.</p>
+<p>Whether it would appreciate in the weeks ahead, to attain its “fair” value (corresponding to a REER of 100), only time will tell. A great deal hinges on a sustainable easing of tensions in West Asia, reopening of commercial shipping lanes and no new geopolitics-induced energy supply shocks or trade actions by US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>.</p>
+<p><strong>More undervalued than yuan</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The rupee’s gain of an international trade competitiveness advantage is also borne out by the estimates of Real Broad Effective Exchange Rate (RBEER) by the Federal Reserve Bank of St. Louis. The RBEER is similar to the RBI’s REER. It compares a country’s average currency value to that of a wider group of 64 trade partners, taking 2020 as the base year.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Opinion</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/rbi-needs-to-look-beyond-defending-the-rupee-10807391/">RBI needs to look beyond defending the rupee</a></span></div>
+<p>The RBEER for the rupee — according to this regional bank, which is one of the 12 constituting the US Federal Reserve — has declined from an all-time-high of 106.1 in November 2024 to 90.15 in June 2026.<br/>
+Interestingly, the RBEER for the yuan was 92.16 in November 2024, which made it an undervalued and much more competitive currency than the rupee then. But the latest RBEER of the yuan in June 2026, at 92.24, was higher than that of the rupee’s 90.15.</p>
+<p>Thus, the rupee is today not merely undervalued, but a more competitive currency than even the yuan. Whether this will help boost Indian exports and competitiveness of domestic manufacturing vis-à-vis imports remains to be seen.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10807730"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/harish-damodaran/">
+<figure>
+<img alt="Harish Damodaran" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/10/harish1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/harish-damodaran/"><span></span>Harish Damodaran</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2195331"></div><div class="follow_author_title" data-id="Harish Damodaran"></div><div class="follow_author_slug" data-id="harish-damodaran"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Harish Damodaran is National Rural Affairs &amp; Agriculture Editor of The Indian Express. A journalist with over 33 years of experience in agri-business and macroeconomic policy reporting and analysis, he has previously worked with the Press Trust of India (1991-94) and The Hindu Business Line (1994-2014).
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/harish-damodaran/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-eighth, twenty twenty-six, at forty-six minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/rupee/" href="https://indianexpress.com/about/rupee/">rupee</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/rupee-value-dollar-effect-india-import-export-10807730/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-28 18:39 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
