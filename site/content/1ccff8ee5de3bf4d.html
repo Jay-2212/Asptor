@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>What’s the Cauvery dispute and how does the Mekedatu dam feature in it? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>What’s the Cauvery dispute and how does the Mekedatu dam feature in it?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/Cauvery.jpg?w=1024" alt="What’s the Cauvery dispute and how does the Mekedatu dam feature in it?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Cauvery, Mekedatu" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/Cauvery.jpg?w=1024" width="650"/><span class="ie-custom-caption">Farmers led by National South Indian Rivers Inter-Linking Farmers Association President P Ayyakkannu bury themselves in the sand on the Cauvery riverbed as they stage a protest to block or limit the release of Cauvery river water to Tamil Nadu, in Tiruchirappalli district, Tuesday, July 21, 2026. (PTI Photo)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Tamil Nadu Chief Minister C Joseph Vijay has sought Prime Minister Narendra Modi’s intervention to ensure that no statutory or administrative approval is granted to Karnataka’s proposed Mekedatu project unless it is consistent with the Cauvery Water Disputes Tribunal’s 2007 award and the Supreme Court’s 2018 judgment on the sharing of the river’s waters.</p>
+<p>The letter was prompted by the Jal Shakti’s Parliament reply on July 27, which stated that the Supreme Court’s judgment of February 16, 2018, “does not expressly stipulate that Karnataka should obtain the consent of the lower riparian States before constructing a structure across the River Cauvery”.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>In a detailed letter to the Prime Minister on Monday, Vijay <a href="https://indianexpress.com/article/india/vijay-tamil-nadu-narendra-modi-centre-mekedatu-dam-10807274/"><strong>urged the Union government</strong></a> to withdraw that reply, arguing that it overlooks settled legal principles governing interstate rivers and the rights of downstream States.</p><div class="paywall container-wall-exclusive">
+<p>Karnataka’s proposal to construct the Mekedatu balancing reservoir has long been a thorny issue between the two states, which have often clashed over their share of waters of the Cauvery river.</p><div id="taboola-mid-article-personalisation"></div>
+<p>So what was the Cauvery tribunal’s award and what did the Supreme Court rule on the dispute? And does it apply to the Mekedatu project? We recall.</p>
+<h2><strong>What is the Cauvery water dispute?</strong></h2>
+<span class="custom-caption"><img alt="The Cauvery basin (Wikimedia Commons)" class="lazyloading size-medium wp-image-10808923" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Kaveri_basin_Map.pdf.jpg?resize=600,426" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Kaveri_basin_Map.pdf.jpg 960w, https://indianexpress.com/wp-content/uploads/2026/07/Kaveri_basin_Map.pdf.jpg?resize=450,320 450w, https://indianexpress.com/wp-content/uploads/2026/07/Kaveri_basin_Map.pdf.jpg?resize=600,426 600w, https://indianexpress.com/wp-content/uploads/2026/07/Kaveri_basin_Map.pdf.jpg?resize=768,546 768w, https://indianexpress.com/wp-content/uploads/2026/07/Kaveri_basin_Map.pdf.jpg?resize=570,405 570w" height="682" sizes="(max-width: 960px) 100vw, 960px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="960"/> The Cauvery basin (Wikimedia Commons)</span>
+<p>Historically, Tamil Nadu used about 602 thousand million cubic feet (TMC) of the total yield of the Cauvery river. As a result, only about 138 TMC was available for Karnataka until the turn of the 20th century.</p>
+<p>In 1924, Tamil Nadu built the Mettur Dam, and the two states signed an agreement effective for 50 years. The pact allowed Tamil Nadu to expand its agricultural area by 11 lakh acres from the existing 16 lakh acres. Karnataka was authorised to increase its irrigation area from three lakh acres to 10 lakh acres.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>In 1974, when the accord lapsed, Karnataka claimed that the agreement restricted its ability to develop farming activities along the Cauvery basin. To make up for lost ground, it started building reservoirs. This led to a dispute between the two states.</p>
+<p>On the insistence of Tamil Nadu, the Cauvery Water Disputes Tribunal (CWDT) was formed in 1990 by the Union government.</p>
+<p><strong>What did the tribunal rule?</strong></p>
+<p>The tribunal passed its order on February 5, 2007, after 17 years of hearings. Of the 740 TMC of water available for utilisation, 419 TMC was awarded to Tamil Nadu, 270 TMC to Karnataka, 30 TMC to Kerala and seven TMC to Puducherry. The remaining 14 TMC was reserved for environmental protection.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/unlike-his-predecessors-why-vijay-wants-to-discuss-cauvery-with-karnataka-10805771/">Unlike his predecessors, why Vijay wants to discuss Cauvery with Karnataka</a></span></div>
+<p>The order also stated that Karnataka must release 192 TMC of water in normal monsoon years (June to May) at the rate of 10 TMC in June, 34 TMC in July, 50 TMC in August, 40 TMC in September, 22 TMC in October, 15 TMC in November, 8 TMC in December, 3 TMC in January and 2.5 TMC each month from February to May to Biligundlu water station in Tamil Nadu.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>“In case the yield… is less in a distress year, the allocated shares shall be proportionately reduced among… Kerala, Karnataka, Tamil Nadu and… Pondicherry,” the Tribunal said. Karnataka opposed the verdict and filed a petition in the Supreme Court claiming 312 TMC of water. Tamil Nadu followed suit.</p>
+<p><strong>How did the Supreme Court rule?</strong></p>
+<p>The Supreme Court increased Karnataka’s share of the Cauvery waters to 284.75 TMC from the 270 tmc ft awarded by the Cauvery Water Disputes Tribunal in 2007.</p>
+<p>This meant that Tamil Nadu would get 404.25 TMC, as against 419 TMC awarded by the Tribunal. But Tamil Nadu was also compensated by being allowed extraction of 10 TMC of groundwater. The share of the other two parties in the decades-old dispute, Kerala and Puducherry, remained unchanged at 30 TMC and seven TMC respectively.</p>
+<p>In the verdict, the three-judge bench of Chief Justice Dipak Misra and Justices Amitava Roy and A M Khanwilkar underlined that the “drinking water requirement” of Karnataka has to be placed “on a higher pedestal”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><strong>What is the Mekedatu project and the dispute surrounding it??</strong></h2>
+<span class="custom-caption"><img alt="The Cauvery at Mekedatu (Wikimedia Commons)" class="lazyloading size-medium wp-image-10808934" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Mekedaatu_1.jpg?resize=600,450" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Mekedaatu_1.jpg 640w, https://indianexpress.com/wp-content/uploads/2026/07/Mekedaatu_1.jpg?resize=450,338 450w, https://indianexpress.com/wp-content/uploads/2026/07/Mekedaatu_1.jpg?resize=600,450 600w, https://indianexpress.com/wp-content/uploads/2026/07/Mekedaatu_1.jpg?resize=540,405 540w" height="480" sizes="(max-width: 640px) 100vw, 640px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="640"/> The Cauvery at Mekedatu (Wikimedia Commons)</span>
+<p>The Mekedatu dam project is located in Ramanagaram district, about 100 km south of <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a>, close to where the Cauvery enters Tamil Nadu. The dam has a proposed capacity of 48 TMC (thousand million cubic feet) and an estimated cost of Rs 6,000 crore.</p>
+<p>The proposed project has been contentious for years. Tamil Nadu maintains that increased upstream storage could enable Karnataka to regulate flows in a manner detrimental to downstream releases during dry years.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/when-vijay-met-modi-some-pressing-issues-and-a-thank-you-10711104/">When Vijay met Modi: Some pressing issues, and a thank you</a></span></div>
+<p>In his letter to PM Modi, Vijay invoked Clause XI of the Cauvery Tribunal Award to argue that the proposed project “cannot be evaluated merely as an engineering proposal”.</p>
+<p>Clause XI states: “Any upper riparian State shall not take any action so as to affect the scheduled deliveries of water to the lower riparian States. However, the States concerned can by mutual agreement and in consultation with the Regulatory Authority make any amendment in the pattern of water deliveries.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Karnataka, however, has maintained that Mekedatu is intended primarily as a balancing reservoir for supplying drinking water to Bengaluru, replenishing the regional groundwater table and generating hydropower. It says that the project is not meant for additional irrigation, and therefore would not alter the water allocations fixed by the Tribunal and the Supreme Court.</p>
+<h2><strong>What is the immediate background of the Mekedatu issue?</strong></h2>
+<p>The Mekedatu dispute comes amid the larger tussle between the two states over the release of Cauvery waters.</p>
+<p>Between June 1 and July 23, Tamil Nadu said it should have received roughly 32 TMC of water under the tribunal award as modified by the Supreme Court in 2018. However, it received only about 3.5 TMC. Even allowing for deficient southwest monsoon rainfall and proportionate reduction during a distress year, the state believes at least another 3 TMC should have been released. A deficit or delayed release will severely affect farmers in the Cauvery delta.</p>
+<p>The Cauvery Water Regulation Committee (CWRC), which met in New Delhi on Tuesday to review the situation in the drought-hit Cauvery basin, has now directed Karnataka to release 4 TMC of water to Tamil Nadu at a rate of 3,500 cusecs a day for 15 days.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Vijay has also sought a meeting with his Karnataka counterpart D K Shivakumar over the Cauvery water, marking a departure from his predecessors who have called for adjudication rather than meetings.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10808862"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-ninth, twenty twenty-six, at fifty-five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/mekedatu-project-cauvery-tribunal-sc-verdict-10808862/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-29 11:57 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
