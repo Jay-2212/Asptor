@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Did OpenAI’s AI agents go ‘rogue’? Why the answer is more complicated than it seems | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Did OpenAI’s AI agents go ‘rogue’? Why the answer is more complicated than it seems</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/OpenAI-agent-hack.jpg?w=1024" alt="Did OpenAI’s AI agents go ‘rogue’? Why the answer is more complicated than it seems">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="OpenAI AI agent hack, AI agent" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/OpenAI-agent-hack.jpg?w=1024" width="650"/><span class="ie-custom-caption">AI agents typically operate within preset boundaries, using software and tools available to them to complete a specified job. (Magnific)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Last week, OpenAI disclosed an “unprecedented cyber incident” in which two of its artificial intelligence agents hacked into another AI company.</p>
+<p>On July 21, the maker of ChatGPT said two of its most capable AI agents had carried out the cyberattack on AI startup Hugging Face. According to the company, the intrusion occurred over July 11-13 during an internal cybersecurity evaluation.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The incident has been widely described as AI going “rogue” because of the underlying circumstances: During an internal evaluation, OpenAI said the models were operating inside an AI sandbox, a controlled testing environment for advanced AI systems.</p>
+<p>Hugging Face CEO Clément Delangue on Saturday (July 25) called on OpenAI to publicly make available the details of the cyberattack by the “rogue” agents “in the spirit of transparency”.</p><div class="paywall container-wall-exclusive">
+<blockquote class="twitter-tweet">
+<p dir="ltr" lang="en">In the spirit of transparency, here’s what I asked <a class="" href="https://x.com/OpenAI?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">@OpenAI</a>:</p>
+<p>• Radical transparency: let’s release the traces from the “rogue” agents so the entire research community can study what happened.</p>
+<p>• More capabilities for defenders: let’s commit $100M in compute from OAI to help the… <a class="" href="https://t.co/KZPqQE15fv" rel="nofollow, noopener" target="_blank">https://t.co/KZPqQE15fv</a></p>
+<p>— clem 🤗 (@ClementDelangue) <a class="" href="https://x.com/ClementDelangue/status/2081056675558195657?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">July 25, 2026</a></p></blockquote>
+<p>The incident drew attention because the agents found an unintended way to complete their assigned task by exploiting weaknesses in their testing environment. It has understandably raised concerns because it feeds into a long-standing fear that by giving AI enough autonomy, it may discover that circumventing rules or deceiving users is an effective way to achieve its assigned objective.</p><div id="taboola-mid-article-personalisation"></div>
+<p>The idea is hardly new. For decades, science fiction has imagined intelligent machines becoming dangerous not because they were evil, but because they pursued their objectives so relentlessly that they treated human rules, ethics or even humans themselves as obstacles.</p>
+<p><strong>What exactly happened?</strong></p>
+<p>According to OpenAI, the incident occurred during an internal evaluation involving its latest flagship model, GPT-5.6 Sol, and a more capable pre-release model, in which the AI agents were deliberately challenged to solve sophisticated hacking problems in a controlled environment.</p>
+<p>AI agents typically operate within preset boundaries, using software and tools available to them to complete a specified job. While generative AI – at least as we currently know it – generates complex text, images and video in response to human language interaction, AI agents go even further, acting like and even on behalf of humans. AI agents can book flights, organise your calendar, make payments, or even write and deploy software — all complex, multi-step processes.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>The company said that these agents were running in an AI sandbox, a confined testing environment designed to isolate them from the wider internet and live systems. In this instance, the models only had network access to install packages through an internally hosted third-party software repository.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Expert Explains AI</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/ai-quantum-computing-cancer-vaccine-research-10789696/">Can quantum computing make AI better at designing cancer vaccines? A scientist explains</a></span></div>
+<p>While attempting to solve ExploitGym, OpenAI’s internal cybersecurity benchmark, the agents exploited vulnerabilities in the research environment, allowing them to access resources beyond their intended testing environment. They then accessed Hugging Face’s systems to retrieve the benchmark answers directly, completing the task in a way their developers had not anticipated.</p>
+<p>Because the aim was to evaluate their cyber capabilities, OpenAI said the models were operating with more relaxed cyber safety restrictions than they would under normal circumstances.</p>
+<p>That sequence of events is what prompted the debate over whether the AI had “gone rogue”.</p>
+<p><strong>Why was this incident unusual?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>AI safety researchers often distinguish between capability failures and alignment failures. A capability failure occurs when an AI system is unable to complete a task. An alignment failure occurs when it completes the task in a way that conflicts with human expectations. The OpenAI incident attracted attention because it appeared closer to the second category: the systems demonstrated a capability that was being tested but used in a way their developers did not intend.</p>
+<p>The concern extends beyond this one incident. As AI agents become more capable, they are increasingly expected to make decisions and carry out multi-step tasks with limited human intervention.</p>
+<p>Many AI companies regard agents as an important step towards artificial general intelligence (AGI), although researchers differ on whether increasingly capable agents alone will lead to AGI. AGI refers to AI systems that can match or exceed human-level performance across a broad range of cognitive tasks, rather than being limited to a single domain or application.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/in-chinas-creation-of-new-global-ai-body-a-push-for-lead-role-in-governance-10794294/">In China’s creation of new global AI body, a push for lead role in governance</a></span></div>
+<p>Unlike conventional software, increasingly capable AI agents are expected to make independent decisions and adapt their behaviour while pursuing a goal. That makes them more useful, but also harder to anticipate every path they might take to complete a task.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<h2><strong>Did the AI agent actually go rogue?</strong></h2>
+<p>Not necessarily. AI safety research has long examined cases where AI systems pursue an assigned objective in unintended ways, without suggesting that the systems are acting with intent or malice. Simply put, the concern is not that today’s AI models “want” to cause harm, but that they may discover unintended ways of “gaming the system” to achieve the objective they were assigned.</p>
+<p>Researchers often describe this broader pattern as reward hacking: a system finds a way to score highly according to the metric it is given, without necessarily achieving what humans intended.</p>
+<p>One form of reward hacking is specification gaming, which occurs when an AI achieves its intended objective, but in a way its developers had not intended. The concept was explored in the 2019 paper <em>Specification Gaming: The Flip Side of AI Ingenuity</em>, in which former DeepMind researcher Victoria Krakovna and colleagues documented that AI systems found unintended shortcuts to maximise a reward, including behaviours that technically satisfied a goal but violated its spirit.</p>
+<p>“This incident is definitely an instance of specification gaming,” Krakovna told <em>The Indian Express</em>. She noted that it had been added to a publicly maintained list documenting examples of AI specification gaming. She pointed to an earlier example involving BrowseComp — an OpenAI benchmark testing the ability of AI models to find difficult information on the web — in which a model sought out the benchmark’s answer key instead of solving the task as intended.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/deepmind-ai-control-roadmap-explained-10749406/">Why Google DeepMind thinks AI agents need to be treated like ‘insider threats’ </a></span></div>
+<p>More recently, researchers at Apollo Research, an AI safety organisation, have examined whether frontier AI models can exhibit strategic behaviour, including by concealing information or exploiting opportunities that help them achieve a goal. Whether that happened in the OpenAI incident remains an open question.</p>
+<p>Researchers at Apollo Research have studied what they describe as “scheming” behaviour, where models may strategically hide information or take actions that improve their chances of achieving a goal under certain test conditions. However, there is no consensus on how such behaviours should be interpreted and whether current systems genuinely possess persistent goals.</p>
+<p>This is different from an AI independently deciding to attack another system. Instead, the concern is that an increasingly autonomous AI may identify an unintended shortcut that satisfies the task it was given, even if that shortcut violates its developers’ expectations.</p>
+<p>The incident has also prompted broader questions about how increasingly autonomous AI systems should be evaluated and governed.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>⁠Dedipyaman Shukla, Associate Director, Indian Governance &amp; Policy Project (IGAP), told <em>The Indian Express</em> that the incident should prompt a broader rethink of how platforms and online services approach cybersecurity risks in agentic environments.</p>
+<p>“The ability of AI systems to rapidly identify vulnerabilities has been a consistent trend, which was also highlighted by <a href="https://indianexpress.com/article/explained/explained-sci-tech/anthropic-mythos-ai-cybersecurity-risks-india-alert-10653169/"><strong>the deployment of Anthropic’s Claude Mythos</strong></a> earlier this year,” he said. “In the wrong hands, these capabilities may be deployed for increasing the attack surface on a target.”</p>
+<p>Shukla said the incident also raised broader questions about the governance of AI safety evaluations, noting that organisations in India remain exposed to such risks. “The full technical details of the incident should be applied towards improving oversight mechanisms for frontier AI research and development, even in sandboxed environments,” he added.</p>
+<p>Whether the OpenAI incident falls into the latter category remains to be seen. But it has already drawn attention to a broader challenge: As AI systems become more autonomous, companies must evaluate what they are capable of, but also strengthen the oversight mechanisms designed to keep those capabilities in check.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10805721"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-seventh, twenty twenty-six, at forty-four minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/artificial-intelligence/" href="https://indianexpress.com/about/artificial-intelligence/">artificial intelligence</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-ai/openai-ai-agents-hacked-hugging-face-ai-safety-10805721/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-29 15:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

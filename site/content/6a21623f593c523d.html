@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Punjab’s six alleged incidents of exam malpractice: What Opposition claims, how AAP government responded | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Punjab’s six alleged incidents of exam malpractice: What Opposition claims, how AAP government responded</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-29</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-punjab-paper-leak_expl-pol.jpg?w=1024" alt="Punjab’s six alleged incidents of exam malpractice: What Opposition claims, how AAP government responded">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Punjab" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-punjab-paper-leak_expl-pol.jpg?w=1024" width="650"/><span class="ie-custom-caption">BJP MPs stage a protest outside Parliament demanding the resignation of Punjab Education Minister Harjot Singh Bains over alleged paper leaks in the state, in New Delhi on July 28, 2026. Photo: ANI/Rahul Singh</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">After Dharmendra Pradhan resigned as Union Education Minister last week over the NEET paper leak controversy, the Opposition parties in Punjab are demanding the resignation of the state’s School and Higher Education Minister <strong><a class="" href="https://indianexpress.com/article/chandigarh/kejriwal-cancels-punjab-tour-harjot-singh-bains-resignation-paper-leak-bhagwant-mann-10807858/">Harjot Singh Bains</a></strong>. </span></p>
+<p><span style="font-weight: 400">The demand for Bains’ resignation, and other Punjab ministers under whose departments the controversial exams were held, was raised by the Opposition parties after senior Aam Aadmi Party (AAP) leader <a class="" href="https://indianexpress.com/about/manish-sisodia/" rel="noamphtml">Manish Sisodia</a> said at Jantar Mantar in New Delhi: “If any paper leak happens in Punjab, we will immediately sack the minister.”</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The Opposition parties, which include the Congress, the BJP, and the Shiromani Akali Dal, have alleged that there were at least six paper leaks and malpractices in Punjab since the AAP came to power in 2022, including a pharmacy officers’ recruitment exam held recently.</span></p><div class="paywall container-wall-exclusive">
+<p><span style="font-weight: 400">Punjab Chief Minister <strong><a class="" href="https://indianexpress.com/article/cities/chandigarh/punjab-paper-leak-aap-rule-bhagwant-mann-statement-10804728/">Bhagwant Mann</a></strong>, in his government’s defence, has maintained that “not a single paper leak” has happened in the state in the past four and a half years. The Opposition, while accusing Mann of “lying through his teeth”, has pointed to six such alleged incidents.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">Here’s what happened in those six incidents and how the AAP government had responded to them at the time.</span></p>
+<h2><b>Pharmacy officers’ recruitment exam (2026)</b></h2>
+<p><span style="font-weight: 400">An exam for the recruitment of 454 pharmacy officers under the Department of Health and Family Welfare was held on July 19. It was organised by Baba Farid University of Health Sciences, Faridkot, and nearly 7,000 candidates appeared at different centres across Punjab.</span></p>
+<p><span style="font-weight: 400">The same day, the Punjab Police said in a statement that a massive “inter-state cheating racket” was busted during the exam, and some candidates were held with a hidden pen camera inside the exam hall in Ferozepur. They allegedly photographed the question paper, sent images to their accomplice operating from Haryana’s Bhiwani, who further forwarded the question paper to his other accomplices in Faridkot. The accused then dictated the answers in real-time to the candidates sitting inside the hall via wireless Bluetooth equipment, said Faridkot Range police in a statement.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The racket’s mastermind was identified as Gurmeet Singh, an employee of Sant Kabir Polytechnic College, Fazilka. Police had detained 35 people including 28 candidates and 7 operatives (from Punjab, Haryana, and Rajasthan).</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/chandigarh/kejriwal-cancels-punjab-tour-harjot-singh-bains-resignation-paper-leak-bhagwant-mann-10807858/">‘Paper leak’ heat against Punjab CM Mann and education minister Bains intensifies, Kejriwal cancels visit</a></span></div>
+<p>The Punjab and Haryana High Court in its order on July 28 said that the <span style="font-weight: 400">“</span>further selection process would be subject to the outcome of the present writ petition<span style="font-weight: 400">”</span> after some aspirants moved court demanding quashing or cancellation of the exam, claiming that it was “vitiated in its entirety”.</p>
+<p><span style="font-weight: 400">The AAP government, including Mann and Bains, have maintained that it was not a “paper leak” but a “cheating racket” which was preempted. Bains has also clarified that the pharmacy exam was under the health minister’s purview, not education.</span></p>
+<p><b>PSSSB Group B officers exam (2025)</b></p>
+<p><span style="font-weight: 400">The exam for 408 posts of Group B officers — such as naib tehsildars, senior assistants, treasury officers, etc. — was conducted by the Punjab Subordinate Services Selection Board (PSSSB) on December 21, 2025, in which over one lakh candidates appeared. In a peculiar turn of events, however, at least 22 of 100 toppers emerged from Bathinda district alone, including two or more from the same family. This prompted the PSSSB to ask the Vigilance Bureau to probe paper leak allegations. Aspirants alleged that siblings, husband-wife, and cousins were among the toppers and top positions were held by a handful of families.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="Harjot Singh Bains" class="lazyloading size-medium wp-image-10809185" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/ex-harjot-singh-bains.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/07/ex-harjot-singh-bains.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Punjab School and Higher Education Minister Harjot Singh Bains. Photo: Harmeet Sodhi</span>
+<p><span style="font-weight: 400">The Vigilance Bureau initiated a probe into the paper leak which is still ongoing. Candidates at an exam centre in Bathinda flagged that several distributed question papers contained corrections made with fluid whitener, generating severe suspicion of pre-exam tampering.</span></p>
+<p><span style="font-weight: 400">Even as it has been over six months since results were declared for the exam, the recruitments remain frozen due to the pending vigilance probe.</span></p>
+<p><b>ADO exam (2024)</b></p>
+<p><span style="font-weight: 400">Conducted by the Punjab Public Service Commission (PPSC), the recruitment exam for 200 vacant posts of Agriculture Development Officers (ADOs) was held on June 30, 2024, with at least 4,100 aspirants appearing for it.</span></p>
+<p><span style="font-weight: 400">This came under the scanner when several aspirants alleged that the question paper was leaked. Days before the exam, some aspirants, in an e-mail to the Chief Minister’s Office, had allegedly given a tip-off that a senior official from the state’s Agriculture Department had accepted a bribe of Rs 32 lakh to leak the paper.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/punjab-paper-leak-row-harjot-singh-bains-manish-sisodia-challenge-backfires-10806386/">After Dharmendra Pradhan’s exit, why AAP’s Punjab education minister is under fire</a></span></div>
+<p><span style="font-weight: 400">Protests were also held in <a class="" href="https://indianexpress.com/section/cities/ludhiana/" rel="noamphtml">Ludhiana</a> and <a class="" href="https://indianexpress.com/section/cities/jalandhar/" rel="noamphtml">Jalandhar</a> demanding cancellation of the exam and a high-level probe. The Punjab government denied the allegations. </span></p>
+<p><b>PSTET (2023)</b></p>
+<p><span style="font-weight: 400">The Punjab State Teachers Eligibility Test (PSTET), which constitutes two papers (Papers 1 and 2), was held on March 12, 2023. Over one lakh candidates appeared.</span></p>
+<p><span style="font-weight: 400">But Paper-2 was cancelled by the Punjab government the next day and rescheduled, after it was found that correct answers for at least 50 multiple-choice questions were already highlighted in bold in the question paper. Two professors from Guru Nanak Dev University, which had conducted the exam, were suspended.</span></p>
+<p><span style="font-weight: 400">Both Mann and Bains had acknowledged the irregularities in the exam and said that a probe had been ordered. </span><span style="font-weight: 400">Paper-2 was re-conducted on April 30, 2023.</span></p>
+<p><b><a class="" href="https://indianexpress.com/about/pseb/" rel="noamphtml">PSEB</a> Class 12 English exam (2023)</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">The class 12 English board exam under the Punjab School Education Board (PSEB), scheduled for February 24, 2023, was cancelled at the last minute after an alleged paper leak. Bains had then marked a high-level probe and said that the paper was cancelled after “direct proofs of paper leak” had emerged in Gurdaspur district. Nearly 2.96 lakh children across the state were affected.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The exam was rescheduled for March 24 that year. But in another major goof-up on March 24, the originally leaked question papers were again distributed to 185 students in Ludhiana and Ferozepur districts owing to “negligence of on-duty staff”. The 185 appeared for the exam a third time on May 22.</span></p>
+<p><b>Naib tehsildar exam (2022)</b></p>
+<p><span style="font-weight: 400">The PPSC conducted the recruitment exam for 78 vacant posts of naib tehsildar on May 22, 2022, for which at least 42,000 appeared. Following allegations of massive cheating, major irregularities, and rigging, the Department of Revenue and Rehabilitation ordered its cancellation — it was then re-conducted on June 18, 2023.</span></p>
+<p><span style="font-weight: 400">The aspirants had moved the Punjab and Haryana High Court alleging that mass cheating took place using wireless devices. After a Punjab Police probe confirmed the same, a re-exam was ordered. The Vigilance Bureau had also started a probe in the matter.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10809149"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/divya-goyal/">
+<figure>
+<img alt="Divya Goyal" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/divya-goel.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/divya-goyal/"><span></span>Divya Goyal</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952122"></div><div class="follow_author_title" data-id="Divya Goyal"></div><div class="follow_author_slug" data-id="divya-goyal"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/share/vvVwdiVTDZHARUE6/">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://x.com/divya5521">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Divya Goyal is a Principal Correspondent at The Indian Express, based in Ludhiana (Punjab). She is widely recognized for her human-interest storytelling and in-depth investigative reporting on social and political issues in the region.
+
+Professional Profile
+
+Experience: With over 13 years in journalism, she joined The Indian Express in 2012. She previously worked with Hindustan Times.
+
+Education: A gold medalist in English Journalism from the Indian Institute of Mass Communication (IIMC), Delhi.
+
+Core Beats: She covers a diverse range of subjects, including gender issues, education, the Sikh diaspora, heritage, and the legacy of the Partition. She has also reported on minority communities in Pakistan and Afghanistan.
+
+Awards and Recognition
+
+Divya has earned significant acclaim for her sensitivity toward gender and social disparities:
+
+Laadli Media Award (2020): For her investigative report "Punjab: The Invisible Drug Addicts," which exposed the gender disparity in treating women addicts.
+
+Laadli Media Award (2023): For a ground report on the struggles of two girls who had to ride a boat to reach their school in a border village of Punjab.
+
+Signature Style
+
+Divya is known for "humanizing the news." Rather than just reporting on policy, she often focuses on the individuals affected by it—such as students dealing with exam stress, farmers struggling with diversification, or families impacted by crime. Her work often bridges the gap between West (Pakistan) and East (India) Punjab, exploring shared heritage and common struggles.
+
+X (Twitter): @DivyaGoyal_                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/divya-goyal/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-ninth, twenty twenty-six, at twenty-nine minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/punjab-exam-paper-leak-controversy-harjot-bains-resignation-aap-10809149/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-29 15:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
