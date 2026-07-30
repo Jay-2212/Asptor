@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>No blanket amnesty or bar: How SC set ‘public interest’ test for ex-post facto environment clearances | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>No blanket amnesty or bar: How SC set ‘public interest’ test for ex-post facto environment clearances</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-Supreme-Court_expl-law.jpg?w=1024" alt="No blanket amnesty or bar: How SC set ‘public interest’ test for ex-post facto environment clearances">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Supreme Court environment clearance" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-Supreme-Court_expl-law.jpg?w=1024" width="650"/><span class="ie-custom-caption">The judgment also departed from the top court’s May 2025 position that prohibited ex-post facto environment clearances “in any form or manner”. Photo: File</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Supreme Court’s judgment on Wednesday (July 29) striking down the Centre’s 2021 Office Memorandum (OM) that allowed retrospective approval for projects that had already commenced construction without <strong><a class="" href="https://indianexpress.com/article/opinion/columns/sc-ruling-on-post-facto-clearances-sets-environmental-law-back-by-decades-10392074/">environment clearances</a></strong> (ECs), now closes the door on blanket and open-ended regularisation of such projects. It leaves limited room for government action under statutory authority.</span></p>
+<p><span style="font-weight: 400">The judgment has sought to strike a middle path in its evolving environmental jurisprudence, distinguishing between the source of executive power and the limits of regularisation.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">The court held that ex-post facto ECs cannot be created through an OM, but recognised that the government may, in exceptional circumstances and in public interest, provide such a mechanism through a statutory notification issued under delegated legislative powers.</span></p><div class="paywall container-wall-exclusive">
+<p><span style="font-weight: 400">The test will depend on how narrowly the government frames any future amnesty scheme and whether it meets the Supreme Court’s benchmark of “public interest”.</span></p><div id="taboola-mid-article-personalisation"></div>
+<p><span style="font-weight: 400">An OM is an administrative instruction issued by a ministry or department and does not have the force of law. A statutory notification, by contrast, is issued under authority granted by a statute — the Environment (Protection) Act, 1986, in this case — and notified in the Gazette.</span></p>
+<p><span style="font-weight: 400">Applying this distinction, the court set aside the Environment Ministry’s July 2021 OM, which introduced a standard operating procedure (SOP) for granting ex-post facto ECs to “violation cases”. The court held that the OM had created a continuing or “perpetual” regime for condoning violations. It did not invalidate the March 2017 notification, which provided a limited, one-time six-month amnesty window.</span></p>
+<p><span style="font-weight: 400">The judgment also departed from the court’s May 2025 position that prohibited ex-post facto ECs “in any form or manner”. Instead, it held that a “narrowly tailored amnesty scheme” may be permissible where justified by “supervening public interest”.</span></p>
+<p><b>Already benefited</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">After <a class="" href="https://indianexpress.com/section/cities/mumbai/" rel="noamphtml">Mumbai</a>-based environmental NGO Vanashakti approached the Supreme Court, the July 2021 OM was stayed, suspending the SOP route for violation cases, by a bench of Justices B R Gavai and Sandeep Mehta in January 2024.</span></p>
+<p><span style="font-weight: 400">By then, as reported by </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> on February 20, 2024, the Environment Ministry had issued ex-post facto ECs to more than 100 projects and issued terms of reference for environmental impact assessment (EIA) to at least another 150 projects under the violation category since March 2017.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/sc-strikes-down-vanashakti-judgment-why-ruling-is-significant-10376248/">SC strikes down Vanashakti judgment: Why ruling is significant</a></span></div>
+<p><span style="font-weight: 400">These projects included coal, iron, and bauxite mines, a greenfield airport, distilleries, steel and iron plants, industrial estates, cement plants, limestone quarries, chemical units, and buildings.</span></p>
+<p><span style="font-weight: 400">Among the project proponents were Singareni Collieries Company Limited, Mahanadi Coalfields Limited, Jaypee Cement, UltraTech Cement, Ramco Cements, Bhushan Steel Limited, Steel Authority of India, Godrej Agrovet Limited, Hindustan Copper, Lloyds Metals &amp; Energy Limited, Hindustan Marble, Artemis Hospital, Pushpawati Singhania Hospital, Spaze Towers, Hotel Leela Venture Ltd, and the Special Protection Group.</span></p>
+<p><b>Scope of amnesty</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">Under the Environmental Impact Assessment Notification, 2006, projects requiring EC must obtain approval before starting operations. However, several projects began work or expanded operations without prior clearance.</span></p>
+<p><span style="font-weight: 400">In March 2017, the Ministry issued a statutory notification offering a one-time six-month opportunity to such projects to disclose violations and seek appraisal for EC, subject to environmental assessment and other legal consequences.</span></p>
+<p><span style="font-weight: 400">After the window expired in September 2017, the Madras High Court disposed of challenges to the notification after recording the Union government’s undertaking that it was a “one-time measure”.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/experts-supreme-court-verdict-recall-on-technical-grounds-not-endorsement-of-post-facto-approvals-10373373/">Experts: Supreme Court verdict recall on technical grounds, not endorsement of post-facto approvals</a></span></div>
+<p><span style="font-weight: 400">Subsequently, in </span><i><span style="font-weight: 400">Appaswamy Real Estates v. Puducherry Environment Protection Association</span></i><span style="font-weight: 400">, the Madras High Court granted a limited extension in March 2018. The Ministry issued an OM the same month allowing eligible projects that were already in violation as of March 2017 to submit applications within 30 days.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">The policy shifted in July 2021 when the Ministry issued an OM introducing an SOP as an ongoing mechanism for violation cases.</span></p>
+<p><b>Judicial evolution</b></p>
+<p><span style="font-weight: 400">In </span><i><span style="font-weight: 400">Common Cause v. Union of India</span></i><span style="font-weight: 400"> (2017), a bench of Justices Madan B Lokur and Deepak Gupta held that mining operations requiring EC could not commence without prior approval. It emphasised that the EIA regime is preventive and intended to assess environmental consequences before irreversible harm occurs.</span></p>
+<p><span style="font-weight: 400">In </span><i><span style="font-weight: 400">Alembic Pharmaceuticals v. Rohit Prajapati</span></i><span style="font-weight: 400"> (2020), a bench of Justices DY Chandrachud and Ajay Rastogi held that ex-post facto EC was inconsistent with fundamental principles of environmental jurisprudence. The court observed that retrospective approval undermines the precautionary principle by allowing project proponents to commence activities first and seek approval later.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">However, in </span><i><span style="font-weight: 400">Pahwa Plastics v. Dastak</span></i><span style="font-weight: 400"> (2022), a bench of Justices Indira Banerjee and JK Maheshwari adopted a more pragmatic approach that closure was not always the appropriate remedy, particularly where regulatory uncertainty existed and environmental compliance remained possible. The court held that regulation and remediation could, in some cases, better serve environmental protection than immediate closure.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><b>Vanashakti litigation</b></h2>
+<p><span style="font-weight: 400">In </span><i><span style="font-weight: 400">Vanashakti v. Union of India</span></i><span style="font-weight: 400">, a bench of Justices Abhay S Oka and Ujjal Bhuyan in May 2025 struck down both the March 2017 notification and the July 2021 OM, holding that ex-post facto ECs were impermissible “in any form or manner”. The court also held that the one-time amnesty introduced in 2017 had exhausted itself and could not justify future regularisation.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/legal-news/why-justice-ujjal-bhuyan-dissented-in-supreme-courts-verdict-on-retrospective-green-clearances-10372437/">Why Justice Ujjal Bhuyan dissented in Supreme Court’s verdict on retrospective green clearances</a></span></div>
+<p><span style="font-weight: 400">Following review petitions by the Union government and industry bodies, a bench comprising then Chief Justice of India B R Gavai and Justices Vinod Chandran and Ujjal Bhuyan recalled the May 2025 judgment by a 2:1 majority, holding that the earlier decision had failed to consider binding precedents and required fresh adjudication.</span></p>
+<p><span style="font-weight: 400">The subsequent judgment now draws a distinction between a limited statutory amnesty justified by public interest and a continuing administrative mechanism that permits routine regularisation of environmental violations.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10809393"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/jay-mazoomdaar/">
+<figure>
+<img alt="Jay Mazoomdaar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/06/mazoomdaar.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/jay-mazoomdaar/"><span></span>Jay Mazoomdaar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2087069"></div><div class="follow_author_title" data-id="Jay Mazoomdaar"></div><div class="follow_author_slug" data-id="jay-mazoomdaar"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/mazoomdaar">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Jay Mazoomdaar is an investigative reporter focused on offshore finance, equitable growth, natural resources management and biodiversity conservation. Over two decades, his work has been recognised by the International Press Institute, the Ramnath Goenka Foundation, the Commonwealth Press Union, the Prem Bhatia Memorial Trust, the Asian College of Journalism etc.
+
+Expertise and Experience
+
+Mazoomdaar’s major investigations include the extirpation of tigers in Sariska, global offshore probes such as Panama Papers, Robert Vadra’s land deals in Rajasthan, India’s dubious forest cover data, Vyapam deaths in Madhya Pradesh, mega projects flouting clearance conditions, Nitin Gadkari’s link to e-rickshaws, India shifting stand on ivory ban to fly in African cheetahs, the loss of indigenous cow breeds, the hydel rush in Arunachal Pradesh, land mafias inside Corbett, the JDY financial inclusion scheme, an iron ore heist in Odisha, highways expansion through the Kanha-Pench landscape etc.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/jay-mazoomdaar/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirtieth, twenty twenty-six, at six minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-law/" href="https://indianexpress.com/about/explained-law/">Explained Law</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-law/supreme-court-environmental-clearance-ex-post-facto-vanashakti-10809393/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-30 03:15 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

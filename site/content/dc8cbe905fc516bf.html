@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Parliament debates examination Bill: How it compares with states’ anti-cheating laws | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Parliament debates examination Bill: How it compares with states’ anti-cheating laws</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/ex-neet-protest_expl.jpg?w=1024" alt="Parliament debates examination Bill: How it compares with states’ anti-cheating laws">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="NEET paper leak" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/ex-neet-protest_expl.jpg?w=1024" width="650"/><span class="ie-custom-caption">A protest over alleged examination irregularities and NEET paper leak at Samvidhan Chowk, in Nagpur on Friday. Photo: ANI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p><span style="font-weight: 400">The Centre tabled <strong><a class="" href="https://indianexpress.com/article/india/lok-sabha-parliament-public-examinations-amendment-bill-2026-neet-row-10806158/">The Public Examinations (Prevention of Unfair Means) Amendment Bill</a></strong> in Lok Sabha on Monday (July 27) to strengthen the anti-paper leak law — The Public Examinations (Prevention of Unfair Means) Act, 2024 — and increase the punishment for those involved in paper leaks.</span></p>
+<p>The recent protests at New Delhi’s Jantar Mantar and other cities across India have put the spotlight on laws pertaining to examination irregularities. With Parliament slated to discuss the Bill on Tuesday, we explain what the new law proposes and how its provisions and penalties compare with laws passed previously by states.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><b>Unfair means</b></p>
+<p><span style="font-weight: 400">“Broadly, unfair means is defined to include the use of unauthorised help and the unauthorised use of written material by candidates,” write Pratinav Damani and Siddharth Rao of the research firm PRS Legislative Research in a April 26, 2023, note titled “Anti-cheating laws for competitive examinations”.</span></p><div class="paywall container-wall-exclusive">
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/neet-exam-reforms-k-radhakrishnan-committee-report-paper-leak-10805901/">Before Team Nilekani, ex-ISRO chief-led panel tried to fix exams: What its report said</a></span></div>
+<p><span style="font-weight: 400">According to the PRS note, laws to curb exam malpractices generally include provisions penalising the use of unfair means by candidates and other groups in public examinations — this refers to exams conducted by state public sector commissions and higher secondary education boards. Individuals responsible for conducting examinations are also prohibited from disclosing any information by virtue of their appointment.</span></p><div id="taboola-mid-article-personalisation"></div>
+<h2><strong>The Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026</strong></h2>
+<p><span style="font-weight: 400">According to a Press Information Bureau release dated July 27, the The Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026, seeks to further strengthen the provisions of the 2024 Act by providing for fast-tracked investigation, speedy trial through Special Fast Track Courts, appointment of Special Public Prosecutors, time-bound disposal of appeals and more stringent penal provisions to effectively deter unfair means and organised malpractices in public examinations.</span></p>
+<p><span style="font-weight: 400">The proposed amendments have been brought in to reinforce the existing legal framework in view of incidents of question paper leakages and organised examination-related malpractices reported in recent years. They are aimed at ensuring greater accountability, strengthening deterrence against such offences and safeguarding the integrity of public examinations.</span></p>
+<p><span style="font-weight: 400">The Bill proposes to enhance the punishment for persons resorting to unfair means by increasing the term of imprisonment to not less than five years, extendable up to 10 years, as against the existing provision of imprisonment for a term of not less than three years, extendable up to five years. The maximum fine is also proposed to be enhanced from ₹10 lakh to ₹50 lakh, the PIB note said.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">For service providers found involved in offences under the Act, the proposed law proposes to increase the maximum fine from ₹1 crore to ₹5 crore and extend the period of debarment from conducting any public examination from four years to eight years.</span></p>
+<p><span style="font-weight: 400">The Bill also proposes enhanced punishment for managerial personnel of service providers by providing for imprisonment for a term of not less than five years, extendable up to 10 years, along with enhancement of the maximum fine from ₹1 crore to ₹5 crore, the PIB note said.</span></p>
+<p><span style="font-weight: 400">To deal more effectively with organised examination-related crimes, the law proposes to increase the minimum term of imprisonment from five years to seven years, extendable up to 10 years, while enhancing the maximum fine from ₹1 crore to ₹10 crore.</span></p>
+<p><span style="font-weight: 400">To ensure expeditious investigation and trial, the Bill proposes insertion of a new Section 12A providing for completion of investigation within two months, designation of Courts of Session as Special Fast Track Courts for day-to-day trial of offences under the Act, completion of trial within three months from the date of filing of the charge sheet, and appointment of Special Public Prosecutors for every Special Fast Track Court.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">According to the PIB release, the law also proposes insertion of a new Section 12B providing that appeals against any judgment, order or sentence of a Special Fast Track Court may be preferred before the High Court within a period of 30 days and, as far as possible, shall be disposed of within a period of three months.</span></p>
+<p><span style="font-weight: 400">Here’s how the Bill’s provisions and penalties compare with some major states that have passed similar laws.</span></p>
+<p><b>Uttar Pradesh</b></p>
+<p><span style="font-weight: 400">Uttar Pradesh had passed The Uttar Pradesh Public Examinations (Prevention of Unfair Means) Act back in 1998, which covered examination malpractice such as question paper leaks, use of unfair means at public examinations and related matters.</span></p>
+<p><span style="font-weight: 400">In 2024, the <a class="" href="https://indianexpress.com/about/yogi-adityanath/" rel="noamphtml">Yogi Adityanath</a>-led state government repealed the 1998 Act by passing The Uttar Pradesh Public Examination (Prevention of Unfair Means) Act, 2024, which introduced stringent penalties, including up to Rs 1 crore fines and life imprisonment for repeat offenders, with cases being non-bailable and tried in a sessions court.</span></p>
+<p><b>Rajasthan</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Rajasthan passed The Rajasthan Public Examination (Measures for Prevention of Unfair Means in Recruitment) Act, 2022, to “provide for effective measures to prevent and curb the offences of leakage of question papers and use of unfair means at public examinations for the purpose of recruitment to any post under the State Government including autonomous bodies, authorities, boards or corporations”. It also has provisions determining the establishment and functioning of designated courts for the trial of such offences and connected matters.</span></p>
+<p><span style="font-weight: 400">The law was again amended in 2023 to increase punishments for those involved in paper leaks of government recruitment examinations. After the amendment, the jail term for those involved in leaking question papers, providing unauthorised access, or conspiring with an “organised mafia” was raised from the previous five to 10 years to a minimum of 10 years up to life imprisonment</span></p>
+<p><span style="font-weight: 400">Other penalties include a fine from a minimum amount of Rs 10 lakh rising up to Rs 10 crore. In case of default of payment of fine, such an individual is also be liable to be punished with imprisonment of either description for a term of two years — the court can “impose a sentence of imprisonment for a term of less than five years” provided it records “adequate and special reasons” in its judgment.</span></p>
+<p><span style="font-weight: 400">In terms of debarment, an examinee who has been convicted of an offence under the provision of this Act shall be debarred from taking any public examination for a period of two years.</span></p>
+<p><b>Odisha</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Odisha was one of the first states to legislate an anti-cheating law as early as 1988: The Orissa Conduct of Examinations Act, 1988. On the back of multiple incidents of paper leaks including in the NEET-UG examination in 2024, the Odisha government introduced The Odisha Public Examinations (Prevention Of Unfair Means) Act, 2024, which finally received the Governor’s assent in February 2025. The new law widened the scope of the earlier law in terms of defining both offenders and what unfair means constitute, and introduced much more stringent punishments.</span></p>
+<p><b>Andhra Pradesh</b></p>
+<p><span style="font-weight: 400">The (then undivided) state passed The Andhra Pradesh Public Examinations (Prevention of Malpractices and Unfair Means) Act, 1997, “to prevent malpractices and unfair means at or relating to public examinations and for matters connected therewith or incidental thereto”.</span></p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+<svg viewbox="0 0 24 24">
+<rect height="16" rx="2" width="20" x="2" y="4"></rect>
+<polyline points="2,4 12,13 22,4"></polyline>
+</svg>
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p><span style="font-weight: 400">The Act was updated in 2006 widened the ambit to include predatory and deceptive marketing techniques used by coaching centres and private tutorial institutes.</span></p>
+<p><b>Other states</b></p>
+<p><span style="font-weight: 400">Other states which have introduced legislation in this regard include Jharkhand (the Jharkhand Competitive Examination (Measures for Control and Prevention of Unfair Means in Recruitment) Act, 2023, which updated the Jharkhand Conduct of Examinations Act, 2001); Chhattisgarh (Chhattisgarh Public Recruitment and Professional Examinations (Prevention of Unfair Means) Bill, 2026, which updates </span><span style="font-weight: 400">The Chhattisgarh Public Examinations [Prevention of Unfair Means] Act, 2008</span><span style="font-weight: 400">); Gujarat (The Gujarat Public Examination [Prevention of Unfair Methods] Act, 2023), and Uttarakhand (The Uttarakhand Competitive Examination [Measures for Prevention and Prevention of Unfair Means in Recruitment] Act, 2023).</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10807106"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-eighth, twenty twenty-six, at twenty-three minutes past two in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/public-examinations-amendment-bill-state-anti-paper-leak-laws-10807106/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-30 03:15 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
