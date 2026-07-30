@@ -1,0 +1,441 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Tamil Nadu is growing rapidly. Why are its revenues not keeping pace? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Tamil Nadu is growing rapidly. Why are its revenues not keeping pace?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-30</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/tn-cm.jpeg?w=1024" alt="Tamil Nadu is growing rapidly. Why are its revenues not keeping pace?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Tamil Nadu" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/tn-cm.jpeg?w=1024" width="650"/><span class="ie-custom-caption">Tamil Nadu Chief Minister C Joseph Vijay. File/Abhinav Saha</span></span>
+
+<div class="story_details" id="pcl-full-content"><p dir="ltr">For decades, Tamil Nadu has been among India’s most diversified and industrialised economies. It manufactures automobiles and electronics, exports textiles, attracts global investment, builds highways and industrial parks, and has steadily expanded its services sector. By most conventional measures, the economy has continued to grow.</p>
+<p dir="ltr">Yet, the government’s <a href="https://indianexpress.com/article/political-pulse/tamil-nadu-budget-vijay-govts-white-paper-rings-fiscal-alarm-bells-10769701/" rel="noopener" target="_blank"><strong>latest White Paper</strong></a> on the state’s finances shows that even as the economy expanded in the post-pandemic years, the government’s own finances weakened. Revenue has failed to keep pace with economic growth and debt has continued to rise, thus narrowing the fiscal space for development activities.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p dir="ltr">It is against this backdrop that the Tamil Nadu government has now constituted the Revenue Augmentation Committee under former Planning Commission deputy chairman Montek Singh Ahluwalia.</p><div class="paywall container-wall-exclusive">
+<p dir="ltr">On paper, the committee’s mandate is straightforward: improve tax administration, plug leakages, identify new tax and non-tax revenues, recommend reforms in excise, registration, mining, commercial taxes and motor vehicles, strengthen technology and suggest ways to increase revenue from liquor and public assets.</p><div id="taboola-mid-article-personalisation"></div>
+<p dir="ltr">But viewed through the White Paper, the committee is really being asked to answer a much larger question. Why has the State’s revenue stopped reflecting the growth of its own economy?</p>
+<p dir="ltr"><strong>Growth and revenue: Out of step</strong></p>
+<p dir="ltr">Broadly speaking, governments should become financially stronger as their economies expand. More factories produce more GST. More land transactions generate registration revenue. More vehicles bring motor vehicle taxes. Rising incomes expand consumption and taxation. This natural relationship between economic growth and government income is what economists describe as revenue buoyancy.</p>
+<p>But the White Paper shows that Tamil Nadu’s own-tax effort (revenue from taxes the state levied) weakened even during the post-Covid economic recovery.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>It notes that the state’s own-tax revenue (revenue from taxes the state levied) as a share of gross state domestic product declined from 5.93% in 2021-22 to 5.45% in 2025-26 (pre-actuals) — the lowest level in the review period — even as the economy continued to expand. It characterises this deterioration as structural rather than cyclical.</p>
+<span class="custom-caption"><img alt="Tamil Nadu's revenues" class="lazyloading size-medium wp-image-10769731" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/Vta8Z-tamil-nadu-s-revenues-.png?resize=600,403" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/Vta8Z-tamil-nadu-s-revenues-.png 1040w, https://indianexpress.com/wp-content/uploads/2026/07/Vta8Z-tamil-nadu-s-revenues-.png?resize=450,302 450w, https://indianexpress.com/wp-content/uploads/2026/07/Vta8Z-tamil-nadu-s-revenues-.png?resize=600,403 600w, https://indianexpress.com/wp-content/uploads/2026/07/Vta8Z-tamil-nadu-s-revenues-.png?resize=768,515 768w, https://indianexpress.com/wp-content/uploads/2026/07/Vta8Z-tamil-nadu-s-revenues-.png?resize=603,405 603w" height="698" sizes="(max-width: 1040px) 100vw, 1040px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1040"/> Tamil Nadu’s revenues</span>
+<p dir="ltr">That observation changes the nature of the committee’s work. Its success may ultimately be judged less by the amount of additional revenue it identifies over the next three months than by whether it can restore the long-term relationship between the state’s economic growth and its public finances.</p>
+<p dir="ltr">“If, five years from now, Tamil Nadu’s economy grows and government revenues naturally grow alongside it, the committee would have addressed the structural problem. If that disconnect remains, any short-term gains may amount only to temporary fiscal adjustments,” said a senior official attached to the state finance ministry.</p>
+<p dir="ltr"><strong>Looking for what the tax system does not see</strong></p>
+<p dir="ltr">The White Paper points to administrative shortcomings, leakages and corruption as major reasons for declining revenue effort. But identifying leakages is only one part of the exercise.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p dir="ltr">The larger question is whether the state’s revenue system has kept pace with the changing economy, a senior official with the state finance department told <em>The Indian Express</em>.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/for-four-new-state-governments-same-old-problem-a-mounting-debt-burden-10676703/">For four new state governments, same old problem: A mounting debt burden</a></span></div></p>
+<p dir="ltr">“Fast-growing sectors may not be adequately captured. Some activities may be lightly taxed relative to their economic value. In other areas, taxes may exist but enforcement may remain weak. Administrative inefficiency, evasion and exemptions together may prevent the state from collecting what the economy is already generating. That explains why the committee has been empowered not merely to recommend higher taxes but to examine compliance, administration and structural reforms across departments,” the official said.</p>
+<p dir="ltr">The emphasis is not simply on taxation. It is on understanding where the state has stopped seeing economic activity.</p>
+<p dir="ltr"><strong>Revenue is only one side of the ledger</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p dir="ltr">The committee’s title focuses on revenue augmentation, but both the White Paper and the broader policy thinking behind it point towards another equally important question: how efficiently is public money being spent?</p>
+<p dir="ltr">“Public finance does not improve only by collecting more. It also improves when leakages on the expenditure side are reduced. An inefficiently spent rupee has the same fiscal consequence as a rupee that was never collected,” said a senior consultant attached to the state finance and expenditure domains.</p>
+<p dir="ltr">This broadens the committee’s challenge beyond tax departments alone. “Procurement systems, project implementation, subsidies, contracting and delivery mechanisms all become part of the conversation about fiscal sustainability. The White Paper itself notes that committed expenditure — including salaries, pensions and interest — has steadily consumed a larger share of revenue receipts, leaving progressively less fiscal space for development expenditure and capital investment,” he said.</p>
+<p dir="ltr">Improving expenditure efficiency, therefore, becomes another way of augmenting public resources without imposing additional burdens on taxpayers.</p>
+<p dir="ltr"><strong>Rebuilding non-tax revenues</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p dir="ltr">The committee has also been asked to examine non-tax revenues — from dividends of public sector undertakings and land monetisation to user charges and public utilities.</p>
+<p dir="ltr">This reflects a wider understanding of the relationship between citizens and the state. Taxes are only one way governments raise resources.</p>
+<p dir="ltr">Experts point out that the quality of public services influences the willingness of citizens to pay fees, charges and tariffs. Water supply, transport, public utilities and government services become financially sustainable only when users perceive value in what they receive. Fiscal reform, therefore, is inseparable from administrative reform. The state cannot sustainably improve non-tax revenues without simultaneously improving the quality and reliability of public services.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/tamil-nadu-dmk-vijay-debt-looking-numbers-10682963/">5 yrs after DMK, Vijay flags Tamil Nadu’s Rs 10-lakh crore debt: Looking into the numbers</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p dir="ltr">Technology occupies a central place in the committee’s terms of reference. Digital systems can simplify compliance, reduce discretion and improve monitoring. Yet experience across departments suggests that technology alone rarely eliminates corruption.</p>
+<p dir="ltr">“Many departments including the Road Transport department have already undergone substantial digitisation. Yet corruption and commission practices often survive because institutions gradually adapt around technological safeguards. The challenge therefore lies not merely in introducing digital systems but in strengthening governance itself — aligning incentives, increasing accountability, improving supervision and ensuring that institutions cannot simply discover new ways to bypass technological controls,” said the expert advising several government plans in association with the state finance department. He said technology improves administrative capacity but it cannot substitute for it.</p>
+<p dir="ltr"><strong>Difficult choices, structural issues</strong></p>
+<p dir="ltr">If improving compliance appears politically straightforward, other recommendations may prove considerably more contentious. The committee has been asked to examine user charges, liquor policy, asset monetisation and other non-tax revenues.</p>
+<p dir="ltr">Each involves trade-offs. Higher registration fees may affect property markets. Changes in utility charges may influence affordability. Altering liquor policy raises questions extending well beyond revenue alone. Even the role of government in commercial activities such as liquor retailing may come under discussion.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p dir="ltr">Also, multiple experts known to the new committee formation and its purpose said the expenditure reforms may require uncomfortable assessments of whether every programme is delivering outcomes proportionate to its fiscal cost.</p>
+<p dir="ltr">The committee’s challenge is therefore also political. Every reform creates both beneficiaries and those who lose existing advantages.</p>
+<p dir="ltr">Perhaps the most difficult challenge lies beneath administration itself. Revenue leakages often emerge not from isolated acts of corruption but from entrenched systems of incentives involving multiple actors. Mining, natural resources, contracting, regulation and enforcement frequently involve networks rather than individual failures.</p>
+<p dir="ltr"><div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/software-engineer-website-tracks-everyday-corruption-tamil-nadu-rs-10-question-10753412/">A 10-rupee question: How a Tamil Nadu engineer’s quest exposes everyday bribes</a></span></div></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p dir="ltr">Addressing such leakages requires changing the institutional incentives that allow corruption to persist. That may ultimately prove harder than designing better tax policy.</p>
+<p dir="ltr"><strong>A committee that asks the state to look at itself</strong></p>
+<p dir="ltr">The committee has been given unusually wide powers. It can summon officers, call for records from departments and public sector undertakings, create specialised working groups for individual revenue heads, and seek expertise from outside government. That makes this, in many ways, an exercise in institutional self-examination.</p>
+<p dir="ltr">The White Paper measured the symptoms of Tamil Nadu’s fiscal deterioration. The committee has now been asked to identify the mechanisms producing those symptoms. For a government still early in its tenure, this carries significance beyond public finance.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10810428"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/arun-janardhanan/">
+<figure>
+<img alt="Arun Janardhanan" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/09/Arun-Janardhanan.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/arun-janardhanan/"><span></span>Arun Janardhanan</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2157021"></div><div class="follow_author_title" data-id="Arun Janardhanan"></div><div class="follow_author_slug" data-id="arun-janardhanan"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Arun Janardhanan is an experienced and authoritative Tamil Nadu correspondent for The Indian Express. Based in the state, his reporting combines ground-level access with long-form clarity, offering readers a nuanced understanding of South India’s political, judicial, and cultural life - work that reflects both depth of expertise and sustained authority.
+
+Expertise
+Geographic Focus: As Tamil Nadu Correspondent focused on politics, crime, faith and disputes, Janardhanan has been also reporting extensively on Sri Lanka, producing a decade-long body of work on its elections, governance, and the aftermath of the Easter Sunday bombings through detailed stories and interviews.
+
+Key Coverage Areas:
+State Politics and Governance: Close reporting on the DMK and AIADMK, the emergence of new political actors such as actor Vijay’s TVK, internal party churn, Centre–State tensions, and the role of the Governor.
+
+Legal and Judicial Affairs: Consistent coverage of the Madras High Court, including religion-linked disputes and cases involving state authority and civil liberties.
+
+Investigations: Deep-dive series on landmark cases and unresolved questions, including the Tirupati encounter and the Rajiv Gandhi assassination, alongside multiple investigative series from Tamil Nadu.
+
+Culture, Society, and Crisis: Reporting on cultural organisations, language debates, and disaster coverage—from cyclones to prolonged monsoon emergencies—anchored in on-the-ground detail.
+
+His reporting has been recognised with the Ramnath Goenka Award for Excellence in Journalism.
+
+Beyond journalism, Janardhanan is also a screenwriter; his Malayalam feature film Aarkkariyam was released in 2021.                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/arun-janardhanan/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirtieth, twenty twenty-six, at twenty-three minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/tamil-nadu-revenue-growth-fiscal-challenge-explained-10810428/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-30 15:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
