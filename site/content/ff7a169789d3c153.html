@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Have fast-track courts delivered on the promise of speedy justice? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Have fast-track courts delivered on the promise of speedy justice?</h1>
+                <div class="article-meta">
+                    <span>By Aaratrika Bhaumik</span> • <span>THE HINDU OPINION</span> • <span>2026-07-30</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71287558"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p><span class="drop-caps">P</span>rime Minister Narendra Modi’s announcement to set up fast-track courts to hear paper leak cases has once again revived the debate over whether these specialised courts are the silver bullet to India’s chronic judicial delays. Following the announcement, the Delhi High Court has constituted a fast-track court at the Rouse Avenue Courts Complex to exclusively hear cases under the Public Examinations (Prevention of Unfair Means) Act, 2024. However, stakeholders have cautioned that fast-track courts also struggle with mounting pendency and resource constraints. So, have fast-track courts delivered on the promise of speedy justice? <b>Bharat Chugh</b> and <b>Shruthi Naik</b> discuss the question in a conversation moderated by <b>Aaratrika Bhaumik</b>.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How effective have fast-track courts been?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Bharat Chugh:</b> Fast-track courts have succeeded in delivering speed, but only for the limited category of cases assigned to them. That is because, in most instances, a fast-track court does not entail the creation of additional judges or judicial capacity. For example, take the proposed fast-track courts for exam leak cases. The judges presiding over these courts are typically drawn from the existing judicial system and reassigned from the cases they were already handling to hear these priority matters instead. Rather than expand the judiciary’s capacity, fast-track courts redeploy existing judicial resources. As a result, while the designated cases move through the system more quickly, the matters those judges were previously handling are pushed further down the queue.
+				</p><p><b>Shruthi Naik:</b> The larger problem is that we rarely consider, at a structural level, what establishing a fast-track court actually requires. While funds may be allocated for judicial officers, support staff, and operational expenses, the real constraint is judicial capacity. If all we are doing is reallocating existing judges rather than expanding the system, we are simply shifting the backlog elsewhere. Equally important is whether the procedural reforms needed to support these courts are in place. Are witness depositions taking place in a timely and predictable manner? Are all stakeholders coordinating to ensure cases progress without unnecessary adjournments? Without these systemic changes, it is difficult to assess whether fast-track courts are truly delivering on their promise of speedy justice.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The Union Law Ministry recently said that Fast-Track Special Courts (FTSCs) are burdened with a backlog of nearly 2.45 lakh cases. What explains this pendency?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Shruthi Naik:</b> The Law Ministry’s data includes the number of cases instituted, disposed of, and pending over the past three years. A closer look at those figures shows that the case clearance rate (the number of cases disposed of compared with the number of cases instituted) has remained below 100% each year. In other words, the system has consistently failed to keep pace with the volume of new cases being filed. In 2025, around 1.4 lakh cases were instituted, but only about 66,000 were disposed of. The remainder inevitably added to the backlog.
+				</p><p>
+										More importantly, if we want to assess whether fast-track courts are truly delivering speedy justice, we need robust data on the time taken to dispose of cases. While the National Judicial Data Grid provides pendency and disposal timelines for courts generally, it does not offer comparable data for FTSCs. Without that degree of transparency, it is difficult to evaluate whether these courts are fulfilling the objective for which they were established.
+				</p><p><b>Bharat Chugh:</b> The pendency in fast-track courts cannot be viewed in isolation. It has to be seen in the context of the overall burden on the justice system. Trial courts across the country are currently grappling with nearly 4.8 crore pending cases, of which roughly 74% are criminal matters. That is an enormous caseload, particularly when viewed alongside the limited judicial strength available to handle it. Every year, crores of fresh cases are instituted, spanning offences from acid attacks and chain-snatching to cybercrime and murder. That is the scale of the challenge confronting the justice system. Without addressing these systemic constraints, it is difficult to expect fast-track courts alone to bring about lasting improvements in the delivery of speedy justice.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The Public Examinations (Prevention of Unfair Means) Amendment Bill, 2026, requires investigations into paper leak cases to be completed within two months and sets a three-month timeline for trials. Should laws prescribe such rigid timelines?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Bharat Chugh:</b> The Supreme Court has repeatedly cautioned against prescribing rigid timelines for criminal proceedings because every case presents its own complexities. Criminal trials often involve chargesheets and evidence running into thousands of pages. Forcing proceedings into a rigid timeline may deprive the defence of a meaningful opportunity to prepare its case, thereby compromising the right to a fair trial. It can also leave courts with less flexibility to effectively manage witnesses, whose testimony is often crucial to the outcome of a case. Therefore, the objective should be to strike a careful balance between expeditious justice and procedural fairness, without sacrificing one in pursuit of the other.
+				</p><p><b>Shruthi Naik:</b> Before prescribing strict timelines, we need to ask whether the necessary institutional capacity actually exists. Do we have enough investigators, forensic laboratories, and judicial resources to complete investigations within the prescribed time? Can forensic reports be generated quickly enough? Can witnesses always be traced and examined without delay? While everyone wants cases to be concluded expeditiously, that objective cannot come at the cost of the quality of justice being delivered. Setting aspirational timelines to encourage the expeditious disposal of cases is one thing, but making them mandatory is quite another.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The Supreme Court has cautioned that arbitrarily designating cases for fast-track courts may violate the right to equality under Article 14 of the Constitution. What considerations should guide the selection of cases for fast-track courts?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Shruthi Naik:</b> Ideally, we should be striving for a justice system that does not require fast-track courts at all. The very demand for specialised courts suggests that people have lost confidence in the ability of the regular justice system to deliver timely justice. More often than not, the decision to assign certain categories of cases to fast-track courts is driven by public sentiment. If individuals are entitled to equal protection of the law, they should also have an equal opportunity to access justice. These are difficult policy choices, and any decision to assign cases to fast-track courts must rest on a rational basis consistent with the guarantee of equality.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									In 2019, FTSCs were constituted to ensure the time-bound trial of rape cases and offences under the Protection of Children from Sexual Offences Act. Have these courts lived up to the purpose?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Bharat Chugh:</b> A major challenge facing FTSCs is the acute shortage of resources. Strengthening the prosecution has never received the attention it deserves. Even in Delhi, it is not uncommon for a single public prosecutor to appear before multiple courts in a day, simply because there are not enough prosecutors. This is particularly concerning in complex criminal cases, where prosecutors often face teams of defence lawyers with far greater legal and research support. The same resource deficit is evident in forensic infrastructure. Paper leak cases, for instance, often hinge on digital evidence recovered from electronic devices, making cyber forensics critical. Yet forensic laboratories are severely understaffed and overburdened. Unless we strengthen the prosecution, expand forensic capacity, and fill judicial vacancies, FTSCs alone cannot deliver speedy justice.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What institutional reforms are required?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Bharat Chugh:</b> A fast-track court is only as effective as the investigation that precedes it. If the objective is to deliver timely and well-reasoned judgments, the process must begin with a credible investigation. That requires adequately trained investigators, timely forensic assistance and the support necessary to gather reliable evidence.
+				</p><p><b>Shruthi Naik:</b> Lawyers, witnesses, investigators and prosecutors should know well in advance when they are required to appear so that hearings can proceed without disruption. Equally important is reducing avoidable delays. That means minimising adjournments and ensuring court directions are complied with promptly.
+				</p><p><b><a href="https://www.thehindu.com/podcast/have-fast-track-courts-delivered-on-the-promise-of-speedy-justice-in-focus-podcast/article71286375.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Bharat Chugh is a Delhi-based advocate and former civil judge; Shruthi Naik is a senior resident fellow at the Vidhi Centre for Legal Policy, Delhi</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- July 31, 2026 12:49 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71287558" data-title="Have fast-track courts delivered on the promise of speedy justice?" data-url="https://www.thehindu.com/opinion/op-ed/have-fast-track-courts-delivered-on-the-promise-of-speedy-justice/article71287558.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" onclick="copytext('https://www.thehindu.com/opinion/op-ed/have-fast-track-courts-delivered-on-the-promise-of-speedy-justice/article71287558.ece');">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" onclick="openShareLink('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece&amp;t=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F')">
+                Facebook   
+                        
+            </li><li class="twitter" onclick="openShareLink('https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece&amp;text=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F')">
+                Twitter    
+                        
+            </li><li class="telegram" onclick="openShareLink('https://t.me/share/url?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece&amp;text=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F')">
+                Telegram     
+                        
+            </li><li class="in" onclick="openShareLink('https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece&amp;title=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F')">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" onclick="openShareLink('https://api.whatsapp.com//send?text=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F%20-%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece')">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" onclick="openShareLink('https://reddit.com/submit?url=https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fhave-fast-track-courts-delivered-on-the-promise-of-speedy-justice%2Farticle71287558.ece&amp;title=Have%20fast-track%20courts%20delivered%20on%20the%20promise%20of%20speedy%20justice%3F')">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71287558" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/have-fast-track-courts-delivered-on-the-promise-of-speedy-justice/article71287558.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-30 22:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
