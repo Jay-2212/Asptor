@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India’s industrial production index saw strong growth, but it hides weak consumer demand | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India’s industrial production index saw strong growth, but it hides weak consumer demand</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-31</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/IIP.jpg?w=1024" alt="India’s industrial production index saw strong growth, but it hides weak consumer demand">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Bangle manufacturing industries in Firozabad, UP. (Express photo by Gajendra Yadav)" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/IIP.jpg?w=1024" width="650"/><span class="ie-custom-caption">Bangle manufacturing industries in Firozabad, UP. (Express photo by Gajendra Yadav)</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Earlier this week, the Ministry of Statistics and Programme Implementation released the recently updated Index of Industrial Production (IIP) data. It showed that the IIP grew by 7.3% year-on-year (YoY) in June 2026.</p>
+<p>Many things <a href="https://indianexpress.com/article/business/industrial-growth-rises-june-highest-23-months-10807681/"><strong>stood out about this data.</strong></a> First, the spike in June was the highest in 23 months, or almost two years. Moreover, it was not an isolated jump; the increase in June was the third consecutive month of accelerating YoY growth, as the <em>chart</em> shows.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<span class="custom-caption"><img alt="Chart. " class="lazyloading wp-image-10812407 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/CHART-1-index-of-industrial-production-rises-to-a-23-month-high-.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/CHART-1-index-of-industrial-production-rises-to-a-23-month-high-.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/07/CHART-1-index-of-industrial-production-rises-to-a-23-month-high-.jpg?resize=450,373 450w, https://indianexpress.com/wp-content/uploads/2026/07/CHART-1-index-of-industrial-production-rises-to-a-23-month-high-.jpg?resize=600,497 600w, https://indianexpress.com/wp-content/uploads/2026/07/CHART-1-index-of-industrial-production-rises-to-a-23-month-high-.jpg?resize=489,405 489w" height="596" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> Chart.</span>
+<p>This spike comes at a time when most observers suggest that India’s growth in the current year will slow down. As such, the IIP data presents a contrasting picture. However, a closer look at the data reveals more about the state of the Indian economy: the sectors that are pulling it up and those that are dragging it down.</p><div class="paywall container-wall-exclusive">
+<h2>What is the IIP?</h2>
+<p>As the name suggests, the IIP maps changes in the volume of production in Indian industries. It chooses a basket of industrial products — ranging from the manufacturing sector to mining to energy — to create an index by allocating different weights to each sector and then tracks their production every month.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Finally, the index value is compared to where it stood the previous year to understand the economy’s industrial health.</p>
+<h2>How should the IIP be read?</h2>
+<p>There are two ways to read the IIP data, based on how the government provides it. The first method sees the different sectors that form India’s industrial base. <em>Table 1</em> shows the main sectors, their relative weights, and their growth rates in June.</p>
+<span class="custom-caption"><img alt="Table 1" class="lazyloading size-medium wp-image-10812401" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/TABLE-1-IIP.jpg?resize=600,419" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/TABLE-1-IIP.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-1-IIP.jpg?resize=450,314 450w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-1-IIP.jpg?resize=600,419 600w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-1-IIP.jpg?resize=580,405 580w" height="503" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> Table 1.</span>
+<p>The other way is to look at the “use-based” classification, or examine the use to which industrial goods are put. <em>Table 2</em> details the weights and growth rates. A look at the growth rate here tells a lot about the nature of demand for industrial goods in the Indian economy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<span class="custom-caption"><img alt="Table 2." class="lazyloading size-medium wp-image-10812403" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/TABLE-2-IIP.jpg?resize=588,600" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/TABLE-2-IIP.jpg 720w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-2-IIP.jpg?resize=441,450 441w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-2-IIP.jpg?resize=588,600 588w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-2-IIP.jpg?resize=397,405 397w" height="735" sizes="(max-width: 720px) 100vw, 720px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="720"/> Table 2.</span>
+<p>Primary goods are sourced from nature (such as minerals or fossil fuels) and used in industries. Intermediate goods refer to goods that are incomplete in themselves (say cotton yarn) but used to produce other goods. Capital goods refer to “manufactured” goods, other than intermediate goods, which are used in the production of other goods or services (but not as inputs), such as a tractor or a commercial vehicle. Infrastructure goods are finished goods primarily used in infrastructure.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Last week's GDP column</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/student-protests-indian-states-education-spending-decline-10802134/">Youth protests: How Indian states’ expenditure on education has declined over 12 years</a></span></div>
+<p>Then come two categories of consumer goods — non-durables (such as milk or biscuits) for immediate consumption, and durables (such as a TV or a car) with a longer life span.</p>
+<h2>So, what does the IIP data tell us about the state of the Indian economy?</h2>
+<p>To find a more robust trend, let’s look at quarterly growth rates in IIP instead of just one or two months. Also, to better understand the contours of India’s economy, let’s focus on the use-based classification.</p>
+<p><em>Table 3</em> compiles the data, and a clearer picture emerges. The past three quarters — nine months — show a clear trend where consumer goods growth has been fairly tepid, especially for consumer non-durables, while capital goods, infrastructure goods and intermediate goods growth has been very strong.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="Table 3." class="lazyloading wp-image-10812405 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/07/TABLE-3-IIP.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/07/TABLE-3-IIP.jpg 920w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-3-IIP.jpg?resize=450,254 450w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-3-IIP.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-3-IIP.jpg?resize=768,433 768w, https://indianexpress.com/wp-content/uploads/2026/07/TABLE-3-IIP.jpg?resize=718,405 718w" height="519" sizes="(max-width: 920px) 100vw, 920px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="920"/> Table 3.</span>
+<p>Madan Sabnavis, Chief Economist of Bank of Baroda, says there is a weakness in consumer demand both in rural and urban India, which are bogged down by higher prices.</p>
+<p>“The weakness in demand for consumer non-durables is evident from the corporate earnings of many FMCG (fast moving consumer goods) companies. The high growth in capital and infrastructure goods is in line with the higher infrastructure spending taking place in the country, especially from the government’s side. That also explains why intermediate goods have shown a rise, as everything from metals to machinery is being used here,” said Sabnavis.</p>
+<p>Weak growth in the production of primary goods is due to supply disruptions and higher prices, thanks to the events in West Asia. Dipti Deshpande, Senior Director and Principal Economist, Crisil Limited, explained: “The weakness in consumer goods IIP during most quarters of fiscal 2026 was largely driven by pharmaceuticals, electronics, apparel and leather, sectors that were most vulnerable to tariff-related uncertainties.”</p>
+<p><strong>Upshot</strong></p>
+<p>While overall growth in the IIP is pretty good, a closer inspection reveals a clear trend of weak consumer demand and strong infrastructure demand. But, as Deshpande points out, “Lower growth in consumer goods IIP relative to capital and intermediate goods IIP is more the norm than an exception.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Monthly data available since April 2024 shows that capital and intermediate goods have consistently outperformed consumer goods output, with trend growth rates of 9.6% and 5.9%, respectively. Sabnavis agrees that the picture painted by the IIP tallies with that provided by earlier overall GDP growth data.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10812275"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/udit-misra/">
+<figure>
+<img alt="Udit Misra" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2015/09/udit-mishra.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/udit-misra/"><span></span>Udit Misra</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="2487929"></div><div class="follow_author_title" data-id="Udit Misra"></div><div class="follow_author_slug" data-id="udit-misra"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Udit Misra is Senior Associate Editor at The Indian Express. Misra has reported on the Indian economy and policy landscape for the past two decades. He holds a Master’s degree in Economics from the Delhi School of Economics and is a Chevening South Asia Journalism Fellow from the University of Westminster.
+
+Misra is known for explanatory journalism and is a trusted voice among readers not just for simplifying complex economic concepts but also making sense of economic news both in India and abroad.
+
+Professional Focus
+
+He writes three regular columns for the publication.
+
+ExplainSpeaking: A weekly explanatory column that answers the most important questions surrounding the economic and policy developments.
+
+GDP (Graphs, Data, Perspectives): Another weekly column that uses interesting charts and data to provide perspective on an issue dominating the news during the week.
+
+Book, Line &amp; Thinker: A fortnightly column that for reviewing books, both new and old.
+
+Recent Notable Articles (Late 2025)
+
+His recent work focuses heavily on the weakening Indian Rupee, the global impact of U.S. economic policy under Donald Trump, and long-term domestic growth projections:
+
+Currency and Macroeconomics:
+
+"GDP: Anatomy of rupee weakness against the dollar" (Dec 19, 2025) — Investigating why the Rupee remains weak despite India's status as a fast-growing economy.
+
+"GDP: Amid the rupee's fall, how investors are shunning the Indian economy" (Dec 5, 2025).
+
+"Nobel Prize in Economic Sciences 2025: How the winners explained economic growth" (Oct 13, 2025).
+
+Global Geopolitics and Trade:
+
+"Has the US already lost to China? Trump's policies and the shifting global order" (Dec 8, 2025).
+
+"The Great Sanctions Hack: Why economic sanctions don't work the way we expect" (Nov 23, 2025) — Based on former RBI Governor Urjit Patel's new book.
+
+"ExplainSpeaking: How Trump's tariffs have run into an affordability crisis" (Nov 20, 2025).
+
+Domestic Policy and Data:
+
+"GDP: New labour codes and opportunity for India's weakest states" (Nov 28, 2025).
+
+"ExplainSpeaking | Piyush Goyal says India will be a $30 trillion economy in 25 years: Decoding the projections" (Oct 30, 2025) — A critical look at the feasibility of high-growth targets.
+
+"GDP: Examining latest GST collections, and where different states stand" (Nov 7, 2025).
+
+International Economic Comparisons:
+
+"GDP: What ails Germany, world's third-largest economy, and how it could grow" (Nov 14, 2025).
+
+"On the loss of Europe's competitive edge" (Oct 17, 2025).
+
+Signature Style
+
+Udit Misra is known his calm, data-driven, explanation-first economics journalism. He avoids ideological posturing, and writes with the aim of raising the standard of public discourse by providing readers with clarity and understanding of the ground realities.
+
+You can follow him on X (formerly Twitter) at @ieuditmisra
+
+ 
+
+ 
+
+ 
+
+ 
+
+                         <a class="more-abt-author" href="https://indianexpress.com/profile/author/udit-misra/" rel="noamphtml">... Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July thirty-first, twenty twenty-six, at twenty-one minutes past seven in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/iip/" href="https://indianexpress.com/about/iip/">IIP</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/iip-demand-state-economy-reveal-10812275/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-31 15:15 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
