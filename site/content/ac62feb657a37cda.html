@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why India’s tea giants face rising competition from cheaper alternatives | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why India’s tea giants face rising competition from cheaper alternatives</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-07-31</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/07/tea-estate.jpg?w=1024" alt="Why India’s tea giants face rising competition from cheaper alternatives">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+
+<span class="custom-caption"><img alt="Tea" decoding="async" height="366" src="https://images.indianexpress.com/2026/07/tea-estate.jpg?w=1024" width="650"/><span class="ie-custom-caption">Tea garden workers in Assam's Golaghat on Friday. ANI</span></span>
+
+<div class="story_details" id="pcl-full-content"><p>Tea may continue to be one of the most <a href="https://indianexpress.com/article/explained/explained-climate/explained-what-is-more-eco-friendly-having-tea-or-coffee-9629792/" rel="noopener" target="_blank"><strong>popular beverages</strong></a> for Indians, but a surge in cheap imports and lower prices are prompting many to switch to lower sub-brands or purchase from the unorganised sector.</p>
+<p>This shift has made the past four to five quarters challenging for listed companies and larger companies, pushing them to focus on premiumisation and diversify into other product categories to offset weak performance in the tea segment.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The tea business remained weak for listed players in the April-June quarter, with modest volume growth and lower revenues. Tata Consumer Products Ltd, which owns brands such as Tata Tea and Tetley, reported just 2% volume growth in its tea and coffee segment during the quarter, while revenue declined 4%.</p><div class="paywall container-wall-exclusive">
+<p>While the company does not disclose the individual contribution of tea and coffee within the segment, tea operations weighed heavily on the overall performance, even as coffee grew 24%. The company attributed the decline in segment revenue to passing on lower tea costs to consumers.</p><div id="taboola-mid-article-personalisation"></div>
+<p>Hindustan Unilever Ltd (HUL), which has brands such as Lipton and Brooke Bond, reported a low single-digit underlying volume growth in its premium tea segment.</p>
+<p>Goodricke, a <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a>-based tea producer with plantations across Darjeeling and Assam, has not yet disclosed its Q1 earnings. However, the company’s revenues dropped by nearly 14% in 2025-26 due to higher operating costs and the downturn in the overall tea market.</p>
+<p><strong>Heatwaves, cheap imports trigger tea market slowdown</strong></p>
+<p>The overall tea market has been in a deflationary phase over the past four to five quarters, driven by a combination of factors, including adverse weather and a rise in cheaper imports.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Goodricke, for example, stated that 2025-26 was “exceptionally challenging” due to adverse weather conditions, a sharp increase in production costs, and tea markets being “largely unsupportive”.</p>
+<p>The adverse weather refers to the summer heatwaves flagged by industry bodies. The prolonged dry spell led to higher pest infestations in tea plantations, affecting the quality of the crop, while extreme heat also dampened consumer demand for tea.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/long-reads/wake-up-smell-chai-tea-coffee-india-global-brand-10313790/">The chai story: Why Indian tea is yet to become a global brand</a></span></div>
+<p>Further, rainfall has also been erratic over the past couple of monsoons, leading to both shortages as well as landslides in the hilly areas where tea is grown. This lowered the yield of high-quality tea, reducing its cost in auction houses where major companies such as HUL and Tata Consumer source the leaf.</p>
+<p>An increase in cheaper tea imports from other markets such as Nepal and Kenya has also led to prices falling in the Indian market.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>With tea essentially being a commodity business, where brand loyalty is relatively low compared to other businesses, falling prices have fuelled growth in the unorganised sector. This has forced larger companies to cut prices to remain competitive, resulting in lower realisations.</p>
+<p>Tea retailers also faced a temporary setback from a shortage of liquefied petroleum gas (LPG) linked to the West Asia conflict. Fuel shortages in households led many consumers to avoid tea purchases, Tata Consumer’s management said during its post-Q1 earnings conference call.</p>
+<p><strong>Premiumisation push: Will tea consumers trade up?</strong></p>
+<p>With the tea market becoming increasingly concentrated, and most Indians already consuming the beverage, these additional challenges have led larger players such as Tata Consumer and HUL to focus on premiumisation. This includes premium offerings such as Tetley Premium and Tata Tea Gold from Tata Consumer, and premium variants under HUL’s Brooke Bond portfolio.</p>
+<p>“If you look at Tata Consumer, they have tea products from Rs 250/kg to Rs 3,000/kg and are focusing on upscaling their premium products. This is the strategy they are looking to adopt over a period of time,” said Ronak Shah, an equity analyst tracking the FMCG sector at Equirus Securities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>HUL has also seen revenue contribution from its premium brands inch higher even as mass brands like Red Label and Taaza have delivered low-single-digit volume growth over the past few quarters.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/matcha-tea-now-from-india-assam-estate-sells-first-india-made-batch-10770091/">Matcha tea, now from India: Assam estate sells first India-made batch</a></span></div>
+<p>However, the rigid habits of tea consumers make it a very difficult segment to premiumise in. “It’s much easier for consumers to shift to a lower grade of tea than to shift up the ladder. You are often forced to shift to lower-quality, unorganised players due to costs or other such factors. But why will you shift up the ladder, especially since you are so used to the taste of your daily tea?” an analyst tracking the sector at a domestic brokerage explained.</p>
+<p>While most experts believe premiumisation may unlock some value in the tea segment, it may take a long time for these efforts to bear fruit.</p>
+<p><strong>Diversification gains pace, some relief in sight</strong></p>
+<p>There is only so much a company can achieve in a commodity-linked segment. The bigger players have thus diversified over the past year and increased focus on other segments.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>For instance, Tata Consumer saw the revenue from its growth businesses surpass tea/coffee revenues for the first time in Q1. The segment, which includes the Tata Sampann and Soulful brands, as well as cold beverages, is currently its fastest-growing.</p>
+<p>Goodricke is also expanding its focus from plantations to dairy, alternative crops, solar, and selective hospitality.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-growth-rate-projection-gdp-10791252/">Will India’s growth rate rise or fall this financial year? Depends on which variable you pick</a></span></div>
+<p>After the deflationary cycle over the past year, tea prices have recovered since late June, with inflation in tea prices estimated to be around 7-10%. During its Q1 earnings call, Tata Consumer Chief Executive Officer Sunil D’Souza noted that the company had implemented a 1-2% price hike in June due to inflation, with further price hikes likely in Q2 if inflation persists. HUL also acknowledged a similar inflationary trend.</p>
+<p>But experts are still unsure whether this would aid revenues from the tea segment for companies. “It depends on what kind of inflation we are talking about. For example, if the inflation remains low or moderate, companies may find it difficult to pass on the higher prices to consumers in case local players are holding too much of low cost tea stocks. So, it’s difficult to decipher the situation as of now,” said Ajay Thakur, research analyst at Anand Rathi.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Adverse effects from the El Niño expected in late 2026 and 2027 may also further impact tea prices.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10808681"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on July twenty-ninth, twenty twenty-six, at eleven minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/india-tea-market-slowdown-explained-10808681/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-07-31 03:41 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
