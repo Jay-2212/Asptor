@@ -2,6 +2,50 @@
 
 Use this file as the single source of truth for task handoffs.
 
+## [2026-08-03 07:30 UTC] Agent: Codex
+### Scope Claimed
+- Stabilize the scheduled source-fetch pipeline when an external publisher returns an HTTP error.
+
+### Context Read
+- [x] README.md
+- [x] INSTRUCTIONS.md
+- [x] ARCHITECTURE.md
+- [x] AGENTS.md
+- [x] LOGBOOK.md (latest entries)
+
+### Assumptions Before Implementation
+- A single unavailable source should not discard successful snapshots from the other configured sources.
+- Indian Express's recurring 403 is an external access-policy change, so its RSS feed is an appropriate source-level fallback rather than a secret or dependency change.
+- The pipeline should remain strict when all sources fail, so a green run never means that ingestion produced no usable input.
+
+### Expected Outputs
+- Source-fetch fallback and partial-success exit policy.
+- Tests covering fallback selection and CLI exit behaviour.
+- Workflow and documentation updates describing the failure policy.
+
+### Work Completed
+- Added ordered source fallback URLs and recorded the URL actually used in each raw snapshot.
+- Added an Indian Express Explained RSS fallback and RSS-to-Article parsing for GitHub-runner 403 responses.
+- Changed retries to stop immediately on permanent HTTP statuses such as 403/404 while retaining retries for transient statuses and transport failures.
+- Added `--allow-partial` for scheduled runs: the pipeline continues when at least one source succeeds and still fails when all sources fail.
+- Updated the workflow, README, and architecture notes.
+
+### Tests/Validation
+- Full suite passed: 129 tests.
+- Live fetch smoke test passed for all five configured sources.
+- Live Indian Express RSS smoke test extracted 200 articles; clean smoke test normalized 32 current Explained articles.
+- `git diff --check` and Python compilation passed.
+
+### Decisions
+- Kept the CLI strict by default so local and diagnostic invocations still expose partial failures as non-zero.
+- Made only the scheduled workflow tolerant of partial source availability; a completely unavailable ingestion run remains a failure.
+
+### Risks/Blockers
+- Indian Express may still be intermittently unavailable from GitHub-hosted runners; the RSS fallback and partial-success policy keep the rest of the site updating, but article-body fetches can remain source-dependent.
+
+### Next Step for Next Agent
+- Monitor the first post-fix scheduled run and confirm that the Actions job reaches Clean, Publish, and Pages deployment with either the HTML or RSS listing path.
+
 ## Entry Template
 
 ```md

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+import xml.etree.ElementTree as ET
 
 from .base_cleaner import BaseCleaner
 from .html_utils import extract_cards, extract_links
@@ -43,6 +44,10 @@ class IndianExpressCleaner(BaseCleaner):
         source_url: str,
         fetched_at: str,
     ) -> list[Article]:
+        rss_articles = self._parse_rss(content_html, fetched_at)
+        if rss_articles:
+            return rss_articles
+
         cards = extract_cards(
             content_html,
             base_url=_BASE,
@@ -83,6 +88,73 @@ class IndianExpressCleaner(BaseCleaner):
 
         if not articles:
             articles = self._fallback_link_parse(content_html, fetched_at)
+
+        return articles
+
+    def _parse_rss(self, content_html: str, fetched_at: str) -> list[Article]:
+        """Parse the Indian Express Explained RSS fallback.
+
+        The HTML listing is occasionally blocked for GitHub-hosted runners,
+        while the site's public RSS endpoint remains available.  RSS uses
+        ``<item>`` elements rather than the card-shaped HTML consumed by
+        ``extract_cards``, so it needs a small dedicated parser.
+        """
+        if "<rss" not in content_html[:500].lower():
+            return []
+
+        try:
+            root = ET.fromstring(content_html)
+        except ET.ParseError:
+            return []
+
+        articles: list[Article] = []
+        seen: set[str] = set()
+        for item in root.findall(".//item"):
+            values = {
+                child.tag.rsplit("}", 1)[-1]: " ".join(child.itertext()).strip()
+                for child in item
+            }
+            url = values.get("link", "").strip()
+            title = re.sub(r"\s+", " ", values.get("title", "")).strip()
+            if not self._is_article_url(url) or len(title) < _MIN_TITLE_LEN:
+                continue
+            if "live updates" in title.lower() or "live highlights" in title.lower():
+                continue
+            if url in seen:
+                continue
+
+            image_url = None
+            author = None
+            published_at = None
+            for child in item:
+                local_name = child.tag.rsplit("}", 1)[-1]
+                if local_name in {"content", "thumbnail", "enclosure"}:
+                    image_url = child.attrib.get("url") or child.attrib.get("href")
+                elif local_name in {"creator", "author"}:
+                    author = " ".join(child.itertext()).strip() or None
+                elif local_name in {"pubDate", "published", "updated"}:
+                    published_at = " ".join(child.itertext()).strip() or None
+
+            seen.add(url)
+            article_hash = Article.compute_hash(url, title)
+            articles.append(
+                Article(
+                    source=self.source_name,
+                    source_id=article_hash,
+                    url=url,
+                    title=title,
+                    subtitle=None,
+                    author=author,
+                    published_at=published_at,
+                    image_url=image_url,
+                    image_caption=None,
+                    content_html="",
+                    content_text="",
+                    fetched_at=fetched_at,
+                    hash=article_hash,
+                    category="National News",
+                )
+            )
 
         return articles
 

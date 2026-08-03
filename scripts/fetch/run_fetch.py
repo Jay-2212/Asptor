@@ -39,6 +39,14 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Stop immediately if any source fetch fails.",
     )
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help=(
+            "Continue with successfully fetched sources when at least one "
+            "source fails; still fail if every source fails."
+        ),
+    )
     return parser
 
 
@@ -52,7 +60,11 @@ def main() -> int:
         fail_fast=args.fail_fast,
     )
     print(json.dumps(results, indent=2))
-    return 1 if results["errors"] else 0
+    if not results["errors"]:
+        return 0
+    if args.allow_partial and results["saved"]:
+        return 0
+    return 1
 
 
 if __name__ == "__main__":

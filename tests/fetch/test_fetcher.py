@@ -6,11 +6,13 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from scripts.fetch.fetcher import (
     FetchError,
     fetch_with_retries,
     run_all_sources,
+    run_source_fetch,
     save_raw_snapshot,
 )
 from scripts.fetch.sources import SourceConfig
@@ -60,6 +62,23 @@ class FetcherTests(unittest.TestCase):
         self.assertIn("Failed to fetch", str(ctx.exception))
         self.assertEqual(delays, [0.25, 0.5])
 
+    def test_fetch_with_retries_does_not_retry_permanent_http_errors(self) -> None:
+        delays: list[float] = []
+        forbidden = HTTPError(
+            "https://example.com", 403, "Forbidden", hdrs=None, fp=None
+        )
+        with patch("scripts.fetch.fetcher.urlopen", side_effect=forbidden) as fetch:
+            with self.assertRaises(FetchError) as ctx:
+                fetch_with_retries(
+                    url="https://example.com",
+                    max_attempts=3,
+                    sleeper=delays.append,
+                )
+
+        self.assertEqual(fetch.call_count, 1)
+        self.assertEqual(delays, [])
+        self.assertEqual(ctx.exception.attempts, 1)
+
     def test_save_raw_snapshot_writes_expected_payload(self) -> None:
         source = SourceConfig(name="Example Source", url="https://example.com")
         fetched_at = datetime(2026, 1, 2, 3, 4, 5, tzinfo=timezone.utc)
@@ -77,6 +96,30 @@ class FetcherTests(unittest.TestCase):
         self.assertEqual(payload["source"]["name"], "Example Source")
         self.assertEqual(payload["fetched_at"], "2026-01-02T03:04:05Z")
         self.assertEqual(payload["content_html"], "<html>sample</html>")
+
+    def test_run_source_fetch_uses_fallback_url_after_primary_fails(self) -> None:
+        source = SourceConfig(
+            name="Example Source",
+            url="https://example.com/blocked",
+            fallback_urls=("https://example.com/feed",),
+        )
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with patch(
+                "scripts.fetch.fetcher.fetch_with_retries",
+                side_effect=[FetchError(source.url, 1, RuntimeError("403")), "<rss />"],
+            ) as fetch:
+                output = run_source_fetch(
+                    source=source,
+                    raw_root=Path(tmp_dir),
+                    sleeper=lambda _: None,
+                )
+
+            payload = json.loads(output.read_text(encoding="utf-8"))
+
+        self.assertEqual(fetch.call_args_list[0].kwargs["url"], source.url)
+        self.assertEqual(fetch.call_args_list[1].kwargs["url"], source.fallback_urls[0])
+        self.assertEqual(payload["content_html"], "<rss />")
+        self.assertEqual(payload["fetched_url"], source.fallback_urls[0])
 
     def test_run_all_sources_collects_errors_without_fail_fast(self) -> None:
         sources = (

@@ -12,6 +12,7 @@ A static GitHub Pages app for CAT VARC prep that provides ad-free, clean article
 
 1. **Fetch Layer** (`scripts/fetch/`)
    - Pull source feeds/pages
+   - Retry transient failures and use source-specific fallback URLs
    - Save raw snapshots to `data/raw/`
 
 2. **Clean Layer** (`scripts/clean/`)
@@ -30,6 +31,7 @@ A static GitHub Pages app for CAT VARC prep that provides ad-free, clean article
 5. **Automation Layer** (GitHub Actions)
    - Run every 3–4 hours
    - Execute pipeline
+   - Continue on partial source availability, but fail if no source is fetched
    - Commit generated output
    - Deploy via GitHub Pages
 

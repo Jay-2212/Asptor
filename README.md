@@ -71,6 +71,13 @@ python -m scripts.fetch.run_fetch --raw-root data/raw --max-attempts 3
 
 Snapshots are saved to `data/raw/<source_name>/<YYYYMMDDTHHMMSSZ>.json`.
 
+The fetch command is strict by default and exits non-zero when any source
+fails. Scheduled Actions runs use `--allow-partial`: they continue when at
+least one source succeeds, while still failing when every source is
+unavailable. Source configurations may also provide ordered fallback URLs;
+the Indian Express fetcher uses its public Explained RSS feed when the HTML
+listing is blocked for a runner.
+
 ---
 
 ## Phase 2 — Cleaning + Normalization

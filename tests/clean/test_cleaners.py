@@ -5,6 +5,7 @@ import unittest
 
 from scripts.clean.fifty_two_cleaner import FiftyTwoCleaner
 from scripts.clean.article_cleaners.fifty_two import FiftyTwoArticleCleaner
+from scripts.clean.indian_express_cleaner import IndianExpressCleaner
 from scripts.clean.the_caravan_cleaner import TheCaravanCleaner
 from scripts.clean.the_hindu_cleaner import TheHinduCleaner
 
@@ -21,6 +22,45 @@ def _make_snapshot(source_name: str, source_url: str, content_html: str) -> dict
         "fetched_at": _FETCHED_AT,
         "content_html": content_html,
     }
+
+
+# ---------------------------------------------------------------------------
+# Indian Express RSS fallback
+# ---------------------------------------------------------------------------
+
+_INDIAN_EXPRESS_RSS = """<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <item>
+      <title>How a Changing Economy Is Reshaping Indian Cities</title>
+      <link>https://indianexpress.com/article/explained/explained-economics/changing-economy-indian-cities-1234567/</link>
+      <pubDate>Mon, 03 Aug 2026 07:00:00 +0000</pubDate>
+      <dc:creator>Explained Desk</dc:creator>
+    </item>
+    <item>
+      <title>Subscribe to the Indian Express</title>
+      <link>https://indianexpress.com/subscribe/</link>
+    </item>
+  </channel>
+</rss>
+"""
+
+
+class IndianExpressCleanerTests(unittest.TestCase):
+    def test_parses_explained_rss_fallback(self) -> None:
+        cleaner = IndianExpressCleaner()
+        snapshot = _make_snapshot(
+            "indian_express_explained",
+            "https://indianexpress.com/section/explained/feed/",
+            _INDIAN_EXPRESS_RSS,
+        )
+
+        articles = cleaner.clean_snapshot(snapshot)
+
+        self.assertEqual(len(articles), 1)
+        self.assertEqual(articles[0].author, "Explained Desk")
+        self.assertEqual(articles[0].category, "National News")
+        self.assertIn("changing-economy-indian-cities", articles[0].url)
 
 
 # ---------------------------------------------------------------------------

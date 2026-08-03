@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import json
+import random
 import re
 import time
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
-from urllib.request import urlopen
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 from .sources import DEFAULT_SOURCES, SourceConfig
 
@@ -22,8 +24,6 @@ class FetchError(Exception):
         )
 
 
-import random
-
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -31,6 +31,18 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/124.0.0.0",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15",
 ]
+
+_RETRYABLE_HTTP_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
+
+
+def _is_retryable(exc: Exception) -> bool:
+    """Return whether retrying *exc* is likely to change the outcome.
+
+    Permanent HTTP responses such as 403 and 404 should move immediately to
+    a configured source fallback.  Transport errors and transient server
+    responses still receive the normal exponential retry treatment.
+    """
+    return not isinstance(exc, HTTPError) or exc.code in _RETRYABLE_HTTP_STATUS_CODES
 
 def fetch_with_retries(
     *,
@@ -44,8 +56,10 @@ def fetch_with_retries(
         raise ValueError("max_attempts must be >= 1")
 
     last_error: Exception | None = None
+    attempts_made = 0
     
     for attempt in range(1, max_attempts + 1):
+        attempts_made = attempt
         try:
             ua = random.choice(USER_AGENTS)
             headers = {
@@ -53,19 +67,18 @@ def fetch_with_retries(
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
                 "Accept-Language": "en-US,en;q=0.9",
             }
-            from urllib.request import Request
             req = Request(url, headers=headers)
             with urlopen(req, timeout=timeout_seconds) as response:
                 return response.read().decode("utf-8", errors="replace")
         except Exception as exc:  # noqa: BLE001
             last_error = exc
-            if attempt == max_attempts:
+            if attempt == max_attempts or not _is_retryable(exc):
                 break
             sleeper(backoff_seconds * (2 ** (attempt - 1)))
 
     raise FetchError(
         url=url,
-        attempts=max_attempts,
+        attempts=attempts_made,
         last_error=last_error or Exception("No error captured during retries"),
     )
 
@@ -86,6 +99,7 @@ def save_raw_snapshot(
     source: SourceConfig,
     content: str,
     fetched_at: datetime | None = None,
+    fetched_url: str | None = None,
 ) -> Path:
     moment = fetched_at or datetime.now(timezone.utc)
     source_dir = raw_root / _normalize_source_name(source.name)
@@ -97,6 +111,8 @@ def save_raw_snapshot(
         "fetched_at": _iso_utc(moment),
         "content_html": content,
     }
+    if fetched_url:
+        payload["fetched_url"] = fetched_url
     file_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
     )
@@ -112,14 +128,29 @@ def run_source_fetch(
     backoff_seconds: float = 1.0,
     sleeper: Callable[[float], None] = time.sleep,
 ) -> Path:
-    content = fetch_with_retries(
-        url=source.url,
-        max_attempts=max_attempts,
-        timeout_seconds=timeout_seconds,
-        backoff_seconds=backoff_seconds,
-        sleeper=sleeper,
+    failures: list[str] = []
+    for fetch_url in (source.url, *source.fallback_urls):
+        try:
+            content = fetch_with_retries(
+                url=fetch_url,
+                max_attempts=max_attempts,
+                timeout_seconds=timeout_seconds,
+                backoff_seconds=backoff_seconds,
+                sleeper=sleeper,
+            )
+            return save_raw_snapshot(
+                raw_root=raw_root,
+                source=source,
+                content=content,
+                fetched_url=fetch_url,
+            )
+        except Exception as exc:  # noqa: BLE001
+            failures.append(f"{fetch_url}: {exc}")
+
+    raise RuntimeError(
+        f"All configured URLs failed for source {source.name!r}: "
+        + " | ".join(failures)
     )
-    return save_raw_snapshot(raw_root=raw_root, source=source, content=content)
 
 
 def run_all_sources(
@@ -129,6 +160,7 @@ def run_all_sources(
     max_attempts: int = 3,
     timeout_seconds: int = 20,
     backoff_seconds: float = 1.0,
+    sleeper: Callable[[float], None] = time.sleep,
     fail_fast: bool = False,
 ) -> dict[str, list[dict[str, str]]]:
     results: dict[str, list[dict[str, str]]] = {"saved": [], "errors": []}
@@ -140,6 +172,7 @@ def run_all_sources(
                 max_attempts=max_attempts,
                 timeout_seconds=timeout_seconds,
                 backoff_seconds=backoff_seconds,
+                sleeper=sleeper,
             )
             results["saved"].append(
                 {"source": source.name, "url": source.url, "path": str(output_file)}
