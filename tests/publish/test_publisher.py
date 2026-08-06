@@ -247,6 +247,111 @@ class TestPublisher(unittest.TestCase):
             self.assertIn("Title 2", content)
             self.assertIn("Content currently unavailable", content)
 
+    def test_publish_article_page_escapes_malicious_title_and_strips_script(self):
+        article = Article(
+            source="the_hindu",
+            source_id="id4",
+            url="https://example.com/4",
+            title='<script>alert(1)</script> Breaking News',
+            subtitle=None,
+            author=None,
+            published_at=None,
+            image_url=None, image_caption=None,
+            content_html='<p>Body</p><script>alert(2)</script><p onclick="alert(3)">click</p>',
+            content_text="Body",
+            fetched_at="2026-05-07T13:00:00Z",
+            hash="hash4"
+        )
+        publisher = Publisher(self.processed_root, self.site_root)
+        publisher.ensure_dirs()
+        publisher.publish_article_page(article, "2026-05-07")
+
+        content = (self.site_root / "content" / "hash4.html").read_text()
+        self.assertNotIn("<script>alert(1)</script>", content)
+        self.assertIn("&lt;script&gt;", content)
+        self.assertNotIn("<script>alert(2)</script>", content)
+        self.assertNotIn('onclick="alert(3)"', content)
+        self.assertIn("Body", content)
+        self.assertIn("click", content)
+
+    def test_publish_article_page_neutralizes_javascript_url_and_image(self):
+        article = Article(
+            source="the_hindu",
+            source_id="id5",
+            url="javascript:alert(document.cookie)",
+            title="Normal Title",
+            subtitle=None,
+            author=None,
+            published_at=None,
+            image_url="javascript:alert(1)",
+            image_caption=None,
+            content_html="<p>Body</p>",
+            content_text="Body",
+            fetched_at="2026-05-07T13:00:00Z",
+            hash="hash5"
+        )
+        publisher = Publisher(self.processed_root, self.site_root)
+        publisher.ensure_dirs()
+        publisher.publish_article_page(article, "2026-05-07")
+
+        content = (self.site_root / "content" / "hash5.html").read_text()
+        self.assertNotIn("javascript:", content)
+        # No unsafe image_url means no hero image block should be emitted.
+        self.assertNotIn("<img", content)
+
+    def test_publish_article_page_keeps_safe_https_url_and_image(self):
+        article = Article(
+            source="the_hindu",
+            source_id="id6",
+            url="https://example.com/real-article",
+            title="Normal Title",
+            subtitle=None,
+            author=None,
+            published_at=None,
+            image_url="https://example.com/hero.jpg",
+            image_caption=None,
+            content_html="<p>Body</p>",
+            content_text="Body",
+            fetched_at="2026-05-07T13:00:00Z",
+            hash="hash6"
+        )
+        publisher = Publisher(self.processed_root, self.site_root)
+        publisher.ensure_dirs()
+        publisher.publish_article_page(article, "2026-05-07")
+
+        content = (self.site_root / "content" / "hash6.html").read_text()
+        self.assertIn("https://example.com/real-article", content)
+        self.assertIn('src="https://example.com/hero.jpg"', content)
+
+    def test_publish_article_page_preserves_unicode_title(self):
+        article = Article(
+            source="the_hindu",
+            source_id="id7",
+            url="https://example.com/7",
+            title="दुनिया 世界 🌍 news",
+            subtitle=None,
+            author=None,
+            published_at=None,
+            image_url=None, image_caption=None,
+            content_html="<p>Body</p>",
+            content_text="Body",
+            fetched_at="2026-05-07T13:00:00Z",
+            hash="hash7"
+        )
+        publisher = Publisher(self.processed_root, self.site_root)
+        publisher.ensure_dirs()
+        publisher.publish_article_page(article, "2026-05-07")
+
+        content = (self.site_root / "content" / "hash7.html").read_text()
+        self.assertIn("दुनिया 世界 🌍 news", content)
+
+    def test_publish_site_with_no_articles_returns_zero(self):
+        # Empty processed_root -- e.g. every source failed upstream.
+        publisher = Publisher(self.processed_root, self.site_root)
+        count = publisher.publish_site()
+        self.assertEqual(count, 0)
+        self.assertTrue((self.site_root / "index.html").exists())
+
     def test_publish_article_page_handles_missing_html_but_has_text(self):
         article_text_only = Article(
             source="the_hindu",

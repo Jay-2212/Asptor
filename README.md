@@ -2,40 +2,73 @@
 
 Asptor is a CAT preparation reading app hosted on GitHub Pages.
 
-This repository is currently in the **foundation phase**. The goal is to build a clean, ad-free reading experience that periodically pulls high-quality journalism (starting with The Hindu Opinion/Edit, The Caravan, and Fifty Two), cleans article content, deduplicates updates, and publishes a static site.
+It runs a scheduled pipeline (every 4 hours, via GitHub Actions) that pulls
+listing pages from a small set of publications — currently The Hindu
+(Opinion and National), Indian Express (Explained), The Caravan, and Fifty
+Two — cleans and normalises the articles it finds, deduplicates against
+everything seen before, and republishes a static reading site to GitHub
+Pages. This has been live and running on schedule for months; it is not a
+dormant scaffold.
 
-## Current Scope (Scaffold)
+**Rights and attribution:** Jay's pipeline/cleaning/diffing code is MIT
+licensed (`LICENSE-CODE`). Article content itself is not — see
+`CONTENT_LICENSE.md` for the precise notice before assuming anything about
+what you can do with the data in `data/` or `site/`.
 
-This initial scaffold provides:
+## Current Pipeline (Live)
 
-- Project structure for data ingestion, cleaning, diffing, and static site output
-- Agent-facing execution and handoff documentation
-- A shared logbook for multi-agent progress tracking
+1. **Fetch** — retrying HTTP fetch with per-source fallback URLs; a
+   scheduled run tolerates individual source failures
+   (`--allow-partial`) but fails outright if every source fails.
+2. **Clean** — per-source listing-page parsers normalise articles into a
+   common schema; a scheduled run also tolerates individual malformed
+   snapshots (`--allow-partial`) without losing a healthy source's output.
+3. **Diff** — compares against persistent per-source seen-hash state so an
+   article is only ever "new" once.
+4. **Full clean** — fetches and extracts full article bodies for newly
+   diffed articles (bounded per run — see `ARCHITECTURE.md` for the
+   diff-bookkeeping fix that keeps this from re-processing history).
+5. **Publish** — generates the static site, sanitizing every field at the
+   output boundary (`scripts/publish/sanitize.py`) and validating the
+   result (`scripts/publish/validate_site.py`) before anything is
+   committed. A run that publishes zero articles fails the job rather than
+   deploying an empty site.
+6. **Health report** — `data/health_report.json` is regenerated every run:
+   per-source counts, short/empty-content count, possible-duplicate
+   counts. See `ARCHITECTURE.md` for what is a hard failure versus a
+   visible warning.
+7. **Commit + deploy** — generated `data/`/`site/` changes are committed,
+   and GitHub Pages is deployed from the validated `site/` output.
 
-## Planned Workflow
-
-1. Python fetch pipeline runs on schedule (GitHub Actions, every 3–4 hours)
-2. Source-specific cleaning and normalization
-3. Diff layer identifies newly fetched content only
-4. Static content is generated for GitHub Pages
-5. GitHub Pages serves updated reading site
+See `ARCHITECTURE.md` for the full design, the health-gate policy, and the
+generated-data retention policy. See `SECURITY.md` for the threat model
+(this pipeline ingests untrusted third-party HTML unattended) and
+`CONTRIBUTING.md` for the contribution/handoff workflow.
 
 ## Repository Structure
 
 ```text
 Asptor/
 ├── AGENTS.md                  # Agent operating guide
-├── ARCHITECTURE.md            # System design and delivery phases
+├── ARCHITECTURE.md            # System design, health gates, retention policy
+├── SECURITY.md                # Threat model, sanitizer design, reporting
+├── CONTRIBUTING.md            # Contribution + handoff workflow
+├── CONTENT_LICENSE.md         # Rights/attribution notice (read before reusing data/)
 ├── INSTRUCTIONS.md            # Quick execution instructions for agents
 ├── LOGBOOK.md                 # Handoff + signoff ledger between agents
 ├── data/
-│   ├── raw/                   # Raw fetched source data
-│   └── processed/             # Cleaned/normalized outputs
+│   ├── raw/                   # Raw fetched source data (not committed -- see .gitignore)
+│   ├── processed/             # Cleaned/normalized outputs
+│   ├── diff/                  # New-content discovery history
+│   ├── state/                 # Persistent dedup + full-clean bookkeeping
+│   └── health_report.json     # Per-run health/quality report
 ├── scripts/
 │   ├── fetch/                 # Source fetchers
 │   ├── clean/                 # Source-specific cleaners
 │   ├── diff/                  # New-content detection logic
-│   └── publish/               # Static output generation helpers
+│   ├── publish/                # Static output generation, sanitization, validation
+│   ├── report/                 # Shared health/audit reporting
+│   └── maintain.py             # Local pipeline runner + audit CLI (--dry-run supported)
 ├── site/
 │   ├── assets/
 │   └── content/
@@ -43,14 +76,18 @@ Asptor/
     ├── fetch/
     ├── clean/
     ├── diff/
-    └── publish/
+    ├── publish/
+    └── report/
 ```
 
 ## Notes on GitHub Pages + Actions
 
-- GitHub Actions can commit generated content back to the repository using the default `GITHUB_TOKEN` (usually enough for same-repo updates).
-- A Personal Access Token (PAT) may be needed only for advanced cross-repo or restricted-permission workflows.
-- Final token strategy should be documented when workflow implementation begins.
+- `.github/workflows/pipeline.yml` (schedule + manual dispatch only) commits
+  generated content using the default `GITHUB_TOKEN`, scoped per-job to the
+  minimum permissions each job needs. No PAT is used.
+- `.github/workflows/tests.yml` runs on every push/PR, read-only, and never
+  touches live publishers or the repository. See `ARCHITECTURE.md`
+  "Automation Layer" for why these are two separate workflows.
 
 ## Next Step
 

@@ -1,23 +1,37 @@
 name: Asptor Pipeline
 
+# Scheduled/manual only. Code pushes are validated by tests.yml instead --
+# see ARCHITECTURE.md "Automation Layer" for why this pipeline no longer
+# runs on every push: a code change (e.g. a docs edit) does not need to
+# trigger ~90 minutes of live fetching against third-party publishers, and
+# mixing "did the code change" with "is it time to refresh content" made
+# a code push and a scheduled refresh race for the same generated files.
+
 on:
-  push:
-    branches: [ main ]
   schedule:
     - cron: '0 */4 * * *'  # Every 4 hours
   workflow_dispatch:      # Manual trigger
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# Prevent overlapping scheduled/manual runs. cancel-in-progress is
+# deliberately false: cancelling mid-commit or mid-`git push` can leave
+# data/ and site/ in a torn state (some files updated, others not), and
+# GitHub Pages deploy is a separate job that must not race with a second
+# run's commit. A queued run is safe; a cancelled one is not.
+concurrency:
+  group: asptor-pipeline
+  cancel-in-progress: false
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    # Only this job needs write access, and only to repository contents
+    # (for the generated-data commit). Pages deployment is a separate
+    # permission scope handled entirely by the deploy job below.
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,7 +44,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 
       - name: Run Tests
         run: python3 -m unittest discover tests -v
@@ -39,7 +53,7 @@ jobs:
         run: python3 -m scripts.fetch.run_fetch --raw-root data/raw --allow-partial
 
       - name: Run Clean
-        run: python3 -m scripts.clean.run_clean --raw-root data/raw --processed-root data/processed
+        run: python3 -m scripts.clean.run_clean --raw-root data/raw --processed-root data/processed --allow-partial
 
       - name: Run Diff
         run: python3 -m scripts.diff.run_diff --processed-root data/processed --state-root data/state --diff-root data/diff
@@ -50,10 +64,16 @@ jobs:
       - name: Run Publish
         run: python3 -m scripts.publish.run_publish --processed-root data/processed --site-root site
 
+      - name: Generate health report
+        run: python3 -m scripts.report.run_health_report --processed-root data/processed --out data/health_report.json
+
+      - name: Validate generated site
+        run: python3 -m scripts.publish.validate_site --site-root site
+
       - name: Commit data and site changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ site/
           git diff --quiet && git diff --staged --quiet || (git commit -m "Automated pipeline update [skip ci]" && git push)
 
@@ -65,6 +85,9 @@ jobs:
   deploy:
     needs: run-pipeline
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

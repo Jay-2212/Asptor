@@ -38,5 +38,13 @@ def main():
         print(f"Error during publishing: {e}", file=sys.stderr)
         sys.exit(1)
 
+    if count == 0:
+        print(
+            "Error: publish produced 0 articles. Refusing to leave an empty "
+            "index.html in place for deployment.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
 if __name__ == "__main__":
     main()

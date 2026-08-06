@@ -18,3 +18,33 @@ grant permission to redistribute it.
 
 `LICENSE-CODE` covers the fetching, cleaning, and diffing code, not the
 content itself.
+
+## What is stored, and why
+
+- `data/processed/` and `data/diff/` store normalised article metadata
+  (title, author, published date, canonical source URL) and, where
+  fetched, full article body HTML/text, exactly as extracted from the
+  publisher's own page. Nothing is paraphrased, summarised, or altered
+  beyond structural cleanup (removing ads/navigation/scripts).
+- Every stored article record retains its original `url` (the canonical
+  source link) and `source` field, and every generated article page is
+  built to link back to that original URL. This is a deliberate design
+  choice, not incidental: attribution to the original publisher is
+  preserved at every layer, not just on the index page. (The one exception
+  is defensive, not intentional: if a stored `url` ever failed the
+  publish-time safety check in `scripts/publish/sanitize.py` — e.g. an
+  unexpected non-http(s) scheme — the page omits the source link rather
+  than rendering something unsafe. In practice every configured source's
+  URLs are validated at extraction time, so this should not occur.)
+- `data/health_report.json` and `MAINTENANCE_REPORT.md` contain only
+  aggregate counts (article totals, per-source counts, duplicate/short
+  counts) — never article text, tokens, or local file paths.
+- See `ARCHITECTURE.md` for the retention policy governing how long raw,
+  processed, and diff data are kept.
+
+This notice describes what is stored and why; it is not a legal opinion,
+and it does not represent that this storage or republishing is cleared
+under any particular publisher's terms of use or applicable copyright law.
+If you are a rights holder with a concern about content appearing here,
+please open a GitHub issue or contact the maintainer via
+https://jaybharti.me/.

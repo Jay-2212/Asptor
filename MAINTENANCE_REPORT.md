@@ -1,11 +1,13 @@
 # Asptor Maintenance Report
 
-**Run Timestamp:** 2026-05-08 03:19:43
+**Run Timestamp (UTC):** 2026-08-06 16:36 UTC
 
 ## Statistics
-- **Total Articles Discovered:** 1852
-- **Empty/Short Content:** 1180
-- **Missing Hero Images:** 1476
+- **Total Articles Discovered:** 7160
+- **Empty/Short Content:** 29
+- **Missing Hero Images:** 6253
+- **Possible Duplicate Titles:** 18
+- **Malformed Files:** 0
 
 ## Status
-⚠️ **Warning:** More than 50% of articles have empty content. Check cleaners.
+Dry run only — no pipeline steps were executed; statistics reflect existing local data.

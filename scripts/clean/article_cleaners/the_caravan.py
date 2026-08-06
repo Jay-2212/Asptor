@@ -23,8 +23,8 @@ class TheCaravanArticleCleaner:
         if hero_container:
             img = hero_container.select_one("img")
             if img:
-                image_url = img.get("src")
-                if not image_url.startswith("http"):
+                image_url = img.get("src") or None
+                if image_url and not image_url.startswith("http"):
                     image_url = "https:" + image_url
             
             caption_tag = hero_container.select_one("figcaption, .article_cover_caption")

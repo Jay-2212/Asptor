@@ -19,9 +19,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class FullArticleProcessor:
-    def __init__(self, processed_root: Path, diff_root: Path):
+    def __init__(self, processed_root: Path, diff_root: Path, state_root: Path | None = None):
         self.processed_root = processed_root
         self.diff_root = diff_root
+        # Defaults to the conventional data/state sibling of data/diff.
+        self.state_root = state_root or (diff_root.parent / "state")
         self.cleaners = {
             "the_hindu_opinion": TheHinduArticleCleaner(),
             "the_hindu_national": TheHinduArticleCleaner(source_name="the_hindu_national", article_path_pattern="/news/national/"),
@@ -29,37 +31,90 @@ class FullArticleProcessor:
             "the_caravan": TheCaravanArticleCleaner(),
             "fifty_two": FiftyTwoArticleCleaner(),
         }
+        # Visible run summary. process_all() previously swallowed every
+        # per-article exception and always exited 0, which made full-clean
+        # failures invisible in Actions logs (see LOGBOOK / SECURITY notes).
+        self.stats = {"attempted": 0, "succeeded": 0, "failed": 0}
 
     def get_cleaner(self, source_name: str):
         return self.cleaners.get(source_name)
 
+    # ------------------------------------------------------------------
+    # Diff-file bookkeeping
+    # ------------------------------------------------------------------
+    # data/diff accumulates one file per source per run and is never
+    # pruned (it is the append-only discovery record described in
+    # ARCHITECTURE.md). Without this bookkeeping, every scheduled run
+    # would re-walk every diff file ever produced, which is why full-clean
+    # runtime grew unbounded toward the 4-hour cron interval. Each diff
+    # file is attempted once; already-enriched articles are cheap no-ops
+    # on the (now skipped) re-visit, but permanently-failing URLs were
+    # being retried forever. Use --repair to force a re-scan of empty
+    # bodies in processed data instead of relying on this to retry.
+
+    def _seen_diffs_path(self, source_name: str) -> Path:
+        return self.state_root / source_name / "full_clean_seen_diffs.json"
+
+    def _load_seen_diffs(self, source_name: str) -> set:
+        path = self._seen_diffs_path(source_name)
+        if not path.exists():
+            return set()
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            return set(data) if isinstance(data, list) else set()
+        except Exception:
+            return set()
+
+    def _mark_diff_seen(self, source_name: str, filename: str) -> None:
+        path = self._seen_diffs_path(source_name)
+        seen = self._load_seen_diffs(source_name)
+        seen.add(filename)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(sorted(seen), indent=2), encoding="utf-8")
+
     def process_all(self, limit: int = 5, repair_empty: bool = False):
-        """Fetch and clean full bodies. 
+        """Fetch and clean full bodies.
         If repair_empty is True, scan processed root for empty content.
         Otherwise, scan diff_root for new articles.
         """
         if repair_empty:
             logger.info("Repairing empty articles in processed root...")
-            for source_dir in self.processed_root.iterdir():
-                if not source_dir.is_dir():
-                    continue
-                source_name = source_dir.name
-                for proc_file in source_dir.glob("*.json"):
-                    self.process_file(proc_file, source_name, limit, force_refetch=True)
+            if self.processed_root.exists():
+                for source_dir in self.processed_root.iterdir():
+                    if not source_dir.is_dir():
+                        continue
+                    source_name = source_dir.name
+                    for proc_file in source_dir.glob("*.json"):
+                        self.process_file(proc_file, source_name, limit, force_refetch=True)
         else:
             if not self.diff_root.exists():
                 logger.info("No diff files found. Skipping full content fetch.")
-                return
+                return self.stats
 
             for source_dir in self.diff_root.iterdir():
                 if not source_dir.is_dir():
                     continue
-                
+
                 source_name = source_dir.name
+                seen_diffs = self._load_seen_diffs(source_name)
+                unseen_files = sorted(
+                    f for f in source_dir.glob("*.json") if f.name not in seen_diffs
+                )
+                if not unseen_files:
+                    continue
                 logger.info(f"Processing new articles for: {source_name}")
-                
-                for diff_file in source_dir.glob("*.json"):
+
+                for diff_file in unseen_files:
                     self.process_file(diff_file, source_name, limit)
+                    self._mark_diff_seen(source_name, diff_file.name)
+
+        logger.info(
+            "Full-clean summary: attempted=%d succeeded=%d failed=%d",
+            self.stats["attempted"],
+            self.stats["succeeded"],
+            self.stats["failed"],
+        )
+        return self.stats
 
     def process_file(self, json_file: Path, source_name: str, limit: int, force_refetch: bool = False):
         try:
@@ -78,12 +133,13 @@ class FullArticleProcessor:
                 
                 # Only fetch if content is empty (or forced)
                 if not article.content_html or force_refetch:
+                    self.stats["attempted"] += 1
                     logger.info(f"    Fetching: {article.title} ({article.url})")
                     try:
                         raw_html = fetch_with_retries(url=article.url, max_attempts=2)
                         cleaner = self.get_cleaner(source_name)
                         result = cleaner.clean(raw_html) if cleaner else generic_clean(raw_html)
-                        
+
                         if result.get("content_html"):
                             # Update fields
                             article.content_html = result.get("content_html", "")
@@ -91,19 +147,22 @@ class FullArticleProcessor:
                             article.author = result.get("author") or article.author
                             article.image_url = result.get("image_url") or article.image_url
                             article.image_caption = result.get("image_caption", "")
-                            
+
                             articles_data[i] = article.to_dict()
-                            
+
                             # If we are in diff mode, also update the processed record
                             if not force_refetch:
                                 self.update_processed_record(article, source_name)
-                            
+
                             updated_count += 1
+                            self.stats["succeeded"] += 1
                             time.sleep(1.5)
                         else:
                             logger.warning(f"      No content extracted for: {article.title}")
+                            self.stats["failed"] += 1
                     except Exception as e:
                         logger.error(f"      Error: {e}")
+                        self.stats["failed"] += 1
 
             if updated_count > 0:
                 with open(json_file, "w") as f:
@@ -145,4 +204,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     processor = FullArticleProcessor(args.processed_root, args.diff_root)
-    processor.process_all(limit=args.limit, repair_empty=args.repair)
+    stats = processor.process_all(limit=args.limit, repair_empty=args.repair)
+    print(json.dumps(stats or processor.stats, indent=2))

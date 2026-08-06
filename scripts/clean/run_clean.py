@@ -180,6 +180,15 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Stop immediately if any snapshot fails to process.",
     )
+    parser.add_argument(
+        "--allow-partial",
+        action="store_true",
+        help=(
+            "Continue when at least one snapshot processes successfully, "
+            "even if other snapshots error out; still fail if every "
+            "snapshot fails or no snapshots were found."
+        ),
+    )
     return parser
 
 
@@ -191,7 +200,11 @@ def main() -> int:
         fail_fast=args.fail_fast,
     )
     print(json.dumps(results, indent=2))
-    return 1 if results["errors"] else 0
+    if not results["errors"]:
+        return 0
+    if args.allow_partial and results["processed"]:
+        return 0
+    return 1
 
 
 if __name__ == "__main__":

@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from scripts.clean import run_clean as run_clean_module
 from scripts.clean.registry import CLEANERS, get_cleaner
 from scripts.clean.run_clean import process_snapshot, run_clean
 
@@ -197,6 +200,36 @@ class RunCleanTests(unittest.TestCase):
             bad_file.write_text("NOT_JSON", encoding="utf-8")
             with self.assertRaises(Exception):
                 run_clean(Path(raw_dir), Path(proc_dir), fail_fast=True)
+
+
+class RunCleanCliAllowPartialTests(unittest.TestCase):
+    """One malformed raw snapshot should not fail the whole clean step
+    when other snapshots processed successfully -- mirrors the fetch
+    layer's --allow-partial behaviour."""
+
+    def test_allow_partial_succeeds_when_some_snapshots_processed(self) -> None:
+        result = {"processed": [{"snapshot": "a", "articles": 1}], "errors": [{"snapshot": "b", "error": "bad"}]}
+        with patch.object(run_clean_module, "run_clean", return_value=result):
+            with patch.object(sys, "argv", ["run_clean", "--allow-partial"]):
+                self.assertEqual(run_clean_module.main(), 0)
+
+    def test_allow_partial_still_fails_when_nothing_processed(self) -> None:
+        result = {"processed": [], "errors": [{"snapshot": "b", "error": "bad"}]}
+        with patch.object(run_clean_module, "run_clean", return_value=result):
+            with patch.object(sys, "argv", ["run_clean", "--allow-partial"]):
+                self.assertEqual(run_clean_module.main(), 1)
+
+    def test_default_mode_fails_on_any_error(self) -> None:
+        result = {"processed": [{"snapshot": "a", "articles": 1}], "errors": [{"snapshot": "b", "error": "bad"}]}
+        with patch.object(run_clean_module, "run_clean", return_value=result):
+            with patch.object(sys, "argv", ["run_clean"]):
+                self.assertEqual(run_clean_module.main(), 1)
+
+    def test_no_errors_succeeds_without_flag(self) -> None:
+        result = {"processed": [{"snapshot": "a", "articles": 1}], "errors": []}
+        with patch.object(run_clean_module, "run_clean", return_value=result):
+            with patch.object(sys, "argv", ["run_clean"]):
+                self.assertEqual(run_clean_module.main(), 0)
 
 
 if __name__ == "__main__":

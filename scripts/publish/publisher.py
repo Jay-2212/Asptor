@@ -7,6 +7,7 @@ from string import Template
 from typing import Dict, List, Optional
 
 from scripts.clean.schema import Article
+from .sanitize import escape_text, safe_url, sanitize_content_html
 from .templates import INDEX_TEMPLATE, ARTICLE_ITEM_TEMPLATE, ARTICLE_PAGE_TEMPLATE, BASE_HEAD, SECTION_TEMPLATE
 
 # ------------------------------------------------------------------
@@ -180,10 +181,10 @@ class Publisher:
                     article_items.append(
                         ARTICLE_ITEM_TEMPLATE.substitute(
                             hash=article.hash,
-                            source=article.source.replace("_", " ").upper(),
-                            date=date_str,
-                            title=article.title,
-                            excerpt=excerpt
+                            source=escape_text(article.source.replace("_", " ").upper()),
+                            date=escape_text(date_str),
+                            title=escape_text(article.title),
+                            excerpt=escape_text(excerpt)
                         )
                     )
                 section_html = SECTION_TEMPLATE.substitute(
@@ -206,39 +207,48 @@ class Publisher:
     def publish_article_page(self, article: Article, generated_at: str):
         """Generate a single article HTML page."""
         date_str = article.published_at[:10] if article.published_at else article.fetched_at[:10]
-        
-        author_html = f'<span>By {article.author}</span>' if article.author else ""
-        
-        # Hero image logic
+
+        author_html = f'<span>By {escape_text(article.author)}</span>' if article.author else ""
+
+        # Hero image logic. image_url is untrusted (sourced from third-party
+        # markup); safe_url drops anything that is not an http(s)/relative URL.
         hero_html = ""
-        if article.image_url:
-            caption_html = f'<div class="image-caption">{article.image_caption}</div>' if article.image_caption else ""
+        safe_image_url = safe_url(article.image_url)
+        if safe_image_url:
+            caption_html = (
+                f'<div class="image-caption">{escape_text(article.image_caption)}</div>'
+                if article.image_caption
+                else ""
+            )
             hero_html = f"""
             <div class="hero-image">
-                <img src="{article.image_url}" alt="{article.title}">
+                <img src="{safe_image_url}" alt="{escape_text(article.title)}">
                 {caption_html}
             </div>
             """
-        
-        # If content_html is empty, provide a placeholder
-        content_html = article.content_html
+
+        # If content_html is empty, provide a placeholder. Escape content_text
+        # since it is rendered as plain text wrapped in <p> tags, not markup.
+        content_html = sanitize_content_html(article.content_html)
         if not content_html:
             if article.content_text:
-                content_html = "".join([f"<p>{p}</p>" for p in article.content_text.split("\n\n")])
+                content_html = "".join(
+                    f"<p>{escape_text(p)}</p>" for p in article.content_text.split("\n\n")
+                )
             else:
                 content_html = "<p>Content currently unavailable. This may be because the article body has not been fetched yet.</p>"
 
         page_html = ARTICLE_PAGE_TEMPLATE.substitute(
             base_head=BASE_HEAD,
-            title=article.title,
+            title=escape_text(article.title),
             author_html=author_html,
-            source=article.source.replace("_", " ").upper(),
-            date=date_str,
+            source=escape_text(article.source.replace("_", " ").upper()),
+            date=escape_text(date_str),
             hero_html=hero_html,
             content_html=content_html,
-            url=article.url,
-            generated_at=generated_at
+            url=safe_url(article.url, default="#"),
+            generated_at=escape_text(generated_at)
         )
-        
+
         with open(self.content_dir / f"{article.hash}.html", "w") as f:
             f.write(page_html)

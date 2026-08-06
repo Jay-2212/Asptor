@@ -2,6 +2,180 @@
 
 Use this file as the single source of truth for task handoffs.
 
+## [2026-08-06 16:00 UTC] Agent: Claude (autonomous maintenance pass)
+### Scope Claimed
+- Production-reliability, content-quality, workflow, and rights-safety
+  pass across the whole pipeline (not a single component) — requested as
+  a maintainer-level audit, not incremental feature work.
+
+### Context Read
+- [x] README.md, ARCHITECTURE.md, AGENTS.md, INSTRUCTIONS.md
+- [x] LOGBOOK.md (full history)
+- [x] All of scripts/ (fetch, clean, diff, publish, maintain.py)
+- [x] All of tests/ (129 tests baseline)
+- [x] .github/workflows/pipeline.yml, CONTENT_LICENSE.md, LICENSE-CODE
+
+### Key findings before implementation
+- **Output escaping gap:** `scripts/publish/publisher.py` interpolated
+  article title/author/url/image_url/content_html into HTML via
+  `string.Template.substitute` and f-strings with zero escaping.
+  `javascript:` URLs and raw `<script>`/`on*` handlers from a publisher's
+  page would have reached the deployed site unmodified.
+- **`scripts/maintain.py`** used `subprocess.run(cmd, shell=True)`.
+- **Full-clean runtime growth:** `run_full_clean` re-walked every diff
+  file ever produced on every run (not just the current run's), which is
+  why scheduled runs had grown to 1h13m–1h41m against a 4-hour schedule.
+- **Empty-deploy risk:** `run_publish` always exited 0, including when 0
+  articles were published — a total upstream failure could silently
+  overwrite a healthy deployed site with an empty one.
+- **Repo size:** ~2 GB, driven primarily by `data/raw/` (806 MB in a
+  50-commit shallow clone) — raw HTML committed every 4 hours with no
+  cross-run read dependency.
+- **Docs stale:** README still described the project as "foundation
+  phase" / "Scaffold" despite months of live scheduled operation.
+- **`push` trigger overlap:** `pipeline.yml` ran the full ~90-minute
+  scrape-and-deploy pipeline on every push to `main`, including
+  docs-only commits.
+
+### Work Completed
+- Added `scripts/publish/sanitize.py` (`escape_text`, `safe_url`,
+  `sanitize_content_html`) and wired it through
+  `publisher.publish_article_page`/`publish_site` — every article field
+  is now escaped or scheme-filtered at the output boundary.
+- Rewrote `scripts/maintain.py`: explicit argument-list subprocess calls
+  (no `shell=True`), cwd validation, `--dry-run` mode, timezone-aware
+  timestamps, and shared health-audit logic factored into
+  `scripts/report/health.py` (also used by the new per-run health report).
+- Added `scripts/report/run_health_report.py` → writes
+  `data/health_report.json` every pipeline run (counts only, no paths or
+  secrets).
+- Added `scripts/publish/validate_site.py`, run before the generated
+  commit: checks `site/index.html` is non-empty, HTML-shaped, and that
+  every linked article page actually exists.
+- `run_publish` now exits non-zero when 0 articles are published.
+- `run_clean` gained `--allow-partial` (mirrors the fetch layer): one
+  malformed raw snapshot no longer fails the entire clean step for every
+  other source.
+- Fixed the full-clean runtime-growth bug: `FullArticleProcessor` now
+  tracks processed diff files per source in
+  `data/state/<source>/full_clean_seen_diffs.json` and only visits new
+  ones; `--repair` mode is unaffected (still rescans all processed data on
+  demand).
+- Fixed a latent `None.startswith` crash in
+  `article_cleaners/the_caravan.py`'s hero-image extraction.
+- Split `.github/workflows/pipeline.yml` (schedule + `workflow_dispatch`
+  only now) from a new `.github/workflows/tests.yml` (push/PR, offline,
+  read-only). Added `concurrency: group: asptor-pipeline,
+  cancel-in-progress: false`; split `permissions` per job
+  (`contents: write` for the pipeline job, `pages: write`/`id-token:
+  write` only for deploy); added the health-report and validate-site
+  steps before commit.
+- Pinned `requirements.txt` to `beautifulsoup4==4.15.0` (previously
+  unpinned).
+- `.gitignore`d new `data/raw/*/*.json` (forward-only — no history
+  rewrite; existing committed snapshots are untouched).
+- Added `SECURITY.md`, `CONTRIBUTING.md`; rewrote the stale parts of
+  `README.md`; added an "Automation Layer" and "Generated-data retention
+  policy" section to `ARCHITECTURE.md`; extended `CONTENT_LICENSE.md`
+  with a "What is stored, and why" section (still MIT-for-code-only,
+  still no relicensing of publisher content, still no legal-clearance
+  claim).
+- Added 63 new tests: `tests/publish/test_sanitize.py` (25),
+  `tests/report/test_health.py` (11), `tests/publish/test_validate_site.py`
+  (5), `tests/clean/test_run_full_clean.py` (6, new coverage — this module
+  had none before), `tests/test_pipeline_integration.py` (5, end-to-end
+  fixture tests covering partial-source-failure, malformed-snapshot,
+  all-sources-failing, unicode, missing/malformed dates, and
+  idempotent-rerun scenarios), `tests/publish/test_run_publish.py` (2),
+  plus escaping/scheme-filtering assertions and CLI exit-code tests added
+  to existing `test_publisher.py` (5 new) and `test_registry_and_run.py`
+  (4 new).
+
+### Tests/Validation
+- Full suite: `python3 -m unittest discover tests -v` → **192 tests, all
+  passing** (up from 129 baseline).
+- `python3 -m scripts.publish.validate_site --site-root site` → passes
+  against the currently-committed site.
+- **Sanitizer verified against real production data, not just fixtures**
+  (flagged as a gap by the advisor review before commit): republished all
+  7,160 currently-processed articles through the new sanitizer into a
+  scratch directory and diff'd every matching page against the committed
+  `site/content/`. Result: 0 zero-byte pages, 0 pages shrunk >38%,
+  paragraph counts (`<p` tag counts) identical on the largest article
+  (297=297), fallback-page count unchanged (29=29), index link count
+  unchanged (7160=7160). The one substantive change found: **5,159 of the
+  7,160 currently-deployed article pages contain a live inline
+  `onclick="if (!window.__cfRLUnblockHandlers) return false;
+  openShareLink(...)"` handler**, sourced verbatim from The Hindu's
+  share-widget markup — every one of those 5,159 pages currently executes
+  third-party JavaScript on the deployed site. The new sanitizer strips
+  all of them (confirmed 0 remaining in the regenerated output) while
+  leaving surrounding content byte-for-byte structurally intact. This is
+  the concrete, previously-live instance of the vulnerability this pass
+  was meant to close, not a hypothetical one. During this verification,
+  fragment-only anchors (`href="#424441"`, used by The Hindu's live-blog
+  format) and `mailto:`/`tel:` share links were initially over-stripped as
+  a side effect of the scheme allowlist; both were fixed and covered with
+  tests before the numbers above were captured.
+- 22 orphaned stale article pages were also surfaced by this diff (files
+  that exist in the committed `site/content/` with no corresponding
+  hash in current `data/processed/`) — `Publisher` has never deleted
+  stale pages when an article drops out of processed data. Pre-existing,
+  not caused by this pass; not fixed here (see Next Step).
+- `python3 -m scripts.maintain --dry-run` → runs cleanly against local
+  data (surfaced a real, pre-existing content-quality signal: 6253/7160
+  local processed articles are missing a hero image — not fixed in this
+  pass, flagged as a follow-up).
+- `git diff --check` → clean (no whitespace errors). Secret/path scan of
+  the diff (code + docs, excluding data/site) → clean; the only matches
+  were the literal word "secret(s)" in prose.
+- **Not run:** a live-fetch smoke test against real publishers. The
+  pipeline's own next scheduled tick (cron `0 */4 * * *`) is the first
+  live exercise of these changes — see Risks/Blockers.
+
+### Decisions
+- Did not prune or rewrite `data/raw/` history, or touch
+  `data/processed/`'s growth (flagged, not fixed — see ARCHITECTURE.md
+  retention policy) to avoid risking the existing body-preservation
+  correctness logic without dedicated test coverage for a compaction pass.
+- Kept tag-pinned (not SHA-pinned) first-party `actions/*` versions —
+  judged proportionate for first-party GitHub Actions; documented instead
+  of guessing SHAs.
+- Chose to drop `push` as a trigger for the full pipeline rather than add
+  a path filter, since any code change (not just non-docs changes)
+  shouldn't imply "also re-scrape now" — `workflow_dispatch` remains
+  available for on-demand full runs.
+
+### Risks/Blockers
+- `data/processed/` growth is unresolved (flagged in ARCHITECTURE.md).
+- Missing hero images (~87% of local processed articles) is a pre-existing
+  content-quality gap, not introduced or fixed here.
+- `Publisher` never deletes a stale `site/content/<hash>.html` page once
+  the corresponding article drops out of `data/processed/` — 22 such
+  orphans exist in the currently-committed site. Not fixed here (would
+  need care: deleting on every run based on current processed data is
+  safe only if merge-forward body preservation is airtight, which is the
+  same code path flagged as needing dedicated tests before touching).
+- This commit was pushed directly (no PR); `pipeline.yml` no longer
+  triggers on `push` (see ARCHITECTURE.md "Automation Layer"), so this
+  push itself only ran `tests.yml`. The full pipeline — and therefore the
+  first live exercise of the new sanitizer, health gate, and validate-site
+  step against a fresh `git clone` in Actions rather than this local
+  checkout — will not run until the next `0 */4 * * *` schedule tick or a
+  manual `workflow_dispatch`.
+
+### Next Step for Next Agent
+- After the next scheduled/manual pipeline run, check
+  `data/health_report.json` and Actions logs to confirm the health gates
+  behave as designed end-to-end in Actions (verified locally in this pass,
+  but not yet inside the Actions environment itself).
+- Consider a `data/processed/` compaction pass (see ARCHITECTURE.md) with
+  its own dedicated tests before implementing.
+- Consider addressing the missing-hero-image rate surfaced by
+  `MAINTENANCE_REPORT.md`.
+- Consider having `Publisher` prune orphaned `site/content/*.html` pages
+  that no longer correspond to any current processed article.
+
 ## [2026-08-03 07:30 UTC] Agent: Codex
 ### Scope Claimed
 - Stabilize the scheduled source-fetch pipeline when an external publisher returns an HTTP error.
