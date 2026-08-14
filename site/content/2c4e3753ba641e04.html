@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Safety not on the platter: Bengaluru’s food safety checks expose gaps, from star hotels to quick-commerce warehouses | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Safety not on the platter: Bengaluru’s food safety checks expose gaps, from star hotels to quick-commerce warehouses</h1>
+                <div class="article-meta">
+                    <span>By Afshan Yasmeen</span> • <span>THE HINDU NATIONAL</span> • <span>2026-08-14</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71338545"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>For Bengalureans, food safety inspections over the past few days have challenged an assumption that often goes unquestioned: that a higher-priced meal, a well-known hotel or a familiar brand necessarily comes with better food safety standards.</p><p>The Karnataka Food Safety and Drug Administration (FSDA) conducted raids, casting its net wide to include roadside eateries, smaller food businesses, three- and five-star hotels, international fast-food chains, government canteens, Indira Canteens and warehouses supplying quick-commerce platforms. The inspections have brought to light expired food, rotten meat and vegetables, mislabelling, poor storage and hygiene practices, and concerns over used cooking oil.</p><p>The ongoing drive that began on August 7 covered over 60 three-star and five-star hotels in Bengaluru Urban and the Greater Bengaluru area till August 9. Thirty teams collected 77 food samples for laboratory analysis. Officials seized 640 kg of mutton, chicken and fish, 276 kg of rotten or mould-affected vegetables, 45 litres of expired milk and curd, 12 kg of expired bakery products and 67 kg of mislabelled or expired cereals and other food products in three days. Nearly 49 litres of used or non-compliant cooking oil were also seized.</p><p>The findings have been unsettling for consumers precisely because the inspections were not confined to establishments where poor hygiene is assumed.</p><p>For Prashanti Naidu, who never hesitated to eat at fine-dining restaurants, the findings came as a shock. “When you eat at a five-star hotel or a fine-dining restaurant, you assume that the standards are automatically higher. You are paying a premium and you expect the ingredients, kitchen and storage to meet that standard. You never imagine that something as basic as expired food could be present in a professional kitchen,” the software professional said.</p><p>What troubled her was the part of a restaurant that customers never see. “The dining area can be spotless and the food can be beautifully presented. But you cannot see the refrigerator, the storage room or how the raw materials are handled. That is where the real food safety question lies,” she said.</p><h4 class="sub_head">What the inspections found</h4><p>The hotel inspections revealed expired food products, non-compliant labelling, misbranding, improper storage of meat, fish and poultry, fungal growth in vegetables and inadequate segregation of vegetarian and non-vegetarian food.</p><p>Officials also found products carrying shelf-life declarations that exceeded the applicable period. In some cases, products with a declared shelf life of one year were found carrying declarations extending to two years. Some imported products had subsequently been repacked.</p><p>The department has issued notices and recommended cases before the respective adjudicating officers. Kitchens at high-end pubs and restaurants in malls were seized or closed for enforcement action. The food articles found unsafe or unfit for consumption were subsequently disposed of in accordance with the prescribed procedure.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/wu6pu7/article71341137.ece/alternates/FREE_1200/Hotel%20raid%2020.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/wu6pu7/article71341137.ece/alternates/FREE_1200/Hotel%20raid%2020.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>The inspections were subsequently extended to fast food outlets and their supplying warehouses. Samples of mayonnaise, chicken and bread were collected for laboratory analysis.</p><p>At a popular fast food outlet on Brigade Road, officials found magnesium sulphite being used for the treatment or purification of used frying oil. A notice was issued and the matter is being examined under the applicable provisions.</p><h4 class="sub_head">The used-oil question</h4><p>Used cooking oil has emerged as an important part of the food safety exercise because the problem is largely invisible to the consumer.</p><p>Under the Food Safety and Standards Authority of India’s Repurpose Used Cooking Oil (RUCO) initiative, used cooking oil is to be diverted from the food chain and collected through authorised agencies for conversion into biodiesel or other non-food products. FSSAI has fixed a limit of 25% for total polar compounds (TPC), beyond which vegetable oil should not be used for frying.</p><p>Karnataka has collected nearly 45.9 lakh litres of used cooking oil between 2024 and 2026 through four FSSAI-recognised agencies. The agencies channel the discarded oil to authorised biodiesel manufacturers.</p><p>The State’s enforcement exercise has brought renewed attention to whether used oil is being properly disposed of rather than finding its way back into kitchens. FSSAI also requires food businesses using more than 50 litres of edible oil a day for frying to maintain records of used-oil disposal.</p><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/tob7og/article71341140.ece/alternates/FREE_1200/Hotel%20raid%2019.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/tob7og/article71341140.ece/alternates/FREE_1200/Hotel%20raid%2019.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>For a diner, however, there is no way of knowing how many times oil has been reused or whether it has crossed permissible limits.</p><h4 class="sub_head">Government kitchens under scrutiny</h4><p>The inspections have also moved into government premises. On August 12, food businesses at Vidhana Soudha, Legislators’ Home, Vikasa Soudha and the M.S. Buildings were inspected. At a canteen on the government premises, officials seized 500 grams each of expired <i>suji rava</i> and coconut powder. An advisory notice was issued over unhygienic conditions and a case is to be registered before the adjudicating authority. Ironically, even the canteen Arogya Soudha did not entirely meet the standards.</p><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/n2hc72/article71341143.ece/alternates/FREE_1200/Hotel%20raid%2018.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/n2hc72/article71341143.ece/alternates/FREE_1200/Hotel%20raid%2018.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>A milk parlour was issued a notice for labelling violations. Several hotels operating within the government complexes were also issued notices. The inspections also covered Indira Canteens. Officials reported violations involving labelling, misbranding and food handling.</p><h4 class="sub_head">Quick-commerce sector too</h4><p>The food safety net has also reached the rapidly expanding quick-commerce sector.</p><p>Quick commerce warehouses in Hoskote taluk of Bengaluru Rural and Sakalawara of Bengaluru Urban were inspected on August 11 and 12. Officials reported non-compliant labelling, misbranding and unhygienic food handling and storage. One of the warehouses was sealed and a notice was issued to the other, with a case recommended before the adjudicating officer.</p><p>The move reflects a change in the way food safety has to be monitored. Food no longer moves simply from a market to a restaurant and then to a customer. Packaged food and fresh produce can pass through warehouses, cold storage facilities and quick-commerce fulfilment centres before reaching a household.</p><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/kumyjc/article71341144.ece/alternates/FREE_1200/Hotel%20raid%2012.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/kumyjc/article71341144.ece/alternates/FREE_1200/Hotel%20raid%2012.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>A lapse at any one of these points can compromise the product.</p><h4 class="sub_head">‘Public health must come before revenue’</h4><p>Health Minister U.T. Khader said the decision to intensify inspections of premium establishments was not prompted by a specific complaint. He also said the government was not targeting hotels and acknowledged the contribution of the hospitality industry.</p><p>“We are not against anyone. We respect all the hoteliers for the contribution they have made to society. But they should not cheat the people,” he said.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/3jv99g/article71341145.ece/alternates/FREE_1200/Hotel%20raid%2016.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/3jv99g/article71341145.ece/alternates/FREE_1200/Hotel%20raid%2016.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>Hotel managements might not always be aware of every lapse committed by employees, he said, but that could not be an excuse for inadequate systems. “They should not see only the revenue. They should also see the health of the public,” he said.</p><p>Mr. Khader indicated that the government was examining additional ways of monitoring food establishments, including the possibility of surveillance teams at the taluk level.</p><h4 class="sub_head">The health consequences</h4><p>Concerns raised by the inspections are finally about how they impact people’s health.</p><p>Senior Hepatobiliary and Transplant Surgeon Sonal Asthana said the monsoon was a period when doctors typically see an increase in food- and water-borne infections. “Every monsoon, we see an upsurge in infections such as typhoid and hepatitis A, which are predominantly linked to contaminated food and water,” he said.</p><p>Certain infections can have complications affecting other organs. Bacterial infections can, in some cases, be followed by neurological complications such as Guillain-Barré syndrome. “The infection itself may not directly cause it, but some of the secondary sequelae of the infection can cause substantial damage,” Dr. Asthana said.</p><p>Hepatitis A and E can also, in severe cases, progress to acute liver failure. He said he had seen patients with these infections acquired through contaminated food or water, including cases where improperly washed raw vegetables had been a source of infection.</p><p>His message to consumers was not to stop eating out, but not to equate reputation with safety. “Just because you are eating in a posh place, do not assume that all the precautions have been taken,” he said.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/nwceu7/article71341149.ece/alternates/FREE_1200/Hotel%20raid%2015.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/nwceu7/article71341149.ece/alternates/FREE_1200/Hotel%20raid%2015.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>“You cannot rely on just the outside facade. There has to be a high degree of compliance, not just at the personal level but also through enforcement of the law,” he said.</p><h4 class="sub_head">The kidney risk</h4><p>Senior nephrologist and transplant surgeon Sankaran Sundar said food safety lapses could, in some infections, have longer-term consequences.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/6cze5t/article71341151.ece/alternates/FREE_1200/Hotel%20raid%209.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/6cze5t/article71341151.ece/alternates/FREE_1200/Hotel%20raid%209.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>He pointed to Shiga toxin-producing E. coli, which can be associated with undercooked meat or inadequately washed produce. Such infections can trigger haemolytic uraemic syndrome (HUS), a serious condition that can affect kidney function.</p><p>A proportion of patients recovering from HUS can develop longer-term complications such as proteinuria, hypertension and reduced kidney function.</p><p>“Hygiene lapses in kitchens are not just about an episode of food poisoning. They can, in some cases, leave a lasting kidney damage,” Sundar said.</p><p>He stressed the importance of proper storage, adequate cooking and careful handling and washing of produce.</p><h4 class="sub_head">Rotten meat never safe</h4><p>The sight of spoiled meat has also prompted questions about implications of consuming it.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/uqklee/article71341154.ece/alternates/FREE_1200/Hotel%20raid%2010.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/uqklee/article71341154.ece/alternates/FREE_1200/Hotel%20raid%2010.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>Vaishnavi Joshi, Consultant, Medical Oncology and Haemato-Oncology, said there was no established scientific evidence that eating rotten meat directly causes cancer. “The immediate concern is food poisoning caused by bacteria and their toxins. Spoilage can also produce compounds such as histamine, putrescine and cadaverine,” she said. “It has established dangers through contamination by bacteria or toxins,” Joshi said.</p><p>She distinguished this from the established evidence on processed meat, which the WHO classifies as carcinogenic to humans, with colorectal cancer being the strongest association. Her advice is simple: spoiled meat should be discarded, not washed, cooked or reheated in an attempt to make it safe.</p><h4 class="sub_head">What next after the raid?</h4><p>Food Safety and Drug Administration Commissioner Srinivas K. said enforcement did not end with an inspection.</p><p>Reputed hotels and food establishments, he said, had also been found not following procedures prescribed under the Food Safety and Standards Regulations, including cases involving expired milk and mislabelling of fish and meat.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/ra5uim/article71341157.ece/alternates/FREE_1200/Hotel%20raid%207.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/ra5uim/article71341157.ece/alternates/FREE_1200/Hotel%20raid%207.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>He explained that a notice is generally issued by the designated officer in such cases. The Commissioner can call the food business operator for a personal hearing, following which fines can be imposed and the establishment required to rectify the deficiencies and submit a compliance report.</p><p>Where legal samples are found to be unsafe, the operator is given the prescribed opportunity to appeal. If the adverse finding is upheld after analysis by the Central laboratory, a prosecution case can be filed before the jurisdictional JMFC court.</p><p>Mr. Srinivas said regular surveillance was already in place and that food business operators were required to have their premises audited annually and report compliance.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/et6dsd/article71341158.ece/alternates/FREE_1200/Hotel%20raid%206.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/et6dsd/article71341158.ece/alternates/FREE_1200/Hotel%20raid%206.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>The department had analysed about 45,000 samples annually during the past two years.</p><h4 class="sub_head">Industry seeks regular inspections</h4><p>The hotel and restaurant industry has welcomed the inspections, but sought a more regular enforcement regime than one done in fits and starts.</p><p>G.K. Shetty, president of the Karnataka State Hotels’ Association, said inspections should be conducted at least once every three months. “If there are violations, let them give the hotels and restaurants a warning and a week to address the cleanliness and hygiene issues,” he said, cautioning that sudden closures could create fear among customers.</p><p>Mr. Shetty also sought simpler SOPs suited to Indian kitchen practices, saying the industry currently had nearly 100 guidelines to follow.</p><p>Ananth Narayan, president of the Bengaluru chapter of the National Restaurants’ Association of India, called for greater consultation with the industry. “FSDA officials and the Health Department must take all the stakeholders into confidence. They need to create awareness and educate everybody, but not through a raid,” he said, suggesting that discussions and warnings should complement enforcement.</p><h4 class="sub_head">Beyond the raids</h4><p>The recent inspections have exposed gaps at very different points of Bengaluru’s food economy — from luxury hotels and international chains to government canteens and quick-commerce warehouses.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/rmn4ou/article71341159.ece/alternates/FREE_1200/Hotel%20raid%204.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/rmn4ou/article71341159.ece/alternates/FREE_1200/Hotel%20raid%204.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka’s Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>For the regulator, the challenge is to ensure that the exercise produces lasting changes rather than temporary compliance when an inspection team arrives. “The enforcement drive ultimately seeks to reinforce that food safety must begin with procurement and storage, continue through preparation and handling, and remain an everyday practice long after an inspection team has left,” the Health Minister said.</p><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Karnataka's Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." class="lazy" data-original="https://th-i.thgim.com/public/incoming/izrseh/article71341162.ece/alternates/FREE_1200/Hotel%20raid%201.JPEG" data-src-template="https://th-i.thgim.com/public/incoming/izrseh/article71341162.ece/alternates/FREE_1200/Hotel%20raid%201.JPEG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Karnataka's Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality." width="100%"/></div><p class="caption">
+
+                            Karnataka's Food Safety wing conducted raids in Bengaluru to inspect hygiene standards, storage facilities and food quality.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>For the consumer, the lesson is basic. A sparkling dining area, a five-star rating or a familiar brand name cannot by itself establish what happens behind the kitchen door. The requirement is simple: When you pay for a meal, you expect good food and service — but, above all, you expect it to be safe and not put your health at risk.</p><p><i>(With additional inputs by Rashmi Patil)</i></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- August 14, 2026 06:45 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71338545" data-title="Safety not on the platter: Bengaluru’s food safety checks expose gaps, from star hotels to quick-commerce warehouses" data-url="https://www.thehindu.com/news/national/karnataka/safety-not-on-the-platter-bengalurus-food-safety-checks-expose-gaps-from-star-hotels-to-quick-commerce-warehouses/article71338545.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Safety%20not%20on%20the%20platter%3A%20Bengaluru%E2%80%99s%20food%20safety%20checks%20expose%20gaps%2C%20from%20star%20hotels%20to%20quick-commerce%20warehouses&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fkarnataka%2Fsafety-not-on-the-platter-bengalurus-food-safety-checks-expose-gaps-from-star-hotels-to-quick-commerce-warehouses%2Farticle71338545.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-e31ae74b748401ded4f69bbd-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71338545" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/karnataka/safety-not-on-the-platter-bengalurus-food-safety-checks-expose-gaps-from-star-hotels-to-quick-commerce-warehouses/article71338545.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-08-14 03:05 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
