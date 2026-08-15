@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Deflating the wind in the willows | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Deflating the wind in the willows</h1>
+                <div class="article-meta">
+                    <span>By Peerzada Ashiq</span> • <span>THE HINDU NATIONAL</span> • <span>2026-08-15</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71346986"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p><span class="drop-caps">I</span>n Halmulla in south Kashmir’s Anantnag district, larger-than-life pictures of cricket stars such as Sachin Tendulkar, Virat Kohil, M.S. Dhoni, Shahid Afridi, and Babar Azam line the bat shops on National Highway-44.</p><p>Fawzul Kabiir, 40, founder of GR8 Sports, is busy inspecting the English willow clefts neatly stacked into a 12-foot-high tower. Clefts, or wedge-shaped blocks of willow wood cut from timber, are turned into bats and customised to meet the evolving demands of cricket.</p><p>While displaying different bars, Kabiir says, “A bat used by an opener is different from that which is used by a middle-order batsman and a slogger. Bats used for one-day matches are different from those used in the T20 format. Each player has a preference of his own.”</p><p>The craftsmanship of local bat-makers comes into play in producing bats sturdy enough to endure wallops or dents, even after being hit by a leather ball. “Seasons are important in maintaining the uniqueness of the bat. We allow the willow clefts to brave the rain and snow in the open. Sun-dried clefts are the best to compete in international markets,” Kabiir explains.</p><p>Inside his well-equipped bat factory, Kabiir tosses a ball into the air and lets it fall onto a bat, listening to the sound to check for the “sweet spot”. “It’s a science I mastered after my bats faced rejection in many countries in 2010, when I showcased some of my samples,” he explains. “Our bats would not meet international standards. And just as we began producing international-quality bats, we have been hit by a shortage of raw material.”</p><p>Famous for its mountain slopes, lush meadows and clear streams, Kashmir enjoys another reputation: the craftsmanship of its bat-makers. According to government data, Kashmir has 195 registered bat manufacturers, mainly in south Kashmir, and around 150 cleft dealers. They shape willow planks into sturdy, beautiful bats that find their way to cricket grounds around the world.</p><p>This international fame came only in 2021, when a bat-making company from Kashmir was certified by the International Cricket Council (ICC) and bagged a contract to supply bats to the Oman Cricket Board. However, it was during the Cricket World Cup 2022 that the Kashmir willow made it to the spotlight when UAE player Junaid Siddique hit the longest six of 109 meters off a Sri Lankan bowler, Dushmantha Chameera.</p><p>The industry is also an important source of livelihood in the region, for at least 50,000 locals. However, it is now grappling with several issues, including shortage of raw material, changes in climate, and smuggling.</p><h4 class="sub_head">A growing industry</h4><p>The Kashmir willow is a deciduous tree native to Europe and western Asia. It was brought to the Kashmir Valley during British rule in 1895 by British officials Sir Walter R. Lawrence and J.C. MacDonell, the first chief of the Forest Department in Jammu and Kashmir (J&amp;K), to meet fuel needs and provide green fodder for cattle.</p><p>According to Yaseer Ahmad Mir, Assistant Professor at the National Institute of Fashion Technology, Salix alba, a species of English willow, was also introduced to make cricket bats, as it was difficult for the British to export bats from England. “They found the climatic conditions of Kashmir suitable for making these bats,” he says.</p><p>The willow wood is usually sourced from areas surrounding Anantnag. English willow trees are harvested after 12-15 years of growth, or when they attain a girth of 120 cm at 1.5 metres above the ground and stand about 12 metres tall. They are then cut into blocks or clefts and left to dry under the sun for months.</p><p>The wood is hard-wearing, relatively light, and easy to sand and shape. “The quality of willow is improved by drying and pressing it during its production stage,” says Mir.</p><p>According to data from the Sher-i-Kashmir Institute of Agriculture and Science Technology, a mature willow tree with a girth of 100 centimetres produces about 15-20 willow clefts. Accordingly, around 1.2 lakh mature Salix trees are felled to produce 30 lakh cricket bats per year. This is double the number manufactured a decade ago.</p><p>Kabiir says 47 international players have used Kashmir willow bats in international tournaments, including the ICC T20 World Cups in 2021 and 2022 and the ODI World Cup in 2023. They include India’s Munaf Patel, Yusuf Pathan, and Wasim Jaffer; Pakistan’s Mohammad Yousuf; Bangladesh’s Saqib Al Hasan, and West Indies’ Kusal Perera and Chris Gayle.</p><p>He says: “We have not only made cricket bats lighter, but also ensured that the ping, balance, and stroke is matchless.”</p><p>In the 2024 ICC Women’s T20 World Cup, West Indies players Aaliyah Alleyne, Zaida James, and Shamilia Connell wrote a new chapter in Kashmir’s bat-making story by using the bats made in the region for the first time. Kabiir says that achieving this feat in women’s cricket required bat manufacturers to undergo a series of tests. The tests assessed lighter bat weights and sweet spots at multiple points on the blade, based on the preferences of the women cricketers.</p><div class="article-picture"><div class="picture zoom-img"><img alt="Bats stacked at a workshop in Anantnag district." class="lazy" data-original="https://th-i.thgim.com/public/incoming/xnpjqw/article71346990.ece/alternates/FREE_1200/07-SPOTLIGHT-13-08-2026.JPG" data-src-template="https://th-i.thgim.com/public/incoming/xnpjqw/article71346990.ece/alternates/FREE_1200/07-SPOTLIGHT-13-08-2026.JPG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Bats stacked at a workshop in Anantnag district." width="100%"/></div><p class="caption">
+
+                            Bats stacked at a workshop in Anantnag district.
+                                                            | Photo Credit: 
+                                Imran Nissar
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p>Kabiir says the bats are affordable compared to those produced elsewhere. “Compared to English willow bats from the U.K. that cost ₹1.5 lakh-2 lakh, the bats produced here range from ₹300 to ₹20,000. This makes them much more affordable. States such as Karnataka, Tamil Nadu, Maharashtra, West Bengal, and Delhi queue up with orders for bats every year,” he says.</p><div class="inline_gallery media-body"><a href="https://www.thehindu.com/news/national/other-states/in-frames-running-out-of-willow/article66690804.ece"><h5 class="title">In Frames | Running out of willow</h5></a><div class="article-photo-gallery position-relative" id="photos-66690804"><div class="owl-carousel owl-theme photo-gallery" id="photo-gallery-66690804"><div class="item"><div class="picture"><img alt="Square cut: A willow
+tree cut down to make
+cricket bats is checked
+before being
+transported to a
+manufacturing unit in
+Kashmir." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/vnbz6e/article66690823.ece/alternates/FREE_660/DSC_4461.jpg" data-src-template="https://th-i.thgim.com/public/incoming/vnbz6e/article66690823.ece/alternates/FREE_660/DSC_4461.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Square cut: A willow
+tree cut down to make
+cricket bats is checked
+before being
+transported to a
+manufacturing unit in
+Kashmir." width="100%"/></div><div class="caption">Square cut: A willow
+tree cut down to make
+cricket bats is checked
+before being
+transported to a
+manufacturing unit in
+Kashmir.</div></div><div class="item"><div class="picture"><img alt="Juicy shot: The lightweight
+hardwood of the willow in
+Kashmir makes it suitable for
+crafting cricket bats." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/w6tdjb/article66690822.ece/alternates/FREE_660/DSC_4429.jpg" data-src-template="https://th-i.thgim.com/public/incoming/w6tdjb/article66690822.ece/alternates/FREE_660/DSC_4429.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Juicy shot: The lightweight
+hardwood of the willow in
+Kashmir makes it suitable for
+crafting cricket bats." width="100%"/></div><div class="caption">Juicy shot: The lightweight
+hardwood of the willow in
+Kashmir makes it suitable for
+crafting cricket bats.</div></div><div class="item"><div class="picture"><img alt="All in a row: Clefts of
+willow are stacked at a
+factory in Sangam in
+Anantnag district of
+south Kashmir." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/qzoxt2/article66690820.ece/alternates/FREE_660/DSC_3468.jpg" data-src-template="https://th-i.thgim.com/public/incoming/qzoxt2/article66690820.ece/alternates/FREE_660/DSC_3468.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="All in a row: Clefts of
+willow are stacked at a
+factory in Sangam in
+Anantnag district of
+south Kashmir." width="100%"/></div><div class="caption">All in a row: Clefts of
+willow are stacked at a
+factory in Sangam in
+Anantnag district of
+south Kashmir.</div></div><div class="item"><div class="picture"><img alt="Tough wicket: A carpenter expertly shapes a cricket bat." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/ncucmf/article66690821.ece/alternates/FREE_660/DSC_3648.jpg" data-src-template="https://th-i.thgim.com/public/incoming/ncucmf/article66690821.ece/alternates/FREE_660/DSC_3648.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Tough wicket: A carpenter expertly shapes a cricket bat." width="100%"/></div><div class="caption">Tough wicket: A carpenter expertly shapes a cricket bat.</div></div><div class="item"><div class="picture"><img alt="Humongous field: The ₹300crore
+enterprise of cricket bat manufacture employs over 1,00,000 people." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/lrnuwy/article66690819.ece/alternates/FREE_660/6751_1_4_2023_9_42_27_2_12_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" data-src-template="https://th-i.thgim.com/public/incoming/lrnuwy/article66690819.ece/alternates/FREE_660/6751_1_4_2023_9_42_27_2_12_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Humongous field: The ₹300crore
+enterprise of cricket bat manufacture employs over 1,00,000 people." width="100%"/></div><div class="caption">Humongous field: The ₹300crore
+enterprise of cricket bat manufacture employs over 1,00,000 people.</div></div><div class="item"><div class="picture"><img alt="Deft touch: There is always demand for carpenters in the industry as more and more cricket leagues are coming up around the world." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/ildgoi/article66690817.ece/alternates/FREE_660/DSC_4018.jpg" data-src-template="https://th-i.thgim.com/public/incoming/ildgoi/article66690817.ece/alternates/FREE_660/DSC_4018.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Deft touch: There is always demand for carpenters in the industry as more and more cricket leagues are coming up around the world." width="100%"/></div><div class="caption">Deft touch: There is always demand for carpenters in the industry as more and more cricket leagues are coming up around the world.</div></div><div class="item"><div class="picture"><img alt="Fine balance: A worker weighs cricket bats before they are painted, branded and packaged for sale." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/dcl0kh/article66690814.ece/alternates/FREE_660/DSC_4095.jpg" data-src-template="https://th-i.thgim.com/public/incoming/dcl0kh/article66690814.ece/alternates/FREE_660/DSC_4095.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Fine balance: A worker weighs cricket bats before they are painted, branded and packaged for sale." width="100%"/></div><div class="caption">Fine balance: A worker weighs cricket bats before they are painted, branded and packaged for sale.</div></div><div class="item"><div class="picture"><img alt="Game theory: A
+customer tries out a
+bat at a sports shop
+at Sangam in
+Anantnag district." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/haxq7f/article66690812.ece/alternates/FREE_660/6751_1_4_2023_9_52_4_2_17_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" data-src-template="https://th-i.thgim.com/public/incoming/haxq7f/article66690812.ece/alternates/FREE_660/6751_1_4_2023_9_52_4_2_17_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Game theory: A
+customer tries out a
+bat at a sports shop
+at Sangam in
+Anantnag district." width="100%"/></div><div class="caption">Game theory: A
+customer tries out a
+bat at a sports shop
+at Sangam in
+Anantnag district.</div></div><div class="item"><div class="picture"><img alt="Pitch perfect: While the fabled English willow is still favoured by many, cricket bats made of the willows of Kashmir
+have an expanding market too." class="slideshowimg lazy" data-device-variant="FREE~FREE~FREE~FREE" data-original="https://th-i.thgim.com/public/incoming/4ptmoy/article66690811.ece/alternates/FREE_660/6751_1_4_2023_9_52_3_1_16_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" data-src-template="https://th-i.thgim.com/public/incoming/4ptmoy/article66690811.ece/alternates/FREE_660/6751_1_4_2023_9_52_3_1_16_CRICKETBATFORFRAMESONLY_SGR_01_04_2023.JPG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Pitch perfect: While the fabled English willow is still favoured by many, cricket bats made of the willows of Kashmir
+have an expanding market too." width="100%"/></div><div class="caption">Pitch perfect: While the fabled English willow is still favoured by many, cricket bats made of the willows of Kashmir
+have an expanding market too.</div></div></div><div class="counter"><span class="current">1</span>/<span class="total">3</span></div></div></div><h4 class="sub_head">The plan to tackle the quality crisis</h4><p>However, just as it was growing towards the ₹700-crore mark and deepening its roots in international cricket, Kashmir’s bat-making industry is struggling to meet both domestic and international orders, Kabiir says. The price of English willow is an indicator of the shortage: per foot, it has gone up from ₹300 in 2021 to ₹1,250. “The Jammu and Kashmir (J&amp;K) government needs to step in to bridge the gap and help the bat industry here expand,” he says.</p><p>Javed Ahmed Rana, the Forest Minister of J&amp;K, agrees that the declining availability of quality willow timber is one of the biggest challenges confronting the cricket bat industry in the Union Territory. To tackle the shortage, “a coordinated drive is in place to revive willow cultivation across Kashmir,” he says.</p><p>According to the Forest Department, the government plans to plant 1,100 willow trees per hectare across 200 hectares of forest and State land, with a target of 2.2 lakh trees starting this year. The move could help the bat industry increase production to 50 lakh bats per year.</p><p>According to Rana, the J&amp;K government is identifying “suitable low-lying and marshy areas across the Valley for expanding willow plantations”. It has roped in the State Forest Research Institute to introduce improved willow species and clones to enhance both productivity and sustainability. He says the government needs to build a self-sustaining willow cultivation ecosystem through scientific management, quality planting material, identifying new plantation areas, and greater farmer participation.</p><p>In 1917, the Forest Department under the Dogra rulers, identified alluvial and riparian willow species and planted them along rivers, stream banks, and point bars. Wetland willows were also planted in areas with saturated soils, including around the wetlands of Wular Lake, Harran, Hygam, Hokur-sur, Mirgund, Mamandangi, Gund Jehangir, and Shahgund. An official estimate suggests that about 5 million willow trees existed in and around these areas.</p><p>Irfan Ali Shah, Conservator of Forests, North Circle, says the Forest Department at present manages approximately 67 hectares of land under willow plantations. “These plantations are managed scientifically according to approved working plans under the Willow Plantation Working Circle. Sites are selected based on soil moisture, drainage, water availability, productivity, and the ecological needs of the species,” he says.</p><p>English willow is particularly suited to mildly waterlogged and moisture-retentive areas, “where adequate soil moisture can support satisfactory growth during its rotation period”. Besides south Kashmir, Baramulla, Kupwara, and Bandipora are also emerging as hubs of willow cultivation.</p><p>“The Lidder Forest Division in Bijbehara plans to plant English willow cuttings in available open spaces in the Momandanji and Katriteng plantations, covering about 5 hectares. The initiative aims to expand the existing willow resource and promote scientific regeneration in suitable areas,” says Shah.</p><h4 class="sub_head">Changes in weather patters</h4><p>Changes in climatic conditions too are adding to the industry’s woes. Nazir Dar, a bat manufacturer from Bijbehara, says many wetlands around local springs have dried up in the past five years. “Springs would feed water bodies and allow willows to grow thick and tall. The construction of houses and the entry of waste, especially polythene, into water bodies have choked scores of springs in Anantnag district,” he says.</p><p>Shah too admits that this is a challenge but adds that the situation is under control. “The availability of adequate moisture is an important factor governing the growth and establishment of willow, particularly in areas traditionally associated with wetland or waterlogged conditions. The drying of wetlands or their degradation as well as reduction in water availability can all adversely affect willow regeneration,” he says.</p><p>However, he is quick to add that it would be inappropriate to state that wetlands in south Kashmir have completely stopped supporting English willow cultivation solely because of drying of water bodies. “In some locations, declining water levels or changes in hydrology may have reduced the suitability of certain sites for new plantations or natural regeneration,” says Shah.</p><p>He says changing climatic patterns could have an impact on English willow particularly because it is closely associated with adequate soil moisture and water availability. The changes in temperature, precipitation patterns, and duration of dry periods events may influence the growth, establishment, and productivity of willow plantations.</p><p>“However, it would be prudent not to attribute any observed decline in willow exclusively to climate change without systematic field-based evidence. The observed changes may also be influenced by land use changes, water body degradation, harvesting practices, plantation management, and availability of suitable planting material,” he adds.</p><h4 class="sub_head">Problem of smuggling</h4><p>Smuggling remains another challenge to the industry in Kashmir.</p><p>After the dilution of Article 370 in 2019 by the Bharatiya Janata Party-led Central government, the Jammu and Kashmir Willow (Prohibition on Export and Movement) Act, 2000, was just one of the two local laws retained to “to curb smuggling of willow clefts”.</p><p>“Kashmir willow timber is being smuggled to places such as Jalandhar and Meerut, which have their own bat-making units and flourishing export industries,” says Mir.</p><p>Until the mid-1970s, Kashmir willow wood was transported to various manufacturing units across India. “But when the J&amp;K government realised the importance of the willow wood and the potential of the industry in Kashmir, it restricted the number of clefts that could be sold outside. After the ban, the smuggling of willow increased. Locals claim that over 25 lakh clefts are smuggled every year,” Mir adds.</p><p>English willow timber is harvested twice a year in May and September. Kabiir says he goes to private willow tree fields in Ganderbal and Kupwara every year in the spring and identifies the female species of English willow by monitoring the movement of pollinators. “The willow trees with flowers are the female species. They are light weight, flexible and without knots, and have a good shine. It is this species that allows us to produce Grade A bats of international standard and fetches us the highest profit.”</p><p>But access to good-quality timber remains a challenge. With the inconsistent quality of timber denting its reputation in the domestic market, the Geographical Indication (GI) tag in 2025 has come as a shot in the arm for the bat industry.</p><p>Mir was one of the members of the committee that prepared the dossier report for the GI tag of the Kashmir willow bat. “The GI recognition gives Kashmir willow bats additional value. It is also a strong marketing tool that can help expand their reach and increase their prices,” explains Mir.</p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- August 15, 2026 05:55 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71346986" data-title="Deflating the wind in the willows" data-url="https://www.thehindu.com/news/national/jammu-and-kashmir/kashmirs-bat-making-industry-deflating-the-wind-in-the-willows/article71346986.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Deflating%20the%20wind%20in%20the%20willows&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fjammu-and-kashmir%2Fkashmirs-bat-making-industry-deflating-the-wind-in-the-willows%2Farticle71346986.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-055aed2ce66838f3a7fcd304-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71346986" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/jammu-and-kashmir/kashmirs-bat-making-industry-deflating-the-wind-in-the-willows/article71346986.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-08-15 02:16 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
