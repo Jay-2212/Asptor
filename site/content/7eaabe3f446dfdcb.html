@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Is English a foreign language in India? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Is English a foreign language in India?</h1>
+                <div class="article-meta">
+                    <span>By Priscilla Jebaraj</span> • <span>THE HINDU OPINION</span> • <span>2026-08-28</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71397784"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>The Supreme Court has been discussing linguistics this month while hearing challenges to the CBSE’s three-language formula, which mandates that two of the three languages must be native Indian languages, a category that does not include English. The top court had wondered whether it was correct to treat English as a “non-indigenous” language, given its long history in the country, and its role as a link language in governance and higher education. So should English be considered a foreign language in India? <b>Apoorvanand</b> and <b>Ganesh Devy</b> discuss the question in a conversation moderated by <b>Priscilla Jebaraj</b>.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is English a foreign language in India?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Apoorvanand:</b> No. It came from outside the geography that we define as India now. But it has been Indianised. We cannot now say that English is foreign to the soil because it’s being used in different forms and for different purposes by people across India. 
+				</p><p><b>Ganesh Devy:</b> Hindi and English are born of the same Indo-European language family. One part of that family came to us 3,500 years ago; that was Sanskrit and one of the descendants of Sanskrit is Hindi. Another part came through Europe 400 years ago, in the 17th century. So, they both belong to the same root language, and both of them have come to us at different times.
+				</p><p>
+										In fact, the only major indigenous language in India is Tamil as it does not come from outside. But for that reason, we cannot impose Tamil on all students. Similarly, we cannot impose English or Hindi. So in India, the language question cannot simply be seen in terms of which is foreign, which is indigenous.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The history of English in India includes both imperialism and the freedom movement, Macaulay and Gandhi. How has this complicated the issue?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ganesh Devy:</b> Macaulay’s minute is relatively recent, dated 1835; the East India Company had started using English in India almost 230 years before that. The interaction between English and other languages started in the 17th century and intensified during the 18th century. In the 19th century, the English governors in Calcutta, Bombay, and Madras insisted on teaching children in native languages, that is, the regional languages. Elphinstone very clearly gave written instructions to teach children in Gujarati and Marathi in the Bombay presidency. But by 1835, the East India Company was thinking of how to bring in legislation to replace Persian, which had been kind of a national language connecting India for several centuries, and that is when Macaulay came in.
+				</p><p><b>Apoorvanand:</b> English came as a language of traders and missionaries and gradually became the language of the administration and the state, but then it also became the language of education. We see an elite being formed through English and also the formation of nationalism or nationalist ideas through English. So that’s a very complex journey. We cannot treat English as a simple imposition on Indians. Indians adopted it, domesticated it, and then used it against those who had colonised India. Then, it became a language of liberation for many communities who did not have access to education or knowledge for generations. 
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									English has become the language of aspiration and status. How does that impact social and political dynamics?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ganesh Devy:</b> The creation of an English-speaking elite has to be seen in the historical context of an earlier experience, where Sanskrit had formed an elite which brought in the <i>varna</i> system. The English language created an elite in India who tried to change that system and make India a modern society. Moreover, in India, in order to get a good job one often needs to migrate outside one’s State. And as soon as migration is involved, the need for English is enhanced.
+				</p><p><b>Apoorvanand:</b> English is connected with social mobility as well as geographical mobility. No other language gives you this advantage.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									According to the 2011 Census, 10% of the Indian population speak English, and the numbers are only increasing. Has this resulted in the suppression of other Indian languages or has it spread multilingualism?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Apoorvanand:</b> It would be very simplistic to make a direct cause and effect relationship, because multi-linguality is a feature of India and there are different reasons for which people use different languages at different levels. In my Delhi classroom, the students are largely from the so-called Hindi belt. But for most of them, their home or street language is actually Bhojpuri or Braj or Avadhi or Maithili. So there are many languages which live side-by-side, performing different functions.
+				</p><p>
+										Being a teacher of Hindi, I regret that Hindi is in fact erasing many languages, which had a very rich tradition and which are living languages such as Maithali or Braj or Avadhi or Dondari or even Adivasi languages, because the state is not investing in them. They have now become oral languages, pushed to the margins, while all attention goes to Hindi. It’s Hindi imperialism in Hindi areas; Hindi is a coloniser.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What is the impact of the rise of English as well as Hindi on other languages?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ganesh Devy:</b> First, let me say that the Census of India is not at all a clear mirror as far as language is concerned. For example, if a language is spoken by less than 10,000 persons, the Census says it is not a language. Then, if you look at how many individuals are studying in universities in India, the total figure at any given time in the last 10 years would be about four crore. Each one of them know English as a second language because English is the language of higher education, and yet the Census does not reflect those figures.
+				</p><p>
+										Hindi has been gulping other languages. In the Census itself, some 56 other languages are included as subsets of Hindi. There is a language called Pawri which is spoken by the Pawra Adivasi community, on the border of Maharashtra and Madhya Pradesh, who do not understand Hindi at all. Yet that is shown as a subset of Hindi. It is the same with Tamil, Kannada and Marathi. All smaller languages are being shown as subsets of larger languages and that comes from the state’s desire to have some kind of linguistic unity.
+				</p><p>
+										India is made of many languages and that is the fundamental truth. Just last week, in Maharashtra, rickshaw drivers and taxi drivers were on strike because there is a compulsion that they have to pass an examination in Marathi, based on grammar. Why would a taxi driver need Marathi grammar? He has functional Marathi. Indians speak a lot of functional languages. They speak English, not as the British do, but as a functional language. They speak Hindi all over India as a functional language. And I think we should never forsake the beauty of having multiple functional languages in our pocket, in our hearts, and in our brains.
+				</p><p>
+										But there is also a vested interest in English in India from English language publishers and English medium schools. They bat for the continuance of English partly out of commercial interest. I don’t agree with that.
+				</p><p><b>Apoorvanand:</b> On the CBSE and their stress on a three-language formula, and the insistence of policymakers that they want children to learn the mother tongue — all this is farcical because people know that all these policymakers are sending their own children to English medium schools and that English is social capital, cultural capital, and capital in real terms.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									There’s also a significant amount of Indian literature written in English today, including works in translation. And of course, films and the Internet freely mix languages. How does that change the debate?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ganesh Devy:</b> In the 6th, 7th, and 8th centuries, many Indians produced books in Sanskrit. Then, in the 15th and 16th centuries, India was producing more books in Persian. Today, India is producing more books in English than they produce in England. But our desi languages have still survived.
+				</p><p>
+										So the production of books, movies, and songs in a certain language is not necessarily an indication of a profound fundamental cultural shift. There are just two small questions to be asked to anybody who is writing English fiction or non-fiction. The first is, when that person goes into any spiritual space, is their prayer also in English? The second question is, is the audience only Indian or is it a global audience? The answers to these two questions will reveal the exact significance of the shift.
+				</p><p>
+										By the way, the English came here and had an impact on many things. But Indian music remains Indian music. We have internalised but not replaced. So, our cultural reception of English culture has been calibrated, granular, and is not wholesale as in Australia, U.S. or in Canada where native cultures were wiped out.
+				</p><p><b>Apoorvanand:</b> I would disagree with that. For example, in my daughter’s generation or the generation after, their first love in music is through English and not “Indian music”. I don’t see any problem in that and I don’t see them as culturally uprooted. Would we say that this young generation or those bands which sing only in English are not culturally Indian? It’s a very complex concept and the whole anxiety about maintaining nativity and creating a difference between what is indigenous and what is foreign is also problematic. Therefore, I would like to argue that English has made India its home. Those who want to declare that it’s a foreign language, in fact, want to hide the fact that Hindi colonises other languages and so do Tamil and other languages, when you create these as meta languages and others as sub languages.
+				</p><p><b><a href="https://www.thehindu.com/podcast/is-english-a-foreign-language-in-india-in-focus-podcast/article71397144.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Apoorvanand is a Professor in the Hindi department of the University of Delhi. Ganesh Devy is a former professor of English and the man behind the People’s Linguistic Survey of India project</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- August 28, 2026 12:58 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71397784" data-title="Is English a foreign language in India?" data-url="https://www.thehindu.com/opinion/op-ed/is-english-a-foreign-language-in-india/article71397784.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Is%20English%20a%20foreign%20language%20in%20India%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fis-english-a-foreign-language-in-india%2Farticle71397784.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-fbf912417314e3e5b9ff3bd6-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71397784" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/is-english-a-foreign-language-in-india/article71397784.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-08-28 05:35 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
