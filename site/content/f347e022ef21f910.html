@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Are brands overreacting to manufactured outrage? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Are brands overreacting to manufactured outrage?</h1>
+                <div class="article-meta">
+                    <span>By Sonikka Loganathan</span> • <span>THE HINDU OPINION</span> • <span>2026-09-03</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71423603"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>Last week, jewellery brand Giva withdrew an advertisement it made for Raksha Bandhan after netizens criticised actress Kriti Sanon’s outfit as too revealing for a traditional festival. The incident is the latest in a series of brands backtracking on their advertisements following backlash that is often religiously or communally charged. Given India’s current socio-political climate, are brands overreacting to manufactured outrage? <b>Mitushi Sharma</b> and <b>Santosh Desai</b> discuss the question in a conversation moderated by <b>Sonikka Loganathan</b>.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Was this ad withdrawn primarily because of concerns for employee safety or to minimise commercial losses?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai:</b> There are two aspects to this controversy. One is that the brand did not anticipate that there would be a problem. Therefore, it is withdrawing the advertisement out of fear for the safety of its employees or because of the political storm that has been created. The other reading is that this outrage is being manufactured by the brand itself. Giva is not like Tanishq, which has enormous publicity. If Tanishq did something that it did not know would cause outrage, then it would have to be deaf, dumb, and blind. Giva has managed to create a conversation that would have been impossible for a small brand. The brand is either cynical or naive.
+				</p><p><b>Mitushi Sharma:</b> The two are interlinked. Commercial decisions are a very big part of the decisions brands take. It includes sales, but also how retailers are reacting and what is happening at the stores. In this case, I am not sure if it was an outrage that was manufactured by the brand as much as by the consumer.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									In 2020, a Tanishq commercial depicting an interfaith baby shower was removed after outrage. The next year, Fab India was in trouble for a promotional campaign titled Jashn-e-Riwaaz; they withdrew it after some people complained that using an Urdu phrase alongside a Hindu festival was not right. Giva’s ad, however, was not trying to send a social message. Are brands becoming more cautious about what they put out?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai:</b> You have to be really tone-deaf to believe that a certain kind of dressing in today’s environment would not get some backlash. To argue that there was no intention would mean that you are completely impervious to the environment that exists today, and that is not a defensible position for anybody engaged in commercial activity and advertising. If this was a surprise to Giva, it shows naivety. Just because you are not communally sensitive does not mean you do not have sensitive content that people can react to. You could argue that Fab India was not intentionally trying to create some interfaith amity just because they used an Urdu phrase. Urdu is a language; it does not belong to a religion and has roots in India.
+				</p><p><b>Mitushi Sharma:</b> It is wise to be cautious. There are enough checks and balances that ads go through, from the brief to the time an ad hits any media. The difference really is between being cautious and conscious about what is culturally sensitive versus being fearful while creating a piece of communication. Everybody has a point of view. An ad conceptualised in Mumbai might not work in Kerala. That is what research is about. 
+				</p><p><b>Santosh Desai:</b> This is not a normal environment. Brands are being more cautious because everybody is cautious. This brand is small. The only reason the ad came to the forefront is that some people chose to get angry and highlight it. They are using it as a pretext to continue that long-standing quarrel over each other’s ideological position. This is not a natural outcome of cultural sensitivity; it is manufactured outrage. 
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									We see women wearing various outfits in our media. Can you elaborate on this naivety?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai:</b> Religion and culture being two different areas that do not overlap is not really how our world exists today. There have been many attempts to control what women wear through religion. The choice of attire for Raksha Bandhan, which you could argue is a cultural festival, is now being viewed through the lens of religion. To argue that it is not likely to cause offence to people determined to see offence is an act of naivety, because I think there is enough evidence to show the fact that the control of what women wear, control of what they say, is an important part of the cultural project that we are seeing in the country today. From the first time I saw the ad, it was clear that it had the potential for controversy.
+				</p><p><b>Mitushi Sharma:</b> When I saw the ad, the first thing that struck me was not the outfit; it was the use of animals. I thought it was a sweet twist. I did not notice the outfit till I was made to notice it. The people looking for fodder are the people who actually pointed out that the outfit was incorrect, whether for religious or cultural reasons. When we create communication, every single thing in that piece needs to serve the message you want to give out and the product you want to sell. Is the outfit really in service of what the communication was supposed to be? The boy’s outfit is absolutely fine. So, obviously, somebody at the execution end has not paid enough attention to ask whether that is really in service.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Are we seeing more self-censorship from brands?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai: </b>You have enough evidence that you do encounter pushback of a fairly significant kind when you cross a line that you may think is harmless. I do think that there is an element of self-censorship, and I think, like Mitushi said, when something is not in service of the communication, however harmless it might be to one set of eyes, there is a potential of it being seen in a different way by another. That awareness is something that I think a lot of brands have today.
+				</p><p><b>Mitushi Sharma:</b> Self-censorship is 100% happening. But it is not a bad thing. Brands and agencies are not shielded from what is happening. There are a lot of discussions that happen in brainstorming rooms, in conference rooms with clients about this. The sad part about self-censorship is that there are times when a great idea never gets made. The question is why are we self-censoring? Is it to make sure that what is coming out is the best version or because of fear? Unfortunately, it is bordering on worrying about what the reaction will be on social media. So yes, there is a lot of self-censorship coming from fear as opposed to doing the right thing.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Does withdrawing an ad set a precedent for how brands respond to online outrage?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai:</b> Brands are not crusaders. They are in it for the money. I am always a little surprised by this insistence for brands to stand by what they are doing. What statement does it make about the state of society when brands have to withdraw communication under pressure? I think that is a separate and a larger question. But from an individual brand’s perspective, it is a no-brainer. Giva is not a brand known for taking progressive positions; they are a no-name-nothing brand. Why would you take the risk of the wrath of so many people, and maybe the powers that be, in order to run an ad?
+				</p><p><b>Mitushi Sharma:</b> I absolutely agree. If a brand decides to pull down an ad, it is completely their decision, whether for commercial or safety reasons. This particular ad has become bigger than it intended to be. Taking down this ad has made it seem as if the company has surrendered to a certain cause: that women cannot wear what they wish to wear. The ad was never meant to be that. The cost of standing by it is now much higher for them. This ad has been blown out of proportion.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									When something is blown out of proportion, what position does that put a brand in?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Santosh Desai:</b> If you look at the Tanishq experience, they actually saw an increase in sales. If you were to look at it from Giva’s perspective, there is nothing that has happened that will harm it. The risks are much higher for an established brand. For a small challenger brand, any reason to be in the news is a net good for them.
+				</p><p><b>Mitushi Sharma:</b> For a brand like Giva, any publicity is good publicity. I do not think this has painted Giva in a bad light. There are two points of view, and they will always exist till we have another inconsequential matter to solve with the armchair activists. It will give them visibility and some recall in the consumer’s mind. We are in the festive season, so a lot of jewellery purchases are going to happen now. This is going to help them.
+				</p><p><a href="https://www.thehindu.com/podcast/are-brands-overreacting-to-manufactured-outrage-in-focus-podcast/article71424487.ece" target="_self"><i>Listen to the conversation</i></a></p></div><p><b><i>Mitushi Sharma is Seasoned Communications Leader and published author. She has led some of the industry’s most prominent businesses, including Unilever, Garnier and NIVEA, across diverse categories and markets; Santosh Desai is Founder Think 9, CEO Futurebrands</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 04, 2026 01:57 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71423603" data-title="Are brands overreacting to manufactured outrage?" data-url="https://www.thehindu.com/opinion/op-ed/are-brands-overreacting-to-manufactured-outrage/article71423603.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Are%20brands%20overreacting%20to%20manufactured%20outrage%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fare-brands-overreacting-to-manufactured-outrage%2Farticle71423603.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-8dfa492c3860f4c931962f7c-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71423603" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/are-brands-overreacting-to-manufactured-outrage/article71423603.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-04 00:06 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
