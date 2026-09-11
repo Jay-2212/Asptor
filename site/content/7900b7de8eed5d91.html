@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Should the use of Gen AI be banned among younger students in schools? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Should the use of Gen AI be banned among younger students in schools?</h1>
+                <div class="article-meta">
+                    <span>By Priscilla Jebaraj</span> • <span>THE HINDU OPINION</span> • <span>2026-09-10</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71453088"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>Recently, New York City Mayor <a href="https://www.thehindu.com/sci-tech/technology/new-york-mayor-zohran-mamdani-announces-ban-on-ai-use-for-students-until-high-school/article71422209.ece" target="_self">Zohran Mamdani announced a one-year moratorium</a> on most generative AI tools for public school students until Class 8 for the 2026-27 academic year. Officials argued that young children require human connection and independent problem-solving skills instead of relying on algorithms. India’s policies on this issue are still evolving. So, should the use of Gen AI be banned among younger students in schools? <b>Lavina Jaswani</b> and <b>Deepa Jacob</b> discuss this question in a conversation moderated by Priscilla Jebaraj.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What kind of AI tools do you use and how do they benefit primary school children?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Lavina Jaswani:</b> We have been using a number of AI-enabled tools to explain concepts to children; to offer personalised learning; and to help teachers create resources, from stories and worksheets to different types of assessments and quizzes. There are different apps we use, such as Kahoot! and Quizlets, to offer a gamified, interactive, and sensorial learning experience that keeps children engaged, rather than the traditional rote learning method.
+				</p><p>
+										However, the teacher still has to ask herself: what is my learning objective? What does a child need to understand? Where can the technology add value and is it truly beneficial and essential for the child? Keeping such questions in mind, AI tools can be effectively used in the classroom.
+				</p><p><b>Deepa Jacob: </b>In our school, technology is integrated seamlessly into our teaching and learning experience. Every child from kindergarten onwards has access to an iPad, which is kept at the school; they don’t take them home. They have apps that might be able to assist them with learning such as Seesaw, which is a journal of their learning through which they can keep a record of things that they do, like published writing pieces, videos of science experiments, their reflection on their learning etc. You can even assign tasks on them.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/international/why-is-new-york-city-pausing-some-ai-tools-in-schools-explained/article71431327.ece" target="_self">Why is New York City pausing some AI tools in schools?</a></b></p><p>
+										Very recently, I discovered that Seesaw itself has an AI component. So, for example, we do a lot of work with reading fluency. The kids are given a grade-level passage. They do a cold read of it on day one and through the week they reread the passage along with the teacher, and learn to pronounce the words, the meaning of the words, and then finally on day five they record their reading again and they find that they’ve improved in their fluency and their accuracy. Recently, one of my colleagues found out that the recording feature has an AI component which transcribes what you’ve said and scores you based on your accuracy. This is really great because rather than the teacher having to listen to every child read, if an app can score your reading and tell you which words you are reading incorrectly, then you can practise those words alone. But it’s AI, not a person, so it comes with its own flaws. For example, one of my students was reading a word with an Indian accent, and the app marked it wrong. The same thing happened to students using several other Asian accents. So, that’s where I feel the human component is important. We need to be careful that we don’t let AI take over our lives.
+				</p><p>
+										I also do not allow generative AI in my classroom. When I ask my children a question, or if they have a question, I will never ask them to Google it. Because the easiest way to kill a love for learning is to find a ready-made answer.  
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/education/five-must-have-ai-tools-for-students/article69681895.ece" target="_self">Five must-have AI tools for students</a></b></p><p>
+										Educationists and philosophers in the field of education have talked about existing in the liminal space, which is that space where you struggle with a concept, that threshold between not knowing something and struggling with something and then finally learning it. I think that is a beautiful space to be in mentally and we need these as human beings. We need this time and space to reconfigure ourselves; time for ideas to incubate and grow. Relying on technology in that phase would be terrible. While technology should be used as a tool, it is easy to over-rely on technology and use it as a crutch. If you want to create human beings that make their own contribution in the world, I think there should be serious restrictions on the amount of AI used among kids.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									One fear is that AI could harm a student’s ability to think and learn for themselves — for instance, if they just enter their homework as a ChatGPT prompt, the AI does their homework for them. Is this a valid fear?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Lavina Jaswani:</b> Yes, this is where we need to take a balanced position. AI can affect children’s thinking abilities, but it depends on how we use it. There are two possibilities: one is when the child uses the AI, the AI gives the answer, the child copies it, submits it and moves on. Then we have a problem, as the child is not using his brain. Instead, we need to guide the child on how to use it and that is where we need to put the restriction.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/education/why-students-need-to-read-before-they-use-ai/article71272857.ece" target="_self">Why students need to read before they use AI</a></b></p><p>
+										Suppose you are trying to teach fractions or some kind of problem-solving lesson. If the AI gives the answer, the child misses the struggle, the trial and error, the logical thinking, and the satisfaction of finally getting the answer.
+				</p><p>
+										So the rule in my classroom is that first, the child needs to think it, then write it and then lastly, ask the AI to verify the answer. They must try to solve it themselves, but if they can’t, just as they may ask their parents or their teacher for help, they can ask AI too to provide assistance in the same way.
+				</p><p>
+										Podcast |<b><a href="https://www.thehindu.com/podcast/is-artificial-intelligence-affecting-critical-thinking-skills-the-hindu-parley-podcast/article69299598.ece" target="_self">Is Artificial Intelligence affecting critical thinking skills?</a></b></p><p><b>Deepa Jacob: </b>The problem is over-reliance. If you’ve been driving a manual car and then you shift to an automatic car, you’re going to find it really hard to go back to driving manual, right? Similarly, I think you can become over-reliant on someone else doing the thinking for you or even synthesising ideas by just feeding them into an AI tool such as the Notebook LLM. The capacity of the human brain is immeasurable. There’s so much study that has gone into how brains function, and their neuroplasticity. It would be a shame if we let it die. Especially in the primary and elementary years, where so much of growth is happening.
+				</p><p>
+										So while AI is a great tool, I think we should be very cautious in how it is used.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/education/schools/when-ai-becomes-the-first-counsellor-are-we-preparing-students-for-what-comes-next/article71391368.ece" target="_self">When AI becomes the first counsellor, are we preparing students for what comes next?</a></b></p><p>
+										At the same time, I don’t think a complete ban is the answer and a one-year moratorium may not be enough to think through, to plan, and to set up some guardrails around how AI should be used in education.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									AI is now an integral part of basic search, of Google, of emails, and even in games. So students are using AI whenever they use the Internet at home. So why keep it out of class?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Deepa Jacob:</b> As educators, we don’t really have control over what kids are exposed to at home, but the one place where we can still teach critical thinking skills is in the classroom. I think we have to preserve that as far as we can. Also, I think children these days are really good at spotting something that’s AI-generated versus the real thing, and for many of them it is not cool anymore.
+				</p><p>
+										I feel like we, the older generation, are more easily fooled when it comes to AI.
+				</p><p><b>Lavina Jaswani:</b> Children are much more tech savvy and even AI-savvy than they were a few years ago. So I don’t think bans and restrictions are the solution. It is better to understand AI and make our children aware of the pros and cons.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/opinion/lead/not-delulu-an-ai-tutor-for-every-child-in-india/article71381725.ece" target="_self">Not ‘delulu’ — an AI tutor for every child in India</a></b></p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Central and State governments are starting to commission pilot projects using AI tools in government schools and in rural areas where there is a shortage of quality teachers, in the hope that AI can bridge that gap. Could AI supplement or even replace teachers in some of these schools?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Lavina Jaswani:</b> AI should not replace a teacher; it should extend the teacher. Especially in primary education, where children learn best through stories, activities, and conversations — moments that are very important to human relationships. That bond with the teacher is very important. So I would never want AI to become the teacher sitting in front of the children. I see AI as a learning assistant.
+				</p><p><b>Deepa Jacob: </b>My first job was in a village school and there were times I wished I had more resources and more tools, especially to translate more content and make it accessible. But I agree that you cannot completely do away with teachers just because knowledge can be found anywhere. But if you think of schools as not just knowledge centres, but wisdom centres where you learn from other human beings about how to become a good human, then you need teachers to be present, curating resources for the child.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/education/why-indias-education-system-needs-to-shape-how-learners-use-ai/article71297279.ece" target="_self">Why India’s education system needs to shape how learners use AI</a></b></p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How have you found AI helpful for teacher preparation and training?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Deepa Jacob:</b> Prep time is very limited so AI tools really help. If I input what I need to teach into Gemini, it helps me create slide decks that I can then present to the class, but again, we need to be careful because we have learnt through experience that AI can hallucinate and put out wrong information, so teachers do need to double check.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/opinion/op-ed/can-middle-school-students-engage-with-ai/article70913678.ece" target="_self">Can middle school students engage with AI?</a></b></p><p><b>Lavina Jaswani:</b> It can help teachers use different techniques in their classroom. Suppose I am teaching fractions in class and one child understands the concept immediately, but another child is still confused; traditionally, the second child may simply hear the same explanation again, but an AI tool can guide the teacher to teach fractions in a more visual and fun way by using a chocolate and dividing it up.
+				</p><p><b><a href="https://www.thehindu.com/podcast/in-focus-podcast-should-the-use-of-gen-ai-be-banned-among-younger-students-in-schools/article71452263.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Lavina Jaswani is Founder of the Sprouts International School in Jaipur; Deepa Jacob is a Class 5 teacher at the American International School in Chennai</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 11, 2026 01:15 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71453088" data-title="Should the use of Gen AI be banned among younger students in schools?" data-url="https://www.thehindu.com/opinion/op-ed/should-the-use-of-gen-ai-be-banned-among-younger-students-in-schools/article71453088.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Should%20the%20use%20of%20Gen%20AI%20be%20banned%20among%20younger%20students%20in%20schools%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-the-use-of-gen-ai-be-banned-among-younger-students-in-schools%2Farticle71453088.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-d012ef5bced56b994a11d48d-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71453088" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/should-the-use-of-gen-ai-be-banned-among-younger-students-in-schools/article71453088.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-11 00:09 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
