@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Brazil, India are building strategic ties for a changing world, says Brazil’s Foreign Minister | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Brazil, India are building strategic ties for a changing world, says Brazil’s Foreign Minister</h1>
+                <div class="article-meta">
+                    <span>By Shobhan Saxena</span> • <span>THE HINDU NATIONAL</span> • <span>2026-09-12</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71459802"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>In an interview with <i>The Hindu </i>in New Delhi, Brazil’s Foreign Minister Mauro Vieira praises India’s BRICS presidency, says bilateral trade could exceed the $30 billion target well before 2030 and argues that BRICS is not an anti-Western bloc.</p><p>Edited excerpts:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>President Lula visited India earlier this year, and there was a very strong sense of enthusiasm among Indian business leaders about Brazil. Bilateral trade is also expanding rapidly. How do you see the future of Brazil–India relations?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Brazil and India have everything they need to build, in addition to the excellent political relationship we already have, a very strong economic relationship. India is an enormous country, with a huge population and highly sophisticated industries. When President Lula was here earlier this year, he and Prime Minister Narendra Modi launched the goal of reaching $30 billion in bilateral trade by 2030. We are already approaching $20 billion. Trade reached around $15 billion last year, with very strong growth, and according to current projections, this year it should reach around $20 billion.
+				</p><p>
+										Petrobras is very satisfied with its business in India and is selling a great deal here. There are also several other projects that could materialise in the short term and significantly increase bilateral trade. Embraer has major interests in India and is working very actively, both in commercial aviation, which is obviously very important in a country of India’s size, and in defence, with the KC-390 and Super Tucano aircraft.
+				</p><p>
+										WEG also has a very significant international presence, and Vale is another major Brazilian company with interests here. Yesterday, I met a group of Brazilian business leaders representing around 20 companies, including large companies such as Vale, Embraer and WEG, as well as associations representing meat exporters and other sectors. If some of the deals currently being developed by Embraer, Vale, WEG and other companies materialise, bilateral trade could exceed US$30 billion in the short term. We could reach that target well before 2030.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>How do you assess India’s BRICS presidency and the transition from the Brazilian presidency to the Indian one?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I believe Brazil was very successful in the major presidencies it held in recent years. The G20 was very important and laid the foundations for action in several areas. The BRICS presidency was also very important, as was COP.
+				</p><p>
+										It is interesting that a significant number of BRICS members are also members of the G20. That creates an important space for dialogue and coordination. Brazil launched important initiatives in both the G20 and BRICS and passed them forward. India, during its BRICS presidency, carried many of these projects forward in several areas.
+				</p><p>
+										The New Development Bank is also extremely important. The meeting in Mumbai was very significant, and there are many interesting developments taking place. The bank is growing, it will continue to grow, and it will consolidate itself within the spirit of BRICS, which is to promote reform of global governance.
+				</p><p>
+										The Bretton Woods institutions — the World Bank and the International Monetary Fund — reflect a reality that is 80 years old. Their mechanisms of control, approval and disbursement can make access more difficult for many developing countries. With the BRICS bank, we can have a faster, more agile and more efficient system, under the control of the countries that own the bank and have a direct interest in its success.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>You have a long relationship with External Affairs Minister S. Jaishnkar. How important is that personal and diplomatic ties, and how closely aligned are Brazil and India on multilateralism and global governance?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									My meeting with Minister Jaishankar was very good. We have known each other for a long time. We were colleagues in Washington around 2012. I was already serving there as ambassador when he arrived as India’s ambassador, and that is when we first met. Later, when I came to India in 2015, during President Dilma Rousseff’s government, I was Foreign Minister and he was Foreign Secretary. We met again then. Since I returned to office in 2023, this relationship has continued. It helps the dialogue a great deal.
+				</p><p>
+										We speak frequently, we consult each other, and our positions are very similar — practically the same — on multilateralism and global governance.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>Would you say Brazil and India also share the view that BRICS should not be understood as an anti-Western bloc?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Exactly. I was asked about this yesterday by the Indian media. There were many microphones around me, and the questions were: “Is BRICS anti-Western? Is BRICS anti-American?” It is nothing of the sort.
+				</p><p>
+										On the contrary, we see BRICS as a space for negotiation, dialogue and consensus-building. It is a space where positions can be discussed and where countries can work towards common understandings. There is nothing anti-Western about it. This is a point we have to repeat often because there continues to be a misunderstanding about the purpose of BRICS.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>The same argument is often made about local currencies and the dollar. Is BRICS seeking to replace the US dollar?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									No. That is not what this is about. The possible use of local currencies for settling part of bilateral trade is something many countries already do, and very often it is a decision made by the private sector. Governments do not tell companies which currency they must use. It is ultimately the choice of companies, exporters and importers.
+				</p><p>
+										Brazil, for example, has had a local-currency payment agreement with Argentina since 2004. I was in Argentina when it was negotiated. But even there, it accounts for only a limited part of bilateral trade because participation depends on the private sector.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>China’s President Xi Jinping is in India for this summit, in his first visit to the country in seven years. India will also hand over the BRICS presidency to China. What is the significance of Xi’s presence, and do you see a broader stabilisation in India–China relations?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									The fact that President Xi came to India is proof of the importance China attaches to BRICS. There is no doubt that BRICS is a very important group. China was also one of the major drivers of the expansion of BRICS, and that expansion was important for all members. One of the advantages of BRICS is that countries that may have differences can sit together in a smaller and more informal setting and discuss them directly.
+				</p><p>
+										Take Iran and the United Arab Emirates. Both are members of BRICS and they have differences. But having both inside the group can also be an advantage because BRICS provides a space where dialogue can take place with greater proximity and informality.
+				</p><p>
+										In a very large organisation, such as the United Nations, it can sometimes be much more difficult to bring countries together in this way.
+				</p><p>
+										The same logic applies more broadly. India and China are enormous countries, major powers and major trading partners. Prime Minister Modi has already been to China, meetings have taken place, and economic relations are very substantial. Xi’s presence here is therefore significant both for BRICS and for the broader Asian geopolitical context.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>Russian President Vladimir Putin is also attending the summit. What does his presence say about India’s role and about India’s relationship with Russia?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									It is another important fact and shows India’s engagement with the organisation and with the negotiations. President Putin came to the summit, which is significant. India and Russia have a relationship that goes back many years. They are very close countries politically and strategically in many respects. They are both enormous countries, major powers in the same broader region. They agree on many things and disagree on others, but their relationship is deep and long-standing.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>Russia has historically supported BRICS expansion. Has the expansion phase now paused? Is BRICS entering a period of consolidation rather than further enlargement?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I think so. The expansion was considered successful and brought an important contribution to the group. Indonesia was the last country to enter as a full member in that initial expansion process. Indonesia had been invited, but it asked that the final decision wait until President Prabowo took office because becoming a member of BRICS is an important strategic decision.
+				</p><p>
+										I believe the conclusion now is that we need a period to consolidate the group and its agenda. There is also an organisational question because BRICS does not currently have a permanent structure. Some countries have suggested creating a BRICS secretariat, but that does not exist for the moment.
+				</p><p>
+										Each country that assumes the rotating presidency is responsible for organising meetings, preparing agendas and maintaining the documents generated through those meetings. So, we need time to consolidate the participation of the new members and also strengthen dialogue with the partner countries.
+				</p><p>
+										Many partner countries would like to become full members, and many ask Brazil for support. Our answer is that Brazil will support them when there is a collective decision to reopen the expansion process. For now, it is important to strengthen the dialogue between full members and partner countries because that will help structure the group better. BRICS already has an important record of achievements. It has many cooperation projects, including in health and other areas, and it has its own development bank.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>Before arriving in India, you visited Singapore and Thailand as part of Brazil’s growing engagement with ASEAN. How does this wider Asian strategy connect with Brazil’s relationship with India?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									It is part of a broader project to bring Brazil closer to ASEAN and to Asia. President Lula gave us a clear instruction to deepen Brazil’s political and commercial relationship with ASEAN countries. At the beginning of the government, in 2023, we established a permanent representation in Jakarta, with an ambassador accredited to the ASEAN Secretariat. Brazil became a Sectoral Dialogue Partner of ASEAN and we are now working to advance to the level of Dialogue Partner, which represents a higher level of engagement. Brazil was also the first Latin American country to establish a permanent representation with the ASEAN Secretariat and the first Latin American country to accede to the Treaty of Amity and Cooperation.
+				</p><p>
+										The economic results are already very significant. If you compare Brazilian exports over the last three years to the five largest ASEAN markets with exports to Brazil’s five largest G7 partners, the figures are comparable. But there is an important difference: Brazil has generated a strong trade surplus in this region, while it has faced large deficits elsewhere. That demonstrates the logic of this strategy.
+				</p><p>
+										These Asian markets are open to Brazil, and Brazil has a longstanding ability to maintain political dialogue with these countries. Our objective is to connect that political relationship with mechanisms that deepen and consolidate economic relations.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>Finally, what is the essence of Brazilian foreign policy, particularly in a world increasingly marked by strategic rivalry?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									The essence of Brazilian foreign policy is that Brazil is a country that promotes peace, integration and peaceful coexistence among states. These principles are written into Article 4 of our Constitution, which defines the principles that should guide Brazilian foreign policy. Brazil is not a military power, nor does it want to be one. Brazil wants to live in peace. It wants to use negotiation and consensus-building.
+				</p><p>
+										President Lula is a major promoter of this foreign policy. He was during his first two terms and he is again today. You can see his determination to open new fronts for political relations, but also for trade and cooperation. Brazil’s foreign policy is peaceful. It is based on cooperation, rapprochement, dialogue and respect for international law. We speak to everyone.
+				</p><p>
+										Brazil has one of the largest diplomatic networks in the world. We have embassies throughout Africa and across Asia. We maintain diplomatic relations with countries that often do not speak to one another. This is what Brazil represents. Brazil is a power for peace — a country committed to dialogue, cooperation, international law and negotiated solutions.
+				</p></div></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 12, 2026 05:28 pm IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71459802" data-title="Brazil, India are building strategic ties for a changing world, says Brazil’s Foreign Minister" data-url="https://www.thehindu.com/news/national/brazil-india-are-building-strategic-ties-for-a-changing-world-says-brazils-foreign-minister/article71459802.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-74836659e5cec0d6eb859281-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Brazil%2C%20India%20are%20building%20strategic%20ties%20for%20a%20changing%20world%2C%20says%20Brazil%E2%80%99s%20Foreign%20Minister&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fbrazil-india-are-building-strategic-ties-for-a-changing-world-says-brazils-foreign-minister%2Farticle71459802.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-74836659e5cec0d6eb859281-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-74836659e5cec0d6eb859281-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-74836659e5cec0d6eb859281-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-74836659e5cec0d6eb859281-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-74836659e5cec0d6eb859281-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-74836659e5cec0d6eb859281-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71459802" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/brazil-india-are-building-strategic-ties-for-a-changing-world-says-brazils-foreign-minister/article71459802.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-12 16:32 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
