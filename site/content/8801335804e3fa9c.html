@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>India and Canada are well beyond reset now, says Canadian High Commissioner to India | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>India and Canada are well beyond reset now, says Canadian High Commissioner to India</h1>
+                <div class="article-meta">
+                    <span>By Suhasini Haidar</span> • <span>THE HINDU NATIONAL</span> • <span>2026-09-11</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71456180"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p><span class="capsletter">T</span>hree years after India-Canada ties were blown apart by allegations that Indian officials were involved in the killing of a Khalistani activist in Canada, and New Delhi and Ottawa downsized missions and sent back High Commissioners, both sides celebrated restoring embassies back to full strength this week. In a wide-ranging conversation at T<i>he Hindu </i>MIND event moderated by Suhasini Haidar, Canadian High Commissioner to India Christopher Cooter said the two countries have now gone well beyond a reset in ties. He also confirmed that they are discussing a bilateral visit by Prime Minister Narendra Modi to Canada this December, when the Comprehensive Economic Partnership Agreement (CEPA) will be announced. Mr. Cooter, however, sidestepped questions about whether Canada owes India an apology for the public allegations that spurred the rift. Edited excerpts:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: You took charge of India-Canada ties at a time when relations hit rock bottom. Would you call yourself the reset ambassador?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									It’s taken us some time to get here. It’s been over a year since Prime Minister Modi was invited to the G7 summit at Kananaskis in Alberta. But we have built momentum. I happened to arrive at the time that we started this reset, and now we have gone well beyond a reset. We are in a kind of dangerous time globally. We have two very hot wars going on (the Russia-Ukraine conflict and the West Asia conflict). We’ve got trade disruptions going on. We’ve got climate change. We’ve got AI, the challenge and opportunity. And it happens to be that this period in which we are re-establishing our relationship is the one that works the best for us. In all of the 80 years or so that we have had diplomatic relations, I don’t think we have ever had an environment which draws us together in that same way.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: Do you see a big announcement round the corner? Prime Minister Narendra Modi is heading to North America in December for the G20 summit in the U.S. Do you expect his first bilateral visit in more than a decade this year?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Yes, a continuing string of events over the last year will culminate this year, we expect, in the visit of Prime Minister Modi to Canada. The two Prime Ministers, when Prime Minister [Mark] Carney came here in March, set out this kind of road map in a joint statement. I think it has 50 or more deliverables and we are trying to fulfil those commitments. There are commercial deals in the offing. There’s a broader range of areas where we are doing things together, for example, in defence. So, it’ll become a bit more tangible to the average person. In October, we have the largest trade mission coming to Mumbai and Bengaluru.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: Have Canada-India trade relations been spurred by the Donald Trump administration’s actions? And will the push remain once Canada and the U.S. sort out their problems and go back to normal?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									A lot of people ask that question. The Canada-U.S. trade deal is a negotiation and there’s no question we will get there at some point. Mr. Trump is a hard bargainer. Well, so are we. That’s why the Prime Minister pulled out of talks that were going to produce a deal that wasn’t good enough for us. The pressures that we are getting from the U.S., yes, have accelerated certain things in Canada, but already Canada was shifting. The polling, the recent byelections we had, all demonstrate that across the country, from one end to the other, Canadians actually support the direction that we are taking. We can see that we had too many eggs in one basket. We don’t want that degree of dependence. We want to diversify. And I think it will be good for India and the relationship with India because at the top, at the political level, the two Prime Ministers have a good chemistry. They have met four times over the last year. There’s a lot of political eye-to-eye view at this point. I think even if there were changes in government, that would survive this.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Sharad Raghavan: Can you estimate what level of progress we are at on the trade deal? What are the sticking points?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Canada is the ninth biggest economy in the world. India is the fourth biggest, and we should have a lot more trade. While the trade itself is rather modest, we generate a lot of employment and investment. Canadian pension funds and other big institutional investors have invested about $80 billion (U.S. dollars) in India. That makes us, along with Singapore and the UAE, the largest investors in your country, which is kind of funny – little, tiny countries in this big country, and we are the biggest investors. There are some tax issues, but generally speaking, they (Canadian investors) are very bullish on India. On the CEPA, the free trade agreement, we are now going to have the fourth round of discussions here in Delhi in a few days’ time. Previously, we discussed for 12 years, and we got no trade agreement. This time, we started in March 2026. We’ve probably done more in these six months than we did in those 12 years. That looks like pretty good math. Our hope is that we get there by the time of a Modi visit to Canada, which would mean achieving this in about nine months [since March]. That’s like a child – we hope this is a really nice baby.
+				</p></div><div class="article-picture"><div class="picture zoom-img"><img alt="Canadian High Commissioner to India Christopher Cooter being presented a memento by Varghese K. George, The Hindu’s Resident Editor, New Delhi. The Hindu’s Diplomatic Affairs Editor Suhasini Haider, and S. Ramanujam, The Hindu’s Assistant Vice President, Finance Administration, are also seen. " class="lazy" data-original="https://th-i.thgim.com/public/incoming/7b0sa1/article71456540.ece/alternates/FREE_1200/DSC_6867.JPG" data-src-template="https://th-i.thgim.com/public/incoming/7b0sa1/article71456540.ece/alternates/FREE_1200/DSC_6867.JPG" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Canadian High Commissioner to India Christopher Cooter being presented a memento by Varghese K. George, The Hindu’s Resident Editor, New Delhi. The Hindu’s Diplomatic Affairs Editor Suhasini Haider, and S. Ramanujam, The Hindu’s Assistant Vice President, Finance Administration, are also seen. " width="100%"/></div><p class="caption">
+
+                            Canadian High Commissioner to India Christopher Cooter being presented a memento by Varghese K. George, <i>The Hindu</i>’s Resident Editor, New Delhi. <i>The Hindu</i>’s Diplomatic Affairs Editor Suhasini Haider, and S. Ramanujam, <i>The Hindu</i>’s Assistant Vice President, Finance Administration, are also seen. 
+                                                            | Photo Credit: 
+                                SUSHIL KUMAR VERMA
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Varghese K. George: In which sectors could India and Canada enhance their bilateral cooperation in trade and meet the $1-trillion investment goal?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Canada has huge amounts of natural resources and technology that would be very apt in the Indian setting. Take nuclear, for example. We have been cooperating on nuclear since the 1950s. So, most of your reactors are based on Canadian CANDU (Canada Deuterium Uranium) models. Eighteen of India’s 24 reactors are actually CANDU-based. We are looking at different types of technologies, different kinds of reactors, smaller ones, medium-sized ones, and then the whole cycle, right up to the decommissioning of other plants. I mean, we have got the things that you actually need, like energy. Canada is the fourth largest producer of oil, fifth largest in LPG, fifth largest in LNG. We have 20% of the world’s tungsten. We are No. 1 in potash, No. 2 or 3 in titanium. We are the only G7 country that can produce batteries for EVs (electric vehicles).
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Saptaparno Ghosh: Why has the hydrocarbon trade between the two countries not really picked up?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									On fossil fuels, what Canada lacks, which the U.S. has, is enough west coast ports. India has got some Canadian oil through the Gulf ports of the U.S. as well, but we have just completed the TMX (Trans Mountain Expansion Project) pipeline in 2024, and it can produce about 9,00,000 to 1,000,000 barrels a day now, and that’s coming out in Vancouver. Vancouver is a little bit shallow for some of the largest ships, so we’ve got to look at getting deep water ports. We have just announced another pipeline project that will go to deep water, and that will allow us to really have economies of scale, which we don’t have yet on the west coast of Canada for India.
+				</p></div><div class="article-picture verticle"><div class="picture zoom-img"><img alt="" class="lazy" data-original="https://th-i.thgim.com/public/news/cities/Delhi/6yoggi/article71456518.ece/alternates/FREE_1200/GetImageContent.jpg" data-src-template="https://th-i.thgim.com/public/news/cities/Delhi/6yoggi/article71456518.ece/alternates/FREE_1200/GetImageContent.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" width="100%"/></div><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span><span itemprop="creator" itemscope="" itemtype="https://schema.org/Person"></span></div><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: The more you describe this almost utopian state of the relationship, we have to see the contrast to exactly three years ago, when then Prime Minister Justin Trudeau came to India for the G20 summit and had a tense meeting with PM Modi over the investigation into the killing of Hardeep Singh Nijjar. How are security talks progressing now, given that the officials involved are the same – the Canadian officials who accused the Indian security apparatus of carrying out a killing in Canada, and the Indian officials who accused Canada of harbouring terrorists?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I don’t want to say the issue [over the Nijjar killing] is gone. I want to say that we have made progress, but relationships require investment. They require maintenance. We have had a security dialogue established. To tell you the truth, I was at the first meeting of that security dialogue, and it was like everybody took a deep breath. Where are we going to go with this? Are we going to continue what we had before, or are we going to go forward? Prime Minister Carney inviting Prime Minister Modi to Canada was a big leap. That took some political courage, but it was an important step forward and I think that risk was worth it because it set the stage for this discussion. It’s going to continue in a way that benefits both countries, not only for the overall bilateral relationship. I think there are some issues that actually go beyond the two countries. Scam centres, for example, in south-east Asia; fentanyl, which is a plague in Canada. We want to prevent precursors coming into North America. Things like that. I’m sure there are other areas. So, you know, as we calm down, establish trust, realise who we are, make that connection at the official level, this whole process is moving forward. But it requires maintenance. And we never know, something will happen, somebody will say something. But now we have got the channels of communication to manage it. We are putting in place mechanisms to deal with future difficulties. It’s not simply being naive and saying, well, let’s just ignore what happened. [We are saying] let’s take into account what happened and let’s build from that to make sure it doesn’t happen again.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: Why is the trial taking so long? It has been three years since Mr. Trudeau stood in Parliament and accused Indian officials of involvement, surely some evidence should have been produced by now?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I can’t comment on that. It’s a court process. Every case is different. What I can say is other things have happened in Canada, which have improved the atmosphere. Declaring the [Lawrence] Bishnoi gang a terrorist organisation, for example. We have a financial crimes task force that is looking at some of these issues. We have taken firmer action on extortion cases that have been affecting the Indian community in Canada.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: The High Commissioner of India, your counterpart at the time, was declared a PNG (persona non grata) along with other diplomats. If they were indeed guilty of something, we should have heard some evidence by now. If not, does Canada owe India an apology?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Well, again, it’s a judicial process, so we’ll see what comes out at the other end. And that could take, I don’t know how long. I have no idea when the date for the trial, actually, if it’s even been set. So, there’s nothing more I can say about that.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Vijaita Singh: As part of Operation Hardball, which was announced in July, has India provided any specific information on how Lawrence Bishnoi was running this gang from jail because his lawyer has said he is in solitary confinement and does not have access to any communication devices?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I can’t answer that question. I don’t know what Lawrence Bishnoi is able to do. The joint operation was a good example of cooperation. It wasn’t just India-Canada but also the Europeans and the Americans working together on a common problem. And I think the outcomes are, again, part of this, at least between India and Canada, part of this overall improvement in the way we work together to solve problems and to make both our countries more safe for our citizens. We also declared the Bishnoi gang a terrorist organisation. That’s a pretty strong step. I think there’s tangible results happening for the communities in Canada, so it is going in the right direction.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Vijaita Singh: Have you sought Lawrence Bishnoi’s extradition and has India sought the extradition of his Canada-based aide Satinderjeet Singh alias Goldy Brar?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Not to my knowledge.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: Another sore point in India is over students, where Canada is cutting down on visas, raising guarantees required, and making education and housing more expensive. Does Canada want less Indian students now?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Look, we remain the host to more Indian students than any other country in the world – more than the U.S. – at about 4,27,000 students. We think they are a great bridge between the two countries. What we had found for a period was that there were just too many students, not just Indian students, students from all kinds of countries, and we couldn’t accommodate them. Housing was a problem in certain smaller communities. Some of the colleges, frankly, took too many students and too much of their income; too much of their revenue was coming from foreign students. They were overdoing it. And there were fraud cases. So, the rules were clamped down. They were tightened. But the signal seems to have gone out that somehow Canada’s closed to any students. And that’s not at all the case. We welcome all good students. It’s true that the financial requirements have gone up, but they go up with inflation. I can tell you, having spoken to the university presidents, including of our very top universities; they all say the same thing – we would love to have more great Indian students. Now, Prime Minister Modi has said he would like universities to come in and open bricks-and-mortar campuses, and they’re looking at that too, but already there are joint degrees and joint programmes that are up and running.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									A.M. Jigeesh: Are there specific Canadian universities that are going to open in India?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									We have had a lot of universities come through here. They have met government [officials], but they are also speaking to institutions, the IITs, and some of the new up-and-coming private universities. Yes, they are looking at campuses in India. McGill [University] made an announcement when Prime Minister Carney was in India, and 13 new MoUs between different universities, Canadian universities, and Indian universities were also announced.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: How does Canada really see India’s hosting of the BRICS summit? Given the Western consensus against Russia, what are your hopes from President Vladimir Putin’s visit here?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									We do recognise that the Global South is a more and more important factor in global geopolitics. India is hosting BRICS, it hosted the G20, which we are part of. We have had India at our G7 summit. India’s practically a member of the G7, frankly. It is true we have some differences with some of the people that will be coming to your summit. But Prime Minister Carney has been very clear that we will not refuse to talk to people. That doesn’t mean we have to agree with them, but we will have a broader approach to discussions with people because we have to do that. We look forward to seeing what the outcomes of the BRICS summit are.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Suhasini Haidar: Do you see a role for India as a mediator in the Russia-Ukraine conflict?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I think anything that brings peace would be welcome. It’s been five years. So, if India can help achieve that, absolutely. And on any other conflicts that are out there as well. India has a credibility and a weight; it is the world’s largest nation by population. And if you can use your gravitas, your influence to bring about outcomes that we all want, then we would say more power to you.
+				</p></div></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 12, 2026 01:03 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71456180" data-title="India and Canada are well beyond reset now, says Canadian High Commissioner to India" data-url="https://www.thehindu.com/news/national/india-and-canada-are-well-beyond-reset-now-says-canadian-high-commissioner-to-india/article71456180.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=India%20and%20Canada%20are%20well%20beyond%20reset%20now%2C%20says%20Canadian%20High%20Commissioner%20to%20India&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Findia-and-canada-are-well-beyond-reset-now-says-canadian-high-commissioner-to-india%2Farticle71456180.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-fee5c68f67e1c01116558b50-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71456180" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><a class="google-btn" href="https://www.google.com/preferences/source?q=https://www.thehindu.com/" target="_blank"><img alt="Google Preferred Source" height="40" src="https://www.thehindu.com/theme/images/th-online/google-preferred-badge.png" width="130"/></a></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/india-and-canada-are-well-beyond-reset-now-says-canadian-high-commissioner-to-india/article71456180.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-12 00:09 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
