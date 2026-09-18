@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Does the BRICS summit signify a shift for Indian foreign policy? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Does the BRICS summit signify a shift for Indian foreign policy?</h1>
+                <div class="article-meta">
+                    <span>By Suhasini Haidar</span> • <span>THE HINDU OPINION</span> • <span>2026-09-17</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71477942"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>With a strong pushback against unilateral western sanctions; criticism of Israel over the killing of civilians, the attacks on Lebanon, and the forced occupation of Palestinian territory; and support for UN reform as well as a <a href="https://www.thehindu.com/topic/brics/" target="_self">BRICS</a> payment mechanism, the <a href="https://www.thehindu.com/news/national/brics-issues-new-delhi-declaration-as-uae-and-iran-back-down-from-tough-positions/article71460749.ece" target="_self">New Delhi Declaration of 2026</a> has been likened to India’s foreign policy from its non-aligned past. But was it a compromise by New Delhi to build consensus, or will the statement, and Prime Minister Narendra Modi’s close engagement with the leaders of Iran, Russia, and China, have a bearing on India’s foreign policy? <b>Ajay Bisaria</b> and <b>Happymon Jacob</b> discuss the question in a conversation moderated by <b>Suhasini Haidar</b>.</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is the New Delhi declaration a return to non-alignment or just momentary rhetoric?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ajay Bisaria:</b> Broadly, the declaration is in keeping with India’s foreign policy, whether that is strategic autonomy and multi-alignment or multi-vector engagement. In terms of optics, India is more on the front foot and less apologetic than it used to be. India is getting more and more comfortable in a non-western forum, saying that it is emphatically part of it. While it doesn’t necessarily mean a shift in posture, it does suggest a greater degree of comfort with a different set of optics.
+				</p><p><b>Happymon Jacob:</b> The BRICS summit is under spotlight and things under spotlight look bigger and shinier than they really are. BRICS is a political platform; not a security platform. I don’t think India’s policy today is that of non-alignment at all. Non-alignment was a strategy for a weak state in a bipolar world. Today, we are in a different kind of world and the desire in India is to become one of the poles in a multipolar world. There is a reference to the Bandung Spirit (Non-Aligned Movement) in the BRICS declaration in pursuit of a fairer, more inclusive, and representative multilateral system. But that is nostalgia, not real policy.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How important are optics such as the Modi-Xi-Putin handshakes or the Prime Minister reaching out to the Iranian President at a time when these leaders represent the “anti-Western lobby”?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Happymon Jacob:</b> The optics are, in some ways, the substance here. Chinese President Xi Jinping had not been to India in nearly seven years. And we had the Abu Dhabi Crown Prince (Khaled bin Zayed Al Nahyan) sitting at the same table. In some ways, the photograph is the message. At the BRICS outreach session, a lot of powers who don’t otherwise get into great power conversations were present. So, there was a lot of socialisation happening inside the platform and on its margins. But I think we should understand that this is not really having an impact on how the world is being shaped. The declaration calls for exercising restraint and protecting civilians and civilian infrastructure and pointedly recalls the respective national positions of each member. It is fantastic, but the argument here is about optics, not common positions.
+				</p><p>
+										Editorial | <b><a href="https://www.thehindu.com/opinion/editorial/building-consensus-on-the-18th-brics-summit-the-new-delhi-declaration/article71463787.ece" target="_self">Building consensus: On the 18th BRICS Summit, the New Delhi Declaration</a></b></p><p><b>Ajay Bisaria:</b> I would agree that these multilateral fora are often performative to a degree and therefore all optics matter. But in a multilateral document, you can say the silent part aloud; what a country won’t say in a national statement, it can say aloud in a high-level multilateral summit. For instance, everyone knows that the phrase “unilateral coercive measures” is about U.S. actions. So, you’re not really saying we condemn U.S. action on so-and-so date; you’re simply saying that we are against U.S. tariffs and [western] sanctions. There is an understanding now that what is said in a multilateral document can be different from a national position.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Every BRICS summit since 2022, including the 2024 summit in Russia, has made a reference to Ukraine. The New Delhi Declaration is the first time that references to Ukraine have been dropped. Why?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ajay Bisaria:</b> My guess would be that it was a Russian veto. In the Rio BRICS declaration last year, there was even condemnation of a Ukrainian attack on Russia without an equivalent condemnation of anything Russia had done. So this time, instead of just condemning Ukraine, they might have decided to drop the whole thing entirely. It is very disappointing that a major multilateral geopolitical forum doesn’t call for belligerents to end the war, but instead stays silent. That is an error of omission. I suspect the Russians said, no, we don’t accept it, and in the interest of having a consensus, it was dropped.
+				</p><p>
+										In Focus podcast | <b><a href="https://www.thehindu.com/podcast/is-brics-coming-of-age-in-focus-podcast/article71468247.ece" target="_self">Is BRICS coming of age?</a></b></p><p><b>Happymon Jacob:</b> I think India has no particular reason to push for that language to be present in the declaration because we have quite clearly sided with the Russian Federation in this war, indirectly if not directly. There must have been Russian push but I see no reason why there could not have been some neutral language to put in [references to Ukraine], given the precedent (of previous BRICS joint declarations).
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The condemnation of Israel in the statement is very strong. Does this represent a shift for India given the PM’s speech on standing “shoulder to shoulder” with Israel during his visit in February 2026?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ajay Bisaria:</b> The big picture is that India is trying to establish neutral and balanced positions on both conflicts, and therefore not be seen as backing only one side in either. It has taken safety in the language of the United Nations. There’s a specific mention of the UN Security Council Resolution 2803 of November last year, which spoke about an International Stabilisation Force and a Board of Peace. Some of the language has been drawn from there. The overall posture is: let’s try to be balanced and reasonably neutral.
+				</p><p>
+										Editorial | <b><a href="https://www.thehindu.com/opinion/editorial/more-heft-on-india-and-the-18th-brics-summit/article71456976.ece" target="_self">More heft: On India and the 18th BRICS Summit</a></b></p><p><b>Happymon Jacob:</b> There is a clear disjunction between the statement and what Prime Minister Modi told the Israeli parliament. Perhaps the declaration is in some way intended to counter the perception that India was getting too close to Israel. The two-state solution has always been India’s position, so the declaration doesn’t contradict Indian policy there. But with the UAE, Egypt, Iran, and Indonesia in the room, there was only so much India could do to push back against the harshness of that language. What Prime Minister Modi told the Israelis in Israel is emotional and consequential. But what is written in the BRICS Declaration is multilateral, symbolic, and not very consequential. I would still say the balance is tilted in favour of Israel as a partner.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How significant are the paragraphs on economic issues, particularly on intra-BRICS trade using payments in national currencies? These 10 or 11 countries represent 40% of the global economy, and 25% of global trade. Could they pose a challenge to the G7?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Happymon Jacob:</b> Indian policy has two parts. One is the support for local currency payment mechanisms. I don’t think India has supported a permanent payment mechanism under the ambit of BRICS. I think there is an acknowledgement that there is no one-size-fits-all approach as far as currency settlement payment mechanisms are concerned. I would think twice before signing on to a non-U.S. dollar payment mechanism, which I believe will mean the next big currency or the next powerful currency. And unfortunately, China’s currency is going to be that big currency.
+				</p><p>
+										Video | <b><a href="https://www.thehindu.com/videos/why-the-brics-summit-was-a-major-diplomatic-win-for-india/article71465371.ece" target="_self">BRICS gives India’s balancing power a boost</a></b></p><p><b>Ajay Bisaria:</b> BRICS is a counterpoint to the G7, an economic grouping that also has geopolitical responsibilities. But I think India also finds itself at an intersection with the G7, because it is a sort of permanent invitee to the G7, along with Australia and South Korea. I have made the argument elsewhere that the G7 should dissolve itself and become the Democratic 10 (D10), including these three countries. I think that is the real strategic autonomy or multi-vector engagement, where India becomes the bridge between the east and the west, but also a voice of the south.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									How much of BRICS solidarity accrues to the Trump factor, including a reaction to the latest U.S. Sanctions Bill on Russia and Iran?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ajay Bisaria:</b> The Trump factor is a key driver of many of these geopolitical events — if not of the substance, certainly of the optics. There is a Trump accelerator at play at BRICS, in terms of BRICS unity. It is this accelerator that gets you to get an India-EU Free Trade Agreement in record time. The Trump accelerator gets India to reverse its relationship with Canada in record time. But also, a non-western alternative grouping has a certain dynamic of its own.
+				</p><p>
+										Comment | <b><a href="https://www.thehindu.com/opinion/op-ed/a-bigger-brics-shaped-by-indias-vision/article71457389.ece" target="_self">A bigger BRICS, shaped by India’s vision</a></b></p><p><b>Happymon Jacob:</b> Much of the threat that Mr. Trump sees in BRICS only exists in his imagination. But today, it is important to take Mr. Trump and his threats seriously. India’s primary challenge as a growing power is not the U.S.; it is China. And therefore, while we like the idea of a multipolar order, I am cognisant of the fact that if [China] becomes the most powerful country in the world, it is certainly not going to be great for India’s own national interests. Give BRICS the credit that is due to it, which is that it brings together the voice of the Global South and conveys that message to the collective west. But it is also important to note that BRICS, like several platforms, is a political platform that airs complaints and that airs unhappiness without too much geopolitical consequence on the ground.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Has India’s convening power as host been dented by the fact that there were no leaders from any of the neighbouring countries?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Happymon Jacob: </b>India should have brought its neighbourhood together under the BRICS platform, which it had done in the past (2016 BRICS-BIMSTEC Summit). I’m not a great believer in the idea of South Asia, but I certainly believe in the instrumentality of SAARC and BIMSTEC regional organisations that can convene the countries of South Asia. China is now taking the lead not only in engaging South Asian countries bilaterally but also convening them in a group. It is a shame that the government is not able to hold on to those.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/national/brics-summit-2026-joint-statement/article71459643.ece" target="_self">BRICS adopts New Delhi Declaration with consensus</a></b></p><p><b>Ajay Bisaria:</b> It would have been a much better situation if the neighbours were present at BRICS, with the BIMSTEC countries, if not all SAARC countries, minus Pakistan and Afghanistan. But I think there were a couple of geopolitical accidents. In terms of Bangladesh, the Sheikh Hasina press conference became the trigger, and then Nepal had the floods. Even so, India’s neighbours should have been called for the ‘party’.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Will any of the decisions at BRICS see their way into future Indian foreign policy? Or is this just one moment with BRICS countries?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Ajay Bisaria:</b> I think this is a moment of success in Indian diplomacy in terms of conducting a major international event. In November, there will be another opportunity to meet global leaders at the ASEAN-East Asia Summit in the Philippines, followed by Prime Minister Modi’s visits to the U.S., Canada, and Brussels, where he could potentially secure three trade agreements. I think that’s what diplomacy will be about: multi-vector engagement; keeping all stakeholders engaged, in multiple directions.
+				</p><p>
+										Comment | <b><a href="https://www.thehindu.com/opinion/lead/indias-opportunity-to-put-brics-back-together/article71439875.ece" target="_self">India’s opportunity to put BRICS back together</a></b></p><p><b>Happymon Jacob:</b> India has only so much diplomatic capital. Therefore, it is important to pick our battles, forums, and partners. I think we should be present in those rooms where global rules on AI are being framed, and where the future of space governance is discussed. I don’t think the next world order is going to be made in forums such as the BRICS but in those silent small rooms.
+				</p><p><b><a href="https://www.thehindu.com/podcast/does-the-brics-summit-signify-a-shift-for-indian-foreign-policy-in-focus-podcast/article71476576.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><i><b>Ajay Bisaria served as High Commissioner to Pakistan and Canada and is the author of </b></i><b>Anger Management: The Troubled Diplomatic Relationship Between India and Pakistan<i>. Happymon Jacob is author of </i>India after Non-Alignment<i>’</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 18, 2026 01:30 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71477942" data-title="Does the BRICS summit signify a shift for Indian foreign policy?" data-url="https://www.thehindu.com/opinion/op-ed/does-the-brics-summit-signify-a-shift-for-indian-foreign-policy/article71477942.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Does%20the%20BRICS%20summit%20signify%20a%20shift%20for%20Indian%20foreign%20policy%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fdoes-the-brics-summit-signify-a-shift-for-indian-foreign-policy%2Farticle71477942.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-3029c21250b9bf8617e42beb-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71477942" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><div data-ga-labelclick="article_add_google_source_btn" google-add-preferred-source-btn=""></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/does-the-brics-summit-signify-a-shift-for-indian-foreign-policy/article71477942.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-18 00:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
