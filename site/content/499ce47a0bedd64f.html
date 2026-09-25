@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Should permanent membership and veto powers of the UNSC be abolished? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Should permanent membership and veto powers of the UNSC be abolished?</h1>
+                <div class="article-meta">
+                    <span>By Kallol Bhattacherjee</span> • <span>THE HINDU OPINION</span> • <span>2026-09-24</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71505505"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><p>In the ongoing session of the UN General Assembly (UNGA), France has made a proposal to enhance the functioning of the UN, especially in dealing with collective security and the use of veto. France has been advocating that the use of veto in the UN Security Council (UNSC) be “regulated” when it comes to dealing with humanitarian crises such as in Sudan, Lebanon or in cases of genocide. France believes that the use of veto is not a matter of “privilege” but of “responsibility”. So, should permanent membership and veto powers of the UN Security Council be abolished? <b>Amitabh Mattoo</b> and <b>Swaran Singh</b> discuss the question in a conversation moderated by <b>Kallol Bhattacherjee</b>. Edited excerpts:</p><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is it realistically possible to imagine an UNSC where veto would be “regulated” as the French proposal suggested?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Amitabh Mattoo:</b> What Emmanuel Macron (President of France) articulated in the UNGA on September 22 is not entirely new. What we are seeing is really a renewed push behind what used to be called the French-Mexican initiative, first launched in 2015, under which permanent members of the SC would voluntarily refrain from using the veto in situations involving genocide, crimes against humanity, and large-scale war crimes. It’s not an attempt to abolish the veto or amend the UN charter. It’s essentially an exercise in self-restraint by the P5 (permanent members of the UNSC: U.S., U.K., France, China and Russia). What gives the initiative fresh significance is not just Mr. Macron’s speech, but the political momentum behind it. France and Mexico both announced this week that 128 states now support the declaration, with 21 joining in the last four months. And the significant part is that the U.K., another P5 country, has now joined France in accepting the principle.
+				</p><p>
+										So for the first time, two of the five permanent members have committed themselves to this form of voluntary restraint.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/national/expanding-permanent-category-with-veto-critical-to-real-reform-of-unsc-india/article70863804.ece" target="_self">Expanding permanent category with veto critical to real reform of UNSC: India</a></b></p><p>
+										But I think we should also distinguish between three different questions which are often conflated — the use of the veto, accountability for the use of the veto, and the much larger question of reform of the Security Council. Mr. Macron’s initiative addresses only the first. It says in effect, even if the veto remains, surely there must be circumstances of exceptional human suffering in which a permanent member agrees not to exercise it. It is, as I said, a modest incremental proposition institutionally, but potentially significant normatively in terms of what we want the world to be like. It seeks to change the political behaviour of the five permanent countries without undertaking what seems to be the almost impossible task of rewriting the charter. So, it’s a modest proposal and it has got some momentum, but whether it translates into reality, we’ll have to wait and see.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Does the current situation in UNGA indicate that the P5 is now divided between the France-U.K. and Russia-U.S.-China factions on the use of veto?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Swaran Singh: </b>Clearly, the U.K. and France are not the heavyweights among the P5. Therefore, I think it is easier for France and the U.K. to make that principled position saying that the P5, which wield veto power, should be able to better regulate or manage how fundamentally the power is utilised; to make sure that the UNSC is able to take action and that it does not get paralysed. In fact, the contradiction of 2013 itself was driven by the fact that in the civil war in Syria, Chinese and Russian vetoes were making it impossible for the UNSC to pass any resolution condemning Syria. After the August 2013 chemical weapons attack in Ghouta in September, the then French President Francois Hollande had in his speech proposed a ‘code of good conduct’ for the UNSC. This is where, for the first time, a kind of proposition was made that the P5 could voluntarily restrain the use of veto in cases of genocide, crimes against humanity or larger war crimes. I think the attempt was to skirt amending the UN Charter and still make it much more contemporaneous. None of the P5 are talking of eliminating veto power that they have. There are multiple versions among the five as to how they wish to reform the UN Security Council.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/international/un-chief-antonio-guterres-last-unga-speech-2026/article71496335.ece" target="_self">We must reform the Security Council: UN chief Guterres in final UNGA address</a></b></p><p>
+										As an ideal, we believe that we live in a world of sovereign equality, but in reality, because of the way power is distributed, it is impossible for any international organisation to survive — not just become effective — but even survive if they happen to take a decision against any of the major powers. Incidentally, veto is not a word mentioned in the UN Charter and it was created through a separate mechanism. But the premise is that any international organisation must not take a decision against the fundamental interests of any major power if they wish to survive.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									While doubts persist about the veto, the question is will veto continue to be extended to new members of the UNSC whenever they are inducted?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Amitabh Mattoo:</b> Apart from Mr. Macron’s or the France-Mexican initiative, there have been incremental reforms which fall short of trying to amend the UN Charter. There was an earlier Liechtenstein initiative, which was adopted by the UNGA in 2022, which took a different route. It did not prevent a permanent member from exercising the veto. Instead, whenever a veto was cast, the General Assembly would be convened within 10 working days to debate the issue. In other words, a veto will no longer be allowed to simply terminate the conversation. The permanent member concerned would have to explain and defend its action on the floor of the UNGA. That was one initiative which was passed by the UNGA. A third initiative, also similar to the French-Mexican initiative, is the ‘ACT code of conduct’ or the Accountability, Coherence and Transparency Initiative. This goes beyond the P5 and asks members of the Security Council, including the non-permanent members, not to vote against credible action designed to prevent or halt genocide, crimes against humanity and war crimes.
+				</p><p>
+										Again, its strength is moral and political rather than legally coercive.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/international/india-presents-detailed-model-on-behalf-of-g4-nations-for-unsc-reform-that-displays-flexibility-on-veto/article67928010.ece" target="_self">India presents detailed model on behalf of G4 nations for UNSC reform that displays flexibility on veto</a></b></p><p>
+										So I would resist the debate as being simply ‘retain or abolish the veto’. We now have several overlapping approaches —abolition, extension of the veto to new permanent members in the name of equality, voluntary restraint in case of mass atrocities, political accountability after a veto is exercised, and the final question of broader structural reform of the Security Council itself. So my own analytical conclusion would be that Mr. Macron’s proposal matters precisely because it is pragmatic; reformist rather than revolutionary. Formal abolition of the veto would ultimately require charter amendment and the consent of the very permanent members whose privilege is being removed.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Can you please explain the issue of accountability in the debate on veto?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Amitabh Mattoo:</b> Short of an amendment of the UN Security Council; an amendment of the veto provisions; or the larger restructuring of the UN Security Council, I think there is great merit in the ‘Liechtenstein initiative’, whereby the debate would continue within the UNGA. It would not prevent or terminate the conversation from happening in the floor of the UNGA, where the permanent member which has exercised the veto would have to clearly demonstrate to the members of the UN what the reasons were behind the exercise of the veto, especially when it has vetoed an action designed to prevent or halt genocide or crimes against humanity.
+				</p><p>
+										Also read | <b><a href="https://www.thehindu.com/news/national/unsc-reform-would-border-on-failure-if-only-non-permanent-category-expanded-india/article71107742.ece" target="_self">UNSC reform would border on failure if only non-permanent category expanded: India</a></b></p><p>
+										Calling upon the permanent member to explain and defend its actions would not necessarily prevent anything when there is real national self-interest at stake, but at least it will make the permanent members, one of the P5 countries which has exercised the veto, become a little more cautious in the use of its power because it would know that it would need to justify and become accountable for its action.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									Is the French proposal transparent or honest about the framing of certain conflicts that are going on such as the Israeli campaign in the Gaza Strip?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/><b>Swaran Singh:</b> I think words such as honesty and justice are most misused in international relations. There is no doubt that all the UN members, whether they are in the Security Council or in the General Assembly, come to the world’s largest platform with their own interpretations, with their own understanding of each of these conflicts that you just listed. So in that sense, there is this important difficulty of word versus the spirit of various international law regimes or the Charter of the United Nations.
+				</p><p><b><a href="https://www.thehindu.com/podcast/should-permanent-membership-and-veto-powers-of-the-un-security-council-be-abolished-in-focus-podcast/article71504842.ece" target="_self"><i>Listen to the conversation</i></a></b></p></div><p><b><i>Amitabh Mattoo is Dean of School of International Studies, JNU. Swaran Singh is former Professor of the School of International Studies, JNU</i></b></p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 25, 2026 01:51 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71505505" data-title="Should permanent membership and veto powers of the UNSC be abolished?" data-url="https://www.thehindu.com/opinion/op-ed/should-permanent-membership-and-veto-powers-of-the-unsc-be-abolished/article71505505.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Should%20permanent%20membership%20and%20veto%20powers%20of%20the%20UNSC%20be%20abolished%3F&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fopinion%2Fop-ed%2Fshould-permanent-membership-and-veto-powers-of-the-unsc-be-abolished%2Farticle71505505.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-05d358206d5ed076b645e1c0-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71505505" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><div data-ga-labelclick="article_add_google_source_btn" google-add-preferred-source-btn=""></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/opinion/op-ed/should-permanent-membership-and-veto-powers-of-the-unsc-be-abolished/article71505505.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU OPINION →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-25 01:08 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
