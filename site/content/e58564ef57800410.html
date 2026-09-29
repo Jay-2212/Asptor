@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Country has lost its way, but always finds its way back: Murli Manohar Joshi | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Country has lost its way, but always finds its way back: Murli Manohar Joshi</h1>
+                <div class="article-meta">
+                    <span>By Ishita Mishra</span> • <span>THE HINDU NATIONAL</span> • <span>2026-09-29</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71524532"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><div class="article-interview"><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									The Ram Temple in Ayodhya has enormous religious and emotional importance for Hindus in India, but recent controversy over embezzlement allegations has raised concerns about accountability. What is your take?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									I will not talk about any individual or a single instance. <a href="https://www.thehindu.com/tag/607-600/" target="_blank">Corruption</a> has become so deep-rooted in society that it has reached the core.
+				</p><p>
+										But it’s a known fact that the BJP had supported the <a href="https://www.thehindu.com/topic/ayodhya-ram-temple/" target="_blank">Ram temple</a> movement. We believed that the Ram temple should be built, not through litigation but through consensus. The matter, however, reached the <a href="https://www.thehindu.com/tag/supreme-court/" target="_blank">Supreme Court</a>, and after years of hearings, the apex court decided that the Ram temple should be built in <a href="https://www.thehindu.com/tag/221-217-81/" target="_blank">Ayodhya</a> and Muslims should be given a piece of land. The SC also decided that a trust would build the temple. Who forms the trust? The <a href="https://www.thehindu.com/tag/1385-1349/" target="_blank">government</a>. So, whatever is happening in the trust is the responsibility of the government.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>You have recently raised concerns about a music concert near the Badrinath shrine in Uttarakhand. Where should the line be drawn between promoting tourism and culture and protecting the sanctity and the traditional character of a pilgrimage centre?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Badrinath is no ordinary place. Adi Shankaracharya chose it with great care and set its customs to connect North and South. Even today the Rawal of this temple comes from Kerala.
+				</p><p>
+										Our ancestors knew the Himalaya is fragile. Sound harms the ecology of this place; hence, even blowing the conch is forbidden at this site and large gatherings were avoided.
+				</p><p>
+										Kalidasa called the Himalaya <i>devatatma</i> (divine soul). What have you done to its divine soul? You have built multi-level parking? Organised DJ style music concerts?
+				</p><p>
+										We agree that tourism makes money, but India never sold mother nature.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>You have spoken for decades about the ecological and civilisational importance of the Himalayas. Is the current push for roads, tourism, pilgrimage infrastructure, and connectivity taking development beyond what the Himalayas can safely sustain?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Yes. The Himalaya is the most fragile mountain in the world; it’s like a child. You cannot load a child’s school bag above the limit he can handle.
+				</p><p>
+										Look at the cracked homes in Joshimath. You want Joshimath to become a Switzerland without considering the fact that Switzerland doesn’t have a fragile Himalaya.
+				</p><p>
+										During the British period, a dam was proposed to be built in Haridwar. Madan Mohan Malaviya asked how the Ganga’s water would reach Varanasi, where last rites are performed, and an agreement was made with the British government to ensure that water would reach Varanasi and be kept pure. Such was our will to save our rivers and mountains.
+				</p><p>
+										It was we who opposed the building of the Tehri Dam in Uttarakhand. But it was built, and look at the water now; it’s extremely impure.
+				</p><p>
+										The all-weather road was partly a military requirement, but when I enquired at the highest level whether roads this wide were necessary. The reply was negative.
+				</p><p>
+										I am not saying that there should be no development; what I am saying is that it should be sustainable and the environment must be considered.
+				</p><p>
+										Look at Shiva. His bull, his wife, Durga’s lion, the snake around his neck, the mouse, and the peacock all live together. The Himalaya, home of Shiva, also teaches coexistence. If the Himalaya is the father, Bharat is the mother. You cannot save the mother at the cost of the father.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>You were part of the BJP when it was a much smaller organisation, alongside leaders such as Atal Bihari Vajpayee and L. K. Advani. What has changed most fundamentally in the BJP since those days?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Policies and working do change with time. But if the changes are more than required, or the fundamentals start being weakened, then it’s not acceptable.
+				</p><p>
+										Speaking about myself, I have not deviated from the principles I held then.
+				</p><p>
+										In the present scenario, I think the country has lost its track. But if we look at history, whenever our country deviated from its path, it also managed to realign. We make mistakes, and we always learnt the lesson, which is reflected in our growth.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/><b>What is your take on SIR?</b></p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									It’s a harsh truth that every government wants to stay in power.
+				</p><p>
+										The Constitution provided for a census and delimitation every ten years, but it was deferred in Mrs. Indira Gandhi’s time, and again during Mr. Atal Bihari Vajpayee’s time, because we also wanted to stay in power.
+				</p><p>
+										One must understand that democracy is best, provided elections are fair, the government is held accountable, and the bureaucracy remains transparent.
+				</p><p>
+										For a good democracy, the opposition needs to be responsive and ready with an alternative plan to take the nation ahead to its desired goals.
+				</p><p>
+										A republic runs on trust. People trusted Lal Bahadur Shastri when he asked them to give up a meal. People trusted Subhas Bose when he said, give me blood and I will give you freedom.
+				</p><p>
+										Where trust is missing, people won’t accept even good things. If voices are raised, address them; standing there with a stick won’t work.
+				</p><p class="question"><img class="icon" src="/theme/images/th-online/interview-quest-icon.svg"/>
+									What are your views on the government’s handling of the Jantar Mantar protest?</p><p class="answer"><img class="icon" src="/theme/images/th-online/interview-ansr-icon.svg"/>
+									Years ago, I wrote an article on <i>Ashtavakra</i>. A sage was teaching his disciples when the unborn child in his wife’s womb told him he was mistaken in his teaching. Angered, he cursed the child to be crooked in eight places. The boy still became a scholar, won the debate at King Janaka’s court, and won his father back.
+				</p><p>
+										I have spoken about it in the past too. Why is Gen Z angry? Because of the misguided aspirations that we created. You promised jobs. Where are the jobs?
+				</p><p>
+										So, if you failed to deliver, then accept it. Tell the youths that “Son, we couldn’t do what we promised. But we will work on it.” They are our children.
+				</p><p>
+										Established authority has always crushed new voices, sometimes in good faith, sometimes in bad. But the Indian way is that the young challenge without taking revenge, and elders advise, set right and correct.
+				</p></div><p><i>Read the excerpts of the interview here:</i></p><p>Amid the recent controversies regarding the special intensive revision (SIR) of electoral rolls, Gen Z protests and the alleged theft of donations made to the Ram temple in Ayodhya, Bharatiya Janata Party veteran Murli Manohar Joshi has raised concerns over accountability and the weakening of public trust in the country.</p><p>In an interview with <i>The Hindu</i>, Mr. Joshi argued that development and democratic governance must remain rooted in responsibility.</p><p>Asked about the Ram temple donation theft allegations, he said corruption had become deep-rooted in society, but declined to discuss any specific instance. He noted that the BJP had backed the temple movement, hoping for a consensus solution rather than litigation. Since the Supreme Court directed that the temple be built by a trust, and the government formed that trust, “whatever is happening in the trust is the responsibility of the government,” he said.</p><p>Regarding the controversy about a music concert having been organised near the Badrinath shrine in Uttarakhand, he said Adi Shankaracharya had chosen the site with care and set customs linking the North and the South, pointing to the tradition that the temple’s Rawal (chief priest) comes from Kerala. Even blowing conches was once forbidden there because sound harms the fragile ecology. Recalling Kalidasa’s description of the Himalaya as “devatatma”, he asked what had been done to its divine soul, citing multi-level parking and DJ-style concerts. “Tourism brings money, but India never sold mother nature,” he said.</p><p>Asked whether roads and pilgrimage infrastructure were exceeding what the mountains can bear, he compared the Himalaya to a child who cannot carry a school bag beyond a limit. He cited the cracked homes of Joshimath and said Switzerland’s model cannot be applied to a mountain range this fragile. He recalled that his side had opposed the Tehri dam, which was built anyway, and said the water is now extremely impure. On the all-weather road, he said he had asked at the highest level whether such width was needed and was told it was not. He stressed he was not against development, but bats for sustainable development.</p><p>Reflecting on the BJP’s transformation since his years alongside Atal Bihari Vajpayee and L.K. Advani, Mr. Joshi said change was inevitable, but weakening fundamental principles was unacceptable. He felt the country had “lost its way”, though history showed India has always corrected its course, sooner or later.</p><p>Asked about the SIR, he said every government wants to stay in power, noting that the Census and the delimitation exercises were deferred under Indira Gandhi and again under Vajpayee. Democracy works, he said, only if elections are fair, governments accountable and bureaucracy transparent, and the Opposition must offer a credible alternative.</p><p>“A republic runs on trust,” he said, citing Lal Bahadur Shastri and Subhas Bose, and adding that raised voices should be addressed rather than met with sticks.</p><p>On youth protests, Mr. Joshi invoked Ashtavakra to argue that established authority should not suppress new voices. Gen Z’s anger, he said, stemmed partly from aspirations created by society and unfulfilled promises of jobs. “You promised jobs. Where are the jobs?” he asked. If promises were not fulfilled, the government should acknowledge it and tell young people: “Son, we couldn’t do what we promised. But we will work on it.”</p><p>“They are our children,” he said.</p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- September 29, 2026 10:47 pm IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71524532" data-title="Country has lost its way, but always finds its path back: Murli Manohar Joshi" data-url="https://www.thehindu.com/news/national/country-has-lost-its-way-but-always-finds-its-way-back-murli-manohar-joshi/article71524532.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-6da24fac37718b6b2994814d-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Country%20has%20lost%20its%20way%2C%20but%20always%20finds%20its%20path%20back%3A%20Murli%20Manohar%20Joshi&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fcountry-has-lost-its-way-but-always-finds-its-way-back-murli-manohar-joshi%2Farticle71524532.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-6da24fac37718b6b2994814d-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-6da24fac37718b6b2994814d-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-6da24fac37718b6b2994814d-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-6da24fac37718b6b2994814d-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-6da24fac37718b6b2994814d-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-6da24fac37718b6b2994814d-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71524532" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><div data-ga-labelclick="article_add_google_source_btn" google-add-preferred-source-btn=""></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/country-has-lost-its-way-but-always-finds-its-way-back-murli-manohar-joshi/article71524532.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-09-29 19:22 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
