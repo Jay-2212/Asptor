@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Deleted, and left in limbo | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Deleted, and left in limbo</h1>
+                <div class="article-meta">
+                    <span>By Shrabana Chatterjee,Senjuti Sengupta</span> • <span>THE HINDU NATIONAL</span> • <span>2026-10-02</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71538194"><div class="schemaDiv" id="schemaDiv" itemprop="articleBody"><h4 class="sub_head">Deepak Chauhan, 35, Siwan district, Bihar; Ziradei constituency; currently unemployed</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Deepak Chauhan." class="lazy" data-original="https://th-i.thgim.com/public/news/national/pybg1a/article71538209.ece/alternates/FREE_1200/1.%20Deepak%20Chauhan.jpg" data-src-template="https://th-i.thgim.com/public/news/national/pybg1a/article71538209.ece/alternates/FREE_1200/1.%20Deepak%20Chauhan.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Deepak Chauhan." width="100%"/></div><p class="caption">
+
+                            Deepak Chauhan.
+                                                            | Photo Credit: 
+                                Shrabana Chatterjee
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion:</b> Absent</p><p>Chauhan, who is disabled, says he has no idea why he was deleted from the list. He says he was at home at the time of the exercise and the booth-level officer (BLO) is also from his village. “The BLO knows that I live here and I am alive, but the BLO still marked me absent,” he says. Chauhan hopes that local volunteers and activists will be able to get his name on the list. “I live in a lot of pain because of my disability. I don’t know how to get my name back on the list. I had applied for a new card, but did not get it,” he says. Chauhan, who has never missed voting in an election, says he was unable to vote in the 2025 Bihar Assembly elections. He last voted in the 2024 Lok Sabha polls.</p><h4 class="sub_head">Ramashankar Sah, 70, Siwan district, Bihar; Ziradei constituency; farmer</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Ramashankar Sah." class="lazy" data-original="https://th-i.thgim.com/public/news/national/oxjm7u/article71538243.ece/alternates/FREE_1200/2.%20Ramashankar%20Sah.jpg" data-src-template="https://th-i.thgim.com/public/news/national/oxjm7u/article71538243.ece/alternates/FREE_1200/2.%20Ramashankar%20Sah.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Ramashankar Sah." width="100%"/></div><p class="caption">
+
+                            Ramashankar Sah.
+                                                            | Photo Credit: 
+                                Shrabana Chatterjee
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Already registered</p><p>Sah says he had submitted all the documents and has never voted anywhere except in his own constituency. “The cause of deletion is ‘already registered’. Why did they remove my name? I don’t understand,” he says. He has asked local officials for help, but no one has been able to give him an answer. Local activists are now helping him. Sah was unable to vote in the 2025 Bihar Assembly polls. He says the panchayat elections are scheduled for early 2027, but he does not know if his name will be restored. He says: “I have always voted, but I may not get to vote again. How is that okay?”</p><h4 class="sub_head">Sunil Sah, 36, Siwan district, Bihar; Ziradei constituency; Border Security Force personnel</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Sunil Sah." class="lazy" data-original="https://th-i.thgim.com/public/news/national/t6qcgt/article71538245.ece/alternates/FREE_1200/3.%20Sunil%20Sah.jpg" data-src-template="https://th-i.thgim.com/public/news/national/t6qcgt/article71538245.ece/alternates/FREE_1200/3.%20Sunil%20Sah.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Sunil Sah." width="100%"/></div><p class="caption">
+
+                            Sunil Sah.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Already registered</p><p>Sah’s father says his son was not present during the process to fill up the form. His family filled up the form, yet Sah’s name was struck off the rolls. “He is a government servant. He is serving the nation. And yet his vote has been taken away,” says Sah’s father. He adds that local activists are helping them fill up Form 6, so that they can be registered as new voters. Sah did not come back from duty to vote in the 2025 elections because his name was deleted, says his father. “Otherwise, he always tries to come back to exercise his democratic right to vote,” he says.</p><h4 class="sub_head">Durgabati Devi, 47; Siwan district, Bihar; Ziradei constituency; homemaker</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Durgabati Devi." class="lazy" data-original="https://th-i.thgim.com/public/news/national/2scqsn/article71538250.ece/alternates/FREE_1200/4.%20Durgabati%20Devi.jpg" data-src-template="https://th-i.thgim.com/public/news/national/2scqsn/article71538250.ece/alternates/FREE_1200/4.%20Durgabati%20Devi.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Durgabati Devi." width="100%"/></div><p class="caption">
+
+                            Durgabati Devi.
+                                                            | Photo Credit: 
+                                Shrabana Chatterjee
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Already registered</p><p>Devi says she had filled up all the forms that the BLO had provided. “I submitted the documents, did everything that was asked of me. Yet they deleted my name without any cause,” she says. Devi has asked the local officials why her name was deleted and what she should do to get it restored, but again, no one has answers. She is unsure of whether she will ever be able to get back on the electoral rolls. Since her name is absent, Devi says she could not vote in 2025. “For a poor person like me, exercising my franchise is the only power I have in this country. That power has been taken away from me,” she says.</p><h4 class="sub_head">Shri Bhagwan Sah; 52; Siwan district, Bihar; Ziradei constituency; farmer</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Shri Bhagwan Sah." class="lazy" data-original="https://th-i.thgim.com/public/news/national/pg3nsw/article71538251.ece/alternates/FREE_1200/5.%20Shri%20Bhagwan%20Sah.jpg" data-src-template="https://th-i.thgim.com/public/news/national/pg3nsw/article71538251.ece/alternates/FREE_1200/5.%20Shri%20Bhagwan%20Sah.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Shri Bhagwan Sah." width="100%"/></div><p class="caption">
+
+                            Shri Bhagwan Sah.
+                                                            | Photo Credit: 
+                                Shrabana Chatterjee
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion:</b> Already registered</p><p>Sah says he has only one voter card. “This feels like a targeted attack. My whole family was deleted under the same cause,” he says. Sah says only local political workers from the Communist Party of India (Marxist-Leninist) Liberation are helping the family by conducting surveys to find out whose names were wrongfully deleted. He hopes that they will be able to help him get his name back on the rolls. Sah also says he has never missed voting in any election. “But now I fear that I may not get to vote again. This is what they call ‘vote chori’. The most marginalised people — Scheduled Castes, Scheduled Tribes, and Other Backward Classes — have been impacted by this,” he says.</p><h4 class="sub_head">Rakesh Chauhan, 36, Siwan district, Bihar; Ziradei constituency; labourer</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Rakesh Chauhan." class="lazy" data-original="https://th-i.thgim.com/public/news/national/nx2ktp/article71538252.ece/alternates/FREE_1200/6.%20Rakesh%20Chauhan.jpg" data-src-template="https://th-i.thgim.com/public/news/national/nx2ktp/article71538252.ece/alternates/FREE_1200/6.%20Rakesh%20Chauhan.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Rakesh Chauhan." width="100%"/></div><p class="caption">
+
+                            Rakesh Chauhan.
+                                                            | Photo Credit: 
+                                Shrabana Chatterjee
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion: </b>Already registered</p><p>Chauhan says he had two voter cards because officials filled in the wrong details. This, he says, is what has led to him being under the ‘already registered’ category. Now both the cards are invalid. “I have no idea how to get my name back on the rolls,” he says. “I have spoken to local gram panchayat leaders and officials. But I could not vote in 2025. I have two voter cards and not a single vote.” It is because of the officials’ mistake that his voter rights have been taken away, he argues. “How is that okay when the fault was not even mine? This is such a mess,” he says.</p><h4 class="sub_head">S.K. Riaz, 24; Paschim Medinipur district, West Bengal; Medinipur constituency; student</h4><div class="article-picture"><div class="picture zoom-img"><img alt="S.K. Riaz" class="lazy" data-original="https://th-i.thgim.com/public/news/national/u6y1gp/article71538254.ece/alternates/FREE_1200/7.%20Sk%20Riaz.jpg" data-src-template="https://th-i.thgim.com/public/news/national/u6y1gp/article71538254.ece/alternates/FREE_1200/7.%20Sk%20Riaz.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="S.K. Riaz" width="100%"/></div><p class="caption">
+
+                            S.K. Riaz
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Logical discrepancy</p><p>Riaz says there was a discrepancy in his father’s name and that, because he had provided his father’s name to establish his link to the 2002 rolls during the mapping and form-filling process, his own name was also struck off. He says their cases were sent to the tribunal and are still under adjudication. “We have not heard back from officials on getting our names restored,” he says. Since every family member’s name was struck off, he says the family is not getting their rations. “We have been to the officials at least six or seven times and filled up multiple forms. Now they are giving us some basic rations, but not the actual quantity we are entitled to. This feels like a targeted attack,” he says.</p><h4 class="sub_head">Md Shamim Akhtar, 49; Kolkata, West Bengal; Entally constituency; Wing Commander, Indian Air Force (Retd)</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Wing Commander, Indian Air Force (Retd) Md Shamim Akhtar." class="lazy" data-original="https://th-i.thgim.com/public/news/national/oi7ss3/article71538265.ece/alternates/FREE_1200/8.%20Md%20Shamim%20Akhtar.jpeg" data-src-template="https://th-i.thgim.com/public/news/national/oi7ss3/article71538265.ece/alternates/FREE_1200/8.%20Md%20Shamim%20Akhtar.jpeg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Wing Commander, Indian Air Force (Retd) Md Shamim Akhtar." width="100%"/></div><p class="caption">
+
+                            Wing Commander, Indian Air Force (Retd) Md Shamim Akhtar.
+                                                            | Photo Credit: 
+                                Special arrangement
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion: </b>Unknown</p><p>Akhtar says he was not put under any category. He says his name and his father’s name were both there in the 2002 voter list. He says he submitted all the documents, yet in February this year, his name came under adjudication. “When the supplementary lists came out in March 2026, I saw that my name had been deleted. They did not even let me appear for a hearing or give me notice about how to solve the problem. I was struck off without any procedure,” he says. Akhtar worries that the BLO has stopped taking his calls. Neither he nor the BLO has any idea how to get his name restored, he says. “This is a complete violation of a person’s democratic right,” Akhtar adds. “Every person responsible for this should be tried under the rule of the law for stripping us of our basic democratic right as a citizen of the country.”</p><h4 class="sub_head">Faruk Kazi, 19; Murshidabad district, West Bengal; Rejinagar constituency; labourer</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Faruk Kazi." class="lazy" data-original="https://th-i.thgim.com/public/news/national/3nhq9c/article71538281.ece/alternates/FREE_1200/9.%20Faruk%20Kazi%20Rejinagar.jpg" data-src-template="https://th-i.thgim.com/public/news/national/3nhq9c/article71538281.ece/alternates/FREE_1200/9.%20Faruk%20Kazi%20Rejinagar.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Faruk Kazi." width="100%"/></div><p class="caption">
+
+                            Faruk Kazi.
+                                                            | Photo Credit: 
+                                Senjuti Sengupta
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion:</b> Logical discrepancy</p><p>Kazi’s parents’ names were not listed in the 2002 SIR as they had registered themselves as voters much later. During the survey, Kazi linked his name with his grandfather Hossain Ali whose name was on the 2002 list. All his family members found themselves back in the final voter list in the 2026 SIR, except Kazi. He has appealed before the tribunal to get his name restored. “I was excited to vote for the first time. My parents’ and elder brother’s names were included in the SIR. I have no idea why my name was struck off,” says Kazi, who registered himself as a new voter only in 2025 and was supposed to cast his first vote in the 2026 Assembly elections. As no decision has been taken yet by the judicial officer in the tribunal on the inclusion of his name, he will also not be able to vote in the upcoming by-poll on October 6.</p><h4 class="sub_head">Imamuddin Sheikh, 53; Murshidabad district, West Bengal; Rejinagar constituency; Elected member of Rampara (II) Panchayat in Rejinagar</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Imamuddin Sheikh" class="lazy" data-original="https://th-i.thgim.com/public/news/national/yb350f/article71538285.ece/alternates/FREE_1200/10.%20Imamuddin%20Sheikh%20Rejinagar.jpg" data-src-template="https://th-i.thgim.com/public/news/national/yb350f/article71538285.ece/alternates/FREE_1200/10.%20Imamuddin%20Sheikh%20Rejinagar.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Imamuddin Sheikh" width="100%"/></div><p class="caption">
+
+                            Imamuddin Sheikh
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Logical discrepancy</p><p>Sheikh’s father Wahab Sheikh’s name was listed as Kalu Sheikh in the 2002 SIR. However, his other documents, including the EPIC card, show him as Wahab Sheikh. “Kalu is my father’s nickname. He often writes it as Wahab Sheikh (Kalu). But the previous SIR’s list only registered him as Kalu Sheikh. Despite him providing his EPIC card number, which is the same in the SIR list, the Election Commission did not approve it and removed my name,” says Sheikh. He has appealed before the tribunal to get his name restored. Meanwhile, he worries that he will no longer get various government benefits. “I contested in the 2023 panchayat election and won the Rampara (II) seat. But I will not be able to contest in the next election if my name is not restored. My father passed away. But the rest of my family members got their names included in the SIR,” says Sheikh who has voted in several elections since 2005.</p><h4 class="sub_head">Hazera Bibi, 33; Murshidabad district, West Bengal; Rejinagar constituency; bidi worker</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Hazera Bibi." class="lazy" data-original="https://th-i.thgim.com/public/news/national/q65x02/article71538291.ece/alternates/FREE_1200/11.%20Hazera%20Bibi%20Rejinagar.jpg" data-src-template="https://th-i.thgim.com/public/news/national/q65x02/article71538291.ece/alternates/FREE_1200/11.%20Hazera%20Bibi%20Rejinagar.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Hazera Bibi." width="100%"/></div><p class="caption">
+
+                            Hazera Bibi.
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion:</b> Unmapped</p><p>Bibi’s father Sheikh Haider Ali’s name was listed both in the 1995 and 1971 SIR, but not in the 2002 SIR. His name was included in revisions of voter lists later as a new voter. Therefore, Bibi and her siblings could not link their names with any relatives from the 2002 SIR list. While the names of her three siblings have been included in the latest SIR despite this gap, Hazera’s name was struck off. She appealed before the tribunal to get the name restored. Bibi, who had been availing herself of several social welfare schemes run by the West Bengal government, has now been removed from several such schemes including Annapurna Bhandar Yojana and Krishak Bandhu scheme. Her benefits under the National Food Security Act have also been suspended. “I have been voting since 2019. Now the government has declared that I am not a voter. It seems that they believe that I am not even a resident of this country and therefore my benefits have been snatched away,” she says.</p><h4 class="sub_head">Najmatara Khatoon, 29; Murshidabad district, West Bengal; Samserganj constituency; Anganwadi worker</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Najmatara Khatoon." class="lazy" data-original="https://th-i.thgim.com/public/news/national/l3dm38/article71538294.ece/alternates/FREE_1200/12.%20Najmatara%20Khatun%20Rejinagar.jpeg" data-src-template="https://th-i.thgim.com/public/news/national/l3dm38/article71538294.ece/alternates/FREE_1200/12.%20Najmatara%20Khatun%20Rejinagar.jpeg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Najmatara Khatoon." width="100%"/></div><p class="caption">
+
+                            Najmatara Khatoon.
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion: </b>Logical discrepancy</p><p>The name of Khatoon’s father, Abdul Haq, was listed as Abdul Haq Sheikh in the 2002 SIR. Due to the mismatch, she was issued a notice and asked to appear for a hearing. Despite producing all the documents including her father’s EPIC card number that matched the 2002 list, her name was struck off. She appealed before the tribunal. “When I approached the local district administration officers, they said my nationality is under question. I have been serving in the local Anganwadi for years. Do they know that my great grandfather built our home over a hundred years ago? How dare they say that I am not an Indian,” she asks.</p><h4 class="sub_head">Md. Mojahar Hossain, 39; Murshidabad district, West Bengal; Samserganj constituency; school teacher, also served as a BLO during the SIR</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Md. Mojahar Hossain." class="lazy" data-original="https://th-i.thgim.com/public/news/national/fepc7z/article71538297.ece/alternates/FREE_1200/13.%20Md.%20Mojahar%20Hossain%20Samserganj.jpg" data-src-template="https://th-i.thgim.com/public/news/national/fepc7z/article71538297.ece/alternates/FREE_1200/13.%20Md.%20Mojahar%20Hossain%20Samserganj.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Md. Mojahar Hossain." width="100%"/></div><p class="caption">
+
+                            Md. Mojahar Hossain.
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Logical discrepancy</p><p>Six other people claimed Hossain’s father as their own in the 2002 SIR list. Hossain says he doesn’t have six siblings. “I have one sister and three brothers. This reason (for deletion) is terribly funny,” he says. While the names of his three brothers were included in the latest SIR, his sister’s and father’s names were also excluded. The Election Commission told his father, Liakat Hossain, that his name did not match the 2002 SIR list. Later, they found that his surname was misspelled as Liakat ‘Hosen’ in that list although the EPIC number was the same. Hossain has appealed before the tribunal. Three other teachers from his school who served as BLOs, like him, have also been excluded in the SIR this time. “I have surveyed over 1,000 voters in my booth. I had filled up my form in my own hand. Who thought I would be one of those 300 people whose names were excluded. I don’t know what is coming next after this exclusion,” he says.</p><h4 class="sub_head">Md. Alauddin Sheikh, 47; Murshidabad district, West Bengal; Samserganj constituency; local politician who also contested in 2021</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Md. Alauddin Sheikh." class="lazy" data-original="https://th-i.thgim.com/public/news/national/ze201q/article71538299.ece/alternates/FREE_1200/14.%20Md.%20Alauddin%20Sheikh%20Samserganj.jpg" data-src-template="https://th-i.thgim.com/public/news/national/ze201q/article71538299.ece/alternates/FREE_1200/14.%20Md.%20Alauddin%20Sheikh%20Samserganj.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Md. Alauddin Sheikh." width="100%"/></div><p class="caption">
+
+                            Md. Alauddin Sheikh.
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion</b>: Logical discrepancy</p><p>Sheikh says he is one of three brothers. “Their names and their wives’ names were also struck off. We told the officers when we appeared for the hearing. But nothing happened,” he says. His family has been staying in Samserganj for years. All of them have voted regularly over the decades. Sheikh says his great grandfather featured in the voter list of 1952 when the first election took place in independent India. He has appealed before the tribunal. A member of Social Democratic Party of India in Murshidabad, he believes that the deletion is politically motivated. “The ruling government is excluding all the Muslim voters. Their intention has been exposed through this exercise. But we will resist them. We are not scared. We all are Indian no matter what,” he says.</p><h4 class="sub_head">Rati Das, 35; Kolkata, West Bengal; Kolkata Port constituency; ragpicker</h4><div class="article-picture verticle"><div class="picture zoom-img"><img alt="Rati Das." class="lazy" data-original="https://th-i.thgim.com/public/news/national/kjoeqi/article71538302.ece/alternates/FREE_1200/15.%20Rati%20Das%20Kolkata.jpg" data-src-template="https://th-i.thgim.com/public/news/national/kjoeqi/article71538302.ece/alternates/FREE_1200/15.%20Rati%20Das%20Kolkata.jpg" height="100%" src="https://www.thehindu.com/theme/images/th-online/1x1_spacer.png" title="Rati Das." width="100%"/></div><p class="caption">
+
+                            Rati Das.
+                                                    </p><span itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject"></span></div><p><b>Reason for deletion:</b> Unmapped</p><p>Das is a first-generation voter in her family. Her father died when she was a child. After his death, her mother was driven out by her in-laws. Along with her two children, she occupied a pavement under Hastings Bridge in Khidirpur. Das does not have a permanent house. In 2012, she and her sister got themselves registered as voters and also started exercising their franchise in every election. But now both their names have been struck off as they failed to link themselves with any of their relatives on the 2002 list. Das has appealed before the tribunal. After the deletion, the Kolkata Municipal Corporation issued a notice to Das asking her to vacate her makeshift settlement under the Hastings Bridge. A team from Kolkata Police’s Security Control Organisation visited Das and her sister last month and checked all their documents. “They asked me whether I came from Bangladesh. How would I prove that I born and brought up in this city? Could you tell them that I am Indian,” she asks.</p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- October 03, 2026 01:37 am IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71538194" data-title="Deleted, and left in limbo" data-url="https://www.thehindu.com/news/national/deleted-and-left-in-limbo/article71538194.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-cb83461ef37122034503d9d8-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Deleted%2C%20and%20left%20in%20limbo&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fdeleted-and-left-in-limbo%2Farticle71538194.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-cb83461ef37122034503d9d8-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-cb83461ef37122034503d9d8-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-cb83461ef37122034503d9d8-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-cb83461ef37122034503d9d8-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-cb83461ef37122034503d9d8-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-cb83461ef37122034503d9d8-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71538194" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><div data-ga-labelclick="article_add_google_source_btn" google-add-preferred-source-btn=""></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/deleted-and-left-in-limbo/article71538194.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-10-03 01:49 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
