@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>E20 turned into 420-petrol chori from public&#x27;s cars: Rahul slams government | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>E20 turned into 420-petrol chori from public&#x27;s cars: Rahul slams government</h1>
+                <div class="article-meta">
+                    <span>By The Hindu Bureau</span> • <span>THE HINDU NATIONAL</span> • <span>2026-11-07</span>
+                </div>
+            </header>
+
+            
+
+            <div class="article-body" id="article-content">
+                <div class="articlebodycontent col-xl-9 col-lg-12 col-md-12 col-sm-12 col-12" id="content-body-71677541"><div class="schemaDiv" id="schemaDiv"><p>Alleging that the amount of ethanol being blended into petrol was, in many cases, higher than the specified limit, Leader of Opposition in the Lok Sabha Rahul Gandhi on Saturday (November 7, 2026) <a href="https://www.thehindu.com/news/national/karnataka/lab-tests-show-ethanol-blend-in-petrol-is-as-high-as-31-higher-than-20-e20-petrol-in-karnataka-government/article71673683.ece" target="_self">cited a report by the Karnataka government’s</a> Department of Food, Civil Supplies, Consumer Affairs and Legal Metrology, saying that 11 out of 14 samples tested by the State government contained more than 20% ethanol.</p><p>“E20 turned into 420 — stealing petrol from the public’s cars,” Mr. Gandhi said in a social media post. E20 is the ethanol-petrol blend, which is supposed to have only 20% ethanol, that is available in petrol pumps across the country.</p><p>The Centre has rejected Mr. Gandhi’s allegations and questioned the sampling method used in the Karnataka government report.</p><div class="inline_embed article-block-item"><blockquote class="twitter-tweet"><p dir="ltr" lang="hi">E20 बना 420 - जनता की गाड़ी से पेट्रोल चोरी! 
+
+मोदी सरकार कहती है - पेट्रोल में 20% एथेनॉल है। कर्नाटक सरकार ने 7 ज़िलों से पेट्रोल के सैंपल लेकर मान्यता प्राप्त लैब में जाँच करवाई।
+
+नतीजा देखिए
+- 14 में से 11 सैंपल में 20% से ज़्यादा एथेनॉल
+- IOCL में 31.2%, HPCL में 30.5%
+- IOCL, HPCL, BPCL, Nayara, Shell - सरकारी हों या प्राइवेट - सब सीमा से ऊपर
+- और कंपनियों की अपनी लैब ने एथेनॉल की मात्रा रिपोर्ट में लिखी ही नहीं
+
+मतलब आप पैसा महंगे पेट्रोल का दे रहे हैं, टंकी में एथेनॉल भरा जा रहा है। नुकसान किसका? आपका। 
+
+आपकी गाड़ी इतना एथेनॉल पचाने के लिए बनी ही नहीं - मतलब, घटता माइलेज, बार-बार मैकेनिक। शौक से ली गई गाड़ी की बर्बादी।
+
+और पंप पर लिखा तक नहीं कि टंकी में क्या डाला जा रहा है - चुनने का कोई विकल्प नहीं।
+
+मोदी जी, बताइए - देश की टंकी में क्या भरा जा रहा है? पेट्रोल में असल में कितना एथेनॉल है? 20% से ज़्यादा मिलावट करने वाली कंपनियों पर कार्रवाई कब होगी?
+
+और डिबेट की चुनौती अब भी खड़ी है। ये मुद्दा भी जोड़ लेंगे - आपकी नीतियों से असल में फ़ायदा किसे हो रहा है?</p>— Rahul Gandhi (@RahulGandhi) <a href="https://x.com/RahulGandhi/status/2118916279365181862?ref_src=twsrc%5Etfw">November 7, 2026</a></blockquote></div><p class="referpara"><strong><b>Also Read: <a href="https://www.thehindu.com/news/national/karnataka/lab-tests-show-ethanol-blend-in-petrol-is-as-high-as-31-higher-than-20-e20-petrol-in-karnataka-government/article71673683.ece" target="_self">Lab tests show ethanol blend in E20 petrol as high as 31% in Karnataka</a></b></strong></p><h4 class="sub_head">‘Exceeding the limit’</h4><p>The Congress leader said the Karnataka government collected petrol samples from seven districts and had them tested at an accredited lab. “Look at the results — 11 out of 14 samples contained more than 20% ethanol, 31.2% at Indian Oil Corporation (IOC) Limited, 30.5% at Hindustan Petroleum Corporation Limited (HPCL), Bharat Petroleum Corporation Limited (BPCL), Nayara, Shell — whether government-owned or private — all exceeded the limit and the companies’ own labs didn’t even report the ethanol content,” Mr. Gandhi said in his post. </p><p>“In other words, you’re paying for expensive petrol, but ethanol is being pumped into your tank. Who loses out? You,” he claimed, saying that cars were not built to handle that much ethanol and that this would lead to lower mileage, repeated trips to the mechanic. “A car you bought with such enthusiasm is being ruined,” he said. He added that there were no signs at filling stations telling customers what is being put in their tanks — “no choice at all”.</p><p>He demanded an answer from Prime Minister Narendra Modi. “Mr. Modi, tell us — what’s being put in the country’s tank? How much ethanol is actually in the petrol? When will action be taken against companies mixing in more than 20%? And the challenge to debate still stands. We’ll add this issue too — who is actually benefiting from your policies?” Mr. Gandhi asked. </p><h4 class="sub_head">Centre counters</h4><p>The Ministry of Petroleum and Natural Gas, in a press note, said the three public sector Oil Marketing Companies (OMCs) — IOCL, BPCL, and HPCL — have clarified that the claims, as reported, are not supported by testing conducted in accordance with the prescribed statutory and technical procedures.</p><p>“E20 petrol supplied by the three OMCs across the country, including Karnataka, conforms to IS 17021, the Bureau of Indian Standards specification for ethanol-blended motor gasoline,” the release said.</p><p>“They have also raised concerns regarding the sampling procedure and testing methodology adopted for the October 2026 exercise,” it added. </p><p>The Ministry also questioned the sampling method used by the Karnataka government. “The Motor Spirit and High Speed Diesel (Regulation of Supply, Distribution and Prevention of Malpractices) Order, 2005, issued under the Essential Commodities Act, 1955, read with the Marketing Discipline Guidelines (MDG) 2024, prescribes a defined procedure for sampling, retention, testing and communication of results,” it said.</p><p>“The prescribed procedure requires six one-litre samples to be drawn, with two samples handed over to the dealer against acknowledgement, two retained by the oil company or department, and two sent to a laboratory specified under Schedule III of the Control Order or notified in the Official Gazette,” the Ministry said. </p></div><div class="articleblock-container" id="arthardpv"></div><div class="update-publish-time article-published-time-end"><p class="publish-time-new"> Published <span>- November 07, 2026 12:59 pm IST</span></p></div><div class="comments-shares share-page flex print-hide" data-artid="71677541" data-title="Citing Karnataka study, Rahul Gandhi says ethanol content in petrol ‘exceeding limit’" data-url="https://www.thehindu.com/news/national/e20-turned-into-420-petrol-chori-from-publics-cars-rahul-slams-government/article71677541.ece"><div class="left"><div class="share"><button class="btn share-btn" data-ga-labelclick="ArticleShare"></button><ul class="share-list bottom" style="display: none;"><li class="copy-link" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                Copy link  
+                        
+            </li><li class="email"><a href="mailto:?subject=Citing%20Karnataka%20study%2C%20Rahul%20Gandhi%20says%20ethanol%20content%20in%20petrol%20%E2%80%98exceeding%20limit%E2%80%99&amp;amp;body=Check%20out%20this%20link%20https%3A%2F%2Fwww.thehindu.com%2Fnews%2Fnational%2Fe20-turned-into-420-petrol-chori-from-publics-cars-rahul-slams-government%2Farticle71677541.ece" target="_self">
+                    Email     
+                                
+                </a></li><li class="facebook" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                Facebook   
+                        
+            </li><li class="twitter" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                Twitter    
+                        
+            </li><li class="telegram" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                Telegram     
+                        
+            </li><li class="in" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                LinkedIn     
+                        
+            </li><li class="whatsapp" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                WhatsApp
+                
+                        
+            </li><li class="reddit" data-cf-modified-0d2f0c34dfade1752ac94dbd-="">
+                Reddit      
+                        
+            </li></ul></div><div class="read-later"><button class="btn read-later-btn" data-articleid="71677541" data-ga-labelclick="ReadLater" style="display:none"><span>READ LATER</span></button><div class="delete-tool-tip" style="display: none;"><a class="cancel" href="https://www.thehindu.com/myaccount/?tab=bookmarks">
+                SEE ALL         
+                </a><span class="delete bookmarkdelete">
+                    Remove     
+                </span></div></div></div><div class="right"><div data-ga-labelclick="article_add_google_source_btn" google-add-preferred-source-btn=""></div></div></div><div class="spliter pt-0 mb-0 print-hide"></div><div class="article-ad two-side text-ad print-hide"><div class="ad-text" id="artproduct2" style="display: none;"></div></div><div class="d-none d-lg-block d-xl-block"><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><div class="dfp-ad articleinlinead middleonead" data-devicetype="large" data-size="[728, 90]" data-unit="/22390678/TH_Desktop_AT_Mid01" id="Desktop_AT_Mid01" style="{ minHeight: ‘90px’}"></div><!-- End DFP : /22390678/TH_Desktop_AT_Mid01, publisher: The Hindu --><!-- Begin DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="large" data-size="[1, 1]" data-unit="/22390678/Hindu_Desktop_Inarticle_1x1" id="Desktop_Inarticle_1x1" style="{ minHeight: ‘250px’}"></div><!-- End DFP : /22390678/Hindu_Desktop_Inarticle_1x1, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --><!-- End DFP : /22390678/TH_Desktop_AT_Mid05, publisher: The Hindu --></div><div class="d-block d-sm-none"><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><div class="dfp-ad articleinlinead" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_MWeb_AT_Middle01" id="MWeb_AT_Middle01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_MWeb_AT_Middle01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><div class="dfp-ad" data-devicetype="small" data-size="[[300,250],[336,280],[200,200],[250,250],[300,300]]" data-unit="/22390678/TH_Mweb_AT_Bottom01" id="Mweb_AT_Bottom01" style="{ minHeight: ‘330px’}"></div><!-- End DFP : /22390678/TH_Mweb_AT_Bottom01, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle02, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle03, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle04, publisher: The Hindu --><!-- Begin DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --><!-- End DFP : /22390678/TH_MWeb_AT_Middle05, publisher: The Hindu --></div><div class="related-topics print-hide"><h3 class="title-patch">
+            Related Topics
+        </h3></div></div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://www.thehindu.com/news/national/e20-turned-into-420-petrol-chori-from-publics-cars-rahul-slams-government/article71677541.ece" target="_blank" rel="noopener" class="source-link">Read the original article at THE HINDU NATIONAL →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-07 16:38 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
