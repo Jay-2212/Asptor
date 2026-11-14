@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>From IITs to India&#x27;s nuclear programme: How Nehru shaped modern Indian science | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>From IITs to India&#x27;s nuclear programme: How Nehru shaped modern Indian science</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/02/Nehru.jpeg?w=1024" alt="From IITs to India&#x27;s nuclear programme: How Nehru shaped modern Indian science">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Nehru" decoding="async" height="366" src="https://images.indianexpress.com/2026/02/Nehru.jpeg?w=1024" width="650"/><span class="ie-custom-caption">Nehru regarded science and technology as powerful instruments of economic and social transformation. (X/INCIndia)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10963012" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10963012\/en\/audio-v1-6834668b.m4a","aac":"https:\/\/audio.indianexpress.com\/10963012\/en\/audio-v1-6834668b.aac","mp3":"https:\/\/audio.indianexpress.com\/10963012\/en\/audio-v1-6834668b.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10963012/en/audio-v1-6834668b.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10963012\/hi\/audio-v1-6ae246fd.m4a","aac":"https:\/\/audio.indianexpress.com\/10963012\/hi\/audio-v1-6ae246fd.aac","mp3":"https:\/\/audio.indianexpress.com\/10963012\/hi\/audio-v1-6ae246fd.mp3"}' data-hindi-url="https://audio.indianexpress.com/10963012/hi/audio-v1-6ae246fd.m4a" data-is-premium="0" data-post-id="10963012" id="translation-audio-10963012" preload="metadata">
+<source src="https://audio.indianexpress.com/10963012/en/audio-v1-6834668b.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10963012/en/audio-v1-6834668b.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10963012/en/audio-v1-6834668b.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10963012">
+<div id="translation-content-body-10963012">
+<p><a href="https://indianexpress.com/article/opinion/columns/manoj-jha-writes-jawaharlal-nehru-is-central-to-the-meaning-of-india-10709565/" rel="noopener" target="_blank"><strong>Jawaharlal Nehru’s</strong></a> engagement with science began long before he entered politics. At Trinity College, Cambridge, he studied geology, chemistry and botany, completing the Natural Science Tripos with a second-class honours degree. Although politics came to dominate his life, his interest in science endured.</p>
+<p><span style="font-weight: 400">In his words: “Though I have long been a slave driven in the chariot of Indian politics… my mind has often wandered to the days when, as a student I haunted the laboratories of that home of science, Cambridge…. In later years, through devious processes, I arrived again at science, when I realised that science was of the very texture of life…. Politics led me to economics, and this led me inevitably to science and the scientific approach to all our problems and to life itself. It is science alone that could solve these problems of hunger and poverty.”</span></p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">In an essay in the collection </span><i><span style="font-weight: 400">Science and Technology in India</span></i><span style="font-weight: 400"> (1977), G H Keswani went a step further, speculating on the career Nehru might have pursued had he remained in science: “We may ask a somewhat fanciful question. If Jawaharlal had continued with his career in science, it is probable that he would have become a notable experimental scientist. Indeed, he was an Experimentalist.”</span></p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p><span style="font-weight: 400">On Nehru’s birth anniversary (November 14), we look at how his faith in science shaped India’s scientific institutions and policies after Independence.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<h2><strong>Before Independence: The foundations of Indian science</strong></h2>
+<p><span style="font-weight: 400">“It can scarcely be denied that scientific research in India was already quite robust before Independence,” writes Keswani. Scientists such as Jagadish Chandra Bose, C V Raman, K S Krishnan, Meghnad Saha, P C Mahalanobis, D S Kothari, Birbal Sahni and Homi J Bhabha belonged to this pre-Independence generation.</span></p>
+<p><span style="font-weight: 400">As one account notes, experimental research did not always require expensive equipment, and individual ingenuity could lead to breakthroughs even in the absence of substantial government patronage. </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/bhagat-singh-views-jawaharlal-nehru-subhas-chandra-bose-10962200/">‘True revolutionary’: Why Bhagat Singh chose Jawaharlal Nehru over Subhas Bose</a></span></div>
+<p><span style="font-weight: 400">The idea of placing science at the centre of India’s development had also begun to take shape before Independence. In 1938, the Congress established the National Planning Committee under Jawaharlal Nehru, during the presidency of Subhas Chandra Bose. The committee sought to envision India’s economic and industrial future, drawing on the expertise of scientists, industrialists and economists. Among those associated with it were scientists Meghnad Saha and J C Ghosh, and industrialists Purshottamdas Thakurdas, Walchand Hirachand and Ambalal Sarabhai.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The outbreak of World War II in 1939 and the launch of the Quit India Movement in 1942 disrupted the committee’s work. However, many of its members remained committed to the cause of scientific, technological and industrial development in the years that followed. Nehru had articulated his own faith in science even earlier. In 1937, he declared: “The future belongs to science and those who make friends with science and seek its help for the advancement of humanity.”</span></p>
+<h2><strong>How Nehru built India’s scientific infrastructure</strong></h2>
+<p><span style="font-weight: 400">“Nehru’s consistent support for science as the first prime minister of India, as we shall see, enabled science institutions to thrive,” notes author Indira Chowdhury in </span><i><span style="font-weight: 400">Growing the Tree of Science: Homi Bhabha and the Tata Institute of Fundamental Research</span></i><span style="font-weight: 400"> (2016).</span></p>
+<p><span style="font-weight: 400">Atomic research particularly interested Nehru. Homi J Bhabha, who had established the Tata Institute of Fundamental Research (TIFR) in 1945 with support from the Sir Dorabji Tata Trust, became a central figure in shaping India’s nuclear programme. Working closely with Nehru, Bhabha helped build the institutional foundations of an indigenous atomic energy programme. The Atomic Energy Commission was established on August 10, 1948. In 1954, a separate Department of Atomic Energy (DAE) was created under the direct charge of the Prime Minister, with Bhabha as its secretary.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/jawaharlal-nehru-india-modernist-rooted-civilisational-legacy-10710181/">How Nehru saw India: The modernist rooted in its civilisational legacy</a></span></div>
+<p><span style="font-weight: 400">Alongside atomic research, Nehru championed the expansion of scientific and technical education. The Indian Institutes of Technology (IITs), modelled partly on the Massachusetts Institute of Technology (MIT), were established over the course of the 1950s and early 1960s, beginning with IIT Kharagpur in 1951. Their objective was to develop highly skilled scientists and technologists who could contribute to research, design and development and help India achieve technological self-reliance.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="Nehru" class="lazyloading wp-image-10963055 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/atomic-reactor-e1794656024237.jpg?resize=600,432" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg 1858w, https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg?resize=450,324 450w, https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg?resize=600,432 600w, https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg?resize=768,553 768w, https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg?resize=563,405 563w, https://indianexpress.com/wp-content/uploads/2026/11/atomic-reactor-e1794656024237.jpg?resize=1536,1105 1536w" height="1337" sizes="(max-width: 1858px) 100vw, 1858px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1858"/> Nehru, with Bhabha, inaugurating the atomic reactor Apsara in 1957. (Nehru Archive)</span>
+<p><span style="font-weight: 400">Nehru also sought to establish a broader policy framework for scientific advancement. On March 4, 1958, Parliament adopted the Scientific Policy Resolution, which articulated the government’s commitment to using science and technology for national development and public welfare.</span></p>
+<p><span style="font-weight: 400">The resolution stated: “The key to national prosperity, apart from the spirit of the people, lies, in the modern age, in the effective combination of three factors, technology, raw materials and capital, of which the first is perhaps the most important, since the creation and adoption of new scientific techniques can, in fact, make up for a deficiency in natural resources, and reduce the demands on capital. But technology can only grow out of the study of science and its applications…”</span></p>
+<span class="custom-caption"><img alt="Nehru" class="lazyloading size-medium wp-image-10963066" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/4-22_c16221.jpg?resize=600,410" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/4-22_c16221.jpg 1525w, https://indianexpress.com/wp-content/uploads/2026/11/4-22_c16221.jpg?resize=450,307 450w, https://indianexpress.com/wp-content/uploads/2026/11/4-22_c16221.jpg?resize=600,410 600w, https://indianexpress.com/wp-content/uploads/2026/11/4-22_c16221.jpg?resize=768,525 768w, https://indianexpress.com/wp-content/uploads/2026/11/4-22_c16221.jpg?resize=593,405 593w" height="1042" sizes="(max-width: 1525px) 100vw, 1525px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1525"/> Nehru at the Central Scientific Research Institute in <a class="" href="https://indianexpress.com/section/cities/hyderabad/" rel="noamphtml">Hyderabad</a> in 1952. (Nehru Archive)</span>
+<p><span style="font-weight: 400">In 1962, Nehru constituted the Indian Parliamentary and Scientific Committee to encourage greater parliamentary engagement with science. Lal Bahadur Shastri was its first chairman.</span></p>
+<p><span style="font-weight: 400">Both Nehru and Bhabha regarded science and technology as powerful instruments of economic and social transformation. The scale of the government’s investment in scientific research reflected this commitment. In </span><i><span style="font-weight: 400">Science and Technology in India </span></i><span style="font-weight: 400">(1977), Keswani writes: “It was Nehru’s government which lifted Indian science from its small beginnings to a national effort. The Indian government spent Rs. 550 million on research in 1964, the year of Nehru’s death. In 1947, it was merely Rs. 24 million.”</span></p>
+<p><b>Why ‘scientific temper’ mattered to Nehru</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">For Nehru, science was not merely a body of knowledge or a means of technological advancement, but a way of approaching life’s problems. </span></p>
+<p><span style="font-weight: 400">In Volume 9 of <em>Selected works of Jawaharlal Nehru</em>, he explained: “What is science? It is a certain way of approaching problems, a certain way of seeking the truth. It is a certain empirical way whereby we get prepared to reject anything if we cannot establish or prove it.” </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-history/nehru-support-china-unsc-india-seat-reason-10557161/">Why Nehru supported China’s bid for UNSC seat, over offers to India from the US and the USSR</a></span></div>
+<p><span style="font-weight: 400">“What I wish to emphasise is that science means an approach to all of life’s problems. It is to be applied to the problems relating to our family, religion and everything else. You cannot apply science in your industries keeping other departments of your life free from it. The whole scheme is unscientific. Therefore, if we want to consider various problems that face us as an individual and as a social group, the right way to consider these problems is to adopt the method of science.”</span></p>
+<p><span style="font-weight: 400">Nehru also saw socialism through this lens, explaining his own political convictions in terms of a scientific approach to social problems: “I am a socialist because I feel that socialism is a scientific approach to the world’s problems. It is not necessary that I should agree with every other socialist but generally a socialist approach is scientific and that appeals to me tremendously.”</span></p>
+<p><b>Where science and religion meet</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Nehru believed that religious thought, too, had to be compatible with reason and scientific inquiry. In his words, “Dharma is good so long as it does not get into conflict with the rational or scientific attitude.” Nehru’s appreciation of Buddhism, according to Keswani, was partly rooted in his understanding of it as a rational tradition. “He averred that Buddha’s method was one of psychological analysis and that Buddha had insight in the latest methods of science.”</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/political-pulse/when-nehru-moved-resolution-that-became-basis-for-preamble-this-house-cannot-bind-down-the-next-generation-10387833/">When Nehru moved resolution that became basis for Preamble: ‘This House cannot bind down the next generation’</a></span></div>
+<p><span style="font-weight: 400">In a speech cited in Volume 14 (1) of </span><i><span style="font-weight: 400">Selected works of Jawaharlal Nehru</span></i><span style="font-weight: 400">, Nehru cautioned against reducing both religion and science to outward forms and practices: “Religion became a set of ceremonials and forms and some kind of a ritual worship. The inner spirit left the people. Large numbers of people talk glibly about science today and yet in their lives or actions do not exhibit a trace of science. They think of science as some isolated area where there are test tubes and other mechanical appliances but have no other relation to life, except sometimes to provide them some conveniences… But science is something more. It is a way of training the mind to look at life and the whole social structure. If science is truth then you must follow that truth. So I stress the need for the development of a scientific mind and temper which is more important than actual discovery as it is out of this temper and method that many more discoveries will come…”</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10963012"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/nikita-mohta/">
+<figure>
+<img alt="Nikita Mohta" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2024/10/edited.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/nikita-mohta/"><span></span>Nikita Mohta</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="9623151"></div><div class="follow_author_title" data-id="Nikita Mohta"></div><div class="follow_author_slug" data-id="nikita-mohta"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://x.com/nikitamohta98">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/nikita.mohta/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Nikita writes for the Research Section of  IndianExpress.com, focusing on the intersections between ...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/nikita-mohta/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November fourteenth, twenty twenty-six, at seven minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-history/" href="https://indianexpress.com/about/explained-history/">Explained History</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-politics/" href="https://indianexpress.com/about/explained-politics/">Explained Politics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-history/jawaharlal-nehru-science-vision-scientific-temper-india-10963012/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

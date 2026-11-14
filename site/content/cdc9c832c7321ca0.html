@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Jensen Huang-Alice Huang affair: How the Nvidia scandal became a US security concern | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Jensen Huang-Alice Huang affair: How the Nvidia scandal became a US security concern</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/Jensen-Huang-Alice-Huang.jpg?w=1024" alt="Jensen Huang-Alice Huang affair: How the Nvidia scandal became a US security concern">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Jensen Huang and Alice Huang" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/Jensen-Huang-Alice-Huang.jpg?w=1024" width="650"/><span class="ie-custom-caption">Jensen Huang during his China visit in May 2026 (left); Alice Huang at a dinner hosted by the erstwhile Nvidia CEO at a restaurant in Taipei, Taiwan, in May last year (AP).</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10961366" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10961366\/en\/audio-v1-465c8fb4.m4a","aac":"https:\/\/audio.indianexpress.com\/10961366\/en\/audio-v1-465c8fb4.aac","mp3":"https:\/\/audio.indianexpress.com\/10961366\/en\/audio-v1-465c8fb4.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10961366/en/audio-v1-465c8fb4.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10961366\/hi\/audio-v1-0a0dd0b6.m4a","aac":"https:\/\/audio.indianexpress.com\/10961366\/hi\/audio-v1-0a0dd0b6.aac","mp3":"https:\/\/audio.indianexpress.com\/10961366\/hi\/audio-v1-0a0dd0b6.mp3"}' data-hindi-url="https://audio.indianexpress.com/10961366/hi/audio-v1-0a0dd0b6.m4a" data-is-premium="0" data-post-id="10961366" id="translation-audio-10961366" preload="metadata">
+<source src="https://audio.indianexpress.com/10961366/en/audio-v1-465c8fb4.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10961366/en/audio-v1-465c8fb4.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10961366/en/audio-v1-465c8fb4.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10961366">
+<div id="translation-content-body-10961366">
+<p>Nvidia co-founder Jensen Huang Thursday <a href="https://indianexpress.com/article/world/nvidia-chief-jensen-huang-resigns-cfo-colette-kress-named-interim-ceo-10960639/" rel="noopener" target="_blank"><strong>resigned as its chief executive officer</strong></a> after a controversy over his extramarital affairs, two of which reportedly <a href="https://indianexpress.com/article/world/former-nvidia-ceo-jensen-huang-third-affair-second-employee-10960966/" rel="noopener" target="_blank"><strong>involved company colleagues</strong></a>.</p>
+<p>But the affair that triggered his ouster was with a Chinese woman named Alice Huang (also known as Huang Le), who has been accused of passing on intelligence to China. Adding to the concerns was the fact that Huang has lobbied for easing America’s restrictions on sales of artificial intelligence (AI) chips to China in the past.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Alice Huang is a former executive from the Singapore-registered data centre operator Megaspeed, which American authorities have separately investigated since 2024 over suspicions that it was helping China access restricted AI chips.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>This is why the extramarital affair goes well beyond his personal life or his company’s future.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<h2><strong>What’s the Jensen Huang-Alice Huang Scandal?</strong></h2>
+<p>The Nvdia CEO’s scandal broke on October 29, when <em>The New York Times</em> reported that US intelligence officials were examining Jensen Huang’s relationship with Alice Huang.</p>
+<p>Jensen Huang admitted to having the affair over the following weekend. US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a> then said the FBI was investigating the matter, but backed the Nvidia co-founder.</p>
+<p>Nobody has been charged with any offence so far, and as per Nvidia board of director’s last statement on the matter, the company had no reason to believe national security or company secrets were compromised.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>How an affair went beyond Nvidia CEO’s marriage and became a national security risk</strong></h2>
+<p>A CEO’s private life is normally his own business. It stops being so when he is involved with a person of interest who is under surveillance by intelligence agencies. And if the CEO’s company makes the chips at the centre of the artificial intelligence (AI) boom and US-China tech race, he will be scrutinised for sure.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/nvidia-crisis-jensen-huang-exit-ai-boom-impact-10960664/">Jensen Huang resigns: Why his exit from Nvidia will be a test for the AI boom</a></span></div>
+<p>While Jensen Huang himself was not a suspect, Alice Huang and Nvidia’s deals with Megaspeed — and by extension China — have come under scrutiny.</p>
+<p>Essentially, the concern is over how much leverage, access and influence Alice Huang had over Nvidia’s operations and decisions. Investigators reportedly wanted to know whether Chinese intelligence was using an executive relationship to learn about Nvidia’s hardware allocation, supply timelines and lobbying on export rules.</p>
+<span class="custom-caption"><img alt="Happier Times: Jensen Huang and his wife Lori Huang walk to the White House to attend a state dinner hosted for China's President Xi Jinping on September 24, 2026 (AP Photo)" class="lazyloading size-full wp-image-10961683" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/Jensen-Huang-Lori-Huang.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Lori-Huang.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Happier Times: Jensen Huang and his wife Lori Huang walk to the White House to attend a state dinner hosted for China’s President Xi Jinping on September 24, 2026 (AP Photo)</span>
+<p>US intelligence officials suspect Alice Huang of working for China’s Ministry of State Security, according to the <em>Financial Times</em> and <em>The New York Times</em>. Chinese state media, however, has called the claims baseless. Singapore’s Home Affairs ministry said that in February 2025, the Singapore Police Force and Singapore Customs initiated an independent investigation into several companies and their key officers, including Megaspeed International Pte Ltd, and its controllers.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>“The suspected domestic offences pertained to potential false declarations in relation to the purchase of servers and other related offences… Alice Huang (otherwise known as Huang Le), a Hong Kong resident, was investigated for suspected involvement in the possible offences in Singapore, given her position as then-CEO,” the Singapore government said in a statement on Thursday.</p>
+<p>It, however, clarified that Alice Huang was not investigated for espionage.</p>
+<p>The US House Select Committee on China called Alice Huang a “publicly reported Chinese intelligence asset” and asked her to attend a November 18 briefing.</p>
+<div id="ai-infographic-editor-content-1"><div class="infographic-nvhuang">
+<div class="infogenie_nvhuang_start">.</div>
+<div class="infographic-nvhuang__head">
+<div class="infographic-nvhuang__kick">WORLD · NVIDIA · US–CHINA TECH</div>
+<div class="infographic-nvhuang__title">Nvidia’s CEO resigned. What is confirmed, alleged and denied</div>
+<div class="infographic-nvhuang__dek">Jensen Huang quit as CEO and board member on Nov 12 after reports of his relationship with Alice Huang, a former Megaspeed executive whom US officials reportedly suspect of working for Chinese intelligence. The two are not related.</div>
+<div class="infographic-nvhuang__asof">As of Nov 13, 2026 · developing story</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__tiles">
+<div class="infographic-nvhuang__tile">
+<div class="infographic-nvhuang__big">33 yrs</div>
+<div class="infographic-nvhuang__small">as CEO of the company he co-founded in 1993</div>
+</div>
+<div class="infographic-nvhuang__tile">
+<div class="infographic-nvhuang__big">Kress</div>
+<div class="infographic-nvhuang__small">CFO Colette Kress is interim CEO while the board searches</div>
+</div>
+<div class="infographic-nvhuang__tile">
+<div class="infographic-nvhuang__big">$4.8bn+</div>
+<div class="infographic-nvhuang__small">Nvidia-based AI gear imported by Megaspeed’s Malaysian arm, Jun 2024–Feb 2026 (NYT, trade records)</div>
+</div>
+<div class="infographic-nvhuang__tile">
+<div class="infographic-nvhuang__big">3</div>
+<div class="infographic-nvhuang__small">relationships reported by media; Huang admitted to one without naming whom</div>
+</div>
+</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__h">HOW IT UNFOLDED</div>
+<div class="infographic-nvhuang__tl">
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">MAY 13–14</span>Huang joins Trump’s Beijing trip as a late addition, boarding Air Force One in Alaska. Nvidia says he went at Trump’s invitation.</div>
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">OCT 29</span>NYT reports US officials believe Megaspeed’s Alice Huang is a Chinese intelligence asset and that Jensen Huang was the target of a foreign intelligence effort.</div>
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">NOV 6–7</span>Reports (NYT, FT) on a US intelligence memo alleging China’s Ministry of State Security recruited her to spy on him.</div>
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">NOV 8 · SUN</span>Nvidia’s board opens an independent investigation. Huang tells staff he “was unfaithful to my wife.”</div>
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">NOV 9 · MON</span>Trump says the FBI is looking into it, and says he believes Huang did not know she was a spy.</div>
+<div class="infographic-nvhuang__ev"><span class="infographic-nvhuang__date">NOV 11 · WED</span>NYT, citing five people, reports a relationship with VP Kimberly Powell. The board meets that night and accepts his resignation.</div>
+<div class="infographic-nvhuang__ev infographic-nvhuang__ev--hot"><span class="infographic-nvhuang__date">NOV 12 · THU</span>Nvidia announces the resignation; Kress named interim CEO. Singapore publishes its Megaspeed findings. Reuters reports a third relationship, with another employee.</div>
+</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__h">CONFIRMED · ALLEGED · DENIED</div>
+<div class="infographic-nvhuang__card infographic-nvhuang__card--ok">
+<div class="infographic-nvhuang__ct">CONFIRMED</div>
+<div class="infographic-nvhuang__li">Huang resigned as CEO, president and board member; Kress is interim CEO (Nvidia).</div>
+<div class="infographic-nvhuang__li">Huang admitted to staff that he was unfaithful to his wife.</div>
+<div class="infographic-nvhuang__li">Nvidia’s board said it had <b>no reason to believe</b> national security or company secrets were compromised, and opened an independent probe.</div>
+<div class="infographic-nvhuang__li">Singapore’s Home Affairs ministry says Alice Huang was <b>not investigated for espionage</b>.</div>
+</div>
+<div class="infographic-nvhuang__card infographic-nvhuang__card--alleg">
+<div class="infographic-nvhuang__ct">ALLEGED (PER REPORTS)</div>
+<div class="infographic-nvhuang__li">US intelligence officials suspect Alice Huang works for China’s Ministry of State Security (NYT, FT). A House committee called her a “publicly reported” Chinese intelligence asset.</div>
+<div class="infographic-nvhuang__li">The Information reported her relationship helped steer at least <b>$7.5bn</b> in Nvidia sales to Chinese buyers; CNBC said it could not verify this.</div>
+<div class="infographic-nvhuang__li">NYT: a relationship with VP Kimberly Powell. Reuters: a third, with another employee. Neither has been confirmed; Nvidia declined to comment on Reuters. Reports do not allege security wrongdoing by Powell.</div>
+</div>
+<div class="infographic-nvhuang__card infographic-nvhuang__card--deny">
+<div class="infographic-nvhuang__ct">DENIED OR DISPUTED</div>
+<div class="infographic-nvhuang__li">China’s foreign ministry calls the spy claim unsubstantiated and “smears.”</div>
+<div class="infographic-nvhuang__li">Huang denied compromising national security or Nvidia secrets. Nvidia said his dealings with her were “not unusual” and it shares no classified information with customers.</div>
+<div class="infographic-nvhuang__li">Nvidia says it found no evidence of chip diversion and cut off Megaspeed in June 2025. Megaspeed denies illegal transfers to China.</div>
+</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__h">WHY WASHINGTON IS WATCHING</div>
+<div class="infographic-nvhuang__card">
+<div class="infographic-nvhuang__li"><b>The question:</b> lawmakers want to know whether sensitive information was compromised and whether the administration responded properly (Reuters).</div>
+<div class="infographic-nvhuang__li"><b>The access:</b> Trump approved H200 chip sales to China in Dec 2025, with 25% of proceeds going to the US government. About 10 Chinese firms were cleared, but none had shipped by mid-May as Beijing held orders back (Reuters). Critics such as Sen. Warren say Huang lobbied for looser curbs; Nvidia says H200 sales need a US licence.</div>
+<div class="infographic-nvhuang__li"><b>Both parties:</b> Republicans Brian Mast and John Moolenaar want testimony; Democrats Warren and Schumer say the resignation does not end the matter.</div>
+</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__h">MEGASPEED AND ALICE HUANG</div>
+<div class="infographic-nvhuang__card">
+<div class="infographic-nvhuang__ct">MEGASPEED</div>
+<div class="infographic-nvhuang__li">Singapore-based firm that rents out computing power built on Nvidia chips; customers include Alibaba. One of Nvidia’s biggest foreign buyers (NYT, CBS).</div>
+<div class="infographic-nvhuang__li">Short-seller Culper says its balance sheet jumped from about $33m to about $3bn in 2024. The source of that money is unconfirmed.</div>
+<div class="infographic-nvhuang__li">NYT reports a US trade official saw unopened Nvidia chip boxes at a Megaspeed affiliate, raising re-export fears. Megaspeed says checks by US and Malaysian authorities and Nvidia found no violations. Renting chips in third countries is not itself barred.</div>
+</div>
+<div class="infographic-nvhuang__card">
+<div class="infographic-nvhuang__ct">ALICE HUANG (A.K.A. HUANG LE)</div>
+<div class="infographic-nvhuang__li">Former Megaspeed CEO, chair and key controller; a Hong Kong resident, per Singapore. NYT describes her as a Chinese citizen.</div>
+<div class="infographic-nvhuang__li">Singapore investigated possible false declarations on server purchases from Feb 2025. In Feb 2026 police found insufficient evidence of offences, but said she gave information she knew to be inaccurate. She got a stern warning and a re-entry ban.</div>
+</div>
+</div>
+<div class="infographic-nvhuang__sec">
+<div class="infographic-nvhuang__h">WHAT TO WATCH</div>
+<div class="infographic-nvhuang__card">
+<div class="infographic-nvhuang__li">Huang has agreed to brief Congress before Thanksgiving (Nov 26), per Rep. Mast; the closed-door date is still being set.</div>
+<div class="infographic-nvhuang__li">Nvidia’s board is weighing internal and external candidates for a permanent CEO.</div>
+<div class="infographic-nvhuang__li">Trump and Xi are expected to meet around the APEC leaders’ meeting, Nov 18–19 (CNBC).</div>
+</div>
+</div>
+<div class="infographic-nvhuang__note">Allegations are attributed to the outlet or official cited and have not been tested in court. No criminal charges against Jensen Huang have been reported. Figures are as of Nov 13 and may change.</div>
+<div class="infographic-nvhuang__src">Sources: Nvidia statements and filing; NYT, Reuters, FT, Bloomberg, The Information (via CNBC, CBS, ABC, Al Jazeera, TechCrunch); Singapore Ministry of Home Affairs statement, Nov 12.</div>
+<div class="infographic-nvhuang__brand"><a class="" href="https://indianexpress.com/section/explained">Express InfoGenIE · Explained Desk</a></div>
+<div class="infogenie_nvhuang_end">.</div>
+</div></div>
+<h2><strong>Who is Alice Huang, and what is Megaspeed?</strong></h2>
+<p>Alice Huang, also known as Huang Le, is a Chinese citizen who worked as a state-media TV reporter and then as a private banker. She was Megaspeed’s CEO, Chairperson, and one of the key controllers. She is no longer associated with the Singapore-based data centre operator with Chinese origins. Its genesis can be traced to 7Road, a Chinese gaming and cloud-computing company that US lawmakers have described as having links to the Chinese government.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>While American export controls prohibit the unauthorised shipment of certain advanced chips to China, Chinese companies can potentially obtain access to comparable computing power by renting infrastructure housed in other countries.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/jensen-huang-nvidia-megaspeed-china-spy-allegations-10956091/">Behind Nvidia CEO Jensen Huang’s affair lies a much bigger China controversy</a></span></div>
+<p>Megaspeed rents out computing power from Nvidia chips housed in data centres outside China, according to <em>Fortune</em>. In fact, Nvidia’s biggest customer of chips in Southeast Asia was Megaspeed, a 2025 <em>Bloomberg</em> report said. This is why the US government was investigating its ownership structure and whether or not it was smuggling Nvidia chips into China.</p>
+<p>According to <em>The New York Times</em>, Nvidia has said its checks show Megaspeed has no Chinese shareholders and that it has no evidence of chip diversion to China.</p>
+<p>But Megaspeed’s business dealings have raised questions about the extent of its links with Chinese technology companies. According to trade records cited by <em>The New York Times</em>, a Malaysian affiliate of Megaspeed purchased at least $4.8 billion worth of advanced AI equipment containing Nvidia technology between June 2024 and February 2026. The company has reportedly supplied computing capacity to Alibaba and other Chinese businesses, allowing them to access Nvidia-powered infrastructure located outside China.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><strong>Megaspeed’s Southeast Asia footprint</strong></h2>
+<p>The company grew fast. <em>South China Morning Post</em>, citing Singapore corporate records, reports that Megaspeed’s assets jumped roughly 90-fold from late 2023 to 2024, to almost $3 billion. Revenue went from nothing in 2023 to more than $294 million in 2024.</p>
+<p><em>Bloomberg</em> reported that Megaspeed rents out Nvidia chips at several Southeast Asian facilities to Alibaba. Its data centres are in Malaysia and Indonesia. This setup is what Washington is worried about. Chinese firms can use computing power in Singapore and Malaysia without importing the restricted chips themselves, according to a experts quoted by <em>Fortune </em>and <em>Forbes</em>. Such arrangements may be legal if the operator isn’t acting on behalf of a Chinese entity.</p>
+<p> </p>
+<p>The timeline raises questions. <strong><a class="" href="https://indianexpress.com/article/world/nvidia-ceo-jensen-huang-alice-huang-affair-photos-china-spy-allegations-timeline-10957843/" rel="noopener" target="_blank">Alice Huang was photographed with Jensen Huang</a></strong> at Taiwan events in 2024 and 2025. Megaspeed was placing huge orders during the same period. <em>The Information</em> reported that she used her relationship with him to help Megaspeed secure $7.5 billion worth of Nvidia chip sales for China.</p>
+<p>A US Commerce Department investigation in late 2024 reportedly reportedly found unopened boxes of brand new Nvidia chips at a facility operated by Speedmatrix, a subsidiary of Megaspeed. This gave rise to suspicions of the chips being smuggled to China. According to CNBC, Speedmatrix was substantially funded in “secret” by Chinese ecommerce giant Alibaba through “shell companies”.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>After the 2024, Megaspeed paused direct orders, but Speedmatrix continued to acquire Nvidia chips. According to <em>New York Times</em>, between 2024 and February 2026, Speedmatrix acquired at least $4.8 billion worth of advanced AI equipment, Nvidia chips-enabled systems.</p>
+<h2><strong>Huang’s Beijing visit with Donald Trump</strong></h2>
+<p>Jensen Huang had immense access to Trump, serving on the President’s Council of Advisors on Science and Technology and accompanying him on high-level diplomatic trips, including a May 2026 visit to Beijing. As head of Nvidia and a presidential advisor, Huang had deep insight into next-generation semiconductor roadmaps, US’s own supply chain vulnerabilities, and high-level government deliberations regarding AI competition with China.</p>
+<p>Counterintelligence experts raised alarms over exactly over this and flagged concerns regarding what sensitive information Alice might have procured during her relationship with Jensen.</p>
+<span class="custom-caption"><img alt="Jensen Huang and Donald Trump during a White House event in September 2026 (AP Photo)" class="lazyloading size-full wp-image-10961687" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/Jensen-Huang-Donald-Trump-1.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-Huang-Donald-Trump-1.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Jensen Huang and Donald Trump during a White House event in September 2026 (AP Photo)</span>
+<p>Huang reportedly lobbied fiercely with the administration to take a lighter regulatory approach to AI and successfully pushed for approvals to sell advanced chips to China. Officials feared foreign intelligence could have used the relationship to indirectly shape US trade and technology policy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Huang’s trip to Beijing with Trump wasn’t on the original itinerary. Trump called and invited him, and he joined the plane in Alaska. Nvidia said he attended at Trump’s invitation.</p>
+<p>The big prize was already in hand. Trump approved H200 chip exports to China in December, and formal licences followed. Just before the summit, <em>Reuters</em> reported that the US had cleared about 10 Chinese firms, including Alibaba, Tencent, ByteDance and JD.com, to buy H200s. The Beijing trip itself delivered little. The <em>Reuters</em> report stated that no H200 chips had been delivered at that point because Beijing was holding back.</p>
+<p>With Nvidia chips being used in global AI technologies as well as US military equipment, <span class="citation-138 citation-end-138">Chinese extortion or coercion, too, remains a major worry. </span></p>
+<h2><strong>The Kimberly Powell report</strong></h2>
+<p>On November 11, <em>The New York Times</em> again reported that Huang also had a relationship with Kimberly Powell, Nvidia’s vice-president of healthcare, who reported to him. In the report, <em>NYT</em> cited five people who had worked at the company. Reuters on Thursday reported a third affair by Jensen, again with a company executive.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>Nvidia is yet to comment on the allegations. Powell has not been accused of any security wrongdoing, and the board’s announced investigation does not mention her.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10961366"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© IE Online Media Services Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/abhishek-chakraborty/">
+<figure>
+<img alt="Abhishek Chakraborty" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/abhishek-chakraborty/"><span></span>Abhishek Chakraborty</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10306171"></div><div class="follow_author_title" data-id="Abhishek Chakraborty"></div><div class="follow_author_slug" data-id="abhishek-chakraborty"></div></div></div></span>
+<div class="author-social">
+<div class="author-fb">
+<a href="https://www.facebook.com/abhishekchakraborty24">
+<img alt="facebook" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/facebook.png" width="20"/>
+</a>
+</div>
+<div class="author-twitter">
+<a href="https://x.com/deshbhaktbong">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+<div class="author-instagram">
+<a href="https://www.instagram.com/idrunkenchef/">
+<img alt="instagram" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/icons/instagram.png" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Abhishek Chakraborty is an Assistant Editor with The Indian Express in Delhi, working at the interse...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/abhishek-chakraborty/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November thirteenth, twenty twenty-six, at nine minutes past four in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/donald-trump/" href="https://indianexpress.com/about/donald-trump/">donald trump</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/jensen-huang/" href="https://indianexpress.com/about/jensen-huang/">Jensen Huang</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/nvidia/" href="https://indianexpress.com/about/nvidia/">Nvidia</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/jensen-huang-alice-huang-affair-national-security-scare-us-10961366/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

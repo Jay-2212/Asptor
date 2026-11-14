@@ -1,0 +1,439 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How does Parliament convene special sessions, and what sets them apart? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How does Parliament convene special sessions, and what sets them apart?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/special-session-parliament.jpg?w=1024" alt="How does Parliament convene special sessions, and what sets them apart?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="The power to convene a session of Parliament rests with the government." decoding="async" height="366" src="https://images.indianexpress.com/2026/11/special-session-parliament.jpg?w=1024" width="650"/><span class="ie-custom-caption">The power to convene a session of Parliament rests with the government. (File)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10961393" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10961393\/en\/audio-v1-0b37d0ec.m4a","aac":"https:\/\/audio.indianexpress.com\/10961393\/en\/audio-v1-0b37d0ec.aac","mp3":"https:\/\/audio.indianexpress.com\/10961393\/en\/audio-v1-0b37d0ec.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10961393/en/audio-v1-0b37d0ec.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10961393" id="translation-audio-10961393" preload="metadata">
+<source src="https://audio.indianexpress.com/10961393/en/audio-v1-0b37d0ec.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10961393/en/audio-v1-0b37d0ec.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10961393/en/audio-v1-0b37d0ec.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10961393">
+<div id="translation-content-body-10961393">
+<p><a href="https://indianexpress.com/article/political-pulse/modi-government-special-parliament-session-womens-quota-delimitation-10960897/"><strong><em>The Indian Express</em> reported on Friday</strong></a> (November 13) that a special session of Parliament could be convened before the regularly scheduled Winter Session this year. The Centre is planning to do so to secure passage of its legislative agenda on delimitation of electoral constituencies and implementation of women’s reservation.</p>
+<p>Sources said this could be the last window to advance the implementation of women’s quota to 2029, when the Lok Sabha elections are scheduled to be held.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>In the ordinary course, Parliament holds three sessions: the Budget Session, Monsoon Session and the Winter Session. Here are the provisions that govern them, and what entails a special session.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<h2>Sessions of Indian Parliament</h2>
+<p>The power to convene a session of Parliament rests with the government. The decision is taken by the Cabinet Committee on Parliamentary Affairs, which currently comprises 10 ministers, including those for Defence, Home and Finance. The committee’s decision is formalised by the President, in whose name MPs are summoned to meet for a session.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>India does not have a fixed parliamentary calendar. The Constitution specifies that six months should not elapse between two parliamentary sessions. The framers of the Constitution borrowed it from the Government of India Act of 1935.</p>
+<p>By convention, Parliament meets for three sessions in a year. The longest, the Budget Session, starts towards the end of January and concludes by the end of April or the first week of May. The session has a recess so that Parliamentary Committees can discuss the budgetary proposals.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Research</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/research/the-historical-journey-of-parliamentary-sessions-in-india-9689482/">The historical journey of parliamentary sessions in India</a></span></div>
+<p>The second session is the three-week Monsoon Session, which usually begins in July and finishes in August. The parliamentary year ends with a three-week-long Winter Session, which is held from November to December. This Winter Session is expected to begin in late November or early December.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Notably, as of November 12 this year, the Monsoon Session of Parliament has not been prorogued for 91 days since being adjourned sine die (postponed without a new day for reconvening) on August 13. This is the longest such adjournment in history, and it means Parliament can be convened any day without the mandatory 14-day notice required before the House is called into session, government sources said.</p>
+<h2>What the Constitution says on Parliament sessions</h2>
+<p>The summoning of Parliament is specified in Article 85 of the Constitution. Like many other Articles, it is based on a provision of the Government of India Act, 1935. This provision specified that the central legislature had to be summoned to meet at least once a year, and that not more than 12 months could elapse between two sessions.</p>
+<p>Dr B R Ambedkar’s drafting of the provision reduced the gap between sessions to six months, and specified that Parliament should meet at least twice a year. He argued that “The clause as it stands does not prevent the legislature from being summoned more often than what has been provided for in the clause itself. In fact, my fear is, if I may say so, that the sessions of Parliament would be so frequent and so lengthy that the members of the legislature would probably themselves get tired of the sessions.”</p>
+<p>Over the years, governments have shuffled around the dates of sessions to accommodate political and legislative exigencies. In 2017, the Winter Session was delayed on account of the Gujarat Assembly elections. In 2011, political parties agreed to cut short the Budget Session so they could campaign for Legislative Assembly elections in five states.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p>Sessions have also been cut short or delayed to allow the government to issue Ordinances. For example, in 2016, the Budget Session was broken up into two separate sessions to enable the issuance of an Ordinance.</p>
+<h2>Special session of Parliament</h2>
+<p>The Constitution does not use the term “special session”. The term sometimes refers to sessions the government has convened for specific occasions, like commemorating parliamentary or national milestones.</p>
+<p>For the two Houses to be in session, the presiding officers (the Lok Sabha Speaker and Chairman of the <a class="" href="https://indianexpress.com/about/rajya-sabha/" rel="noamphtml">Rajya Sabha</a>) should chair their proceedings. The presiding officers can also direct that the proceedings of their respective Houses be limited, and procedural devices like Question Hour would not be available to MPs during the session.</p>
+<p>While Article 85 empowers the President to summon Parliament, the convention is to give around 15 days’ notice for a regular session. A special session, however, can be convened at shorter notice. <a href="https://indianexpress.com/article/political-pulse/83-days-on-monsoon-session-yet-to-be-prorogued-longest-gap-on-record-10949416/"><strong>If a session has been adjourned</strong></a> sine die but not prorogued (meaning formally ending a session), it technically remains alive, and the Lok Sabha can be reconvened at short notice by the Speaker under Rule 15 of the Rules of Procedure.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>However, Article 352 (Proclamation of Emergency) of the Constitution does refer to a “special sitting of the House”. Parliament added the part relating to the special sitting through the Constitution (Forty-fourth Amendment) Act, 1978. Its purpose was to add safeguards to the power of proclaiming an Emergency in the country, after the events of 1975 under Prime Minister Indira Gandhi. It specifies that if a Proclamation of Emergency is issued and Parliament is not in session, then one-tenth of Lok Sabha MPs can ask the President to convene a special meeting to disapprove the Emergency.</p>
+<p><em>This explainer uses information from earlier articles (published in <a href="https://indianexpress.com/article/explained/parliament-winter-session-lok-sabha-rajya-sabha-7107893/"><strong>2020</strong></a> and <a href="https://indianexpress.com/article/explained/explained-politics/special-session-of-parliament-8920401/"><strong>2023</strong></a>) written by Chakshu Roy, Head of Outreach at PRS Legislative Research.</em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10961393"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November thirteenth, twenty twenty-six, at forty-seven minutes past twelve in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-polity/" href="https://indianexpress.com/about/explained-polity/">Explained Polity</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/special-session/" href="https://indianexpress.com/about/special-session/">special session</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-politics/parliament-special-session-features-process-delimitation-10961393/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

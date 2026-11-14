@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Sensex surges, but what will it take for a sustained rally? An expert explains | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Sensex surges, but what will it take for a sustained rally? An expert explains</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/sensex.jpg?w=1024" alt="Sensex surges, but what will it take for a sustained rally? An expert explains">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Sensex" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/sensex.jpg?w=1024" width="650"/><span class="ie-custom-caption">Sensex jumped nearly 2,100 points to end at 79,373.18 on Thursday. (File)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10952001" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10952001\/en\/audio-v1-cde34dd3.m4a","aac":"https:\/\/audio.indianexpress.com\/10952001\/en\/audio-v1-cde34dd3.aac","mp3":"https:\/\/audio.indianexpress.com\/10952001\/en\/audio-v1-cde34dd3.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10952001/en/audio-v1-cde34dd3.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10952001\/hi\/audio-v1-5512d093.m4a","aac":"https:\/\/audio.indianexpress.com\/10952001\/hi\/audio-v1-5512d093.aac","mp3":"https:\/\/audio.indianexpress.com\/10952001\/hi\/audio-v1-5512d093.mp3"}' data-hindi-url="https://audio.indianexpress.com/10952001/hi/audio-v1-5512d093.m4a" data-is-premium="0" data-post-id="10952001" id="translation-audio-10952001" preload="metadata">
+<source src="https://audio.indianexpress.com/10952001/en/audio-v1-cde34dd3.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10952001/en/audio-v1-cde34dd3.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10952001/en/audio-v1-cde34dd3.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10952001">
+<div id="translation-content-body-10952001">
+<p><span style="font-weight: 400">A <a href="https://indianexpress.com/article/business/market/indian-stock-market-rally-oil-slides-us-democratic-win-10951459/?ref=business_pg" rel="noopener" target="_blank"><strong>buoyant Sensex</strong></a> jumped nearly 2,100 points to end at 79,373.18 on Thursday amid a fall in crude  prices and hopes for a resolution to the Iran war following the US midterm drubbing for the Republicans.</span></p>
+<p><span style="font-weight: 400">Before this upsurge, however, the Sensex had traded around the 74,000 mark for around three years. A combination of factors weighed on sentiment — a weakening rupee, volatile crude oil prices, geopolitical tension, slowing growth and uncertainty over a trade deal with the US. </span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">Sankaran Naren, Executive Director and Chief Investment Officer at ICICI Prudential AMC, spoke to Sandeep Singh, National Bureau Chief at </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">, on October 27, about what was holding the markets back and what risks should investors be watching out for. Edited excerpts from the Explained.Live interview.</span></p><div class="ie-premium-content-block paywall container-wall-exclusive">
+<p><b>What was holding the markets back?</b></p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p><span style="font-weight: 400">Three years back, the markets were overvalued. That could be part of the explanation. But there are multiple reasons holding back the market.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p><span style="font-weight: 400">First, is the geopolitical problem — war in Ukraine and the Gulf, and record high crude oil prices.</span></p>
+<p><span style="font-weight: 400">Second, artificial intelligence-related growth has been very high in some countries: US, South Korea, Taiwan, Japan, etc. The growth rate there has been much higher than the growth rate that India can ever give. People have moved to these markets, particularly in the last two years. </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/us-midterm-election-results-2026-impact-on-india-10951885/">What Democrat-controlled US Congress means for AI, trade, immigration, oil</a></span></div>
+<p><span style="font-weight: 400">And the third reason is that after March 2023, once the money started coming into equity mutual funds, three sets of investors started to sell. One is Indian promoters who have been launching IPO after IPO because they know that the markets are overvalued. </span><span style="font-weight: 400">The second is private equity companies which had invested pre-2023, which had realised that you can sell these stocks to Indian investors at a good price. And the third was multinationals who had set up businesses in India over the last 20, 30, 40 years. They realised that they should list in India because here you get valuations much higher than in your home country. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">Despite the huge amount of money that we collected, all that money primarily went into these three sets of people’s pockets. And that is why markets have not delivered returns. </span></p>
+<p><b>Weakening rupee, volatile oil prices, rising interest rates, slowing growth: What is your biggest worry?</b></p>
+<p><span style="font-weight: 400">I am worried about the impact of AI on India, whether it will be negative or positive. It is the most important long-term view because at some point of time the war will end and when the war ends, oil will come down. At some point of time, people will not have IPOs. </span></p>
+<p><span style="font-weight: 400">But AI can be a structural trend. And no one knows what the long-term impact of AI will be. People believe that fund managers can correctly guess the long-term impact, but we also don’t know. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="embed-youtube" style="text-align:center; display: block;"></span>
+<p><b>There is a talk of India becoming a $20-trillion economy say two decades from now. Are the grounds ready for that?</b></p>
+<p><span style="font-weight: 400">In the services sector, there are no other countries which are competing with us. In manufacturing, there are multiple countries that are competing, including Vietnam and Thailand.</span></p>
+<p><span style="font-weight: 400">To win in manufacturing is not as easy as winning in services. Is India working to become better every year over the previous year? Yes. But the competition is intense.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/us-midterm-results-2026-democrats-trump-india-us-trade-policy-10950562/">Trump’s midterm defeat: Good news or fresh trouble for India’s trade deal?</a></span></div>
+<p><span style="font-weight: 400">I think we need to create manufacturing employment on a very very large scale. And that is the solution for growth to increase. And I’m sure that the government is well aware of this issue and will focus on it. But it is not as easy to create a global manufacturing hub in every area as it has been to create a global services hub. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><b>Assuming that the US-Iran war ends, which sectors should investors look at to maximise their returns? </b></p>
+<p><span style="font-weight: 400">I think banking clearly will benefit a lot because the sector has been hurt by inflation and the rupee has been depreciating. Oil marketing companies should certainly benefit because they are the people who are bearing the brunt of the higher oil prices. If you look at areas like aviation for example, they are going to be benefited. But overall, we have started rate hikes and they may continue if oil is like this. But if the war ends and oil crashes, the requirement for the Reserve Bank of India to keep hiking interest rates also goes down. But we require a good fall in oil. A good fall in oil actually lubricates all parts of the economy, not just a few areas. </span></p>
+<p><b>These are external factors. On the domestic front, what gives you comfort and what is challenging? </b></p>
+<p><span style="font-weight: 400">The current account deficit is under control, fiscal deficit is under control. Credit growth is booming. The automotive industry has been booming over the last year. Power demand has been booming. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">Some of the challenges include a subpar monsoon. And there is always the worry that El Niño will create more problems. </span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/india-ipo-grey-market-premium-gmp-investor-risks-sebi-regulations-10947995/">‘Similar to cricket betting’: Amid India’s IPO booms, why investors need to watch out for grey markets</a></span></div>
+<p><span style="font-weight: 400">There are things that any country can do… the RBI realised that it is important to get insurance deposits. So, they floated an FCNR scheme and collected $127 billion of deposits. That takes care of all near-term foreign exchange issues.</span></p>
+<p><span style="font-weight: 400">Having said that, the problem of the war, and the problem of what AI leads to in the future, will remain. </span></p>
+<p><b>Amid these challenges, does asset allocation become much more important, given we don’t know how things are going to shape, and how long the challenges will continue given the nature of them being external rather than internal? </b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">Indians have got this love for equity at this point of time. And equity is inherently not a riskless asset class. That’s why if people start practising asset allocation, they will view volatility as an opportunity and not worry so much. But, if you are only invested in equity or you take positions in derivative markets on leverage, then you are very worried about everything that is happening. </span></p>
+<p><b>Many investors have 15-20 schemes in their portfolio. Can you simplify and tell us three classes of schemes that investors must possess at all times?</b></p>
+<p><span style="font-weight: 400">I am of the view that if you create three categories — balanced advantage, balanced hybrid, and flexi cap — you would have covered substantially. Then you don’t need to worry day-to-day about what’s happening in the market. You just keep investing in these categories and keep saving and keeping put money in these three categories because our broad approach is very clear. </span></p>
+<p><b>Can you take our readers through these categories briefly?</b></p>
+<p><span style="font-weight: 400">Balanced advantage is a very simple model: As the market goes up, you keep selling, and as the market goes down, you keep buying. So in 2023-24 when the market was more overvalued, it had less exposure to equity and higher exposure to debt and arbitrage. Today, because equity has become more fairly valued, it has a higher exposure to equity and a lower exposure to arbitrage and debt. </span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-midterms-key-takeaways-impact-world-india-10950071/">US midterms: Trump loses Congress. What changes for India and the world?</a></span></div>
+<p><span style="font-weight: 400">If you look at balanced hybrids, it’s even more simple. It says you can invest between 40% and 60% in debt, and 40% and 60% in equity. It is the quintessential asset allocation product where you’re choosing two products, and both the products have to be between 40% and 60%. </span></p>
+<p><span style="font-weight: 400">The third category is called “flexi” cap because you can invest in all kinds of things. You can invest in large cap, mid cap, small cap, micro cap and, therefore, you are entirely investing in the entire equity market. So we call it the most unconstrained fund.</span></p>
+<p><span style="font-weight: 400">For people who need gold, I would say multi-asset is the fourth category.</span></p>
+<p><b>What’s your advice for retail investors? </b></p>
+<p><span style="font-weight: 400">For the first 10 years of people’s investing career, they should choose mutual funds so that they go through one cycle. They understand what is investing through balanced advantage or multi asset or flexi cap. After 10 years of investing, if you have learned quite a lot, then you do direct equity. And if you become an expert after 20, 30 years, you do derivatives.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">But unfortunately, when we talk to stockbrokers, they say it is 25 to 30-year-olds who are actually trading derivatives. I do not know whether they have the knowledge and the temperament to handle it well.</span></p>
+<p><span style="color: #993300"><b>Reader questions</b></span></p>
+<p><b>Countries which have AI on their side, like the US, their markets are doing much better. Would you suggest that we try to invest in foreign markets?</b></p>
+<p><span style="font-weight: 400">Any market which is exuberant and where valuations are high is actually a riskier market. So, at this point of time we tell people to be careful if you are investing in the Nasdaq index because it is the best performing index in the world in the last 10 years. </span></p>
+<p><b>I am currently investing in mutual funds. My SIP is around Rs 25,000 a month. Should I stop it because for the past 2 years, whatever I have invested giving negative returns?</b></p>
+<p><span style="font-weight: 400">We tell people to start a SIP in flexi cap category or balanced advantage category or multi-asset category. Forget closing, we tell people to add now. That is our view. Actually, that is what we have been trying to promote at this point of time. So, I think you know, for the best benefit of SIP, you actually have to invest when the markets are down.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10952001"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November fifth, twenty twenty-six, at fifty-five minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/bse-sensex/" href="https://indianexpress.com/about/bse-sensex/">BSE Sensex</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/sensex-rally-indian-stock-market-outlook-investment-strategy-10952001/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

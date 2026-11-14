@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>After US midterm wipeout, will Trump resume Iran war? An expert explains | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>After US midterm wipeout, will Trump resume Iran war? An expert explains</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/Tehran-Trump-banner.jpg?w=1024" alt="After US midterm wipeout, will Trump resume Iran war? An expert explains">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="disc-paragraph story_details" id="pcl-full-content">
+<div class="translation-content translation-content-en" id="translation-content-en-10954283">
+<div id="translation-content-body-10954283">
+<p>The US midterm polls have left the Democratic Party in firm control of both Houses of the US Congress, with the Republican Party suffering historic losses <a href="https://indianexpress.com/article/explained/explained-global/us-midterms-2026-results-democrats-texas-senate-upsets-10949850/" rel="noopener" target="_blank"><strong>even in traditional strongholds</strong></a>.</p>
+<p>Behind the Blue Tsunami was the <a href="https://indianexpress.com/article/explained/explained-economics/us-midterms-elections-2026-trump-economy-blue-wave-explainspeaking-10947683/" rel="noopener" target="_blank"><strong>cost of living crisis</strong></a> in the US, exacerbated by President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>’s tariffs and, crucially, the war he started against Iran — which drove up fuel prices domestically and globally.</p><div class="ie-premium-content-block paywall container-wall-exclusive" style="display: none;"><div class="adboxtop adsizes"><div class="ie-adtext">Advertisement</div><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250"></div></div><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Indeed, after the results, Vice President J D Vance acknowledged on X that “the reason we lost is the war [with Iran]”. Trump has himself called this “largely true”.</p>
+<p>The question now is whether a defeated Trump will lash out by resuming the war with Iran or pursue a deal instead.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>The signals seem mixed. Early after the polls, he seemed disinclined towards more war, saying: “We seem to be getting everything we want… we’re locked and loaded if we need to go, but there may be no reason for it.”</p><div class="desktop-full-ad"><div class="adsbox970x90" style=""><div class="ie-adtext">Advertisement</div><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_728X90"></div></div></div>
+<p>But, on Thursday, he tried to keep the possibility open: “Do we want to go further (with military action)? I would rather not destroy the rest of the country, if possible, but maybe I will have to. You’ll know soon enough.”</p>
+<span class="custom-caption"><img alt="US Iran" class="lazyloading size-medium wp-image-10954424" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/trump_b1bfb2.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/trump_b1bfb2.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> US President Donald Trump faces a dilemma over how to deal with Iran. (AP)</span>
+<p>Vance, perhaps driven by the need to distance himself from Trump before the 2028 Presidential elections, has been clearer. He said that for voters to return to the party, the administration would have to “end the war, focus on inflation, put America first (and) change our relationship to Israel”.</p>
+<p>With the new Congress set to take office in early January, the US now appears simultaneously on the verge of both war and a deal with Iran. What are the pathways ahead?</p>
+<p><strong>The path to war</strong></p>
+<p>As has been <a href="https://indianexpress.com/article/explained/explained-global/trump-rejects-iran-peace-proposal-us-iran-war-strait-hormuz-nuclear-talks-10895376/" rel="noopener" target="_blank"><strong>explained before</strong></a> in these columns, the Trump administration’s military actions against Iran later in the year were essentially an attempt to improve its bargaining position for a deal. But this prolonged entanglement in West Asia has significantly affected its domestic standing, as proved by the midterm polls. The President’s approval rating now stands at 38%.</p>
+<p>In recent months, Vance has reportedly privately accused Israel’s (now caretaker) Prime Minister, <a class="" href="https://indianexpress.com/about/benjamin-netanyahu/" rel="noamphtml">Benjamin Netanyahu</a>, of being “wrong on everything” about Iran. This shows Washington DC’s loss of faith in the military approach that has long been pushed by the Israeli leader.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-midterms-key-takeaways-impact-world-india-10950071/">US midterms: Trump loses Congress. What changes for India and the world?</a></span></div>
+<p>If anything, the US’s post-midterms predicament has strengthened Tehran’s bargaining position, reflected in Iranian leaders’ rhetoric following the results. This, in turn, may force the US President to save face through yet another visible show of force, even if a deal remains the ultimate objective.</p>
+<p>But Trump’s principal challenge, even before the midterms, has been that Tehran retains as much agency as Washington in determining when a round of strikes ends.</p>
+<span class="custom-caption"><img alt="US Iran" class="lazyloading wp-image-10954421 size-medium" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/vance.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/vance.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> US Vice President JD Vance has been trying to distance himself from Trump. (AP)</span>
+<p>In the run-up to the polls and ever since, Tehran has consistently asserted that there is not a single US military pathway — whether swift or prolonged — that will not result in escalatory retaliation, especially with potentially longer-range missiles being used without “geographic restraint”.</p>
+<p>This significantly cuts into Washington’s space for calibrated military action that absorbs the cost of Iranian retaliation but still keeps Tehran at the table.</p>
+<p>The regional Arab states, which faced the brunt of Iran’s retaliatory attacks earlier this year, know that another round of fighting will hobble them economically. Recognising both Washington’s dilemma and Tehran’s resilience, Qatar, Turkey, Egypt, Saudi Arabia and UAE are proactively pushing for any possible interim arrangement.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/democrats-flip-both-houses-in-midterms-impact-10950201/">Democrats flip both Houses in midterms: What happens next in Trump’s Washington?</a></span></div>
+<p>The US achieved no strategic objective through the war it started with Israel in late February. Resuming it would do even less for its bargaining position in the ongoing negotiations for an interim deal.</p>
+<p><strong>The path to a deal</strong></p>
+<p>In the run-up to the midterms, it was the aforementioned lack of an achievable objective that prevented US military action, or support for Israeli action.</p>
+<p>Iran remains interested in forcing the US to return to the core terms of the <a href="https://indianexpress.com/article/explained/explained-global/us-iran-mou-expert-points-details-hormuz-nuclear-10746602/" rel="noopener" target="_blank"><strong>collapsed interim peace deal from June</strong></a>. This is reflected in its seven demands — including cessation of hostilities, end of the US blockade, sanctions relief, release of frozen Iranian funds and reparations, among others.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/us-midterm-election-results-2026-india-us-relations-trump-10950786/">Decoding the 2026 US midterms verdict: Why Delhi must rediscover and engage with the many Americas</a></span></div>
+<p>Iran also wishes to retain the pathway to peace that was set out in the June memorandum of understanding — the US meeting these seven demands, followed by Iran reopening the Strait of Hormuz (retaining the right to coordinate shipping with Oman), and then both sides then moving to nuclear talks.</p>
+<p>For Tehran, this interest supersedes the need to preempt hostilities with Washington (as it has rhetorically been threatening to do).</p>
+<span class="custom-caption"><img alt="US Iran" class="lazyloading size-medium wp-image-10954428" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/tehran.jpg?resize=600,400" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg?resize=450,300 450w, https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg?resize=600,400 600w, https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg?resize=768,512 768w, https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg?resize=607,405 607w, https://indianexpress.com/wp-content/uploads/2026/11/tehran.jpg?resize=1536,1024 1536w" height="1067" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A banner depicting Iran’s late Supreme Leader Ayatollah Ali Khamenei in central Tehran on Tuesday, (November 3). (AP)</span>
+<p>Iran refrained from responding to Israel’s large-scale aerial provocation close to Iranian airspace in October. It is also now reportedly amenable to a two-day implementation window for an interim deal — Day 1 would see Iran admitting International Atomic Energy Agency inspectors in return for a lifting of the US blockade and release of frozen Iranian funds; Day 2 would see Iran reopening the Strait of Hormuz and the initiation of talks over its reported 440 kg stockpile of 60% enriched uranium.</p>
+<p>This is a marked step-down from Iran’s seven-day roadmap presented to the US in September.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/trump-us-military-aid-israel-2026-10950906/">Trump says US will cut military aid to Israel: Why now, and what can actually happen?</a></span></div>
+<p>However, if the midterm results dissuade the Trump administration from military action, it would need Iranian nuclear concessions (related to the 60% enriched uranium) even in the interim deal.</p>
+<p>This is unlike the June MoU, which effectively agreed to defer nuclear negotiations for 60 days. This is untenable for Tehran, especially as it blames Washington for undermining key provisions of the June MoU, such as guaranteeing Iranian/Omani control of the Strait of Hormuz.</p>
+<p><strong>The clock is ticking</strong></p>
+<p>For the Trump administration, time is running out for a smooth path to removing sanctions on Iran — a core part of Tehran’s demands.</p>
+<p>On September 18, Trump had signed the Lindsey O. Graham Sanctioning Russia and Iran Act of 2026. This statute had extended the expiry of the original 1996 Iran Sanctions Act from December 2026 to December 2031. For permanent sanctions relief, a Congressional vote is inevitable.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/israel-government-formation-gadi-eisenkot-netanyahu-coalition-scenarios-10953119/">Who will form Israel government? The three scenarios involving Eisenkot and Netanyahu</a></span></div>
+<p>Moreover, it was a Republican-led House and Senate which had passed the 2015 Iran Nuclear Agreement Review Act that sought to review Barack Obama’s nuclear deal. Now, this same Act binds the Trump administration to submit any nuclear deal with Iran to Congress with a 60-day review period. For a Republican-led Congress to oversee this review period, a comprehensive deal for full sanctions relief would ideally need to have been submitted by November 7.</p>
+<p>Hence, notwithstanding the actual complexity of Congress-linked options facing President Trump for whenever a nuclear deal is on the table, an interim agreement remains the only viable path presently.</p>
+<p>But Trump is not the only one facing the difficult question of releasing funds to Iran. Democrats, too, will soon have to choose — back a Trump-led deal, or be seen as prolonging the war. That, however, remains a problem for after January, when the new Democrat-controlled Congress takes charge.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/midterms-democratic-socialists-in-capitalist-us-10953773/">A third front in US politics: Reading the rise of Democratic Socialists in capitalist USA</a></span></div>
+<p>Ironically, it is also this closing “lame duck” window which arguably presents the last opportunity for Washington to attempt another military-led attempt at forcing early nuclear concessions from Tehran.</p>
+<p>Ultimately, it will be Iran’s willingness (or lack thereof) to offer nuclear concessions during an interim deal that will determine whether Washington turns to the military to save face.</p>
+<p>This is notwithstanding a ‘Black Swan’ scenario where Israeli caretaker PM Netanyahu or his successor conducts fresh unilateral strikes on Iran and allows Washington to intervene, declare a ceasefire, and secure credit for “ending” the war — which it had started.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10954283"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/us-iran-war-after-midterms-trump-explained-10954283/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

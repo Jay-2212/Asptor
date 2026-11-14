@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How hackers took control of supermarket fridges across Europe, and what it means for India’s cold chain | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How hackers took control of supermarket fridges across Europe, and what it means for India’s cold chain</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-14</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/europe-fridges-hacked.jpg?w=1024" alt="How hackers took control of supermarket fridges across Europe, and what it means for India’s cold chain">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Europe fridges hacked: Refrigerated display cases at a Meny supermarket in Bergen, Norway, in 2017. Recent cyberattacks on supermarket refrigeration systems elsewhere in Europe have highlighted the risks of connecting cooling equipment to the internet. (Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/europe-fridges-hacked.jpg?w=1024" width="650"/><span class="ie-custom-caption">Refrigerated display cases at a Meny supermarket in Bergen, Norway, in 2017. Recent cyberattacks on supermarket refrigeration systems elsewhere in Europe have highlighted the risks of connecting cooling equipment to the internet. (Wikimedia Commons)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10962181" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10962181\/en\/audio-v1-5825673d.m4a","aac":"https:\/\/audio.indianexpress.com\/10962181\/en\/audio-v1-5825673d.aac","mp3":"https:\/\/audio.indianexpress.com\/10962181\/en\/audio-v1-5825673d.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10962181/en/audio-v1-5825673d.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10962181" id="translation-audio-10962181" preload="metadata">
+<source src="https://audio.indianexpress.com/10962181/en/audio-v1-5825673d.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10962181/en/audio-v1-5825673d.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10962181/en/audio-v1-5825673d.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10962181">
+<div id="translation-content-body-10962181">
+<p>Overnight on October 11–12, hackers took control of refrigeration systems at around 700 retail sites in France, including stores run by Carrefour and Intermarché. They turned up the temperature settings used to melt ice off the cooling coils, causing food to spoil and starting at least 15 fires, according to France’s national cybersecurity agency, ANSSI.</p>
+<p>A second wave of such attacks <a href="https://indianexpress.com/article/world/europe-supermarket-fridge-cyberattack-interactive-graphic-10951870/"><strong>followed in early November</strong></a>, affecting stores in eight European countries, including Belgium, Sweden and Ireland, and forcing retailers to throw away large quantities of food. Separately, an attack on a refrigeration equipment supplier affected the systems that monitor and control temperatures at three sites of France’s national blood service. Its alarm systems alerted staff, who moved the blood products before any were lost.</p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On November 9, France accused Shahid Kaveh, a unit linked to Iran’s Revolutionary Guard Corps (IRGC), of orchestrating the October attacks, a charge Iran has denied. Authorities have not established that the subsequent incidents were carried out by the same group.</p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>Refrigeration keeps food and medical supplies at safe temperatures as they are stored, transported and distributed. That temperature-controlled system is known as the cold chain. Connecting cooling equipment to the internet lets operators check temperatures, spot faults and adjust settings remotely. The attacks showed what can happen when someone else gains access to those controls.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<h2>First, how do cold storage systems work?</h2>
+<p>A cold-storage facility is a large, insulated refrigerator, often divided into rooms maintained at different temperatures depending on what is stored inside. Its insulated walls slow the entry of heat from outside, while refrigeration equipment continuously removes the heat that gets in. This preserves everything from fresh fruits and vegetables to frozen food, vaccines and blood products.</p>
+<p>But how does a refrigerator actually cool a room?</p>
+<p><img alt="Cold Storage Cooling System Diagram" class="lazyloading alignnone size-medium wp-image-10962678" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg 1672w, https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/Cold-Storage-Cooling-System-Diagram.jpg?resize=1536,864 1536w" height="338" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/></p>
+<p>It uses a refrigerant, a substance that circulates through pipes and changes between liquid and gas. As it passes through cooling coils inside the storage area, it absorbs heat from the surrounding air. A compressor raises the pressure and temperature of the refrigerant, which then releases heat through a second set of coils outside the cooled space.</p>
+<p>Maintaining the required temperature involves constant monitoring. Sensors measure the temperature and send readings to an electronic controller. In industrial facilities, this may be a programmable logic controller (PLC), a rugged industrial computer that sends instructions to equipment such as compressors, fans and pumps.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>For instance, when a loading door opens and warmer air enters, the sensors detect the resulting temperature change. The controller can then adjust the cooling equipment to bring the room back to the required temperature. It also manages defrost cycles, during which ice accumulated on the cooling coils is periodically melted. Without this process, ice can obstruct airflow and reduce cooling efficiency.</p>
+<h2>So, why connect refrigerators to the internet?</h2>
+<p>Traditionally, staff checked and recorded temperatures by hand. Connecting refrigerators to the internet allows businesses to monitor their performance remotely and manage several facilities through a single system.</p>
+<p>“Businesses connect refrigerators to the internet to monitor temperatures and equipment performance in real time, receive alerts before stock spoils, diagnose faults remotely and manage many sites from one system,” Sandeep Kachhawa, an energy efficiency researcher, told <em>The Indian Express</em>.</p>
+<p>Such equipment is part of the Internet of Things (IoT), where physical devices, including sensors and controllers, exchange information over a network.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/microsoft-global-outage-outlook-teams-365-exchage-online-10962091/">Microsoft global outage: How one cloud failure disrupted businesses worldwide</a></span></div>
+<p>Connected systems “also allow authorised staff or service providers to adjust temperature settings, alarm thresholds or defrost cycles remotely,” Kachhawa said “This improves response times, but creates a cyber risk if the controller is poorly secured.”</p>
+<h2>How can a cyberattack disrupt refrigeration?</h2>
+<p>Refrigeration controllers can become vulnerable when they are directly exposed to the internet or accessed through poorly secured remote connections. Attackers can identify such equipment online and attempt to gain access using weak or default passwords, or exploit vulnerabilities in outdated software.</p>
+<p>“Many legacy systems used in Pharma, hospitals and industrial cold chains may have internet connectivity to enable monitoring and remote access so suppliers can undertake remote diagnostics,” Arun Rajagopal, principal consultant and managing partner at Cyber Forte UK, told <em>The Indian Express</em>.</p>
+<p>Such connections could also allow attackers to move from an organisation’s corporate network into the systems controlling its physical equipment. “Time and time again, past security incidents have shown how easy it is for an attacker to pivot from Corporate IT Networks to OT or Industrial Environments,” Rajagopal said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The risks are compounded by the long lifespan of industrial equipment. Xavier Bellekens, CEO of cybersecurity firm Lupovis, pointed out that while laptops might be replaced every three to five years, refrigeration equipment can remain operational for 15–20 years, sometimes long after manufacturers stop providing software security updates.</p>
+<p>“The equipment may still work perfectly from a mechanical perspective, even though its software is outdated and its manufacturer no longer provides security updates,” he said.</p>
+<p>Lupovis observed suspicious activity against its simulated Danfoss refrigeration controllers, known as honeypots, between October 20 and 30, following the first wave of attacks in France. These systems replicate real equipment, allowing researchers to observe attackers without exposing actual facilities.</p>
+<p>“Over this ten-day period, we identified more than 250 attempts from 91 distinct sources, with activity peaking on 26 October,” Bellekens told <em>The Indian Express</em>. The attackers attempted to log in using default credentials and probed the controllers for vulnerabilities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Bellekens had earlier told <em>POLITICO</em> that the activity could be linked to a Russian state-sponsored group, citing infrastructure previously associated with Russian hackers. Russia has denied involvement.</p>
+<p>“We believe this activity may represent preparation for the second wave, but definitive attribution would require further investigation,” Bellekens told <em>The Indian Express</em>.</p>
+<p><strong>What could an attack mean for food supplies?</strong></p>
+<p>Farmers could lose income if their produce spoils or buyers cannot collect it. Food processors, retailers and logistics companies could face stock losses and supply delays, while consumers could experience shortages or higher prices.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/php2shell-php-security-flaws-websites-offline-explained-10931935/">What is PHP2Shell, and why did it force websites around the world offline?</a></span></div>
+<p>“An attack on an individual facility would be unlikely to cause a nationwide food crisis, but disruption to a major distribution hub could affect supplies across several cities or regions,” Kachhawa said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>“If several facilities use the same refrigeration controls and automation vendor, a security weakness could affect multiple sites. This could turn a problem at one supplier or platform into a wider disruption,” he added. However, he cautioned that using the same technology does not automatically make every facility vulnerable; the security of the systems and their remote connections matters.</p>
+<p><strong>What does this mean for India’s cold chain?</strong></p>
+<p>India had 8,831 cold-storage facilities with a combined capacity of about 40.3 million metric tonnes, the Ministry of Agriculture and Farmers Welfare said in a response to a <a class="" href="https://indianexpress.com/about/rajya-sabha/" rel="noamphtml">Rajya Sabha</a> question on February 6, 2026.</p>
+<p>As these facilities adopt more automated and remotely monitored systems, they could also become exposed to the vulnerabilities seen in Europe.</p>
+<p>In India, the risk is likely to be concentrated in cold-chain facilities that use internet-connected refrigeration controls, remote monitoring and external vendor access, Kachhawa said. These include organised retail chains, dairy chilling facilities, pharmaceutical warehouses, vaccine storage centres and large distribution hubs. Refrigerated transport may also be vulnerable where trucks use connected temperature-monitoring and fleet-management systems.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The exposure, however, is not uniform. Traditional potato cold storage facilities are less exposed to remote cyberattacks because most of their equipment is locally controlled and not connected to external networks, Kachhawa said.</p>
+<p><strong>Who is responsible for keeping these systems safe?</strong></p>
+<p>According to Arun Rajagopal, securing connected refrigeration systems is a shared responsibility, involving equipment manufacturers, software providers, maintenance contractors and the businesses operating them.</p>
+<p>“This is a shared responsibility between product manufacturers, system integrators and asset owners and operators,” Rajagopal said. He pointed to network and information security rules in the UK and EU for operators, and to the EU Cyber Resilience Act’s requirements for product suppliers.</p>
+<p>Manufacturers are responsible for secure equipment and software updates, while operators must monitor which devices are connected and who can access them.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>For older equipment that no longer receives security updates, Bellekens said operators need additional protections rather than necessarily replacing entire refrigeration installations. “However, it must recognise that the controller presents a risk and restrict access to it accordingly.”</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>India is also encouraging greater automation in cold-chain infrastructure. The National Centre for Cold-chain Development’s (NCCD) Engineering Guidelines &amp; Minimum System Standards (2025) encourage IoT-based monitoring, remote control and unified control systems for facilities supported under central government schemes.</p>
+<p>However, Kachhawa said the guidelines do not appear to specify detailed cybersecurity requirements for these connected systems, including secure remote access, network separation, user authentication and software updates.</p>
+<p>Separately, CERT-In’s May 2026 cybersecurity blueprint identifies operational technology (OT), which controls physical equipment, and cyber-physical systems as areas requiring protection. Its recommendations include restricting remote access, monitoring third-party vendors and managing supply-chain risks.</p>
+<p>What should operators do? Rajagopal stressed the importance of strong passwords, multi-factor authentication and keeping critical controllers off the public internet.</p>
+<p>“Cybersecurity and safety trumps operational flexibility,” he said.</p>
+<p>Kachhawa also recommended independent temperature sensors and alarms, alongside procedures for manually monitoring temperatures and moving products if automated controls fail.</p>
+<p>The French blood-service incident demonstrated why such precautions matter: its alarms detected abnormal temperature changes, allowing staff to move blood products before they were lost.</p>
+<p>At the policy level, Kachhawa called for cybersecurity requirements to be incorporated into cold-chain infrastructure standards and government funding conditions, alongside regular assessments of facilities storing essential food and medical products.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10962181"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November fourteenth, twenty twenty-six, at fifty-four minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/europe-supermarket-fridge-hack-india-cold-chain-10962181/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-14 19:00 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
