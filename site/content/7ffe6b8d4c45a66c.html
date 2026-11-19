@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Who keeps the internet running, and what happens when they can no longer afford to? An expert explains | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Who keeps the internet running, and what happens when they can no longer afford to? An expert explains</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/software-maintainer-2.jpg?w=1024" alt="Who keeps the internet running, and what happens when they can no longer afford to? An expert explains">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="After the PHP2Shell flaws were disclosed, open-source maintainers helped get security fixes to users, including those on older PHP releases. (Magnific)" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/software-maintainer-2.jpg?w=1024" width="650"/><span class="ie-custom-caption">After the PHP2Shell flaws were disclosed, open-source maintainers helped get security fixes to users, including those on older PHP releases. (Magnific)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10962624" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10962624\/en\/audio-v1-04794b36.m4a","aac":"https:\/\/audio.indianexpress.com\/10962624\/en\/audio-v1-04794b36.aac","mp3":"https:\/\/audio.indianexpress.com\/10962624\/en\/audio-v1-04794b36.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10962624/en/audio-v1-04794b36.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10962624" id="translation-audio-10962624" preload="metadata">
+<source src="https://audio.indianexpress.com/10962624/en/audio-v1-04794b36.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10962624/en/audio-v1-04794b36.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10962624/en/audio-v1-04794b36.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10962624">
+<div id="translation-content-body-10962624">
+<p>When two critical security flaws in PHP, a programming language used by millions of websites, prompted organisations around the world to take services offline in October, Czech software engineer Ondřej Surý was among the maintainers who helped get the fixes to users.</p>
+<p>The flaws, collectively <strong><a class="" href="https://indianexpress.com/article/explained/explained-sci-tech/php2shell-php-security-flaws-websites-offline-explained-10931935/">dubbed PHP2Shell</a></strong>, led to precautionary shutdowns on October 21 of services run by Japan’s Finance Ministry, US human-resources platform BambooHR, the Port of Rotterdam in the Netherlands, and the Wikimedia Foundation, which operates Wikipedia.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>Surý maintains widely used PHP software packages for Debian and Ubuntu, two Linux-based operating systems. He made patched versions available even for older releases of PHP that no longer receive official security updates.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>Surý does much of this maintenance alongside his full-time job as Director of DNS Engineering at the Internet Systems Consortium (ISC), which develops software that helps translate website addresses into the numerical addresses computers use to communicate over the internet. He told <em>The Indian Express</em> that ISC had seen a sharp spike in vulnerability reports this year, although relatively few were serious. As AI tools make it easier to identify potential security flaws, assessing and fixing them still requires human expertise.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>The experience raises a larger question about the sustainability of open-source software, whose underlying code is freely available for others to use, modify and distribute, and on which much of the internet depends. In an interview with <em>The Indian Express</em>, Surý discusses the PHP2Shell incident, the growing demands of AI-assisted vulnerability discovery, and why he believes businesses that profit from open-source software must help fund its maintenance. Edited excerpts:</p>
+<h2><strong>Why does PHP matter to the functioning of the internet, and what made the recent PHP2Shell vulnerabilities particularly serious?</strong></h2>
+<p>PHP is a programming language mainly used to develop websites. Roughly 70% of the web is powered by PHP. The recently discovered vulnerabilities in PHP were in the most serious category, remote code execution (RCE). In short, an attacker can exploit such a vulnerability to execute a program of their own choosing on a remote machine, potentially gaining full access to the server (the computer running the website or service).</p>
+<p><strong>When researchers discover a serious security flaw in widely used software, what happens next? Who develops the fix, who ensures it reaches users, and which parts of this process still depend heavily on human work?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>When ethical security researchers discover a serious security flaw, they contact the affected project or organisation privately. Any project or organisation that cares about security should have a mechanism through which researchers can report flaws in its software.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-sci-tech/php2shell-php-security-flaws-websites-offline-explained-10931935/">What is PHP2Shell, and why did it force websites around the world offline?</a></span></div>
+<p>Fixing the vulnerability is usually no different from fixing any other defect in the software, but the process depends on the size of the project. The work could fall to a single person in a small project or a handful of people in a larger one. They might or might not be employed to do this work.</p>
+<p>In the case of PHP, there are a handful of volunteers for whom this is a side project, and very few people are employed directly by the PHP Foundation. Most of the important work still depends on people. As for when and how AI is used, it is important to remember that AI is just a tool that might or might not be useful in specific cases.</p>
+<p><strong>How did the early disclosure of the PHP2Shell vulnerabilities affect the release of security updates?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>That was unfortunate because people who knew the original release schedule had made plans to properly release the software so that users could upgrade. The premature disclosure accelerated the whole process by a day.</p>
+<p>Now, this is the bad part about AI: once details of the upcoming vulnerabilities were known, people started using AI to search for possible security flaws. It was no longer safe to stick to the original schedule because AI, as a tool, is quite good at finding security vulnerabilities, especially when guided by a skilled person.</p>
+<p><strong>AI tools are increasingly being used to discover vulnerabilities in software. Have you noticed any change in the number or complexity of vulnerability reports you receive, or in the work required to respond to them?</strong></p>
+<p>In my day job, I am the Director of DNS Engineering at ISC, responsible for BIND 9, a widely used open-source DNS server. There was a sharp spike this year in the frequency and depth of the vulnerability reports we received.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Fortunately, after the initial surge, things went back to normal. We still receive occasional security reports, but only very few of them are serious enough to be handled as security vulnerabilities.</p>
+<p>That is the thing with AI: it needs to be guided by an expert with domain knowledge. Otherwise, you often end up with serious-sounding reports about ordinary software bugs, or issues that are not even bugs.</p>
+<p><strong>Could AI also help maintainers identify security vulnerabilities themselves?</strong></p>
+<p>Not only that, maintainers can also use frontier AI models to find security vulnerabilities themselves. That said, both offensive (finding and exploiting vulnerabilities) and defensive (finding and fixing vulnerabilities) uses of AI need to be supervised by an expert. Otherwise, you might end up with a pile of mediocre-quality reports or, worse, AI might miss something serious.</p>
+<p><strong>You’ve spoken about the difficulty of sustaining open-source maintenance. Why does so much essential software depend on the work of relatively few people, and what would it take to support them adequately?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>When I joined university in 1995, free software was still very new, at least to me, and I found a purpose in making the fruits of my work freely available to others. It was a paradigm change, and I believe many people involved in the free-software movement are still driven by those ideals.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Black October</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-ai/ai-cybersecurity-risks-php2shell-emudhra-flaws-10937564/">An expert explains how AI is changing cybersecurity</a></span></div>
+<p>On the other hand, some people have built multibillion-dollar enterprises on top of open-source software and never even thought about supporting the software that allowed them to make money.</p>
+<p>I think we need to find a balance. The free-software model is viable because it gives me and other developers freedom. On the other hand, if many people depend on that software for their livelihoods, we need a sustainable model that allows maintainers to continue working on the software they love without becoming exploited and exhausted.</p>
+<p><strong>Who should be responsible for funding the maintenance of open-source software?</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>That question can easily be turned around: if the people maintaining the open-source software your company uses were to simply walk away, how large would your losses be in the event of a serious security vulnerability like the recent one in PHP? This should give people running businesses the answer to who should fund the work.</p>
+<p>Not every open-source project has an organisation, whether for-profit or non-profit, behind it, but some do.</p>
+<p>For instance, Software in the Public Interest is a non-profit organisation that provides financial and administrative support to projects such as Debian. Smaller projects can raise funds through platforms such as Open Collective, while PHP development receives funding through the PHP Foundation.</p>
+<p>My PHP packaging work can be supported through Freexian’s PHP Long Term Support (PHP LTS) project, which provides maintenance and security updates for older PHP releases, or through GitHub Sponsors, which allows individuals and organisations to fund developers directly.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>At my day job, the Internet Systems Consortium (ISC) offers paid professional support for open-source projects such as BIND 9 and Kea, among other projects I am closely associated with.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10962624"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November fifteenth, twenty twenty-six, at sixteen minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/expert-explains-php2shell-ondrej-sury-open-source-maintenance-10962624/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-19 03:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

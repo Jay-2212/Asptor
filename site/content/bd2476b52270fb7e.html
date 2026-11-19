@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Blue-chip stocks have performed poorly all year. How did they make a comeback? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Blue-chip stocks have performed poorly all year. How did they make a comeback?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-19</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/Ch2090302_ec81be.jpg?w=1024" alt="Blue-chip stocks have performed poorly all year. How did they make a comeback?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="A view of the Bombay Stock Exchange (BSE) building in Mumbai which houses Sensex , India's oldest stocks index (Express Photo by Neeraj Priyadarshi)" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/Ch2090302_ec81be.jpg?w=1024" width="650"/><span class="ie-custom-caption">A view of the Bombay Stock Exchange (BSE) building in Mumbai which houses Sensex , India's oldest stocks index (Express Photo by Neeraj Priyadarshi)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10966841" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10966841\/en\/audio-v1-0ea48272.m4a","aac":"https:\/\/audio.indianexpress.com\/10966841\/en\/audio-v1-0ea48272.aac","mp3":"https:\/\/audio.indianexpress.com\/10966841\/en\/audio-v1-0ea48272.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10966841/en/audio-v1-0ea48272.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10966841\/hi\/audio-v1-c33d2170.m4a","aac":"https:\/\/audio.indianexpress.com\/10966841\/hi\/audio-v1-c33d2170.aac","mp3":"https:\/\/audio.indianexpress.com\/10966841\/hi\/audio-v1-c33d2170.mp3"}' data-hindi-url="https://audio.indianexpress.com/10966841/hi/audio-v1-c33d2170.m4a" data-is-premium="0" data-post-id="10966841" id="translation-audio-10966841" preload="metadata">
+<source src="https://audio.indianexpress.com/10966841/en/audio-v1-0ea48272.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10966841/en/audio-v1-0ea48272.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10966841/en/audio-v1-0ea48272.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10966841">
+<div id="translation-content-body-10966841">
+<p>Blue-chip stocks, also known as large-caps, have <a href="https://indianexpress.com/article/explained/explained-economics/sensex-rally-indian-stock-market-outlook-investment-strategy-10952001/"><strong>led the market’s rally</strong></a> over the <a href="https://indianexpress.com/article/business/market/bse-sensex-crosses-80000-dhanteras-nifty-fii-buying-top-gainers-10953160/"><strong>past three weeks</strong></a>, after underperforming for nearly a year. As geopolitical concerns have eased, and other valuation and growth-related concerns have subsided for now, this premium section of the market has emerged as the most attractive risk-reward bet for investors.</p>
+<p>Record foreign inflows have followed the recovery in sentiment in November. These have led to a sharp turnaround in the Indian stock market over the past few weeks, outperforming other major global markets.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>From being down nearly 15-16% for the year at their lowest in October, the Nifty 50 and Sensex have rallied 11-12% over the last three weeks. Meanwhile, Nifty’s small- and mid-cap indices were up 3-8% in that period.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>“Our view is that things are attractive in the next few quarters from an earnings perspective, and on top of that, valuations were attractive for large-caps. These factors are helping large-caps do better,” said Pankaj Pandey, Head of Research at ICICI Securities.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>So, why have blue-chips roared back to life lately after facing persistent issues earlier?</p>
+<h2><strong>Why blue-chip stocks were performing poorly</strong></h2>
+<p>Blue-chip companies are well-established and reliable, with massive market capitalisations, known for giving stable and safe returns over a long period of time. Broadly, all companies that are part of the Nifty 50 and Sensex fall under this category.</p>
+<p>Mid- and small-caps are the other top 500 companies on the exchange, apart from the blue chips.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/indian-stock-market-2026-pharma-ai-infrastructure-stocks-10898808/">Stocks down again — but what are the outliers in India’s share market slide?</a></span></div>
+<p>Since an all-time high in early January, the Nifty 50 had fallen as much as 15% by March. After remaining relatively stable post a brief recovery, it hit its lowest for the year in early October. Despite the recent rally, the index remains 3% below where it ended last year.</p>
+<p>On the other hand, the mid- and small-cap indices had been on a roll as investors searched for more attractive bets. Despite undergoing a similar correction to the Nifty 50 and Sensex around March, these indices have soared and remain as much as 6% higher for the year.</p>
+<p>In fact, almost all mid- and small-cap indices hit record highs around August and September even as the benchmark indices remained sluggish.</p>
+<h2><strong>Blue chips turn attractive</strong></h2>
+<p>The main reason behind mid- and small-caps outperforming blue chips was investors hunting for value deals and higher returns, as a host of problems bogged down the Indian market.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The war in West Asia was the biggest reason, triggering foreign outflows, exorbitant fuel prices, a battering of the rupee, and geopolitical uncertainty.</p>
+<p>The focus thus shifted to mid- and small-caps, with the earnings of many of these companies still growing in double digits despite the overall market becoming unattractive, providing the potential of some returns for investors.</p>
+<p>However, as things in West Asia have subsided a bit and India has gained from an “anti-AI” sentiment, blue-chip stocks have now overshadowed their counterparts. As the Nifty 50 and Sensex went on a seven-session winning run in early November, reflecting this exuberance, the small- and mid-cap indices were broadly positive but saw ups and downs.</p>
+<p>Blue chips have also received strong inflows from foreign investors. Having dumped over $31 billion-worth of shares this year until last month, foreign portfolio investors (FPIs) bought shares worth $9.5 billion in November as of Monday — the highest ever in a month.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The majority of this money has gone into blue chips, which are lower risk compared to the smaller stocks.</p>
+<p>“After a prolonged phase of mid- and small-cap outperformance, investors are increasingly shifting towards quality businesses with strong balance sheets, consistent cash flows and reasonable valuations,” explained Mayur Shah, Portfolio Management Services (PMS) Fund Manager at Anand Rathi Advisors.</p>
+<h3><strong>Earnings revival, valuation comfort</strong></h3>
+<p>Strong earnings growth reported by blue chips for the July-September quarter and relatively comfortable valuations have turned the “risk-reward ratio” favourable for investors.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/indians-invest-abroad-record-4-billion-foreign-stocks-debt-fy27-10952448/">Why Indians are investing billions abroad amid shaky domestic stock markets</a></span></div>
+<p>“From a valuation and earnings perspective, large-caps and small-caps are at reasonable valuations, while mid-caps are on the slightly higher side. From this perspective, the large-caps are more attractive in its risk-reward dynamic,” said Pandey of ICICI Securities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>The profit growth of companies part of the Nifty 50 grew by 27% year-on-year in Q2, which was the fastest pace in 17 quarters, according to Motilal Oswal. The profit growth of these blue-chip companies has been improving over the past couple of quarters, having seen single-digit growth for multiple quarters prior to that.</p>
+<p>While smaller companies outside the blue-chip category have also delivered robust returns, the double-digit growth in the safer companies makes it an attractive “risk-reward” profile for investors.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10966841"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November seventeenth, twenty twenty-six, at thirteen minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/blue-chip-stocks-outperform-mid-small-cap-stocks-india-10966841/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-19 03:04 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
