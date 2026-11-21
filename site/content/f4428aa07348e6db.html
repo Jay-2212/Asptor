@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Price of war: How India’s oil, gas import bill is soaring amid West Asia crisis | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Price of war: How India’s oil, gas import bill is soaring amid West Asia crisis</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-21</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/India-oil-imports_20261119191146.jpg?w=1024" alt="Price of war: How India’s oil, gas import bill is soaring amid West Asia crisis">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="oil imports, crude oil imports, crude oil import India, liquefied natural gas (LNG) import bill, Ministry of Petroleum and Natural Gas (MoPNG), US-Israel war on Iran, west asia war, Iran war, Israel-US-Iran war, Iran conflict, Strait of Hormuz, Strait of Hormuz shut, west asia conflict, iran and israel war, iran and israel, us israel war, war in iran, iran us, us israel iran, us israel, us iran war, iran us war, us war, israel news, israel iran war news, war news, israel iran news, israel war news, iran war news, war on iran, iran israel war today, war in iran and israel, iran attack israel, israel iran, israel us attack iran, attack on iran, iran attack on us, us and iran, us attack in iran, did iran attack us, us to attack iran, us and israel, us and israel attack iran, us attack iran today, us iran news, iran us news, us news, iran attack news, iran attack today" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/India-oil-imports_20261119191146.jpg?w=1024" width="650"/><span class="ie-custom-caption">In October, the last month for which data is available, the oil import bill jumped 87.5% on-year to $19.5 billion. (Reuters Photo)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10970545" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10970545\/en\/audio-v1-42b14398.m4a","aac":"https:\/\/audio.indianexpress.com\/10970545\/en\/audio-v1-42b14398.aac","mp3":"https:\/\/audio.indianexpress.com\/10970545\/en\/audio-v1-42b14398.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10970545/en/audio-v1-42b14398.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10970545\/hi\/audio-v1-4b961c2f.m4a","aac":"https:\/\/audio.indianexpress.com\/10970545\/hi\/audio-v1-4b961c2f.aac","mp3":"https:\/\/audio.indianexpress.com\/10970545\/hi\/audio-v1-4b961c2f.mp3"}' data-hindi-url="https://audio.indianexpress.com/10970545/hi/audio-v1-4b961c2f.m4a" data-is-premium="0" data-post-id="10970545" id="translation-audio-10970545" preload="metadata">
+<source src="https://audio.indianexpress.com/10970545/en/audio-v1-42b14398.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10970545/en/audio-v1-42b14398.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10970545/en/audio-v1-42b14398.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10970545">
+<div id="translation-content-body-10970545">
+<p>India’s <strong><a class="" href="https://indianexpress.com/about/oil-import/">crude oil import</a></strong> bill surged by nearly 54% on a year-on-year (y-o-y) basis in the first seven months of the current financial year, even as import volumes rose only slightly amid supply tightness and elevated prices owing to the West Asia conflict and the consequent Strait of Hormuz crisis, as per provisional data from the Ministry of Petroleum and Natural Gas (MoPNG).</p>
+<p>Elevated prices also led to a jump in liquefied natural gas (LNG) import bill and fuel export value. As a result, net oil and gas imports — arrived at by deducting petroleum product exports from oil, natural gas, and petroleum product imports — were higher by almost 40% from the year-ago levels, underscoring the adverse economic impact of the West Asia crisis on energy import-dependent India.</p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The country depends on imports to meet over 88% of its crude oil requirement and about half of its consumption of natural gas, which is imported as LNG, or super-chilled gas. Despite depending on imported oil and gas, India is a net exporter of petroleum products due to its massive oil refining capacity, while it also imports some petroleum products like liquefied petroleum gas (LPG).</p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>Prior to the West Asia war, which broke out in late-February, about 40% of India’s crude oil imports, 60% of its LNG imports, and a whopping 90% of its LPG imports came from the Persian Gulf through the Strait of Hormuz.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/indias-russian-fossil-fuel-imports-at-record-high-of-e6-4-billion-in-october-amid-elevated-prices-10960615/">India’s Russian fossil fuel imports at record high of €6.4 billion in October amid elevated prices</a></span></div>
+<p>Although the physical supply tightness — a key worry in the first few months of the war — has now eased to a large extent, energy prices remain elevated and volatile amid sky-high freight and insurance costs owing to war risk premiums. After moderating slightly in June-August, oil prices jumped again in September-October as a result of renewed hostility in West Asia and soaring freight costs. In October alone, India’s oil import bill surged by nearly 88% y-o-y.</p>
+<p>India has been forced to import oil and gas at extremely high rates as the country has been prioritising supply security over price considerations, given its extreme reliance on imports and largely inelastic demand.</p>
+<h2><strong>India’s oil and gas trade math</strong></h2>
+<p>According to latest provisional data released by the Petroleum Planning and Analysis Cell (PPAC) of the MoPNG, crude oil imports in April-October jumped 53.5% y-o-y to $111 billion, even as import volumes rose by just 2.7% to 146.6 million tonnes, or about 1.08 billion barrels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This translates to about $103.3 per barrel as the average landed price of imported crude oil in the seven-month period, up from around $69 per barrel in the corresponding period of last year. The April-October oil import bill is already 88% of the import value for the full financial year 2025-26, and there are still five months to go in the current fiscal.</p>
+<span class="custom-caption"><img alt="War impact on India's oil, gas import bill" class="lazyloading wp-image-10970937 size-full" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/ex-oil-gas-import.jpg" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/ex-oil-gas-import.jpg 600w, https://indianexpress.com/wp-content/uploads/2026/11/ex-oil-gas-import.jpg?resize=450,262 450w" height="349" sizes="(max-width: 600px) 100vw, 600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="600"/> War impact on India’s oil, gas import bill.</span>
+<p>In October, the last month for which data is available, the oil import bill jumped 87.5% y-o-y to $19.5 billion. The Indian crude oil basket averaged at $116.1 per barrel in September and $119.9 per barrel in October. It stood at $114.48 in April, $106.2 in May, $83.2 in June, $82 in July, and $90.2 in August.</p>
+<p>As for LNG imports, while supplies rose 7.4% to 22,175 million standard cubic metres (mscm) in April-October, the LNG import bill rose by 35.8% to $11 billion, reflecting the spurt in prices. Petroleum product imports almost halved in volume terms to 15.1 million tonnes from 29.8 million tonnes, as supply of major petroleum products that India imports — like LPG — were impacted by the war. In value terms, the decline in petroleum product imports was relatively lower — down 25% to $9.9 billion — due to super-normal prices in the international market.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/business/india-october-2026-trade-data-record-exports-50-billion-10962151/">Goods exports log all-time high of $50 billion in October, trade gap at year’s peak</a></span></div>
+<p>India’s petroleum product export volumes declined 13.5% to 32.1 million tonnes in April-October as domestic fuel supplies took precedence amid the global supply crunch. Nonetheless, the exports surged 47% in value to $34.1 billion due to the jump in international petroleum fuel prices.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Taking into account the overall oil, LNG, and petroleum product imports as well as fuel exports, the country’s net oil and gas imports rose 39% y-o-y in April-October to $97.7 billion, PPAC data shows.</p>
+<p><strong>India’s concerns</strong></p>
+<p>Energy imports are a major component of India’s overall imports, and any meaningful increase has ramifications for the country’s trade balance, current account, inflation, and the rupee’s exchange rate, among others. For instance, India’s wholesale fuel and power inflation was 32.8% in October, 25.9% in September, and 23.2% in August, as per government data.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/ethanol-mirage-e100-india-oil-import-problems-10941885/">The ethanol mirage: Why E100 won’t Solve India’s oil import problems</a></span></div>
+<p>The country imports 1.8-2 billion barrels of oil a year, and every $1-per-barrel increase in price bumps up its oil import bill by up to $2 billion on an annualised basis. According to a March report by Nomura, India is among the three Asian economies most vulnerable to high oil prices. It also said that every 10% increase in oil price typically widens the country’s current account deficit by 0.4% on the gross domestic product (GDP). Crude oil alone is the country’s largest merchandise import.</p>
+<p>Heavy dependence on energy imports has led to a double whammy of supply tightness and price surge. While highly diversified crude sourcing has helped in ensuring adequate oil, petrol, diesel, and jet fuel availability amid the West Asia crisis, some rationing of gas supplies to certain industries and commercial consumers was done in the initial months of the conflict in order to ensure adequate availability for households and a few priority sectors.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10970545"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sukalp-sharma/">
+<figure>
+<img alt="Sukalp Sharma" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sukalp-sharma/"><span></span>Sukalp Sharma</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="8418961"></div><div class="follow_author_title" data-id="Sukalp Sharma"></div><div class="follow_author_slug" data-id="sukalp-sharma"></div></div></div></span>
+<div class="author-social">
+<div class="author-twitter">
+<a href="https://twitter.com/sukalp4">
+<img alt="twitter" height="20" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/x-story.svg" width="20"/>
+</a>
+</div>
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sukalp Sharma is a Deputy Associate Editor with The Indian Express and writes on a host of subjects ...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sukalp-sharma/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twentieth, twenty twenty-six, at zero minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/crude-oil-import-india/" href="https://indianexpress.com/about/crude-oil-import-india/">crude oil import India</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/crude-oil-imports/" href="https://indianexpress.com/about/crude-oil-imports/">crude oil imports</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/oil-imports/" href="https://indianexpress.com/about/oil-imports/">oil imports</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/oil-import-bill-up-financial-year-2027-10970545/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-21 20:27 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

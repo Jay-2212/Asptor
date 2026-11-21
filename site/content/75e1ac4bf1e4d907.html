@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>NEET-2027: What reforms could be proposed, what more needs to be done | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>NEET-2027: What reforms could be proposed, what more needs to be done</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-21</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/ex-neet-reforms_expl.jpg?w=1024" alt="NEET-2027: What reforms could be proposed, what more needs to be done">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="NEET" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/ex-neet-reforms_expl.jpg?w=1024" width="650"/><span class="ie-custom-caption">The Nandan Nilekani-led high-powered task force must provide a time-bound implementation roadmap that defines institutional responsibilities, resources, technical safeguards, independent oversight, and accountability. Photo: Express</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10970049" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10970049\/en\/audio-v1-950a2766.m4a","aac":"https:\/\/audio.indianexpress.com\/10970049\/en\/audio-v1-950a2766.aac","mp3":"https:\/\/audio.indianexpress.com\/10970049\/en\/audio-v1-950a2766.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10970049/en/audio-v1-950a2766.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10970049" id="translation-audio-10970049" preload="metadata">
+<source src="https://audio.indianexpress.com/10970049/en/audio-v1-950a2766.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10970049/en/audio-v1-950a2766.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10970049/en/audio-v1-950a2766.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10970049">
+<div id="translation-content-body-10970049">
+<p><span style="font-weight: 400">Recurring controversies over the National Eligibility-cum-Entrance Test (NEET) have exposed persistent vulnerabilities in India’s public examination system. The NEET-2024 examination, which saw paper leaks, exam malpractices, and candidates getting abnormal scores, led to the constitution of the Radhakrishnan Committee — whose 101 recommendations pertained to exam reforms.</span></p>
+<p><span style="font-weight: 400">Yet, the <strong><a class="" href="https://indianexpress.com/article/india/neet-ug-paper-leak-cbi-chargesheets-pune-tea-stall-owner-10927326/">NEET-2026 examination</a></strong> in May was marked by allegations of paper leaks and cancellations, and the subsequent retest (Re-NEET) in June was followed by widespread student protests. Repeated and incorrect questions as well as answer-key discrepancies have further undermined confidence in competitive examinations.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">In July 2026, the government constituted a Nandan Nilekani-led High-Powered Task Force (HPTF) to recommend comprehensive reforms in public examinations, including those conducted by the National Testing Agency (NTA). Its initial deadline of October 2026 for submitting its report has been extended to January 2027 after receiving over 50,000 suggestions and extensive stakeholder consultations.</span></p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p><span style="font-weight: 400">With no interim report publicly available, NEET-2027 candidates face considerable uncertainty. With computer-based testing (CBT), a secure question vault, last-minute paper assembly, and digital delivery among the reported proposals, we look at what reforms are likely to be considered, their limitations and challenges, and what needs to be done to restore fairness and institutional accountability beyond NEET-2027.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p><b>Why have earlier reforms failed to prevent recurring NEET crises?</b></p>
+<p><span style="font-weight: 400">Following the NEET-2024 controversy, the Dr Radhakrishnan Committee recommended reforms covering examination security, technology, infrastructure and institutional processes.</span></p>
+<p><span style="font-weight: 400">But the NEET-2026 crisis raises questions about their implementation and oversight. Vulnerabilities exist across the examination chain — from question setting and review to transportation, storage, examination-centre management, and evaluation. Allegations of insider involvement make these particularly serious.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/nta-search-exam-centres-neet-paper-leak-online-10859874/">Under paper leak shadow, NTA looks for spaces for exam centres; seeks AICTE support next year</a></span></div>
+<p><span style="font-weight: 400">New recommendations will have little value unless earlier failures are investigated, institutional responsibility is established, and proposed reforms are rigorously piloted.</span></p>
+<h2><b>Is CBT feasible for NEET?</b></h2>
+<p><span style="font-weight: 400">CBT reduces dependence on physical printing, packaging, transportation, and storage, while enabling computerised administration, controlled access, and automated evaluation. But it introduces digital vulnerabilities, system failures, and cybersecurity risks.</span></p>
+<p><span style="font-weight: 400">A nationwide examination requires adequate centres, secure systems, reliable power and connectivity, trained personnel, and contingency arrangements. Uneven infrastructure and varying computer familiarity among candidates also raise concerns about accessibility and fairness.</span></p>
+<p><span style="font-weight: 400">CBT’s feasibility must be established through infrastructure assessment, large-scale pilots, and independent technical audits. Changing the examination format alone cannot guarantee security or fairness.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><b>Can a question vault and last-minute digital delivery secure the question paper?</b></p>
+<p><span style="font-weight: 400">Security must begin with question creation and validation, not merely paper transportation. Question setting, review, syllabus alignment, translation, and answer verification are all potential points of compromise, particularly with concentrated access.</span></p>
+<p><span style="font-weight: 400">A proposed question vault would maintain a large pool of independently vetted questions. The final paper could be assembled shortly before the examination, encrypted and digitally transmitted to centers, thereby reducing advance access and dependence on physical transport.</span></p>
+<span class="custom-caption"><img alt="NEET" class="lazyloading size-medium wp-image-10970103" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/ex-neet-retest.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/ex-neet-retest.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Candidates being screened as they arrive at an examination centre for the RE NEET UG exam in Jaipur on June 21, 2026. Photo: Rohit Jain Paras</span>
+<p><span style="font-weight: 400">The question paper repository, selection software, servers, encryption keys, and transmission networks require restricted access, traceable operations, and independent cybersecurity audits. Ultimately, security depends on the entire chain — from question setters and validators to final selection and delivery.</span></p>
+<p><b>How can fairness be ensured across multiple CBT sessions?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Multiple NEET sessions require different question papers, yet all candidates must compete on a common merit list. Ensuring equivalent difficulty is therefore a major challenge.</span></p>
+<p><span style="font-weight: 400">Statistical normalisation, potentially using percentile scores, may help compare performance. But its reliability depends on the comparability of the papers and on statistical assumptions. Even small adjustments can affect ranks and admission prospects.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/neet-ug-exam-moving-online-education-ministry-prepares-cbt-computer-upgrade-future-exams-cuet-nta-10900240/">NEET moving online: Education Ministry prepares CBT upgrade for future exams</a></span></div>
+<p><span style="font-weight: 400">Through rigorous pilots and independent validation, NTA must establish that papers have comparable syllabus coverage, difficulty, and discriminatory power. The methodology and its limitations must be transparent and auditable. Normalisation cannot compensate for fundamentally unequal question papers.</span></p>
+<p><span style="font-weight: 400">Beyond technical reforms, changes to eligibility, examination schedules, sessions, and format could further reduce vulnerabilities. Such changes require advance notification and phased implementation. In the absence of timely official announcements, major structural changes to NEET-2027 should be ruled out.</span></p>
+<p><b>Can a two-stage NEET examination address normalisation concerns?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">A two-stage examination, on the lines of IIT-JEE (Mains and Advanced), is one possible alternative. All eligible candidates would appear in a screening examination (Mains), followed by a final examination for shortlisted candidates (Advanced) based on predefined cut-offs or a specified number of qualifiers. A single-session final examination does not need normalisation.</span></p>
+<p><span style="font-weight: 400">This model raises questions about shortlisting, eligibility, syllabus, question paper format and difficulty, scoring, and cut-offs. It would increase examination overheads but improve fairness in rankings for top scorers.</span></p>
+<h2><b>Should Class XII marks carry weightage in NEET? Can NEET be conducted twice a year?</b></h2>
+<p><span style="font-weight: 400">On Tuesday (November 17), </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> reported that providing weightage to Class 12 board exam scores in NEET-UG has emerged as a key proposal from several states during “consultative meetings” held so far with the Nilekani-led task force. Another proposal discussed was offering more than one attempt in a year.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/nandan-nilekani-task-force-neet-exam-reforms-class-12-board-marks-weightage-10965928/">States to Nandan Nilekani task force: Give weightage to Class 12 board exam scores in NEET UG</a></span></div>
+<p><span style="font-weight: 400">Weightage to Class XII marks could recognise sustained academic performance, but variations in board examinations and marking standards make equitable weightage difficult. Conducting NEET twice a year could offer candidates another opportunity to improve their scores, but would increase logistical costs and raise concerns about normalisation and admission timelines.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">A two-stage NEET, along the lines of IIT-JEE, could address both concerns: Class XII marks could be used in determining eligibility for the second-stage single-session examination.</span></p>
+<p><b>Could the HPTF recommend changes to eligibility, attempts, or age limits?</b></p>
+<p><span style="font-weight: 400">With over two million candidates competing for limited medical seats, NEET’s unlimited attempts and the absence of an upper age limit raise questions about the examination’s capacity and the size of the candidate pool. Candidates can appear repeatedly, irrespective of age, even beyond 60.</span></p>
+<p><span style="font-weight: 400">Age limits and attempt restrictions, common in most competitive examinations, could help narrow the candidate pool.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p><b>Can GenAI improve question generation and the quality of examinations?</b></p>
+<p><span style="font-weight: 400">Conventional software can select pre-vetted questions from a secure vault without GenAI. GenAI could assist in question generation, syllabus mapping, translation, preparing answer options, and calibrating difficulty, creating a larger, more diverse question pool.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/education/nta-overhaul-process-minto-road-office-cisf-security-paper-leak-confidentiality-claiuse-10888582/">CISF, AI monitoring, security experts: How NTA is changing after NEET leak</a></span></div>
+<p><span style="font-weight: 400">AI-generated questions, however, may contain factual errors, ambiguities, incorrect answer keys, syllabus errors, or translation defects. Expert validation is essential;</span> <span style="font-weight: 400">AI may assist question development.</span></p>
+<p><b>What should the HPTF deliver to restore confidence in public examinations?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><span style="font-weight: 400">The Nilekani-led HPTF must provide a time-bound implementation roadmap that defines institutional responsibilities, resources, technical safeguards, independent oversight, and accountability. Major reforms must undergo large-scale pilots before nationwide implementation.</span></p>
+<p><span style="font-weight: 400">NTA also needs permanent expertise in examination management, cybersecurity, psychometrics, digital forensics, and vigilance. The HPTF’s success must ultimately be measured by whether examinations become secure, transparent, reliable, and fair. India needs not merely new examination technology but also trustworthy examination standard operating procedures and institutions.</span></p>
+<p><strong><i>The author is a former computer science professor at IIT Kharagpur, IIT Kanpur, BITS Pilani and JNU, and a former scientist at the Defence Research and Development Organisation and the Department of Science &amp; Technology.</i></strong></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10970049"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/rajeev-kumar/">
+<figure>
+<img alt="Rajeev Kumar" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://indianexpress.com/wp-content/themes/indianexpress/images/avatar-default.png?w=40" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/rajeev-kumar/"><span></span>Rajeev Kumar</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="10822570"></div><div class="follow_author_title" data-id="Rajeev Kumar"></div><div class="follow_author_slug" data-id="rajeev-kumar"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Rajeev Kumar is a former Professor of Computer Science at IIT Kharagpur, IIT Kanpur, BITS Pilani, an...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/rajeev-kumar/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November nineteenth, twenty twenty-six, at fifty-five minutes past five in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/neet-2027-exam-reforms-cbt-question-vault-two-stage-test-10970049/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-21 20:27 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
