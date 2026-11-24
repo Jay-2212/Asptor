@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Nvidia reinstated Jensen Huang as CEO | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Nvidia reinstated Jensen Huang as CEO</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/jensen_669ae3.jpg?w=1024" alt="Why Nvidia reinstated Jensen Huang as CEO">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Jensen Huang Nvidia" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/jensen_669ae3.jpg?w=1024" width="650"/><span class="ie-custom-caption">Jensen Huang returns as Nvidia CEO following the board's decision to reinstate him on November 23, 2026. (NYT)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10974781" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10974781\/en\/audio-v1-4f09f0d6.m4a","aac":"https:\/\/audio.indianexpress.com\/10974781\/en\/audio-v1-4f09f0d6.aac","mp3":"https:\/\/audio.indianexpress.com\/10974781\/en\/audio-v1-4f09f0d6.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10974781/en/audio-v1-4f09f0d6.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10974781" id="translation-audio-10974781" preload="metadata">
+<source src="https://audio.indianexpress.com/10974781/en/audio-v1-4f09f0d6.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10974781/en/audio-v1-4f09f0d6.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10974781/en/audio-v1-4f09f0d6.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10974781">
+<div id="translation-content-body-10974781">
+<p>Less than two weeks after Jensen Huang resigned as CEO of Nvidia amid revelations about his extramarital affairs, including one with a woman suspected of being a Chinese spy, the chipmaker’s board has unanimously voted to reinstate him.</p>
+<p>Nvidia announced on Monday (November 23) that Huang would return as president, CEO and board member, reversing its earlier refusal to consider his reinstatement despite mounting pressure from US President <a class="" href="https://indianexpress.com/about/donald-trump/" rel="noamphtml">Donald Trump</a>, Silicon Valley executives and investors.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>“Jensen is the right person to lead NVIDIA,” board chairman Harvey Jones said, adding that his reinstatement was in the best interests of the company’s shareholders, employees, partners and customers.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>Trump, who had repeatedly called for Huang’s return, welcomed the reversal on Truth Social. “The Country needs Jensen’s leadership at NVIDIA in order to ensure the Success and Prosperity of not only the Company, but the American Economy,” he wrote.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>Nvidia shares surged more than 30% in premarket trading following the announcement, according to Reuters. Huang, meanwhile, said he was “<a href="https://indianexpress.com/article/world/jensen-huang-nvidia-ceo-reinstated-reaction-10975344/"><strong>honored to return</strong></a>” and thanked the board, employees and supporters for their confidence.</p>
+<h2>Why did Trump push for Huang’s return?</h2>
+<p>Despite reportedly being informed twice by his advisers about Huang’s relationship with the suspected Chinese spy, Trump has publicly expressed his support of the former Nvidia CEO and called him a “legend” in a social media post following his resignation.</p>
+<p>The two have had a seemingly symbiotic relationship, with Trump seeing Nvidia as “essentially too big to fail”, according to a November 12 investigation by <em>The New York Times</em>. Nvidia’s success has been integral to the US’s continued position as the market leader in artificial intelligence, a sector central to Trump’s economic agenda.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><em>The NYT</em> also reported that Trump saw Huang as a modern-day Henry Ford who was leading a technological revolution, and that he viewed the company’s fortunes as closely intertwined with those of the US economy and stock market. Trump was concerned that Huang’s removal could trigger an economic downturn.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">More Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/jensen-huang-nvidia-scandal-key-man-risk-10957266/">Jensen Huang’s scandal exposes Nvidia’s ‘key-man risk’. What does it mean?</a></span></div>
+<p>Trump also has a personal financial stake in Nvidia: an analysis of his financial disclosures by <em>The Washington Post</em> found that he held between $13 million and $62 million worth of the chipmaker’s shares as of the end of August.</p>
+<p>According to <em>The NYT</em>, Trump even called Huang on November 10, shortly before his resignation, and urged him to keep fighting for his job.</p>
+<p>Huang’s friendship with Trump developed during the president’s second term, when Huang and his wife Lori attended a donor dinner at Trump’s Mar-a-Lago residence in April 2025. That month, Nvidia announced plans to produce up to $500 billion worth of AI infrastructure in the US over four years. The White House hailed the announcement as the “Trump effect”, linking it to the Trump’s efforts to revive American manufacturing.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Huang was soon invited to accompany the US President on his visit to West Asia, where major deals involving Nvidia chips were announced.</p>
+<p>Huang also successfully lobbied to ease restrictions on advanced American chip sales to China, despite objections from senior administration officials. He argued that wider adoption of US technology would help America maintain its lead over China in AI. The administration subsequently permitted certain Nvidia chip sales to China, drawing criticism over national security risks.</p>
+<p><strong>Who else is on Team Huang?</strong></p>
+<span class="custom-caption"><img alt="Elon Musk (left) and Nvidia CEO Jensen Huang at the US-Saudi Investment Forum in Washington on November 19, 2025. (Haiyun Jiang/The New York Times)" class="lazyloading size-medium wp-image-10974808" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/Jensen-and-Elon.jpg?resize=600,338" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=450,253 450w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=600,338 600w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=768,432 768w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=720,405 720w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=1536,864 1536w, https://indianexpress.com/wp-content/uploads/2026/11/Jensen-and-Elon.jpg?resize=150,83 150w" height="900" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> Elon Musk (left) and Nvidia CEO Jensen Huang at the US-Saudi Investment Forum in Washington on November 19, 2025. (Haiyun Jiang/The New York Times)</span>
+<p>Elon Musk has warned that Nvidia could lose important business relationships following Huang’s departure.</p>
+<p>“Jensen drove supply chain brilliantly at Nvidia but many of those deals were a handshake with Jensen, not a written contract,” Musk wrote on X. “Without Jensen, at least some of those critical deals will be lost.”</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Huang himself has spoken about the importance of such relationships. In an interview earlier this year, he said Nvidia had worked with chipmaker TSMC for nearly three decades without a legal contract, with the two companies relying on mutual trust.</p>
+<p>Fortnite-maker Epic Games CEO Tim Sweeney and Replit CEO Amjad Masad have also backed Huang’s reinstatement. OpenAI CEO Sam Altman called Huang “a personal hero of mine”, but declined to take a position on whether he should return, saying he did not know enough about the matter.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/jensen-huang-nvidia-megaspeed-china-spy-allegations-10956091/">Behind Nvidia CEO Jensen Huang’s affair lies a much bigger China controversy</a></span></div>
+<p>The campaign has also drawn support from prominent Nvidia investors. In an open letter to the company’s board, Altimeter Capital founder Brad Gerstner and Atreides Management’s Gavin Baker urged directors to keep “all options on the table, including the potential return of Jensen Huang”.</p>
+<h2><strong>Why is Nvidia’s board opposed to Huang’s return as CEO?</strong></h2>
+<p>Huang said last week he would be honoured to return if the board considered it in the best interests of shareholders and employees. However, Nvidia has maintained that he resigned following disclosures of behaviour inconsistent with its code of conduct and standards.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>At the company’s earnings call on November 17, chairman Harvey Jones said: “The Nvidia board unanimously accepted his resignation and does not intend to reinstate Jensen as CEO.”</p>
+<p>The company’s independent investigation remains underway, while long-serving CFO Colette Kress has taken over as interim CEO.</p>
+<p>The board has also established a committee to oversee national security and export-control compliance, as scrutiny grows over Nvidia’s dealings with China. Kress has sought to reassure investors that the company’s relationships with major customers and suppliers remain intact.</p>
+<p>The concerns extend beyond corporate governance. On Sunday (November 22), <em>The NYT</em> reported that US intelligence had tracked Alice Huang’s contacts with China’s Ministry of State Security during her relationship with Jensen Huang. US authorities are also investigating whether advanced Nvidia chips obtained by companies connected to her were illegally diverted to China.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The US Securities and Exchange Commission is reportedly investigating whether Nvidia’s disclosures misled investors, according to <em>The Wall Street Journal</em>.</p>
+<p>The controversy has divided investors over whether Huang’s return would restore confidence or expose the company to further risks. An institutional Nvidia shareholder, speaking anonymously to <em>Reuters</em>, expressed reservations about reinstating him before the investigations concluded, pointing to Apple and Microsoft as examples of companies that continued to prosper after the departure of influential leaders.</p>
+<p>The divisions extend to the Trump administration. Treasury Secretary Scott Bessent previously called for an outside successor and criticised the Commerce Department’s handling of chip exports to China. On Sunday (November 22), he said the US government was seeking answers about Nvidia’s chip sales to China and who had overseen compliance under Huang’s leadership.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10974781"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-third, twenty twenty-six, at fifty-two minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/artificial-intelligence/" href="https://indianexpress.com/about/artificial-intelligence/">artificial intelligence</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-ai/why-trump-wants-jensen-huang-back-at-nvidia-and-why-its-board-is-resisting-10974781/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 06:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

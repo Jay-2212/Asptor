@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Myanmar’s genocide verdict matters, including for Israel’s case | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Myanmar’s genocide verdict matters, including for Israel’s case</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/Friedenspalast_Den_Haag_100MP.jpg?w=1024" alt="Why Myanmar’s genocide verdict matters, including for Israel’s case">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="The ICJ in Netherlands ruled that Myanmar committed genocide during its 2016-17 operations in Rakhine State (credit: Wikimedia Commons)" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/Friedenspalast_Den_Haag_100MP.jpg?w=1024" width="650"/><span class="ie-custom-caption">The ICJ in Netherlands ruled that Myanmar committed genocide during its 2016-17 operations in Rakhine State (credit: Wikimedia Commons)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10972612" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10972612\/en\/audio-v1-71d01016.m4a","aac":"https:\/\/audio.indianexpress.com\/10972612\/en\/audio-v1-71d01016.aac","mp3":"https:\/\/audio.indianexpress.com\/10972612\/en\/audio-v1-71d01016.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10972612/en/audio-v1-71d01016.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10972612\/hi\/audio-v1-cb4dc7a6.m4a","aac":"https:\/\/audio.indianexpress.com\/10972612\/hi\/audio-v1-cb4dc7a6.aac","mp3":"https:\/\/audio.indianexpress.com\/10972612\/hi\/audio-v1-cb4dc7a6.mp3"}' data-hindi-url="https://audio.indianexpress.com/10972612/hi/audio-v1-cb4dc7a6.m4a" data-is-premium="0" data-post-id="10972612" id="translation-audio-10972612" preload="metadata">
+<source src="https://audio.indianexpress.com/10972612/en/audio-v1-71d01016.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10972612/en/audio-v1-71d01016.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10972612/en/audio-v1-71d01016.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10972612">
+<div id="translation-content-body-10972612">
+<p>The International Court of Justice (ICJ) <a href="https://indianexpress.com/article/opinion/editorials/icjs-rohingya-verdict-is-not-enough-10972174/"><strong>has found</strong></a> that the Republic of the Union of Myanmar “committed genocide” against the Rohingya ethnic group in the country’s northern Rakhine State.</p>
+<p>Announced on Thursday (November 19), <a href="https://indianexpress.com/article/world/myanmar-rohingya-genocide-icj-verdict-un-court-10970040/"><strong>the verdict</strong></a> makes Myanmar the first sovereign State in history to be directly held responsible for such a crime.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>It comes 78 years after the UN General Assembly adopted the Convention on the Prevention and Punishment of the Crime of Genocide, and 82 years after a Polish-Jewish lawyer, Raphael Lemkin, coined the term “genocide”.</p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>What is the relevance of this judgment, and can it have a bearing on other pending ICJ cases — including the one on Israel’s actions in Palestine?</p><div class="ie-premium-content-block paywall container-wall-exclusive"><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<h2><strong>Why holding a ‘State’ responsible for genocide is significant</strong></h2>
+<p>The 1948 convention defines genocide as killing members of a group, causing them serious bodily or mental harm, deliberately inflicting conditions calculated to bring about the group’s physical destruction partially or wholly, imposing measures to prevent births within the group, and forcibly transferring their children to another group.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read </span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/everyday-explainers/international-court-of-justice-russia-ukraine-7795024/">Everyday Global: What is the International Court of Justice</a></span></div>
+<p>Its adoption marked a unique development for international law governing State actions. In that decade, the most prominent international legal development was the codification of individual criminal responsibility, when Nazi German officials were held responsible after the Second World War (1939-45) for several ‘high crimes’ through a new body of international criminal law.</p>
+<p>These laws were codified in the 1945 London Charter for the International Military Tribunal at Nuremberg, which listed three crimes: Crimes Against Peace, War Crimes, and Crimes Against Humanity. Nonetheless, both the ‘Nuremberg Trials’ as well as its successor ‘Tokyo Tribunal’ prosecuted individuals, and not States, for international crimes, despite the Holocaust being a genocide perpetrated as part of Nazi State policy.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Even as the 1948 convention gave the ICJ jurisdictional authority to consider any State’s breach of the convention as a “crime under international law”, international legal opinion remained that only individuals could be held criminally responsible.</p>
+<p>This was clear in the very first of the ‘Nuremberg Principles’: “Crimes against international law are committed by men, not by abstract entities, and only by punishing individuals who commit such crimes can the provisions of international law be enforced”.</p>
+<p>Individual criminal responsibility remained unsettled for decades. How could an individual be charged for actions committed under the flag of a sovereign State?</p>
+<p>Even when the State of Israel prosecuted Adolf Eichmann in 1961 for the Holocaust, Israeli judges had to draw parallels to the crime of international piracy to make the case that genocide was so grave a crime that any accused could be tried by any legal authority anywhere.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The jurisprudence of such courts, building on the reasoning at Nuremberg and Tokyo, was eventually advanced by other courts across the last century.</p>
+<p>Individual criminal responsibility for three crimes in particular — genocide, war crimes, and crimes against humanity — was advanced principally by the International Criminal Tribunals for Rwanda and Yugoslavia, before being codified in the 1998 Rome Statute for the International Criminal Court (which specifically prosecutes individuals).</p>
+<p>For the ICJ, States remain outside the scope of criminal responsibility. This has meant that to even hold States guilty of breaching the 1948 convention, the court has historically applied a very strict legal threshold.</p>
+<h3>History of genocide cases at the ICJ</h3>
+<p>For the ICJ to conclusively find a breach of the 1948 Genocide Convention, two aspects must be present — actus reus or the physical act, and dolus specialis or the specific intent to commit the crime of genocide.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The road to establishing such intent is especially narrow. Based on the ICJ’s own jurisprudence, “The Court may only establish genocidal intent by inference from circumstantial evidence if it is the only reasonable inference that can be drawn from the evidence”.</p>
+<p>Before Gambia v. Myanmar, the ICJ has ruled on two other cases involving the convention: Bosnia and Herzegovina v. Serbia and Montenegro (2007) and Croatia v. Serbia (2015). In the latter, the court did not find the existence of dolus specialis, dismissing both parties’ claims and counterclaims.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/icj-israel-genocide-emergency-measures-southa-africa-9130178/">Explained: The ICJ ruling on the genocide case against Israel for its actions in Gaza</a></span></div>
+<p>In the former, however, the ICJ did indeed recognise the 1995 Srebrenica Massacre as genocide but held that Serbia’s main violation was failing to prevent individual perpetrators from committing genocide. It did not hold Serbia directly responsible.</p>
+<p>Hence, even as the court has held a State responsible for breaching the 1948 convention’s obligations to prevent genocide, it has never held a State directly responsible for the act.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Crucially, in both cases, the ICJ relied on the findings and reasoning already established by the Yugoslavia Tribunal to consider the presence/absence of dolus specialis.</p>
+<p>In Gambia v. Myanmar, however, the ICJ’s reasoning was drawn principally from the facts submitted to it relating to this case alone. These included the submissions of the UN Independent Fact-Finding Mission on Myanmar and the Independent Investigative Mechanism for Myanmar.</p>
+<p>Their findings, amidst a vast evidentiary pool, were sufficient to pass the “only reasonable inference” test, allowing the court to hold Myanmar directly responsible for genocide under Article III of the 1948 convention.</p>
+<p>Such direct responsibility is different from other crimes under the same Article, such as failing to prevent the commission of genocide (which the court also found Myanmar guilty of). Hence, the court did not dilute its strict legal threshold to establish dolus specialis for genocide.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<h4>Implications for South Africa v Israel</h4>
+<p>The ICJ is not a Court of Record, as understood in the domestic sense for any country’s judicial system. It is not tied to its own past judgments; Article 59 of the ICJ Statute states that its judgments have “no binding force except between the parties and in respect of that particular case.”</p>
+<p>The historic nature of the latest judgment itself was achieved through a rare 9-6 split amongst the 15 judges of the Bench, showing continued polarisation of opinion on direct State responsibility.</p>
+<p>Collectively, this means that there is no predetermined implication of the 2026 judgment on other active cases relating to the 1948 Genocide Convention, such as South Africa v Israel (2023), in which Israel is accused of directly committing genocide in the Gaza Strip.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/why-south-africa-israel-international-court-of-justice-9103758/">Why has South Africa taken Israel to the International Court of Justice?</a></span></div>
+<p>However, the interpretation of evidence considered by the court does have major implications for how similar evidence could influence its future reasoning.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The Myanmar military’s 2017 ‘clearance operations,’ which killed about 10,000 Rohingya people, its brutal killing of over 2,000 children under the age of five, its “large-scale terrain clearance”, and many other such acts were all crucial for the court to determine dolus specialis. Most importantly, the court ruled that the presence of other counter-insurgency objectives during actus reus did not preclude the co-existence of genocidal intent.</p>
+<p>In Gaza, Israel has committed similar actions at exponentially larger scales, justifying it as part of its counter-terror campaign against Hamas. For instance, the 2026 UN Independent International Commission of Inquiry into Israeli actions found that “at least 20,179 children” had been killed in Gaza by Israel since December 2023 alone.</p>
+<p>The commission maintains that “the essence of childhood has been destroyed” in Gaza by Israeli actions. Notably, in Gambia v Myanmar, the court considered the killing of children in particular to be “foundational” to the intent of destroying a group in part or whole.</p>
+<p>This, along with many other such commonalities, will invariably affect the ICJ’s treatment of the Gaza case.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><em><strong>The writer is Senior Research Associate at the Council for Strategic and Defense Research, New Delhi.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10972612"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-first, twenty twenty-six, at thirty-two minutes past one in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/myanmar/" href="https://indianexpress.com/about/myanmar/">Myanmar</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/why-myanmars-genocide-verdict-matters-including-for-israels-case-10972612/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 06:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

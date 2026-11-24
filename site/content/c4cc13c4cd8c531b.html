@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Why Telangana is scrapping intermediate colleges and merging them with schools | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Why Telangana is scrapping intermediate colleges and merging them with schools</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/ex-hyderabad-college_expl.jpg?w=1024" alt="Why Telangana is scrapping intermediate colleges and merging them with schools">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Telangana intermediate college" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/ex-hyderabad-college_expl.jpg?w=1024" width="650"/><span class="ie-custom-caption">The Government City College in Hyderabad. Photo: Wikimedia Commons</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10973726" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10973726\/en\/audio-v1-8131a9bb.m4a","aac":"https:\/\/audio.indianexpress.com\/10973726\/en\/audio-v1-8131a9bb.aac","mp3":"https:\/\/audio.indianexpress.com\/10973726\/en\/audio-v1-8131a9bb.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10973726/en/audio-v1-8131a9bb.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10973726" id="translation-audio-10973726" preload="metadata">
+<source src="https://audio.indianexpress.com/10973726/en/audio-v1-8131a9bb.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10973726/en/audio-v1-8131a9bb.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10973726/en/audio-v1-8131a9bb.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10973726">
+<div id="translation-content-body-10973726">
+<p><span style="font-weight: 400">The Telangana government <strong><a class="" href="https://indianexpress.com/article/education/telangana-to-do-away-with-intermediate-colleges-bring-classes-11-12-into-schools-10959724/">recently decided</a></strong> to do away with intermediate colleges — also known as junior colleges — and replace them with Classes 11 and 12. From the next academic year (2027-28), the two grades will be integrated into the school system, with existing schools with grades up to Class 10 adding two more and conducting classes.</span></p>
+<p><span style="font-weight: 400">We explain the rationale behind the state government’s decision and how it will be implemented on the ground.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<h2><b>Why did the Telangana government decide to scrap Intermediate colleges?</b></h2>
+<p><span style="font-weight: 400">A number of students, especially girls, drop out of the education system after passing Class 10. Students, including a majority of those hailing from socially and economically backward communities, complain of the hassle of approaching different junior colleges to get admissions.</span></p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p><span style="font-weight: 400">The present system takes students through the rules and regulations of two separate education boards: School Education and Intermediate. School education up to Class 10 is managed by the School Education Department and culminates in the Secondary School Certificate (SSC) public examination conducted by the Board of Secondary Education, whereas Intermediate education is governed by the Telangana Board of Intermediate Education. Right to Education and academic activists note that the transition for students to a different type of institution after their Class 10 board exams is difficult and tiresome.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/hyderabad/learn-german-japanese-with-english-revanth-lays-out-plan-to-prepare-andhra-youth-for-global-jobs-market-10748468/">Learn German, Japanese with English: Revanth lays out plan to prepare Telangana youth for global jobs market</a></span></div>
+<p><span style="font-weight: 400">A few days after his government scrapped the Intermediate system, Chief Minister A <a class="" href="https://indianexpress.com/about/revanth-reddy/" rel="noamphtml">Revanth Reddy</a>, who holds the Education portfolio, said that the high dropout rate after the 10th grade was a big worrying factor. “One big reason for this is that intermediate colleges are often located far away,’’ he said. Many students from vulnerable communities who cannot afford travel and other expenses associated with attending junior colleges located far away simply discontinue education.</span></p>
+<p><span style="font-weight: 400">According to the government, about 40% of students — mostly girls and those from Dalit, tribal, and minority groups — leave school after Class 10. The dropout rates are significantly lower in institutions like Kendriya Vidyalayas, Navodaya Vidyalayas, and Kasturba Gandhi Balika Vidyalayas, which offer continuous education up to the 12th grade, the government said.</span></p>
+<p><b>How will the decision be executed at the ground level?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">In the 2025-26 batch, over 10 lakh students had enrolled in approximately 1,750 junior colleges. All the classrooms in these junior colleges will be converted and will be known as Class 11 and 12. The transition from Intermediate to School Education will affect around 11 lakh students starting next year.</span></p>
+<p><span style="font-weight: 400">As the Telangana Board of Intermediate Education will be merged with the School Education Board, the junior colleges will be used to conduct classes for 11th and 12th grades wherever possible. Schools which don’t have enough infrastructure to add more classrooms for two more grades can conduct them under the school’s name in former junior colleges located nearby. Students who pass Class 10 from a school can get admission in the same school for Classes 11 and 12 instead of searching for junior colleges.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/cities/hyderabad/schools-cant-collect-bulk-of-fees-upfront-telangana-human-rights-body-orders-action-10674636/">Schools can’t collect bulk of fees upfront: Telangana human rights body orders action</a></span></div>
+<p><span style="font-weight: 400">The school education system will be divided into primary education (kindergarten to Class 4), secondary education (Classes 5-8), and senior secondary education (Classes 9-12).</span></p>
+<p><span style="font-weight: 400">Teachers and lecturers who are currently teaching in junior colleges will take classes for 11th and 12th grades from the next academic year. As per state Education Secretary Dr Yogita Rana, there are no changes in the syllabus, and streams like BiPC (Biology, Physics, Chemistry), MPC (Maths, Physics, Chemistry), MEC (Maths, Economics, Commerce) and CEC (Civics, Economics, Commerce) will continue. This also ensures that teachers and lecturers in junior colleges smoothly fill into roles in Classes 11 and 12, and no separate training or recruitment of new teaching staff is needed. </span></p>
+<p><b>What does the government aim to achieve?</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">The main objective of the reforms, according to the government, is to prevent students from dropping out and ensure continuity. Students passing Class 10 often have to go through a tiring process of enrolling in junior colleges, which upsets their flow and often leaves them disoriented with the education system.</span></p>
+<p><span style="font-weight: 400">Without the hassle of seeking admissions after Class 10, students can concentrate on preparing for various competitive exams such as the National Eligibility cum Entrance Test (NEET, a pre-medical test), the Joint Entrance Examination (JEE, for admission to top engineering colleges), etc.</span></p>
+<p><span style="font-weight: 400">The quality of education also changes many times when students shift from schools to junior colleges. The scrapping of Intermediate also aims to provide quality education from the nursery level through to the university stage and prepare students to compete in the modern world and grab opportunities.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10973726"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/sreenivas-janyala/">
+<figure>
+<img alt="Sreenivas Janyala" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2013/12/blank-columnist1.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/sreenivas-janyala/"><span></span>Sreenivas Janyala</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952070"></div><div class="follow_author_title" data-id="Sreenivas Janyala"></div><div class="follow_author_slug" data-id="sreenivas-janyala"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Sreenivas Janyala is a Deputy Associate Editor at The Indian Express, where he serves as one of the ...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/sreenivas-janyala/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-second, twenty twenty-six, at thirty-nine minutes past three in the afternoon."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/telangana-intermediate-colleges-scrapped-2027-28-schools-10973726/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 06:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

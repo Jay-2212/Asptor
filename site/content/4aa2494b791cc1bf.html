@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Ganga Water Treaty: Will the 1996 pact be renewed? Where India, Bangladesh stand | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Ganga Water Treaty: Will the 1996 pact be renewed? Where India, Bangladesh stand</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/ex-ganga-water-treaty-farakka_expl-geop.jpg?w=1024" alt="Ganga Water Treaty: Will the 1996 pact be renewed? Where India, Bangladesh stand">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Ganga Water Sharing Treaty" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/ex-ganga-water-treaty-farakka_expl-geop.jpg?w=1024" width="650"/><span class="ie-custom-caption">The Farakka barrage. Photo: Partha Paul</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10975613" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10975613\/en\/audio-v1-525cc813.m4a","aac":"https:\/\/audio.indianexpress.com\/10975613\/en\/audio-v1-525cc813.aac","mp3":"https:\/\/audio.indianexpress.com\/10975613\/en\/audio-v1-525cc813.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10975613/en/audio-v1-525cc813.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10975613\/hi\/audio-v1-a77487d7.m4a","aac":"https:\/\/audio.indianexpress.com\/10975613\/hi\/audio-v1-a77487d7.aac","mp3":"https:\/\/audio.indianexpress.com\/10975613\/hi\/audio-v1-a77487d7.mp3"}' data-hindi-url="https://audio.indianexpress.com/10975613/hi/audio-v1-a77487d7.m4a" data-is-premium="0" data-post-id="10975613" id="translation-audio-10975613" preload="metadata">
+<source src="https://audio.indianexpress.com/10975613/en/audio-v1-525cc813.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10975613/en/audio-v1-525cc813.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10975613/en/audio-v1-525cc813.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10975613">
+<div id="translation-content-body-10975613">
+<p><span style="font-weight: 400">Less than three weeks before the <strong><a class="" href="https://indianexpress.com/article/explained/explained-global/ganga-water-sharing-treaty-bangladesh-bnp-10533747/">Ganga Water Sharing Treaty</a></strong> officially lapses on December 12, representatives from India and Bangladesh met in Dhaka this weekend (November 21-22) for the 91st routine meeting of the India-Bangladesh Joint Committee.</span></p>
+<p><span style="font-weight: 400">Although there was no official word on whether discussions for renewing the 1996 bilateral treaty were held, some reports have indicated that Bangladesh appears to be agreeable to the prospect of renewing the pact instead of seeking a fresh agreement altogether.</span></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">How did the treaty come to be, what are its provisions, and where do both countries currently stand on renegotiating the terms of engagement? We explain.</span></p><div class="ie-premium-content-block paywall container-wall-exclusive">
+<p><b>From friction to friendship</b></p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p><span style="font-weight: 400">Tensions had brewed over sharing of the Ganga waters since the 1950s, when the Indian government proposed building a barrage at Farakka in West Bengal, some 18 km from what would become the international border between India and (then) East Pakistan. Construction began in 1961, and upon its completion in 1975, the Farakka barrage started diverting waters from the Ganga to the Hooghly river, flushing out the silt around the <a class="" href="https://indianexpress.com/section/cities/kolkata/" rel="noamphtml">Kolkata</a> port located on the latter and keeping it navigable for ships.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p><span style="font-weight: 400">But throughout its construction, friction remained and reached a flashpoint in 1976 when Maulana Bhashani, an Awami League party legislator in (by then independent) Bangladesh, led the “Farakka Long March” against India’s water policies, demanding the demolition of the barrage, which he argued had resulted in the drying up of the Padma river (Ganga’s main distributary in Bangladesh) and subsequent desertification.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/the-next-india-bangladesh-ganges-treaty-must-also-protect-the-river-10829880/">The next India-Bangladesh Ganges treaty must also protect the river</a></span></div>
+<p><span style="font-weight: 400">Although there were ad hoc agreements signed between the two countries throughout the next decade (1977, 1982, and 1985), none of them provided lasting solutions.</span></p>
+<p><span style="font-weight: 400">Finally, in December 1996, both countries under the leadership of Prime Ministers H D Deve Gowda and <a class="" href="https://indianexpress.com/about/sheikh-hasina/" rel="noamphtml">Sheikh Hasina</a> signed the Ganga Water Sharing Treaty, instituting a 30-year framework for a flow-sharing mechanism during the annual dry season (January to May) and setting up a joint committee to monitor and implement the pact.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><b>Ganga Water Sharing Treaty: Terms of agreement</b></h2>
+<p><span style="font-weight: 400">The treaty, hailed as a milestone in bilateral diplomacy at the time, established a three-tiered allocation system based on historical data of average flow during a 10-day period between 1949 and 1988.</span></p>
+<p><span style="font-weight: 400">Under the agreement, if the flow of water falls to or below the lower threshold of 70,000 cusecs (cubic feet per second, the unit to measure flow), the two countries would share the water equally. If the flow is between 70,000 and 75,000 cusecs, then Bangladesh would be entitled to 35,000 cusecs and India was to keep the remaining flow. In the event of the upper threshold of 75,000 cusecs or more, India would get 40,000 and Bangladesh would receive the balance (</span><i><span style="font-weight: 400">see table</span></i><span style="font-weight: 400">).</span></p>
+<span class="custom-caption"><img alt="Ganga Water Treaty" class="lazyloading size-medium wp-image-10975617" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/ex-GWST-annexure-i.jpg?resize=600,224" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/ex-GWST-annexure-i.jpg 997w, https://indianexpress.com/wp-content/uploads/2026/11/ex-GWST-annexure-i.jpg?resize=450,168 450w, https://indianexpress.com/wp-content/uploads/2026/11/ex-GWST-annexure-i.jpg?resize=600,224 600w, https://indianexpress.com/wp-content/uploads/2026/11/ex-GWST-annexure-i.jpg?resize=768,287 768w, https://indianexpress.com/wp-content/uploads/2026/11/ex-GWST-annexure-i.jpg?resize=728,272 728w" height="372" sizes="(max-width: 997px) 100vw, 997px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="997"/> Annexure I of the Ganga Water Sharing Treaty.</span>
+<p><span style="font-weight: 400">The aforementioned terms were subject to an additional clause: between March 11 and May 10 each year, both countries would receive a guaranteed 35,000 cusecs of water in alternate three 10-day periods.</span></p>
+<p><span style="font-weight: 400">Although it lacks a minimum guarantee clause, the treaty has an emergency provision: Article II(iii) states that “in the event flow at Farakka falls below 50,000 cusecs in any 10-day period, the two Governments will enter into immediate consultations to make adjustments on an emergency basis, in accordance with the principles of equity, fair play and no harm to either party”.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p><span style="font-weight: 400">For resolving disputes, the Joint Committee (consisting of an equal number of representatives nominated by both governments) would be primarily responsible, failing which it would be referred to the Joint Rivers Commission (JRC). The two countries had set up the JRC in 1972 as a bilateral mechanism to deliberate and manage water sharing for 54 shared rivers, of which only the Ganga is governed by a formal treaty as of today.</span></p>
+<p><b>Sticking points</b></p>
+<p><span style="font-weight: 400">Over the years, the treaty has been criticised in both countries for not accounting for the future needs of rising populations in both countries, besides climate change-induced crises. Although the treaty provides for renewal by mutual consent at the end of the 30-year period, both sides have indicated a willingness to revisit the agreement’s terms.</span></p>
+<p><span style="font-weight: 400">News reports from last year suggested India was seeking an additional 30,000 to 35,000 cusecs during the March 11-May 10 period to meet its growing needs, and that the new treaty could be relatively shorter in duration, that is, 10 to 15 years. </span><i><span style="font-weight: 400">PTI</span></i><span style="font-weight: 400"> reported that during a JRC meeting, Bangladesh had asked for a guaranteed release of 40,000 cusecs of water between February and May, besides a longer treaty renewal period and enhanced flood data sharing.</span></p>
+<p><span style="font-weight: 400">One point of contention has been Bangladesh’s demand to reinstate a minimum guarantee, similar to what was laid down in the 1977 ad hoc agreement. This provision guaranteed that Bangladesh received at least 80% of its scheduled allocation during certain lean-season periods, even when actual availability fell short.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p><span style="font-weight: 400">Nilanjan Ghosh, who heads Development Studies at the think tank Observer Research Foundation (ORF), wrote in a piece for the ORF website: “A fixed volumetric guarantee that remains binding irrespective of actual flows could impose an asymmetric burden of hydrological risk on the upstream country. India therefore cannot commit to such an impracticable demand. This could leave India bearing a disproportionate share of climate-induced shortages, regardless of its domestic needs.”</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/india/bihar-farakka-treaty-india-bangladesh-water-dispute-10847931/">Why Bihar wants the Farakka treaty scrapped — and why it puts Centre in a bind</a></span></div>
+<p><span style="font-weight: 400">After the Tarique Rahman-led Bangladesh Nationalist Party’s landslide victory in the country’s general election in February 2026, reports had emerged that the treaty’s renewal would be among the top priorities of the newly elected government. But no discussions have been forthcoming on that front, even as tensions continue to simmer between the two countries over the contentious issue of former prime minister Sheikh Hasina’s extradition, who has been living in exile in New Delhi since her ouster in August 2024. It was understood to be why Tarique Rahman didn’t go ahead with a proposed official visit in August 2026 — it would’ve been his first since becoming prime minister.</span></p>
+<p><span style="font-weight: 400">The same month, the treaty’s provisions saw resistance brewing in Bihar, where the Janata Dal (United) — an ally of the BJP — pushed against its renewal, saying that the pact had proved “detrimental to Bihar’s interest”.</span></p>
+<p><span style="font-weight: 400">India’s decision last year to unilaterally put the 1960 Indus Waters Treaty with Pakistan in abeyance after the Pahalgam terror attack in April 2025 has also prompted caution in Bangladesh.</span></p>
+<p><b>What next</b></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p><span style="font-weight: 400">As to the way forward, Srinivas Chokkakula, president and chief executive of the New Delhi-based think tank Centre for Policy Research, said in a <strong><a class="" href="https://indianexpress.com/article/opinion/columns/india-and-bangladesh-must-not-just-renew-ganga-water-treaty-they-should-reimagine-it-10806356/">July 2026 op-ed</a></strong> for </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400"> that the next treaty “presents an opportunity not merely to renew a bilateral water-sharing arrangement but to reimagine a regional strategic vision to address challenges of this new age of shared vulnerabilities and fragmented global economy”.</span></p>
+<p><span style="font-weight: 400">Chokkakula, who argued that the two countries would need to invest in appropriate processes and revisit existing bilateral institutions, wrote: “The changed realities and greater uncertainties, including water availability, will need robust and resilient transborder institutions to address the enhanced scope of issues — water sharing, data collection and monitoring, dispute resolution, responding to risks, etc. Finally, both countries will have to reinvent the political capital that made the 1996 treaty possible, and reinvest in it.”</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10975613"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-fourth, twenty twenty-six, at fourteen minutes past nine in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-geopolitics/" href="https://indianexpress.com/about/explained-geopolitics/">Explained Geopolitics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/ganga-water-sharing-treaty-renewal-2026-india-bangladesh-10975613/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 06:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

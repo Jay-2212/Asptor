@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How India’s first indigenous bird flu vaccine was developed, why it matters | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How India’s first indigenous bird flu vaccine was developed, why it matters</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/ex-bird-flu-vaccine_expl-scitech.jpg?w=1024" alt="How India’s first indigenous bird flu vaccine was developed, why it matters">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="bird flu vaccine" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/ex-bird-flu-vaccine_expl-scitech.jpg?w=1024" width="650"/><span class="ie-custom-caption">The bird flu vaccine, which costs Rs 1-2 per dose, was announced by Union Agriculture Minister and former Madhya Pradesh chief minister Shivraj Singh Chouhan in Bhopal on Friday. Photo: PTI</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10973882" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10973882\/en\/audio-v1-9831160f.m4a","aac":"https:\/\/audio.indianexpress.com\/10973882\/en\/audio-v1-9831160f.aac","mp3":"https:\/\/audio.indianexpress.com\/10973882\/en\/audio-v1-9831160f.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10973882/en/audio-v1-9831160f.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10973882" id="translation-audio-10973882" preload="metadata">
+<source src="https://audio.indianexpress.com/10973882/en/audio-v1-9831160f.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10973882/en/audio-v1-9831160f.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10973882/en/audio-v1-9831160f.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10973882">
+<div id="translation-content-body-10973882">
+<p><span style="font-weight: 400">For years, India has dealt with recurring outbreaks of bird flu, caused by the highly pathogenic H5N1 strain of avian influenza. While the disease has primarily affected poultry, the virus has increasingly been detected in other animal species, including tigers, leopards, and other mammals. It has also infected humans, raising concerns about its potential to pose a wider public health threat.</span></p>
+<p><span style="font-weight: 400">Now, scientists at the ICAR-National Institute of High Security Animal Diseases (NIHSAD) in <a class="" href="https://indianexpress.com/section/cities/bhopal/" rel="noamphtml">Bhopal</a> have <strong><a class="" href="https://indianexpress.com/article/india/india-first-indigenous-h5n1-bird-flu-vaccine-icar-nihsad-bhopal-shivraj-singh-chouhan-10971805/">developed India’s first indigenous vaccine</a></strong> against H5N1 for chickens. The vaccine, which costs Rs 1-2 per dose, was announced by Union Agriculture Minister and former Madhya Pradesh chief minister <a class="" href="https://indianexpress.com/about/shivraj-singh-chouhan/" rel="noamphtml">Shivraj Singh Chouhan</a> in Bhopal on Friday (November 20).</span></p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p><span style="font-weight: 400">We explain why the vaccine was needed, the challenges involved in developing it, and what the trials established.</span></p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<h2><b>Why India needed a bird flu vaccine</b></h2>
+<p><span style="font-weight: 400">India’s first bird flu outbreak was reported in 2006 in Navapur, Maharashtra. Since then, the country has recorded more than 500 outbreaks, according to figures shared by Chouhan. Outbreaks have resulted in large-scale deaths and culling of poultry, affecting farmers and the wider poultry industry.</span></p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p><span style="font-weight: 400">The vaccine targets a particular genetic group of the virus known as H5N1 Clade 2.3.2.1a, which has been responsible for a majority of bird flu outbreaks in Indian chickens since 2011.</span></p>
+<p><span style="font-weight: 400">A clade is a genetic grouping of viruses that share a common ancestry. H5N1 is the name of the virus subtype, while 2.3.2.1a identifies a particular genetic lineage within it. This is important because influenza viruses continue to change over time, and vaccines need to be suited to the strains circulating in a population.</span></p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/after-maharashtra-bird-flu-outbreak-why-are-poultry-farmers-seeking-h5n1-vaccination-10957398/">Why Maharashtra’s poultry farmers are seeking bird flu vaccination</a></span></div>
+<p><span style="font-weight: 400">Dr S Nagarajan, principal scientist at NIHSAD who led the team of scientists involved in the vaccine’s development, told </span><i><span style="font-weight: 400">The Indian Express</span></i><span style="font-weight: 400">, “These outbreaks have caused huge economic loss to the poultry industry… Hence, the vaccine is important to control the clade 2.3.2.1a H5N1 virus strain to mitigate the economic losses to the farmers and to prevent emergence of a human pandemic virus.”</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p><span style="font-weight: 400">The concern over this particular clade extends beyond poultry. “Outbreaks involving the same viral group were reported in several mammalian species, including tigers, lions, domestic cats, leopards and jungle cats in 2025,” Nagarajan said. According to him, three human deaths involving H5N1 viruses belonging to the same clade were also reported from Haryana, Andhra Pradesh, and Karnataka.</span></p>
+<p><span style="font-weight: 400">The vaccine is intended to protect chickens, not humans. Its potential public health benefit lies in reducing the circulation of the virus among birds and, consequently, the opportunities for transmission to people who come into contact with infected poultry.</span></p>
+<p><b>Challenges in development of the vaccine</b></p>
+<p><span style="font-weight: 400">The vaccine was developed at ICAR-NIHSAD, an institute in Bhopal specialising in the diagnosis, surveillance, and research of high-risk animal diseases.</span></p>
+<p><span style="font-weight: 400">The institute has been working on avian influenza for years. Its research includes monitoring the different strains circulating in India, studying how the virus changes, and examining its ability to infect different animal species.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<span class="custom-caption"><img alt="bird flu" class="lazyloading size-medium wp-image-10973906" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/ch1502129.jpg?resize=600,450" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg 3200w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=450,338 450w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=600,450 600w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=768,576 768w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=540,405 540w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=1536,1152 1536w, https://indianexpress.com/wp-content/uploads/2026/11/ch1502129.jpg?resize=2048,1536 2048w" height="2400" sizes="(max-width: 3200px) 100vw, 3200px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="3200"/> Veterinary officials and other staff engaged in culling of birds in Navapur in Maharashtra’s Nandurbar district in February 2021. Photo: Deepak Joshi</span>
+<p><span style="font-weight: 400">Nagarajan said the biggest challenge was the time taken to develop the vaccine. “It took a lot of dedicated efforts and hard work to develop this vaccine. The biggest challenge was racing against the time to develop the vaccine within the minimum possible time,” he said.</span></p>
+<p><span style="font-weight: 400">The demands of the work also extended beyond the laboratory. Officials said the scientists worked through weekends and holidays and followed strict biosafety protocols throughout the research period. These included sanitisation procedures before and after leaving the laboratory, extensive bathing procedures and restrictions on keeping pets at home to minimise the possibility of carrying infection outside the facility.</span></p>
+<p><b>How effective is the vaccine?</b></p>
+<p><span style="font-weight: 400">The vaccine has passed safety, efficacy, and potency tests in accordance with the prescribed guidelines of the World Organisation for Animal Health (WOAH). According to Nagarajan, experimental trials showed that it provided 100% protection against the targeted H5N1 clade throughout the 24-week observation period following booster vaccination.</span></p>
+<p><span style="font-weight: 400">The 24-week finding, however, refers to the period observed after the booster dose under experimental conditions. Further details about the number of birds involved, the trial design, and performance under commercial farm conditions would help establish the vaccine’s efficacy when used on a larger scale.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/bird-flu-outbreak-maharashtra-humans-10677149/">Bird flu outbreak in Maharashtra: How it infects humans and why experts are on alert</a></span></div>
+<p><span style="font-weight: 400">Another important finding was that the vaccine prevented the transmission of the virus between chickens. In the trials, vaccinated chickens were kept in contact with unvaccinated birds. The researchers found that the vaccinated birds did not transmit the virus to their unvaccinated counterparts.</span></p>
+<p><span style="font-weight: 400">This is important because a vaccine that protects individual birds from developing severe disease can reduce deaths on poultry farms. Preventing transmission can also help limit the circulation of the virus among birds and reduce the risk of further outbreaks.</span></p>
+<p><b>What does it mean for poultry farmers?</b></p>
+<p><span style="font-weight: 400">The vaccine has been priced at Rs 1-2 per dose, making it relatively inexpensive for poultry farmers. Its intended use is to protect chickens, particularly layers and growers, against clinical disease and deaths.</span></p>
+<p><span style="font-weight: 400">Layers are chickens raised for egg production, while growers are birds being raised towards maturity. Preventing infection in these populations could help farmers avoid losses and disruptions to production.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<span class="custom-caption"><img alt="bird flu" class="lazyloading size-medium wp-image-10973908" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/ch1556437.jpeg?resize=600,342" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg 2716w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=450,257 450w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=600,342 600w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=768,438 768w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=710,405 710w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=1536,876 1536w, https://indianexpress.com/wp-content/uploads/2026/11/ch1556437.jpeg?resize=2048,1168 2048w" height="1549" sizes="(max-width: 2716px) 100vw, 2716px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="2716"/> At a chicken market in New Delhi in July 2021. Bird flu outbreaks have resulted in large-scale deaths and culling of poultry. Photo: Praveen Khanna</span>
+<p><span style="font-weight: 400">Nagarajan said that properly administered vaccination would protect chickens against clinical signs and deaths and prevent transmission to unvaccinated birds. It could also reduce environmental contamination by limiting the circulation of the virus.</span></p>
+<p><span style="font-weight: 400">The vaccine, however, is not yet available for farmers to use commercially. The next step is the transfer of technology to manufacturers who can produce it at scale and make the vaccine available to poultry farmers. Nagarajan said that transfer of technology “will be initiated at the earliest possible” and the time for actual vaccine availability will depend on the process proposed by the Centre’s Department of Animal Husbandry and Dairying.</span></p>
+<p><b>What does this mean for India’s animal disease research?</b></p>
+<p><span style="font-weight: 400">NIHSAD has previously developed indigenous vaccines for diseases including Gumboro, Brucella abortus, Classical Swine Fever, and African Swine Fever. Its research also covers disease surveillance, diagnostics, and the study of pathogens that can spread between animals and humans.</span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p><span style="font-weight: 400">The H5N1 vaccine adds to this work by giving India a vaccine specifically developed against the clade responsible for most outbreaks in its poultry population.</span></p>
+<p><span style="font-weight: 400">Nagarajan said India was not dependent on other countries for vaccines against animal and bird diseases. The achievement, therefore, is not about ending dependence on foreign vaccines but developing a vaccine suited to a particular strain circulating in India.</span></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10973882"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/anand-mohan-j/">
+<figure>
+<img alt="Anand Mohan J" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2017/08/Anand-Mohan.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/anand-mohan-j/"><span></span>Anand Mohan J</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="4802422"></div><div class="follow_author_title" data-id="Anand Mohan J"></div><div class="follow_author_slug" data-id="anand-mohan-j"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Anand Mohan J is an award-winning Senior Correspondent for The Indian Express, currently leading the...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/anand-mohan-j/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-second, twenty twenty-six, at forty-four minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-sci-tech/" href="https://indianexpress.com/about/explained-sci-tech/">Explained Sci-Tech</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-sci-tech/india-first-h5n1-bird-flu-vaccine-chickens-nihsad-bhopal-10973882/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 06:01 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
