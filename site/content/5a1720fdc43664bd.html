@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How just one ingredient can make ‘fairness’ creams dangerous for health | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How just one ingredient can make ‘fairness’ creams dangerous for health</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/fairness-cream-2.jpg?w=1024" alt="How just one ingredient can make ‘fairness’ creams dangerous for health">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="Fairness creams purchased online often lack ingredient labels, and no mechanism exists to monitor and regulate online sales. (Magnific)" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/fairness-cream-2.jpg?w=1024" width="650"/><span class="ie-custom-caption">Fairness creams purchased online often lack ingredient labels. (Magnific)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10975211" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10975211\/en\/audio-v1-59b456b8.m4a","aac":"https:\/\/audio.indianexpress.com\/10975211\/en\/audio-v1-59b456b8.aac","mp3":"https:\/\/audio.indianexpress.com\/10975211\/en\/audio-v1-59b456b8.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10975211/en/audio-v1-59b456b8.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10975211" id="translation-audio-10975211" preload="metadata">
+<source src="https://audio.indianexpress.com/10975211/en/audio-v1-59b456b8.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10975211/en/audio-v1-59b456b8.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10975211/en/audio-v1-59b456b8.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10975211">
+<div id="translation-content-body-10975211">
+<p>A 17-year-old girl from Keralam developed a kidney disease called membranous nephropathy and was hospitalised after she used a so-called fairness cream with alarmingly high levels of mercury.</p>
+<p>Keralam Health Minister K Muraleedharan on Sunday (November 22) ordered stringent action against the sale of illegal cosmetic products and protein powders, as well as those who promote them through social media. He also said that some of these creams were coming from Pakistan. Earlier this month, <a href="https://indianexpress.com/article/india/beware-of-pakistan-made-whitening-creams-madhya-pradeshs-latest-advisory-10963018/"><strong>Madhya Pradesh also cracked down</strong></a> on unauthorised Pakistan-made ‘whitening’ creams.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>What happened in this case, what makes such creams potentially harmful, and how does the government regulate them?</p><div class="ie-premium-content-block paywall container-wall-exclusive">
+<p><strong>The Keralam case</strong></p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>The girl purchased a fairness cream from an e-commerce platform after a vlogger recommended it. After she complained of swelling on the body (edema), bubbly urine and other symptoms, she was taken to the Aster MIMS Hospital at Areekode in Malappuram.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>She was then diagnosed with membranous nephropathy, a medical condition in which the immune system damages the glomeruli, or the tiny filtering units of the kidneys. The resulting injury allows proteins, particularly albumin, to escape into urine.</p>
+<p>The patient’s history showed that she has been using a fairness cream, whose samples were tested outside the state and found to have high mercury levels. Several people have since shared similar experiences on social media.</p>
+<p><strong>Prevalence in Keralam</strong></p>
+<p>According to Dr S Gouri, a nephrologist who diagnosed the girl’s case, the Aster MIMS hospital at Kottakkal (in Malappuram district) alone reported 13 similar cases between 2021 and 2023. The patients had purchased creams over the counter or via online platforms.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/fairness-cream-kerala-teenager-kidney-disease-10974391/">How a fairness cream left a Kerala teenager battling kidney disease</a></span></div>
+<p>She said nephrologists in the state have been made aware of the issue for the last five years, due to kidney-related ailments caused by high-mercury cosmetics. The issue has also been debated at a state-level conference of nephrologists.</p>
+<p>In such cases, recovery may take three months to a year. Dr Gouri said that most patients were young and middle-aged, and none reportedly underwent dialysis. The disease does not turn fatal mainly because of early diagnosis, as the intense symptoms force patients to consult nephrologists.</p>
+<h2>Why is mercury added to fairness products?</h2>
+<p>The permitted level of mercury in such cosmetics is 1 ppm, but the mercury content found in this cream’s sample was around 12,500 ppm.</p>
+<p>Skin care products sometimes contain mercury, which functions as a lightening agent due to its ability to inhibit melanin production. Melanin is a pigment produced naturally by the body to protect the skin against the sun’s ultraviolet rays, and it results in darker skin and hair colour.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">In Express</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/health-wellness/maharashtra-fda-flags-skin-lightening-creams-with-mercury-lead-how-these-damage-your-kidneys-and-brain-10780195/">Toxic beauty: Why Maharashtra FDA’s warning on mercury-laced skin-lightening creams should concern every consumer</a></span></div>
+<p>Once applied to the skin, mercury inactivates tyrosinase, an enzyme that supports melanin production. Higher tyrosinase activity produces more melanin, resulting in darker skin, while low activity does the reverse. When incorporated in a cream, mercury is easily absorbed into the skin and spreads throughout the body.</p>
+<p>According to the US FDA, mercury absorption can cause kidney damage, potentially leading to rapid kidney failure, as well as neurological damage such as tremors, tingling or numbness, headaches, fatigue, and mood or cognitive disturbances.</p>
+<h2>What rules govern cosmetics in India?</h2>
+<p>The Union Health Ministry implemented the Cosmetic Rules of 2020 for a separate legal framework for the industry and to protect consumer interests. Cosmetics were earlier under the Drugs and Cosmetics Rules, 1945.</p>
+<p>Section 39 (5) of the Cosmetic Rules fixes the “level of unintentional mercury” in cosmetic products at 1 ppm. For products meant for around the eye, the level should not exceed seventy parts per million (0.007%). The rules also state that product labels should disclose any hazardous or poisonous ingredients, while the inner label must have a statement indicating the exact names and quantities of those ingredients.</p>
+<p>Creams purchased online often lack ingredient labels.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Both the Central Drugs Standard Control Organisation under the Union Government and state drug control departments have different roles in governing the cosmetics industry. The central body monitors imports, approves new products with novel ingredients, and sets national safety standards, while the state body issues licenses to domestic manufacturers, inspects factories, and monitors retail markets against spurious or unsafe products.</p>
+<p>According to Kerala’s drugs control department, a special drive held in July this year against the illegal sale of cosmetic products (mainly fairness creams and lipstick) led to 15 cases being registered and cosmetics worth Rs 4 lakhs being seized. These cases were registered after a raid in the domestic market and most were against traders who sold products without a manufacturing license. High levels of mercury were detected in two fairness creams, with a content of up to 15,000 ppm. Lab reports are awaited for further action.</p>
+<p>Since 2025, the department has also conducted awareness drives among higher secondary school students. Across over 334 sessions, with each camp having at least 50 students, students have been made aware of harmful fairness creams and lipsticks containing toxins.</p>
+<p>Globally, the Minamata Convention was adopted in 2013 under the United Nations Environmental Programme to protect human life from the health hazards of mercury. Named after the Japanese city of Minamata, where mercury poisoning had been a major issue, the treaty is envisaged to phase out/control the use of mercury in consumer/skin care products, among other objectives.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Article 4 of the convention requires all parties not to allow the manufacture, import or export of cosmetics (with mercury content above 1ppm), including skin lightening soaps and creams. India ratified the convention in 2018.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10975211"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div> <div class="author-block">
+<div class="author-img">
+<a href="https://indianexpress.com/profile/author/shaju-philip/">
+<figure>
+<img alt="Shaju Philip" aria-label="article" class="author-profile-img" decoding="async" height="80" loading="lazy" src="https://images.indianexpress.com/2014/01/shajuphilip.jpg?w=80" width="80"/>
+</figure>
+</a>
+</div>
+<div class="author-detailing">
+<div class="author-recog">
+<div class="author-name"><a href="https://indianexpress.com/profile/author/shaju-philip/"><span></span>Shaju Philip</a></div>
+<span class="author-follow"><div class="follow-newdiv story_page"><div class="follow-author-container"><div class="ieauthor-follow"> </div><div class="follow_event_name" data-id="article-page"></div><div class="follow_author_id" data-id="1952072"></div><div class="follow_author_title" data-id="Shaju Philip"></div><div class="follow_author_slug" data-id="shaju-philip"></div></div></div></span>
+<div class="author-social">
+</div>
+</div>
+<div class="author-bio-all">
+<p class="author-bio"> Shaju Philip is a Senior Assistant Editor at The Indian Express, where he leads the publication's co...                        <a class="more-abt-author" href="https://indianexpress.com/profile/author/shaju-philip/" rel="noamphtml">Read More </a>
+</p>
+</div>
+</div>
+</div>
+<p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-third, twenty twenty-six, at thirty-five minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/cosmetics/" href="https://indianexpress.com/about/cosmetics/">cosmetics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/mercury/" href="https://indianexpress.com/about/mercury/">Mercury</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/fairness-creams-dangerous-health-keralam-kidney-mercury-10975211/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 20:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

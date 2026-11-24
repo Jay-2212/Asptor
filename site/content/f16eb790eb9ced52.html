@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>Rohingya genocide: Why the ICJ’s verdict against Myanmar may never be enforced | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>Rohingya genocide: Why the ICJ’s verdict against Myanmar may never be enforced</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/rohingya-genocide.jpg?w=1024" alt="Rohingya genocide: Why the ICJ’s verdict against Myanmar may never be enforced">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="rohingya genocide myanmar" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/rohingya-genocide.jpg?w=1024" width="650"/><span class="ie-custom-caption">Rohingya women walking in an Internally Displaced Persons (IDP) camp in Rakhine state, Myanmar. (Wikimedia Commons)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10975140" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="translation-audio tts-hindi-treatment" style="display:none;">
+<div class="translation-toggle-wrap-rhs" data-nosnippet="">
+<button class="translation-toggle-btn active" data-lang="eng" type="button">English (Original)</button>
+<button class="translation-toggle-btn" data-lang="hi" type="button">हिंदी</button>
+</div>
+</div>
+<div class="tts-hindi-control"></div>
+<div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10975140\/en\/audio-v1-3ad81298.m4a","aac":"https:\/\/audio.indianexpress.com\/10975140\/en\/audio-v1-3ad81298.aac","mp3":"https:\/\/audio.indianexpress.com\/10975140\/en\/audio-v1-3ad81298.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10975140/en/audio-v1-3ad81298.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10975140\/hi\/audio-v1-7bb3bb10.m4a","aac":"https:\/\/audio.indianexpress.com\/10975140\/hi\/audio-v1-7bb3bb10.aac","mp3":"https:\/\/audio.indianexpress.com\/10975140\/hi\/audio-v1-7bb3bb10.mp3"}' data-hindi-url="https://audio.indianexpress.com/10975140/hi/audio-v1-7bb3bb10.m4a" data-is-premium="0" data-post-id="10975140" id="translation-audio-10975140" preload="metadata">
+<source src="https://audio.indianexpress.com/10975140/en/audio-v1-3ad81298.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10975140/en/audio-v1-3ad81298.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10975140/en/audio-v1-3ad81298.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="ai-translation-note js-ai-translation-note" hidden="">
+<div class="ai-translation-note-title">
+			AI Translation		</div>
+<div class="ai-translation-note-text" data-nosnippet="">
+</div>
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10975140">
+<div id="translation-content-body-10975140">
+<p><em><strong>Written by Shashank Maheshwari</strong></em></p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>On November 19, the International Court of Justice found Myanmar had “<a href="https://indianexpress.com/article/world/myanmar-rohingya-genocide-icj-verdict-un-court-10970040/"><strong>committed genocide</strong></a>” against the Rohingya ethnic group in the country’s northern Rakhine province. This made Myanmar the first sovereign State to be held directly responsible for such a crime.</p>
+<p>The judgment culminated a case initiated by Gambia against Myanmar in 2019. Just two years earlier, Myanmar’s army had carried out “clearance operations” against the Rohingya, and over 730,000 were displaced.</p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<p>Both Gambia and Myanmar are parties to the 1948 UN Genocide Convention, under which every party is duty-bound to prevent genocide.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>The court ordered Myanmar to pass genocide laws and prosecute those responsible, give guarantees against repetition, allow the safe return, restore property, search for the disappeared and provide medical care, and report within two years so that compensation can be decided. The court, however, refused to grant citizenship to the Rohingya.</p><div class="ie-premium-content-block paywall container-wall-exclusive">
+<p>While the judgment is significant, it remains to be seen whether Myanmar will obey it.</p>
+<p><strong>No effective enforcement mechanism</strong></p>
+<p>The court’s ruling was based on a rule in the International Law Commission’s (ILC) 2001 Articles on State Responsibility: the wrongdoer must undo the damage as far as possible.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>Article 1 creates responsibility for a wrongful act, which the State must stop under Article 30 and pay full reparation under Article 31.</p>
+<p>These rules were built slowly and through compromise, even as the idea of holding countries responsible for violating international law has evolved.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/why-myanmars-genocide-verdict-matters-including-for-israels-case-10972612/">Why Myanmar’s genocide verdict matters, including for Israel’s case</a></span></div>
+<p>In the early 20th century, powerful nations leveraged these rules against the countries they defeated, with Article 231 of the Treaty of Versailles holding Germany and its allies responsible for the losses caused by World War I. International law scholar James Crawford described it as “a war indemnity disguised in legal language.”</p>
+<p>An attempt to establish common rules failed at the 1930 Hague Conference because countries feared interference in their political decisions. It was only in 2001 that the ILC finalised the Articles on State Responsibility.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>However, objections from countries such as the United Kingdom led to the removal of a proposal to classify serious violations as crimes committed by States. Instead, Articles 40 and 41 required countries to cooperate to end certain serious violations and neither recognise nor support the resulting unlawful situations.</p>
+<p>The UN General Assembly merely took note of these Articles in 2001 and deferred their adoption as a treaty in subsequent discussions in 2004, 2007 and 2010.</p>
+<p>Thus, several provisions exist and reflect binding customary international law, but no party is assigned to enforce them. The Court admits as much: beyond the measures it ordered, “the choice of additional means must be left to Myanmar”.</p>
+<p><strong>The UNSC does not enforce ICJ judgments, even though it can</strong></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The UN Charter provides a way to ensure that countries follow the ICJ’s judgments. Under Article 94(1), every UN member must comply with the Court’s judgments in cases involving that country. If a country refuses, Article 94(2) allows the other country involved in the case to approach the UN Security Council, which can recommend or take steps to enforce the judgment.</p>
+<p>This provision was introduced when the UN Charter was drafted in 1945, after a proposal by China to grant the Security Council the power to enforce ICJ judgments.</p>
+<p>However, the Security Council is not duty-bound to act, and any of its five permanent members can block substantive decisions through their veto power. As a result, even when the ICJ delivers a legally binding judgment, its enforcement can depend on political considerations rather than legal obligations alone.</p>
+<p>In <em>Nicaragua v. United States</em>, the US lost a suit initiated by Nicaragua in 1984 over American support for the Contra rebels and mining of Nicaraguan waters. The US discontinued its participation in the case after it lost jurisdiction. In 1986, the court held that the US had broken international law and ordered it to stop and pay reparations, but the US ignored the ruling.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>When Nicaragua went to the Security Council, the US vetoed a draft resolution calling for full compliance on 28 October 1986. Nicaragua later withdrew its complaint after a change of government.</p>
+<p>To date, the court has not enforced a judgment under Article 94(2).</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-law/sc-hc-judges-appointment-memorandum-of-procedure-njac-10975068/">Why SC issued notice to Centre and CJI over appointments of judges</a></span></div>
+<p>Myanmar, too, could evade enforcement by enlisting an ally’s veto power on the Council. A government that, in the Court’s words, still denies that the harm occurred, and which seized power during the case, is unlikely to write an honest restitution report.</p>
+<h2><strong>How political compromise has shaped the definition of genocide</strong></h2>
+<p>The history of international law reveals an uncomfortable truth: even the rules meant to prevent humanity’s worst crimes have been shaped by political interests. When Raphael Lemkin coined the word genocide in 1944, the idea went beyond mass killings. Early UN drafts also covered the destruction of a group’s culture.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>But the scope of the term was narrowed during negotiations over the 1948 Genocide Convention. Political groups that were initially included were later removed amid concerns that some countries would refuse to join. The definition also excludes cultural genocide, the systematic destruction of a group’s traditions, language, religion, heritage, and social identity.</p>
+<p>As a result of this continued political compromise, the Genocide Convention protects only national, ethnic, racial and religious groups.</p>
+<p>Nuremberg worked because the US, USSR, UK and France controlled Germany’s territory, government, and defendants. International law was enforced because these countries wanted it to be enforced.</p>
+<p>However, subsequent examples have revealed that international law may be applied where the powerful find it convenient, and attacked, sanctioned, or ignored where they do not.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>When Israel captured Adolf Eichmann in Argentina in 1960, the UNSC, by eight votes to none, accepted that the transfer violated Argentina’s sovereignty, and asked Israel to make appropriate reparation. Within weeks, however, Argentina and Israel jointly declared the matter closed, and Eichmann was hanged in 1962.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The International Criminal Court’s 2024 arrest warrant for Israeli Prime Minister Netanyahu tells the same story. Neither the US nor Israel is a party to the Rome Statute. The US responded with an executive order and sanctions on the ICC’s chief prosecutor and four ICC judges, while the US Secretary of State declared that Washington can take actions it deems necessary to protect the US, Israel, and other allies.</p>
+<p>The present judgment is an official finding of genocide that grants courts and prosecutors an authoritative record, and supports other States’ duty not to treat the situation as lawful. But its enforcement still depends on whether powerful States choose to act. The ICJ can say what the law is. It cannot make a State follow it.</p>
+<p><em><strong>The author is an Assistant Professor at the Jindal Global Law School (JGLS) in Sonipat, Haryana. </strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10975140"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-third, twenty twenty-six, at two minutes past six in the evening."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/rohingya-genocide-icj-myanmar-enforcement-10975140/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 20:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

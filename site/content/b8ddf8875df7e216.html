@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>How India outdid the West in protecting wildlife, and the gaps that remain | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>How India outdid the West in protecting wildlife, and the gaps that remain</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/tigers.jpg?w=1024" alt="How India outdid the West in protecting wildlife, and the gaps that remain">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="tigers, wildlife" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/tigers.jpg?w=1024" width="650"/><span class="ie-custom-caption">India now supports the world’s largest populations of wild tigers, at approximately 4,000. (Express file photo: Ashish Kale) </span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10974140" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10974140\/en\/audio-v1-ce39a71a.m4a","aac":"https:\/\/audio.indianexpress.com\/10974140\/en\/audio-v1-ce39a71a.aac","mp3":"https:\/\/audio.indianexpress.com\/10974140\/en\/audio-v1-ce39a71a.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10974140/en/audio-v1-ce39a71a.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10974140" id="translation-audio-10974140" preload="metadata">
+<source src="https://audio.indianexpress.com/10974140/en/audio-v1-ce39a71a.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10974140/en/audio-v1-ce39a71a.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10974140/en/audio-v1-ce39a71a.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10974140">
+<div id="translation-content-body-10974140">
+<p>A cheetah brought from Botswana <strong><a class="" href="https://indianexpress.com/article/india/cheetah-from-botswana-is-kunos-latest-mom-4-cubs-take-indias-population-to-62-10971264/" rel="noopener" target="_blank">gave birth to four cubs at Madhya Pradesh’s Kuno National Park</a></strong> recently, taking India’s cheetah population to 62, including 43 born here.</p>
+<p>As lead scientist of the cheetah reintroduction programme for 13 years, I found it deeply rewarding to bring cheetahs back to India after 75 years of extinction. The project is just one example of wildlife conservation in India. India has a long conservation ethic, and despite several challenges, we have lost fewer species than many less populated, prosperous countries with more resources and natural habitat.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>What has India done right so far, and what challenges remain? When can animal rights activism and human ‘kindness’ interfere with wildlife conservation?</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<h2>India’s ancient conservation ethic</h2>
+<p>India’s biodiversity reflects a distinctive biogeographic history. The subcontinent drifted across the Indian Ocean, evolving endemic life forms, before colliding with Asia about 50 million years ago and received species from Eurasia, Persia and Southeast Asia. Modern humans arrived from Africa about 60,000–70,000 years ago.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>Human activities have accelerated extinction rates by an estimated 100–300 times since the Industrial Revolution. Although India faces pressure from major drivers of extinction, such as human population density, habitat conversion, unsustainable hunting and harvesting, livestock grazing, pollution, biological invasions and climate change, we have done comparatively pretty well in conserving species.</p>
+<p>Culture and religion shape attitudes towards wildlife. Hinduism, Jainism, Buddhism and Sikhism emphasise stewardship of nature, thereby fostering tolerance and coexistence, compared with Western beliefs of dominion over nature.</p>
+<p>Although Yellowstone, established in the US in 1872, is celebrated as the world’s first national park, <em>Abhayaranyas</em> (forests without fear) existed in the Mauryan era (300 BCE). Kautilya’s <em>Arthashastra</em> had the world’s first documented policy on wildlife conservation, and the Vedic <em>Aranyakas</em> articulated ethical foundations for protecting nature. Hunting, described in the Ramayana and Mahabharata, was culturally accepted but expected to remain balanced.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>This balance was disrupted by successive invasions. Across the British Empire, forests were cleared for farming and timber, often managed for a few commercial species at the expense of biodiversity. Sport hunting and government bounties sped up wildlife decline.</p>
+<p>What survived were mostly royal hunting reserves and rugged forests too difficult to farm or log. Many of these later became national parks and wildlife sanctuaries. They weren’t necessarily India’s finest habitats, but they were much of what remained.</p>
+<p><strong>Saving the tiger and more</strong></p>
+<p>Modern conservation gained momentum in the 1970s under Prime Minister Indira Gandhi. Conservationists and administrators, including Salim Ali, JC Daniel, MK Ranjitsinh, Karan Singh, K Sankhala and Anne Wright, helped shape the Wildlife (Protection) Act, 1972, and Project Tiger, 1973, which remains the country’s flagship conservation programme.</p>
+<p>During the 1980s and 1990s, international trade in tiger parts, elephant ivory and rhino horn flourished, alongside drug and arms trafficking. After tiger populations in China and Southeast Asia were depleted, poachers increasingly targeted India. The local extinction of tigers in Sariska in 2005, despite official estimates of 19 animals, prompted Prime Minister Manmohan Singh to intervene. The Tiger Task Force was formed, and exposed bureaucratic failures, ignored poaching warnings and fraudulent estimates. A scientific assessment found only about 1,400 tigers, far fewer than the reported 3,500.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>The Task Force recognised that alienated communities could be drawn into poaching. Implementation of its “Joining the Dots” recommendations, by Prodipto Ghosh and Rajesh Gopal, who steered the science-based policy reforms, led to the National Tiger Conservation Authority, the Wildlife Crime Control Bureau, and scientific monitoring of tiger populations, prey and habitats. Core and buffer zoning was strengthened, and financial incentives supported voluntary relocation from core areas. The current Rs 15 lakh per-family package offered forest communities an opportunity for better livelihoods, education and healthcare through relocation.</p>
+<p>With 58 tiger reserves, India has secured nearly 70,000 km² of human-free habitat for tigers and other wildlife. As apex predators, tigers act as umbrella species, helping protect entire ecosystems.</p>
+<span class="custom-caption"><img alt="lions" class="lazyloading size-medium wp-image-10974699" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/lions-in-Gir.jpg?resize=600,410" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg?resize=450,307 450w, https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg?resize=600,410 600w, https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg?resize=768,524 768w, https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg?resize=593,405 593w, https://indianexpress.com/wp-content/uploads/2026/11/lions-in-Gir.jpg?resize=1536,1048 1536w" height="1092" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> India now supports the world’s only population of Asiatic lions, at approximately 1,000. (Express file)</span>
+<p>Securing human-free space for biodiversity is especially difficult in a densely populated country. Living alongside high densities of large carnivores also imposes costs through crop damage, livestock predation and risks to human life. India is arguably unique in implementing a model that creates space for biodiversity while offering disadvantaged communities socioeconomic opportunities through voluntary relocation. Regrettably, this flagship component of Project Tiger has not received funding through Ministry allocations since 2021.</p>
+<p>India now supports the world’s largest populations of wild tigers (approximately 4,000), Asian elephants (approximately 23,000) and leopards (over 15,000), and the only population of Asiatic lions (approximately 1,000). This is remarkable in a country of 1.4 billion people, many of whom depend on forests for their livelihoods.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Once distributed from Persia to Palamu in Bihar, lions were eliminated across most of their range during the British era; fewer than 50 survived in Junagadh under the Nawab’s protection. Today, about 1,000 share 30,000 km² of Kathiawar coexisting with people and livestock – an exemplary conservation success.</p>
+<p>Since the Sariska crisis and reforms that followed, India’s tigers have increased by about 6% a year, recolonising roughly 3,000 km² annually, making India is a global leader in tiger conservation.</p>
+<h2>What India’s wildlife laws achieved, and what more they need to do</h2>
+<p>India’s environmental laws were among the world’s most stringent, rightly guarding against short-sighted economic temptations. Mahatma Gandhi’s observation that “the world has enough for everyone’s need, but not enough for everyone’s greed” remains pertinent. Dilution of these laws would lead to compromising protected areas (only 5.4% of total land) for marginal economic gains and risking loss of irreplaceable natural heritage.</p>
+<p>Because our protected areas are too small to sustain viable populations independently, fencing them off could have disastrous consequences. Maintaining connectivity through wildlife corridors is essential for movement and genetic exchange; fences should be used judiciously to mitigate conflict.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>India has made commendable progress in building wildlife passages across highways and other linear infrastructure. Similar measures are needed in agricultural and pastoral landscapes, where road deaths threaten Indian wolves, caracals, foxes, jungle and desert cats, golden jackals and striped hyenas. Less charismatic than tigers, lions, and cheetahs, these species are no less important to India’s natural heritage.</p>
+<span class="custom-caption"><img alt="caracal at ranthambore" class="lazyloading size-medium wp-image-10974709" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/Caracal-Cat-Ranthambore.jpg?resize=600,335" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=450,251 450w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=600,335 600w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=768,428 768w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=726,405 726w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=1536,856 1536w, https://indianexpress.com/wp-content/uploads/2026/11/Caracal-Cat-Ranthambore.jpg?resize=150,83 150w" height="892" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A pair of the rare wild cat, the Caracal, at Ranthambore National Park. (ranthambhorenationalpark)</span>
+<p>Carnivore recovery increases conflict as animals move beyond protected areas. India’s response has largely focused on compensation for human casualties and livestock losses. While compensation reduces resentment, lasting coexistence requires proactive conflict mitigation within communities’ socioeconomic thresholds of tolerance and tangible wildlife-related benefits for forest-dependent communities. This key recommendation of the Tiger Task Force remains inadequately addressed.</p>
+<p><strong>Where kindness is misguided</strong></p>
+<p>India’s conservation programmes have benefited from government funding across political parties. Yet conservation professionals have not always persuaded decision-makers to act in the “species’ best interest”, emphasised by the Supreme Court in 2013.</p>
+<p>India’s 1,000 lions remain a single genetically vulnerable population exposed to catastrophic events such as epidemics. The species’ best interest requires multiple populations across its historical range, spreading the risk of extinction. Instead, we invest in sophisticated lion hospitals. Individual animal welfare is an important ethical benchmark, but interventions motivated solely by individual animal welfare can conflict with conservation. Medical treatment allows carriers of deleterious genes to survive and reproduce, increasing genetic load over generations.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>Similarly, failure to control feral dogs and cats due to mis-informed activism facilitates disease transmission, competition for prey and hybridisation with endangered indigenous wolves, jungle, and desert cats. Humane population control of feral animals is essential for wildlife conservation.</p>
+<span class="custom-caption"><img alt="Great Indian Bustard " class="lazyloading size-medium wp-image-10974719" data-lazy-type="lazyloading-image" data-src="https://images.indianexpress.com/2026/11/bustard.jpg?resize=600,373" data-srcset="https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg 1600w, https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg?resize=450,280 450w, https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg?resize=600,373 600w, https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg?resize=768,478 768w, https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg?resize=651,405 651w, https://indianexpress.com/wp-content/uploads/2026/11/bustard.jpg?resize=1536,955 1536w" height="995" sizes="(max-width: 1600px) 100vw, 1600px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" width="1600"/> A critically endangered Great Indian Bustard at Naliya, Kutch.<br/>(Express photo)</span>
+<p>We also fail as technical advisers when policymakers praise investments in zoos as conservation strategies over preserving wilderness, or propose captive-breeding and release of Great Indian Bustards to offset powerline deaths, rather than prioritising underground cabling and installing bird diverters on green energy infrastructures to safeguard the wild population.</p>
+<p>There are only two biodiverse Island systems in India (Lakshadweep and Andaman &amp; Nicobar) that abound in endemic biota. Development projects here can have disastrous irreversible impacts on biodiversity and therefore need special scrutiny and evaluation.</p>
+<h2>The cheetah project</h2>
+<p>Coming back to the cheetah project, the programme’s larger objective is not simply to establish breeding populations within fenced enclosures; it is to use cheetahs to restore open ecosystems and their ecological processes, as tigers do in forests.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>Small fenced populations, even when breeding successfully, cannot achieve this. Four years into the programme, approximately 15 cheetahs are free-ranging, while the remaining 40 are in fenced enclosures, ideally these numbers should have been reversed.</p>
+<p><strong>Helping wildlife and humans</strong></p>
+<p>A multipronged approach is essential to generate tangible economic profits from coexistence with wildlife.</p>
+<p>Community homestays, as in Ladakh’s snow leopard landscapes, should be encouraged over current high-end tourism, with a proportion of all wildlife-tourism profits shared locally.</p>
+<p>But tourism alone cannot create habitat or fully offset costs of coexistence. We should also evaluate agroforestry on private lands that creates wildlife habitat, sustainable harvesting of non-timber forest products and their branded marketing, and scientifically regulated sustainable community use of wildlife outside protected areas. These activities already occur, legally and illegally. Legitimising community rights and setting monitored, science-based sustainable limits could support wildlife recovery beyond protected areas and restore balance across shared landscapes.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p><em><strong>Yadvendradev V Jhala is Senior Scientist of the Indian National Science Academy based at TIFR – National Centre for Biological Sciences <a class="" href="https://indianexpress.com/section/cities/bangalore/" rel="noamphtml">Bengaluru</a></strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10974140"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-third, twenty twenty-six, at two minutes past six in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/india-protecting-wildlife-achievments-challenges-10974140/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 20:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

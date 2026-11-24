@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>FPI disclosure relief: Why SEBI wants to ease rules, and could it reduce transparency? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>FPI disclosure relief: Why SEBI wants to ease rules, and could it reduce transparency?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-24</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/SEBI-FPI-rules-.jpg?w=1024" alt="FPI disclosure relief: Why SEBI wants to ease rules, and could it reduce transparency?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="FPI, SEBI rules" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/SEBI-FPI-rules-.jpg?w=1024" width="650"/><span class="ie-custom-caption">SEBI has proposed easing disclosure requirements for foreign portfolio investors (FPIs) to attract foreign capital, raising questions about transparency and beneficial ownership in Indian markets. (Magnific)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10974489" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10974489\/en\/audio-v1-efa37210.m4a","aac":"https:\/\/audio.indianexpress.com\/10974489\/en\/audio-v1-efa37210.aac","mp3":"https:\/\/audio.indianexpress.com\/10974489\/en\/audio-v1-efa37210.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10974489/en/audio-v1-efa37210.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10974489\/hi\/audio-v1-f2876a52.m4a","aac":"https:\/\/audio.indianexpress.com\/10974489\/hi\/audio-v1-f2876a52.aac","mp3":"https:\/\/audio.indianexpress.com\/10974489\/hi\/audio-v1-f2876a52.mp3"}' data-hindi-url="https://audio.indianexpress.com/10974489/hi/audio-v1-f2876a52.m4a" data-is-premium="0" data-post-id="10974489" id="translation-audio-10974489" preload="metadata">
+<source src="https://audio.indianexpress.com/10974489/en/audio-v1-efa37210.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10974489/en/audio-v1-efa37210.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10974489/en/audio-v1-efa37210.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10974489">
+<div id="translation-content-body-10974489">
+<p>Three years after proposing stringent disclosure norms, the Securities and Exchange Board of India (SEBI) on Friday proposed to make the Indian markets more attractive for foreign investors by scrapping additional disclosure requirements linked to concentration and size.</p>
+<p>The regulator said current rules in this regard are more stringent than in competing markets. This means these foreign players won’t now have to report every single detail when holding an Indian company’s shares, but does the proposed relaxation come at the cost of market integrity? Also, the proposed relaxation raises questions about transparency and the ability to identify the ultimate beneficiaries behind large foreign investments.</p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>While SEBI’s objective is to reduce regulatory friction and attract foreign capital, the trade-off could be reduced granular transparency in the case of some of the foreign funds. The challenge for the regulator will be to ensure that easing compliance does not create greater opacity in India’s capital markets or compromise safeguards against money laundering, regulatory circumvention and the concealment of beneficial ownership, market sources said.</p> <div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+<h2><strong>What changes has SEBI proposed to FPI disclosure rules?</strong></h2>
+<p>A day after SEBI Chairman Tuhin Kanta Pandey said it will release a consultation paper to simplify regulatory frameworks for foreign portfolio investors (FPIs), the regulator released a paper proposing to scrap detailed disclosure norms for foreign players.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>Currently, <a href="https://indianexpress.com/article/explained/explained-economics/fpis-pump-record-11-3-billion-in-november-what-drove-this-comeback-10968969/"><strong>certain FPIs</strong></a> have to disclose detailed information about all entities invested in them under the additional disclosure framework (ADF), including individual investors, irrespective of the size of their holdings. This granular disclosure applies to foreign funds with more than half of their Indian portfolio in a single corporate group, or to FPIs that, individually or with their investor group, hold more than Rs 50,000 crore worth of Indian equities.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/fpis-pump-record-11-3-billion-in-november-what-drove-this-comeback-10968969/">FPIs pump record $11.3 billion in November: What drove this comeback?</a></span></div>
+<p>SEBI says these requirements have imposed considerable compliance costs, forcing global funds to undertake extensive investor identification exercises, sometimes establish separate vehicles for Indian investments and repeatedly update disclosures as investors enter or exit pooled funds. Complex structures such as fund-of-funds arrangements have also made compliance particularly difficult.</p>
+<p>The regulator now proposes to remove this ADF altogether for FPIs, with an aim to make regulations in the Indian market comparable to other major markets. The regulator has kept the proposal open for public comments till December 11.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<h2><strong>Why did SEBI tighten FPI disclosure norms after the Hindenburg-Adani controversy?</strong></h2>
+<p>The ADF was introduced in August 2023, in the aftermath of the Hindenburg report on the Adani Group. The controversy had raised questions about whether certain offshore FPIs were being used to conceal the true beneficial ownership of shares and potentially circumvent minimum public shareholding requirements.</p>
+<p>The Supreme Court-appointed expert committee had subsequently noted that SEBI’s investigation into the ownership of offshore entities investing in Adani stocks faced difficulties in establishing the ultimate ownership of several FPIs. The committee noted that information sought from regulators in foreign jurisdictions had not been forthcoming.</p>
+<p>The ADF was brought into effect to prevent opaque offshore corporate structures from escaping Indian authorities after the controversy between US research firm Hindenburg and the Adani Group but exempts FPI categories like foreign government-driven or sovereign funds, foreign public retail funds, and entities listed in foreign markets.</p>
+<p>SEBI then dropped allegations that offshore funds had been effectively controlled by Adani and were being used to breach minimum public shareholding norms in four Adani companies.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/why-have-gold-prices-fallen-by-25-in-nine-months-and-could-they-dip-further-10971777/">Why have gold prices fallen by 25% in nine months, and could they dip further?</a></span></div>
+<p>This makes SEBI’s latest proposal politically and regulatorily sensitive. The very framework that emerged amid concerns over opacity in offshore shareholding structures is now proposed to be dismantled.</p>
+<h2><strong>Why does SEBI want to ease disclosure requirements for foreign investors?</strong></h2>
+<p>According to the regulator, the ADF was more of a compliance burden on foreign investors than a security measure. “Disclosure requirements that are not in line with globally accepted practices could potentially place India at a competitive disadvantage vis-à-vis peer jurisdictions with relatively lenient regulatory requirements,” SEBI wrote in its consultation paper.</p>
+<p>“Many foreign investors looking to invest in India consider the granular disclosure requirements as an additional compliance burden. Rather than investing in India and being subject to granular disclosures, many investors may instead choose to avoid investing in India,” it added. The regulator also argued that existing provisions like the restrictions under the Prevention of Money Laundering Act (PMLA) and the Press Note 2 issued in March already cover the purpose of the ADF.</p>
+<p>“This is positive. It is not going to fully deliver on our expectations, but it is definitely positive. It will widen the participation of FPIs in the market. But actual momentum and flow will depend upon, you know, the relative valuation, the economic growth story, corporate earnings, all that,” said G Chokkalingam, founder of Equinomics Research. “I don’t think this is going to be negative or compromised. You know, it doesn’t stop SEBI from investigating any individual cases,” he said.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>The proposal does not mean beneficial ownership disclosures will disappear altogether. FPIs would still be subject to the applicable beneficial ownership identification requirements under the Prevention of Money Laundering Rules. But removing the ADF would eliminate the additional, threshold-triggered, full-look-through disclosure obligation.</p>
+<h2><strong>Could relaxing FPI disclosure rules reduce market transparency?</strong></h2>
+<p>FPIs, particularly those operating through multi-layered offshore structures, pooled funds and jurisdictions with limited disclosure, can make it difficult to establish who ultimately controls capital flowing into Indian companies. Removing the additional layer of disclosures could weaken the visibility of ownership chains, especially in cases involving concentrated holdings or large investment positions.</p>
+<p>FPIs, particularly those operating through multi-layered offshore structures, pooled funds and jurisdictions with limited disclosure, can make it difficult to establish who ultimately controls capital flowing into Indian companies. Removing the additional layer of disclosures could weaken the visibility of ownership chains, especially in cases involving concentrated holdings or large investment positions, according to market sources.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-economics/blue-chip-stocks-outperform-mid-small-cap-stocks-india-10966841/">Blue-chip stocks have performed poorly all year. How did they make a comeback?</a></span></div>
+<p>SEBI had tightened disclosures in 2023 partly because of concerns that opaque offshore investment structures could undermine genuine public shareholding and market transparency. “Now, it argues that the additional disclosure regime is burdensome, internationally out of step and potentially discouraging foreign capital,” said an analyst.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<h2><strong>Will easing disclosure norms attract more foreign investment into India?</strong></h2>
+<p>While FPIs have bought a record $13 billion worth of Indian shares in November, concerns still remain about whether the flows will remain positive if global conditions worsen again, especially after heavy selling in previous months had been a big headwind for the Indian market. Between October 2024 and October 2026, FPIs pulled out more than $ 60 billion from Indian equities, adding pressure on the rupee and markets amid the West Asia war, Ai disruption, high crude prices and interest rate worries.</p>
+<p>The relaxed regulations certainly reduce the compliance burden for FPIs, making regulations comparable to major markets like the US and other emerging economies. However, it is only one factor in the grand scheme of things, and foreign flows depend on other factors like geopolitical conditions, earnings growth, and valuations.</p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10974489"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-third, twenty twenty-six, at twenty-nine minutes past ten in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-economics/" href="https://indianexpress.com/about/explained-economics/">Explained Economics</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-economics/sebi-fpi-disclosure-rules-foreign-investors-adani-10974489/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-24 20:46 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
