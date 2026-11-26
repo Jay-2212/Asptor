@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>The civilisational state: How the SCO forum reflects a shift in global politics | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>The civilisational state: How the SCO forum reflects a shift in global politics</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/Modi-sco-civilisational-identity.jpg?w=1024" alt="The civilisational state: How the SCO forum reflects a shift in global politics">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="civilisational state" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/Modi-sco-civilisational-identity.jpg?w=1024" width="650"/><span class="ie-custom-caption">Prime Minister Narendra Modi addresses the First Shanghai Cooperation Organisation (SCO) Civilisational Dialogue Forum, in New Delhi on Friday. (DPR PMO/ANI Photo)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10976798" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="translation-audio tts-hindi-treatment" style="display:none;">
+<div class="translation-toggle-wrap-rhs" data-nosnippet="">
+<button class="translation-toggle-btn active" data-lang="eng" type="button">English (Original)</button>
+<button class="translation-toggle-btn" data-lang="hi" type="button">हिंदी</button>
+</div>
+</div>
+<div class="tts-hindi-control"></div>
+<div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10976798\/en\/audio-v1-76c866ef.m4a","aac":"https:\/\/audio.indianexpress.com\/10976798\/en\/audio-v1-76c866ef.aac","mp3":"https:\/\/audio.indianexpress.com\/10976798\/en\/audio-v1-76c866ef.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10976798/en/audio-v1-76c866ef.m4a" data-hindi-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10976798\/hi\/audio-v1-e47dd4b9.m4a","aac":"https:\/\/audio.indianexpress.com\/10976798\/hi\/audio-v1-e47dd4b9.aac","mp3":"https:\/\/audio.indianexpress.com\/10976798\/hi\/audio-v1-e47dd4b9.mp3"}' data-hindi-url="https://audio.indianexpress.com/10976798/hi/audio-v1-e47dd4b9.m4a" data-is-premium="0" data-post-id="10976798" id="translation-audio-10976798" preload="metadata">
+<source src="https://audio.indianexpress.com/10976798/en/audio-v1-76c866ef.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10976798/en/audio-v1-76c866ef.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10976798/en/audio-v1-76c866ef.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="ai-translation-note js-ai-translation-note" hidden="">
+<div class="ai-translation-note-title">
+			AI Translation		</div>
+<div class="ai-translation-note-text" data-nosnippet="">
+</div>
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10976798">
+<div id="translation-content-body-10976798">
+<p>India hosted the inaugural Shanghai Cooperation Organisation (SCO) Civilisational Dialogue Forum in New Delhi between November 20 and 22. The initiative reflects a growing trend in international relations to highlight civilisational identity and values as an effort to restore sanity and order in a strife-torn world.</p>
+<p>The summit, proposed by Prime Minister Narendra Modi at the SCO Summit in Tianjin in September 2025, aims to strengthen cultural ties and people-to-people exchanges among SCO countries. The forum comes even as geopolitical tensions, competing international orders and the weakening of multilateral institutions are reshaping global politics.</p><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>The idea of dialogue among civilisations is not new. At the 1893 Parliament of the World’s Religions in Chicago, Swami Vivekananda argued that world order and peace depend on mutual respect, assimilation, and universal acceptance, not on religious uniformity or cultural dominance. He presented Indian civilisational values, grounded in Vedantic unity, as an antidote to global sectarianism and materialism.</p><div class="ie-premium-content-block paywall container-wall-exclusive"> <div class="ie-mobile-ad-carousel-wrapper">
+<div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+</div>
+<p>In <em>The Ideals of the East</em> (1903), Japanese author Okakura Kakuzō argued that Asia shared a unified spiritual and cultural heritage, connecting Indian spiritual philosophy and Buddhism with Chinese thought and traditions. He saw Japan as a living repository that preserved and synthesised these continental ideals.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p>More recently, in 1988, Iranian President Mohammad Khatami proposed designating 2001 as the United Nations Year of Dialogue among Civilisations. This presented an alternative to Samuel Huntington’s clash of civilisations thesis, which argues cultural and religious identities drive the primary conflicts in the post-Cold War world.</p>
+<p>Subsequent efforts include Kazakhstan’s Congress of Leaders of World and Traditional Religions (2003), the UN Alliance of Civilisations (2005), and Azerbaijan’s Baku Process (2008). India hosted the 2023 G20 summit with the theme <em>Vasudhaiva Kutumbakam</em> (The world is one family). In 2024, the UN also established June 10 as the International Day for Dialogue among Civilisations.</p>
+<h2>First, what is a civilisational state?</h2>
+<p>American political scientist Lucian W. Pye introduced the term ‘civilisational state’ in his 1990 Foreign Affairs essay, <em>China: Erratic State, Frustrated Society</em>, to describe China’s distinctive historical and political character. He considered this difficult to understand within the conventional European nation-state framework. The concept subsequently attracted wider attention among scholars and commentators examining China’s historical continuity and international identity.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<p>A civilisational state can be understood as a sovereign nation whose identity is rooted in historical, religious, cultural and philosophical memories, traditions and practices. These extend well beyond its formation as a modern nation-state, linking its past with its present.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/india-host-brics-goals-west-10865761/">With India as host, here are better goals for BRICS than ‘confronting the West’</a></span></div>
+<p>Unlike the conventional nation-state, which focuses mainly on territorial sovereignty, citizenship and political institutions, the civilisational state draws on a longer historical inheritance to explain its identity, development choices and international role.</p>
+<p>Over the last century, countries such as China, Russia, Turkey and India have progressed from promoting civilisational identity towards leveraging history, philosophical traditions and cultural ties as part of their foreign policy.</p>
+<p><strong>Why is the idea gaining importance?</strong></p>
+<p>The growing prominence of civilisational narratives is connected to the changing international order. The Russia–Ukraine war, US–China rivalry, conflicts in West Asia and declining confidence in multilateral institutions have encouraged countries to question the existing distribution of international power and influence.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>Emerging powers increasingly contend that Western political and institutional mechanisms should not be seen as universal models for international governance. Civilisational values provide an alternative framework for countries to coexist despite differences in religion, culture, economic circumstances, and political systems.</p>
+<p>They also complement strategic autonomy: countries can maintain relationships with competing geopolitical powers without necessarily adopting their ideological or political systems. Rather than replacing conventional geopolitics, civilisational diplomacy adds a historical and cultural dimension in the pursuit of national interests.</p>
+<p><strong>How countries are using the idea</strong></p>
+<p><span style="color: #800000"><strong>China: Challenging Western models of modernisation</strong></span></p>
+<p>China presents itself as a civilisation with thousands of years of historical continuity. Under Xi Jinping, this narrative has become important in explaining China’s developmental trajectory and international position. The Global Development Initiative (2021), Global Security Initiative (2022) and Global Civilisation Initiative (2023) illustrate this approach.</p>
+<p>The Global Civilisation Initiative advocates respect for civilisational diversity, cultural exchanges and opposition to imposing one country’s values on others. Beijing’s argument is that modernisation does not need to follow a single Western pathway. This narrative also provides China with a diplomatic framework for engaging developing countries seeking greater autonomy in international affairs.</p>
+<p><span style="color: #800000"><strong>Russia: Positioning itself as a Eurasian civilisation</strong></span></p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<p>Russia’s 2023 Foreign Policy Concept explicitly describes the country as a unique state-civilisation and a vast Eurasian and Euro-Pacific power. Moscow emphasises its Slavic, Orthodox Christian, European and Asian influences to distinguish its identity from Western political traditions.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">China This Week</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-global/china-this-week-trump-xi-putin-declaration-japan-10973949/">Trump, Xi and Putin’s declaration, Japan’s snub, and the Shenzhen story</a></span></div>
+<p>This narrative supports Russia’s engagement with China, India and Central Asia and reinforces its advocacy of multipolarity through BRICS and the SCO. However, Russia’s claims to a broader historical and cultural space remain contested, particularly in Ukraine, where questions of sovereignty and independent national identity are central.</p>
+<p><span style="color: #800000"><strong>Turkey: Reviving Ottoman and Turkic connections</strong></span></p>
+<p>Under President Recep Tayyip Erdoğan, Turkey has given greater prominence to its Ottoman and Islamic heritage. Ankara uses historical and linguistic connections to strengthen relationships across the Middle East, Balkans and Central Asia.</p>
+<p>The Organisation of Turkic States, connecting Turkey with Azerbaijan, Kazakhstan, Kyrgyzstan and Uzbekistan, demonstrates how shared historical and linguistic identities can facilitate contemporary institutional cooperation.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_4_300X250"></div></div>
+<p>Civilisational identity also allows Turkey to expand its geopolitical engagement beyond its traditional European orientation.</p>
+<p><span style="color: #800000"><strong>The Western civilisational narrative</strong></span></p>
+<p>Civilisational politics is not exclusively a non-Western phenomenon. The second Trump administration’s 2025 National Security Strategy frames global politics around cultural and civilisational identity, warning of ‘civilisational erasure’ in Europe and positioning the US as a defender of Western cultural and religious heritage.</p>
+<p>European debates surrounding Christian heritage, migration and cultural identity similarly demonstrate the growing importance of civilisational narratives in Western political discourse.</p>
+<p><span style="color: #800000"><strong>India: From civilisational heritage to engagement</strong></span></p>
+<p>India’s approach to civilisational diplomacy is distinctive because its historical experience encompasses multiple philosophical traditions, religions, languages and cultural exchanges. The government increasingly draws upon this heritage to establish India’s international identity.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_5_300X250"></div></div>
+<p>The 2023 G20 presidency theme, expressed through <em>One Earth, One Family, One Future</em>, presented an Indian philosophical principle as a framework for addressing shared global challenges. India’s efforts to secure permanent G20 membership for the African Union further reflected its emphasis on more representative global governance.</p>
+<p><em><strong>Three other dimensions are important.</strong></em></p>
+<p><em>First</em>, Buddhism provides India with historical connections across Southeast and East Asia, Mongolia and Central Asia. Nalanda University, Buddhist diplomacy and cultural exchanges translate these historical connections into contemporary international engagement.</p>
+<p><em>Second</em>, India’s promotion of International Yoga Day demonstrates how traditional knowledge systems can acquire global recognition and become instruments of cultural diplomacy.</p>
+<p><em>Third</em>, civilisational identity reinforces India’s strategic autonomy. Its engagement with the US, Russia, Europe, China and the Global South shows that Indian foreign policy cannot be defined by membership in any particular geopolitical bloc.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_6_300X250"></div></div>
+<p>The SCO Civilizational Dialogue Forum extends this approach. By convening scholars, academics and cultural representatives, India seeks to broaden the organisation’s engagement beyond its traditional focus on security, economics and connectivity. Discussions of shared artistic traditions, architecture, manuscripts, languages and philosophical traditions highlight the historical interconnectedness of Eurasian societies.</p>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>For India, this also creates an opportunity to connect civilisational outreach with its wider Eurasian engagement, particularly with Central Asia and the South Caucasus.</p>
+<h2><strong>Can civilisational diplomacy overcome geopolitical divisions?</strong></h2>
+<p>Civilisational diplomacy can build cultural ties beyond conventional alliances, giving countries alternative ways to engage internationally through greater civil society participation and stronger people-to-people connections.</p>
+<p>However, this also carries risks. Governments may selectively interpret history to strengthen domestic political legitimacy or claim cultural superiority. Historical ties may also be invoked to challenge neighbouring countries’ sovereignty and independent identities.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_7_300X250"></div></div>
+<p>India and China illustrate another limitation: shared Buddhist heritage has not prevented strategic rivalry and border tensions. Civilisational connections cannot substitute for political negotiations, economic cooperation or established international institutions.</p>
+<p>The challenge is to ensure that civilisational identity becomes a source of dialogue rather than division.</p>
+<p>Ultimately, the question is not which civilisation will dominate the international system, but whether distinct civilisational traditions can coexist and cooperate without hardening into rival geopolitical blocs.</p>
+<p>For India, the opportunity is to turn its civilisational heritage into practical diplomatic partnerships while preserving its pluralistic traditions and strategic autonomy. The SCO Civilizational Dialogue Forum provides an important platform for this effort.</p>
+<p><em><strong>Capt. Anurag Bisen (retired) is a Senior Fellow, Vivekananda International Foundation, New Delhi. Dr Raj Kumar Sharma is Associate Professor, SDU University, Almaty, Kazakhstan</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10976798"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-fifth, twenty twenty-six, at forty-four minutes past seven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-global/" href="https://indianexpress.com/about/explained-global/">Explained Global</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-global/civilisational-state-sco-dialogue-forum-history-culture-foreign-policy-10976798/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-26 01:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>

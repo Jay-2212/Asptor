@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #0a0a0c;
+        --surface: #16161a;
+        --text: #e0e0e0;
+        --text-muted: #94a3b8;
+        --accent: #3b82f6;
+        --serif: 'Merriweather', Georgia, serif;
+        --sans: 'Inter', system-ui, sans-serif;
+        --display: 'Playfair Display', serif;
+        --max-width: 720px;
+        --font-size-base: 1.125rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.8; }
+
+    .container {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .nav-bar {
+        position: sticky;
+        top: 0;
+        background: rgba(10, 10, 12, 0.8);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 1rem 0;
+        z-index: 1000;
+    }
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .back-link { font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    header.site-header {
+        padding: 6rem 0 3rem;
+        text-align: left;
+    }
+
+    .logo {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.03em;
+        color: #fff;
+    }
+
+    .tagline {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-top: 0.75rem;
+        font-weight: 400;
+    }
+
+    .section-title {
+        font-family: var(--sans);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--text-muted);
+        margin: 4rem 0 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Tabs */
+    .category-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        margin: 2rem 0;
+    }
+
+    .tab-button {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem 0;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+    }
+
+    .tab-button:hover {
+        color: #fff;
+    }
+
+    .tab-button.active {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #fff;
+    }
+
+    /* Article Cards */
+    .article-list { display: grid; gap: 1.5rem; padding: 2rem 0; }
+    .article-card {
+        background: var(--surface);
+        padding: 2.5rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    .article-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.5);
+    }
+    .card-source {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-family: var(--display);
+        font-size: 2rem;
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+        color: #fff;
+    }
+    .card-excerpt {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    /* Article Content */
+    .article-header { padding: 4rem 0 3rem; }
+    .article-header h1 {
+        font-family: var(--display);
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin: 0 0 1.5rem 0;
+        color: #fff;
+        letter-spacing: -0.02em;
+    }
+    .article-meta {
+        font-size: 1rem;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--surface);
+        padding-bottom: 2rem;
+    }
+    .article-meta span { font-weight: 600; color: var(--text); }
+
+    .hero-image {
+        width: 100%;
+        margin: 2rem 0 4rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        max-height: 70vh;
+        object-fit: cover;
+    }
+    .image-caption {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        padding: 1rem 1.5rem;
+        text-align: center;
+        font-style: italic;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        font-family: var(--serif);
+        font-size: var(--font-size-base);
+        line-height: 1.9;
+        color: #d1d5db;
+    }
+    .article-body p { margin-bottom: 2.25rem; }
+    .article-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 2.5rem auto;
+        border-radius: 8px;
+    }
+    .article-body h2, .article-body h3 {
+        font-family: var(--display);
+        color: #fff;
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Controls */
+    .controls { display: flex; gap: 0.5rem; }
+    .btn-control {
+        background: var(--surface);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-control:hover { border-color: var(--accent); color: var(--accent); }
+
+    .source-footer {
+        margin-top: 6rem;
+        padding: 3rem;
+        background: var(--surface);
+        border-radius: 20px;
+        text-align: center;
+    }
+    .source-link { font-weight: 700; font-size: 1.1rem; }
+
+    footer.site-footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--surface);
+    }
+
+    @media (max-width: 768px) {
+        .logo { font-size: 2.75rem; }
+        .article-header h1 { font-size: 2.5rem; }
+        .article-card { padding: 1.5rem; }
+        .card-title { font-size: 1.5rem; }
+    }
+</style>
+
+    <title>COP31 ends without climate deal. Why, and what does that mean for India? | Asptor</title>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="container nav-content">
+            <a href="../index.html" class="back-link">← ASPTOR</a>
+            <div class="controls">
+                <button class="btn-control" onclick="changeFontSize(-2)">A-</button>
+                <button class="btn-control" onclick="changeFontSize(2)">A+</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <article>
+            <header class="article-header">
+                <h1>COP31 ends without climate deal. Why, and what does that mean for India?</h1>
+                <div class="article-meta">
+                     • <span>INDIAN EXPRESS EXPLAINED</span> • <span>2026-11-25</span>
+                </div>
+            </header>
+
+            
+            <div class="hero-image">
+                <img src="https://images.indianexpress.com/2026/11/cop-31-decision.jpg?w=1024" alt="COP31 ends without climate deal. Why, and what does that mean for India?">
+                
+            </div>
+            
+
+            <div class="article-body" id="article-content">
+                <div class="full-details">
+<span class="custom-caption"><img alt="COP31" decoding="async" height="366" src="https://images.indianexpress.com/2026/11/cop-31-decision.jpg?w=1024" width="650"/><span class="ie-custom-caption">Activists participate in a demonstration holding signs that say "shame" and "failure" at the COP31 U.N. Climate Summit, Nov. 20, 2026, in Antalya, Turkey. (AP Photo/Khalil Hamra, File)</span></span>
+<div class="translation-audio">
+<div class="translation-toggle-wrap" data-post-id="10976018" data-property="indianexpress.com">
+<div class="translation-divider"> <div class="lang_select">
+<span id="narrationText">AI Narration</span>
+<span class="ai_assisted" id="aiInfoOpenBtn"></span>
+</div>
+</div><div class="translation-audio-content"> <div class="ie-audio-wrapper" data-audio-wrapper="">
+<div class="ie-audio-sentinel" data-audio-sentinel=""></div>
+<div class="ie-audio-player is-collapsed" data-audio-player="">
+<button aria-label="Play audio" class="ie-audio-play" type="button">
+
+
+</button>
+<span class="ie-audio-label">Listen</span>
+<div class="ie-audio-expand">
+<input class="ie-audio-progress" max="100" min="0" step="0.1" type="range" value="0"/>
+<span class="ie-audio-time">00:00</span>
+<div class="ie-audio-speed-wrap">
+<select class="ie-audio-speed">
+<option value="0.5">0.5x</option>
+<option value="0.75">0.75x</option>
+<option selected="" value="1">1x</option>
+<option value="1.25">1.25x</option>
+<option value="1.5">1.5x</option>
+<option value="2">2x</option>
+</select>
+</div>
+</div>
+<audio class="ie-audio-native" data-actual-audio-sources='{"m4a":"https:\/\/audio.indianexpress.com\/10976018\/en\/audio-v1-08bc7689.m4a","aac":"https:\/\/audio.indianexpress.com\/10976018\/en\/audio-v1-08bc7689.aac","mp3":"https:\/\/audio.indianexpress.com\/10976018\/en\/audio-v1-08bc7689.mp3"}' data-actual-audio-url="https://audio.indianexpress.com/10976018/en/audio-v1-08bc7689.m4a" data-hindi-sources="[]" data-hindi-url="" data-is-premium="0" data-post-id="10976018" id="translation-audio-10976018" preload="metadata">
+<source src="https://audio.indianexpress.com/10976018/en/audio-v1-08bc7689.m4a" type="audio/mp4"/><source src="https://audio.indianexpress.com/10976018/en/audio-v1-08bc7689.aac" type="audio/aac"/><source src="https://audio.indianexpress.com/10976018/en/audio-v1-08bc7689.mp3" type="audio/mpeg"/> </audio>
+</div>
+</div>
+</div> </div><!-- /.translation-toggle-wrap -->
+</div>
+<div class="story_details" id="pcl-full-content"> <div class="translation-content translation-content-en" id="translation-content-en-10976018">
+<div id="translation-content-body-10976018">
+<p>The World Meteorological Organization (WMO) expects 2026 to rank amongst the four warmest years on record, with a very strong El Niño building into 2027. Europe’s deadly summer heat, the flash floods in Nepal and India’s own summer season tested public systems everywhere this year. The war in Iran led to the closure of the Strait of Hormuz, driving up the price of oil, gas and fertiliser.</p>
+<p>It is in this context that COP31 in Antalya closed on November 22 without adopting its cover decision – the proposed Antalya Pact, which would have set out a common political direction for global climate action, including on emissions reduction, the energy transition and climate finance. It is the first UN climate summit since Copenhagen in 2009 to end without an overarching political outcome.</p><div class="ie-premium-content-block paywall container-wall-exclusive"><img alt="" class="lazyloading" data-lazy-src="https://data.indianexpress.com/election2019/track_1x1.jpg" data-lazy-type="lazyloading-image" data-src="https://data.indianexpress.com/election2019/track_1x1.jpg" height="1px" src="https://indianexpress.com/wp-content/themes/indianexpress/images/default-ie.jpg" style="display:none;" width="1px"/>
+<p>A cover decision is not legally binding but serves as an important political signal. It is where the conference says, in a single voice, what the world agrees on and where it goes next. Almost every conference of recent years has produced one, from Glasgow’s “phase-down” of coal in 2021 to Dubai’s call to transition away from fossil fuels in 2023, and even Belém’s promise to triple adaptation finance in 2025.</p> <div class="ie-mobile-ad-carousel-wrapper">
+<div class="ie-mobile-ad-carousel">
+<div class="ie-adtext">
+<span style="color:rgb(107,107,107);">Story continues below. </span>
+<a class="" href="https://indianexpress.com/express-plus/subscription-plan/?pageCode=15&amp;ref=ad_pos_3">Subscribe to see fewer ads.</a>
+</div>
+<div class="ie-carousel-track">
+<div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_1"></div></div></div><div class="ie-carousel-slide"><div class="adboxtop adsizes"><div class="ad-slot" id="gpt_ad_IE_ROS_ATF_300X250_INARTICLE_2"></div></div></div> </div>
+<div class="ie-carousel-controls">
+<button aria-label="Previous slide" class="ie-carousel-arrow ie-carousel-arrow-prev" type="button">
+<span aria-hidden="true"></span>
+</button>
+<button aria-label="Next slide" class="ie-carousel-arrow ie-carousel-arrow-next" type="button">
+<span aria-hidden="true"></span>
+</button>
+</div>
+</div>
+</div>
+<p>This year, the cover decision <a href="https://indianexpress.com/article/india/cop31-antaralya-summit-fails-fossil-fuel-deal-10974180/"><strong>mattered more than usual</strong></a>. With the world falling miserably short on emissions cuts to keep the 1.5℃ target in sight, this COP was the one venue where all countries could renew their climate ambitions to keep the Paris Agreement’s targets alive.</p>
+<blockquote class="twitter-tweet">
+<p dir="ltr" lang="en">I’m deeply disappointed that #COP31 has ended without consensus on an overarching outcome.</p>
+<p>I share the very profound frustration of all those who expected governments to rise to the moment the climate crisis demands.</p>
+<p>But this setback does not change the facts.</p>
+<p>There may be no consensus in the negotiating room, but there is no ambiguity in the science.</p>
+<p>The take-home message from COP31 is clear:</p>
+<p>The world must do much more to confront the climate crisis.</p>
+<p>And it must do it now.</p>
+<p><a class="" href="https://t.co/j05tHQA8AM" rel="nofollow, noopener" target="_blank">https://t.co/j05tHQA8AM</a></p>
+<p>— António Guterres (@antonioguterres) <a class="" href="https://x.com/antonioguterres/status/2124508137138839957?ref_src=twsrc%5Etfw" rel="nofollow, noopener" target="_blank">November 22, 2026</a></p></blockquote>
+<p>The absence of a cover decision also sets a concerning precedent. Even relatively ‘weaker’ COPs still produced a cover text. This helps restore confidence in the multilateral process to address problems of global nature such as climate change. After the failed 2009 Copenhagen conference, it took six years of rebuilding trust to reach the Paris Agreement. Cover decisions, though not binding, also signal the direction of travel to everyone outside the room, such as finance ministries, investors and regulators.</p><div class="ie-story-you-may-like-control" id="taboola-mid-article-personalisation"></div><div class="ie-story-you-may-like-treatment" id="ie-render-top-widget-articles"></div>
+<p><strong>What were the pressure points that led to a no-deal?</strong></p>
+<p>The breaking point was the cause of the crisis itself. More than 130 countries backed a call to move away from fossil fuels during the talks. Yet the final draft did not name coal, oil or gas, and referred only to the Dubai outcome, which had called for transitioning away from fossil fuels.</p>
+<p>Instead, the draft offered a global aspiration to scale carbon capture, utilisation and storage (CCUS) to gigatonne levels by 2035, and a goal of raising the share of electricity in final energy use to 35% by 2035. While carbon removal remains an important area of research, it cannot on its own keep the 1.5°C target under the Paris Agreement alive. Reducing greenhouse gas emissions thus becomes non-negotiable.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_1_300X250"></div></div>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also in Explained</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/explained/explained-climate/cop31-climate-summits-15-degree-target-paris-agreement-relevance-10957235/">COP31: Why climate summits still matter, even as the world misses its targets</a></span></div>
+<p>For some negotiators, including those representing the EU and countries such as Panama and the Marshall Islands, a text that could not name fossil fuels but could champion carbon capture read as a retreat from Dubai. For Saudi Arabia, speaking for the Arab states, however, carbon capture was the point: it lets producers cut emissions without cutting output. Russia also objected, and for now there is no formal mitigation process at all.</p>
+<p>Yet there is hope. Outside COP31, Brazil handed over its voluntary roadmap for transitioning away from fossil fuels, and Denmark, Spain and Portugal announced national plans.</p>
+<p>Money, or a lack thereof, was also a major reason for this failure. Disagreements over new, quantified climate finance pledges added fuel to the fire. Developing countries said wealthier nations must provide adequate financial assistance and that developing countries shouldn’t be expected to make ambitious commitments without it. Wealthier, developed countries made no new collective financial commitments. Their announcements were selective and leaned on loans and private capital. For now, the finance work programme has survived as a process but without new money behind it.</p>
+<p><strong>Where did India stand, and what did it secure?</strong></p>
+<p>India came to Antalya with a familiar brief. Its third Nationally Determined Contribution (NDC), submitted in April 2026, commits to a 47% cut in emissions intensity from 2005 levels and a share of about 60% for non-fossil sources in installed power capacity by 2035. It had already crossed the 50% threshold for non-fossil capacity, five years ahead of its 2030 target. Working with BASIC (Brazil, South Africa, India, China) and the Like-Minded Developing Countries (LMDCs), India pressed for public finance under Article 9.1 of the Paris Agreement. It wanted mitigation talks to stay bottom-up, country-driven, facilitative and non-punitive, and it opposed unilateral measures such as the EU’s Carbon Border Adjustment Mechanism (CBAM).</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_2_300X250"></div></div>
+<p>While India remained dissatisfied with the dilution of the text on developed countries’ historical responsibility, it was successful in getting its key points into the draft text: a) developed countries’ Article 9.1 obligations were recalled; and b) equity and common but differentiated responsibilities (CBDR) were placed at the heart of implementation.</p>
+<div class="custom_read_button alsoread-section"><span class="widget_title">Also Read</span> | <span class="article_title"><a class="click-event-dataid" data-id="Alsoread_editdriven" href="https://indianexpress.com/article/opinion/columns/what-cop31-collapse-means-for-india-climate-change-policy-10974745/">What COP31 collapse means for India – and the future of climate change policy</a></span></div>
+<p>Interestingly, India also recognised the need for reducing anthropogenic methane emissions and the near-term climate benefits of reducing such short-lived climate pollutants (SLCPs). This marks a welcome shift from its previous position, with India finally recognising the near-term climate benefits of reducing methane emissions while maintaining its stand on food security.</p>
+<h2>What does the lack of a unified vision mean for climate policy, and for India?</h2>
+<p>The easy reading is that Antalya failed. The harder one is that it failed honestly. A text that could not name fossil fuels, wrote a gigatonne aspiration for carbon capture into a UN decision and deleted the only number on adaptation finance would not have been a compromise. It would have been a step back dressed as consensus. No deal was better than that deal.</p>
+<p>The cost of the stalemate is still real, and it falls on trust. The regime now runs on two currencies, ambition and money, and each camp holds one hostage to the other. Developed countries want fossil-fuel language without new finance. Producers want carbon capture without fossil-fuel language. Developing countries want finance before ambition. Under the consensus rule, everyone holds a veto and no one holds the pen.</p><div class="adboxtop adsizes"><div class="ie-adtext">Story continues below this ad</div><div class="ad-slot" id="gpt_ad_IE_ROS_ROTATE_3_300X250"></div></div>
+<div id="ai-infographic-editor-content-1">
+<div class="ie-newsletter-widget">
+<div class="ie-newsletter-widget__icon">
+
+</div>
+<div class="ie-newsletter-widget__body">
+<div class="ie-newsletter-widget__label">Newsletter</div>
+<p class="ie-newsletter-widget__text">Follow our daily newsletter so you never miss anything important. On Wednesday, we answer readers' questions.</p>
+</div>
+<a class="" href="https://indianexpress.com/newsletters/explained/" rel="noopener" target="_blank">Subscribe</a>
+</div></div>
+<p>The deeper risk is fragmentation. When parties to the UNFCCC cannot agree, rules get written elsewhere: in coalitions of the willing on fossil fuels, in voluntary pledges and in trade policy such as CBAM. These are spaces where CBDR carries little weight. For India, a weak multilateral process is not a win. It is the loss of the one forum where equity is the law of the room. The ICJ’s advisory opinion last year gave legal weight to arguments India has long made, but that weight is useful only in a forum that still works.</p>
+<p>So, India must do two things at once. It must keep pressing for public finance and opposing unilateral trade measures at COP32 in Addis Ababa and through the second global stocktake that concludes in 2028. And it must move faster where no consensus text is needed: cutting methane emissions from waste and fossil fuels, phasing down HFCs under the Kigali Amendment, and reducing black carbon emissions. Cutting these super-pollutants is the quickest way to shave near-term warming. A summit without a deal is a setback. A decade without action would be a far bigger one.</p>
+<p><em><strong>Zerin Osho is the Director of the India Program at the Institute for Governance &amp; Sustainable Development (IGSD). Himanshu Kumar is a Senior Research &amp; policy Associate at Gateway Research.</strong></em></p>
+<section class="stories_fu_widget myie-express-article-widget" id="myie_express_article_10976018"><div id="myexpress_artp" style=" width:100%; height: 112px; background:#EFEFEF"></div></section></div> </div>
+</div>
+</div>
+<div class="copyright">© The Indian Express Pvt Ltd</div><div class="ev-meter-content article-body-readmore cropped-readmore"><div class="block3_readmore"><div class="read-more-box-readmore"><button class="read-more-btn">Expand</button></div><p>  <div id="professor_prebid-root"></div></p><div class="ie-first-publish" data-content="This article went live on November twenty-fourth, twenty twenty-six, at twelve minutes past eleven in the morning."></div> <div class="storytags ev-meter-content">
+<ul>
+<li>Tags:</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/an-expert-explains/" href="https://indianexpress.com/about/an-expert-explains/">An Expert Explains</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/explained-climate/" href="https://indianexpress.com/about/explained-climate/">Explained Climate</a>
+</li>
+<li>
+<a class="ie_ga_event_tracking" data-ie-event-action="Desktop" data-ie-event-category="Next_Story_Tag" data-ie-event-label="https://indianexpress.com/about/express-explained/" href="https://indianexpress.com/about/express-explained/">Express Explained</a>
+</li>
+</ul>
+</div>
+</div></div>
+<!-- Block 3 readmore end. -->
+<div>
+</div>
+<div class="abbott-disc">
+</div>
+<div class="more-from">
+<div aria-label="Sponsored content" class="l-container" role="region"><div class="o-taboola-story"><div id="taboola-below-article-explained"></div></div></div> </div>
+</div>
+            </div>
+
+            <div class="source-footer">
+                <a href="https://indianexpress.com/article/explained/explained-climate/cop31-antalya-climate-deal-failure-india-implications-10976018/" target="_blank" rel="noopener" class="source-link">Read the original article at INDIAN EXPRESS EXPLAINED →</a>
+            </div>
+        </article>
+
+        <footer class="site-footer">
+            <p>Refined for reading by Asptor • Generated on 2026-11-26 01:25 UTC</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeFontSize(delta) {
+            const content = document.getElementById('article-content');
+            const style = window.getComputedStyle(content, null).getPropertyValue('font-size');
+            const currentSize = parseFloat(style);
+            const newSize = currentSize + delta;
+            if (newSize >= 12 && newSize <= 32) {
+                content.style.fontSize = newSize + 'px';
+                localStorage.setItem('asptor-font-size-px', newSize + 'px');
+            }
+        }
+
+        // Restore preference
+        window.onload = () => {
+            const savedSize = localStorage.getItem('asptor-font-size-px');
+            if (savedSize) {
+                document.getElementById('article-content').style.fontSize = savedSize;
+            }
+        };
+    </script>
+</body>
+</html>
